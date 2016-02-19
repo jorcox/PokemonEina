@@ -1,5 +1,8 @@
 package logica;
 
+import habilidad.Habilidad;
+import pokemon.Pokemon;
+
 /**
  * 
  * @author Javier Beltran, Jorge Cancer, Alejandro Dieste
@@ -16,7 +19,7 @@ package logica;
  */
 public class MatrizEfectividad {
 	
-	private double[][] matriz = 
+	private static double[][] matriz = 
 		{{0.5, 0.5, 1, 1, 0.5, 1, 0.5, 2, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1}, // Acero
 		{1, 0.5, 1, 0.5, 1, 1, 2, 1, 1, 1, 1, 0.5, 1, 2, 1, 2, 1, 1}, // Agua
 		{0.5, 1, 1, 1, 1, 0.5, 0.5, 0.5, 1, 0.5, 1, 2, 2, 1, 2, 1, 0.5, 0.5}, // Bicho
@@ -41,13 +44,13 @@ public class MatrizEfectividad {
 	 * Devuelve el factor de efectividad de un ataque de un tipo determinado
 	 * contra un pokemon de un tipo determinado.
 	 * 
-	 * @param atacante tipo del pokemon atacante.
-	 * @param oponente tipo del pokemon oponente.
+	 * @param habilidad la habilidad del pokemon atacante.
+	 * @param oponente el pokemon oponente.
 	 * @return el valor multiplicador de un ataque de tipo atacante contra
 	 * un pokemon de tipo oponente.
 	 */
-	public double getEfectividad(Tipo atacante, Tipo oponente) {
-		return matriz[atacante.ordinal()][oponente.ordinal()];
+	public static double getEfectividad(Habilidad habilidad, Pokemon oponente) {
+		return matriz[habilidad.getTipo().ordinal()][oponente.getTipo().ordinal()];
 	}
 	
 }
