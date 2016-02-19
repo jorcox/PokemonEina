@@ -11,6 +11,9 @@ public class Pokemon {
 	private int ataqueEsp;
 	private int defensaEsp;
 	private int velocidad;
+	private int precision;
+	private int evasion;
+	private int indiceCritico;
 	
 	public int getNivel() {
 		return nivel;
@@ -53,6 +56,24 @@ public class Pokemon {
 	}
 	public void setVelocidad(int velocidad) {
 		this.velocidad = velocidad;
+	}
+	public int getPrecision() {
+		return precision;
+	}
+	public void setPrecision(int precision) {
+		this.precision = precision;
+	}
+	public int getEvasion() {
+		return evasion;
+	}
+	public void setEvasion(int evasion) {
+		this.evasion = evasion;
+	}
+	public int getIndiceCritico() {
+		return indiceCritico;
+	}
+	public void setIndiceCritico(int indiceCritico) {
+		this.indiceCritico = indiceCritico;
 	}
 	
 	
