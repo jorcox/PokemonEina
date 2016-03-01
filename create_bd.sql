@@ -22,10 +22,11 @@ CREATE TABLE movimientos (
 	descripcion VARCHAR(256)
 );
 
-CREATE TABLE aprender_mov (
+CREATE TABLE movs_nivel (
 	id INTEGER IDENTITY,
-	id_pokemon INTEGER,
-	nivel INTEGER
+	id_poke INTEGER,
+	nivel INTEGER,
+	nombre VARCHAR(256)
 );
 	
 CREATE TABLE entrenador (
