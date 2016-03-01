@@ -59,5 +59,4 @@ public class Dialogo {
 	public String getDialogo(String id) {
 		return bundle.getString(id);
 	}
-	
 }

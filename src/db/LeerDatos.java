@@ -120,11 +120,9 @@ public class LeerDatos {
 
 	public void introducirMovPorNivel() {
 		try {
-			/*
-			 * db.update("CREATE TABLE movs_nivel (" +
-			 * "id INTEGER IDENTITY, id_poke INTEGER," + "nivel INTEGER," +
-			 * "nombre VARCHAR(256))");
-			 */
+			/*db.update("CREATE TABLE movs_nivel ("
+					+ "id INTEGER IDENTITY, id_poke INTEGER,"
+					+ "nivel INTEGER," + "nombre VARCHAR(256))");*/
 			Scanner linea = new Scanner(new File("movs_nivel.txt"), "UTF-8");
 			linea.useDelimiter(",");
 			/*
