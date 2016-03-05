@@ -94,5 +94,4 @@ public class MovimientosPokemon {
 
 		return "";
 	}
-
 }
