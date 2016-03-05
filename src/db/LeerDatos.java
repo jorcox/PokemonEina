@@ -69,7 +69,7 @@ public class LeerDatos {
 			db.update("CREATE TABLE movimientos ( id INTEGER IDENTITY, name VARCHAR(256),nombre VARCHAR(256), "
 					+ "poder INTEGER, tipo_mov VARCHAR(256), tipo VARCHAR(256), "
 					+ "precision INTEGER, pp INTEGER, descripcion VARCHAR(256))");
-			Scanner linea = new Scanner(new File("moves.txt"),"UTF-8");
+			Scanner linea = new Scanner(new File("moves.txt"), "UTF-8");
 			linea.useDelimiter(",");
 			/*
 			 * Lectura de cada linea del fichero
@@ -79,17 +79,20 @@ public class LeerDatos {
 				 * 1 - name 2 - nombre 3 - poder 4 - tipo_mov 5 - tipo 6 -
 				 * precision 7 - pp 8 - descripcion
 				 */
-				String a=linea.next();
-				String name=linea.next();
-				String nombre=linea.next();
+				String a = linea.next();
+				String name = linea.next();
+				String nombre = linea.next();
 				linea.next();
-				int poder=linea.nextInt();
-				String tipo_mov=linea.next();
-				String tipo=linea.next();
-				int precision=linea.nextInt();
-				int pp=linea.nextInt();
-				linea.next();linea.next();linea.next();linea.next();
-				String descripcion=linea.next();
+				int poder = linea.nextInt();
+				String tipo_mov = linea.next();
+				String tipo = linea.next();
+				int precision = linea.nextInt();
+				int pp = linea.nextInt();
+				linea.next();
+				linea.next();
+				linea.next();
+				linea.next();
+				String descripcion = linea.next();
 				String st = "INSERT INTO movimientos(name,nombre,poder,tipo_mov,tipo,precision,pp,descripcion)"
 						+ " VALUES('"
 						+ name
@@ -103,14 +106,58 @@ public class LeerDatos {
 						+ tipo
 						+ "', "
 						+ precision
-						+ ", " + pp 
-						+ ", '" + descripcion 
-						+ "')";
+						+ ", " + pp + ", '" + descripcion + "')";
 				db.update(st);
 				linea.nextLine();
 			}
 			linea.close();
 			db.query("SELECT * FROM pokemon_tipo");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void introducirMovPorNivel() {
+		try {
+			/*db.update("CREATE TABLE movs_nivel ("
+					+ "id INTEGER IDENTITY, id_poke INTEGER,"
+					+ "nivel INTEGER," + "nombre VARCHAR(256))");*/
+			Scanner linea = new Scanner(new File("movs_nivel.txt"), "UTF-8");
+			linea.useDelimiter(",");
+			/*
+			 * Lectura de cada linea del fichero
+			 */
+			int pokemon = 0;
+			boolean id_poke = true;
+			while (linea.hasNextLine()) {
+				if (id_poke) {
+					pokemon = linea.nextInt();
+					id_poke = false;
+					linea.nextLine();
+				} else {
+					try {
+						int nivel = linea.nextInt();
+						if (nivel <= 100) {
+							String nombre = linea.next();
+							String st = "INSERT INTO movs_nivel(id_poke,nivel,nombre)"
+									+ " VALUES("
+									+ pokemon
+									+ ","
+									+ nivel
+									+ ", '" + nombre + "')";
+							db.update(st);
+							System.out.println(st);
+						}
+						linea.nextLine();
+					} catch (Exception e) {
+						id_poke = true;
+						linea.nextLine();
+					}
+				}
+			}
+			linea.close();
+			db.query("SELECT * FROM movs_nivel");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
