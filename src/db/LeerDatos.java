@@ -163,6 +163,49 @@ public class LeerDatos {
 			e.printStackTrace();
 		}
 	}
+	
+	public void introducirEvolucion() {
+		try {
+			Scanner linea = new Scanner(new File("evolucion_pokemon.txt"), "UTF-8");
+			linea.useDelimiter(",");
+			/*
+			 * Lectura de cada linea del fichero
+			 */
+			int pokemon = 0;
+			boolean id_poke = true;
+			while (linea.hasNextLine()) {
+				if (id_poke) {
+					pokemon = linea.nextInt();
+					id_poke = false;
+					linea.nextLine();
+				} else {
+					try {
+						int nivel = linea.nextInt();
+						if (nivel <= 100) {
+							String nombre = linea.next();
+							String st = "INSERT INTO movs_nivel(id_poke,nivel,nombre)"
+									+ " VALUES("
+									+ pokemon
+									+ ","
+									+ nivel
+									+ ", '" + nombre + "')";
+							db.update(st);
+							System.out.println(st);
+						}
+						linea.nextLine();
+					} catch (Exception e) {
+						id_poke = true;
+						linea.nextLine();
+					}
+				}
+			}
+			linea.close();
+			db.query("SELECT * FROM movs_nivel");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public void shutdown() {
 		try {
