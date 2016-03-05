@@ -25,8 +25,8 @@ public class LeerDatos {
 			db.update("CREATE TABLE pokemon_tipo ( id INTEGER IDENTITY, nombre VARCHAR(256), "
 					+ "ps INTEGER, ataque INTEGER, defensa INTEGER, ataque_esp INTEGER, "
 					+ "defensa_esp INTEGER, velocidad INTEGER, evolucion INTEGER)");
-			db.update("INSERT INTO pokemon_tipo(nombre,ps,ataque,defensa,ataque_esp,defensa_esp,velocidad)"
-					+ " VALUES('Sara', 1000, 1000, 1000, 1000, 1000, 1000, null)");
+			db.update("INSERT INTO pokemon_tipo(nombre,ps,ataque,defensa,ataque_esp,defensa_esp,velocidad,evolucion)"
+					+ " VALUES('Sara', 1000, 1000, 1000, 1000, 1000, 1000, 0)");
 			Scanner linea = new Scanner(new File("pokemon.txt"));
 			linea.useDelimiter(",");
 			/*
@@ -38,7 +38,7 @@ public class LeerDatos {
 				 * Defensa esp. 7 - Velocidad
 				 */
 				int i = linea.nextInt();
-				String st = "INSERT INTO pokemon_tipo(nombre,ps,ataque,defensa,ataque_esp,defensa_esp,velocidad)"
+				String st = "INSERT INTO pokemon_tipo(nombre,ps,ataque,defensa,ataque_esp,defensa_esp,velocidad,evolucion)"
 						+ " VALUES('"
 						+ linea.next()
 						+ "', "
@@ -51,7 +51,7 @@ public class LeerDatos {
 						+ linea.nextInt()
 						+ ", "
 						+ linea.nextInt()
-						+ ", " + linea.nextInt() + ")";
+						+ ", " + linea.nextInt() + ", 0)";
 				db.update(st);
 				linea.nextLine();
 
@@ -120,9 +120,11 @@ public class LeerDatos {
 
 	public void introducirMovPorNivel() {
 		try {
-			/*db.update("CREATE TABLE movs_nivel ("
-					+ "id INTEGER IDENTITY, id_poke INTEGER,"
-					+ "nivel INTEGER," + "nombre VARCHAR(256))");*/
+			/*
+			 * db.update("CREATE TABLE movs_nivel (" +
+			 * "id INTEGER IDENTITY, id_poke INTEGER," + "nivel INTEGER," +
+			 * "nombre VARCHAR(256))");
+			 */
 			Scanner linea = new Scanner(new File("movs_nivel.txt"), "UTF-8");
 			linea.useDelimiter(",");
 			/*
@@ -163,44 +165,41 @@ public class LeerDatos {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void introducirEvolucion() {
 		try {
-			Scanner linea = new Scanner(new File("evolucion_pokemon.txt"), "UTF-8");
+			Scanner linea = new Scanner(new File("evolucion_pokemon.txt"),
+					"UTF-8");
 			linea.useDelimiter(",");
 			/*
 			 * Lectura de cada linea del fichero
 			 */
-			int pokemon = 0;
-			boolean id_poke = true;
+			int i = 0;
 			while (linea.hasNextLine()) {
-				if (id_poke) {
-					pokemon = linea.nextInt();
-					id_poke = false;
-					linea.nextLine();
-				} else {
-					try {
-						int nivel = linea.nextInt();
-						if (nivel <= 100) {
-							String nombre = linea.next();
-							String st = "INSERT INTO movs_nivel(id_poke,nivel,nombre)"
-									+ " VALUES("
-									+ pokemon
-									+ ","
-									+ nivel
-									+ ", '" + nombre + "')";
-							db.update(st);
-							System.out.println(st);
-						}
-						linea.nextLine();
-					} catch (Exception e) {
-						id_poke = true;
-						linea.nextLine();
-					}
+				int id_pok = linea.nextInt();
+				int primera_evo = linea.nextInt();
+				int segunda_evo = 0;
+				if(linea.hasNextInt())segunda_evo=linea.nextInt();
+				if (i == 0) {
+					int nivel = primera_evo;
+					if(nivel>100)nivel=36;
+					String st = "UPDATE pokemon_tipo SET evolucion=" + nivel
+							+ "WHERE id=" + id_pok;
+					db.update(st);
+				} else if (i == 1) {
+					int nivel = segunda_evo;
+					if(nivel>100)nivel=36;
+					String st = "UPDATE pokemon_tipo SET evolucion=" + nivel
+							+ " WHERE id=" + id_pok;
+					db.update(st);
+				}
+				i++;
+				linea.nextLine();
+				if (i == 3 || i==2 && segunda_evo==0) {
+					i = 0;
 				}
 			}
 			linea.close();
-			db.query("SELECT * FROM movs_nivel");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

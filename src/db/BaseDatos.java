@@ -153,13 +153,14 @@ public class BaseDatos {
 
 	public static void main(String[] args) {
 		LeerDatos pb=new LeerDatos();
-		pb.introducirPokemon();
-		pb.query("SELECT * FROM pokemon_tipo");
+		//pb.introducirPokemon();
 		//pb.introducirMovimientos();
 		//pb.query("SELECT * FROM movimientos");
 		//pb.introducirMovPorNivel();
 		//pb.query("SELECT * FROM movs_nivel");
-		//pb.shutdown();
+		pb.introducirEvolucion();
+		pb.query("SELECT * FROM pokemon_tipo");
+		pb.shutdown();
 		/*
 		 * BaseDatos db = null;
 		 * 
