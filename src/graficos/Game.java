@@ -1,12 +1,14 @@
 package graficos;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -115,7 +117,8 @@ public class Game extends JPanel {
 		JFrame frame = new JFrame("Pokemon Ada Byron");
 		Game game = new Game();
 		frame.add(game);
-		frame.setSize(1920, 1080);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setSize(screenSize.width, screenSize.height);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setUndecorated(true);
@@ -133,7 +136,7 @@ public class Game extends JPanel {
 		frame.setVisible(true);
 		while (true) {
 			Thread.sleep(400);
-			show = (show==true) ? false : true;
+			show = (show == true) ? false : true;
 			game.repaint();
 		}
 
@@ -156,7 +159,7 @@ public class Game extends JPanel {
 		// jlabel.setFont(new Font(font.getName(), Font.PLAIN, 20));
 		// jlabel.setMaximumSize(new Dimension(200, 300));
 		// jlabel.setOpaque(true);
-		// frame.add(jlabel);		
+		// frame.add(jlabel);
 	}
 
 }
