@@ -24,9 +24,9 @@ public class LeerDatos {
 		try {
 			db.update("CREATE TABLE pokemon_tipo ( id INTEGER IDENTITY, nombre VARCHAR(256), "
 					+ "ps INTEGER, ataque INTEGER, defensa INTEGER, ataque_esp INTEGER, "
-					+ "defensa_esp INTEGER, velocidad INTEGER)");
+					+ "defensa_esp INTEGER, velocidad INTEGER, evolucion INTEGER)");
 			db.update("INSERT INTO pokemon_tipo(nombre,ps,ataque,defensa,ataque_esp,defensa_esp,velocidad)"
-					+ " VALUES('Sara', 1000, 1000, 1000, 1000, 1000, 1000)");
+					+ " VALUES('Sara', 1000, 1000, 1000, 1000, 1000, 1000, null)");
 			Scanner linea = new Scanner(new File("pokemon.txt"));
 			linea.useDelimiter(",");
 			/*
