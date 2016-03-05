@@ -2,29 +2,24 @@ package web;
 
 import java.io.BufferedReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
-import java.net.URLConnection;
+import java.util.Scanner;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class MovimientosPokemon {
-
-	static String[] colores = { "Azul", "Rojo", "Verde", "Negro", "Morado",
-			"Blanco", "Rosa", "Naranja", "Amarillo", "Púrpura", "Marrón" };
-
+public class EvolucionPokemon {
 	public static void main(String[] args) {
 		try {
 			for (int i = 1; i <= 151; i++) {
 				System.out.println("Pokemon " + i);
 				System.out.println("__________________________");
-				getUrlString("http://www.pokexperto.net/index2.php?seccion=nds/nationaldex/movimientos_nivel&pk="
-						+ i,i);
+				getUrlString(
+						"http://www.pokexperto.net/index2.php?seccion=nds/nationaldex/pkmn&pk="
+								+ i, i);
 				Thread.sleep(4000);
 			}
 		} catch (Exception e) {
@@ -51,47 +46,35 @@ public class MovimientosPokemon {
 			bReader.close();
 			isReader.close();
 			Document doc = Jsoup.parse(html);
-			Elements niveles = new Elements();
-			int c = 0;
-			/*
-			 * No va lo de los colores
-			 */
-			while (c < colores.length) {
-				niveles.addAll(doc.getElementsByClass(colores[c]));
-				c++;
-			}
-			Elements nombres = doc.getElementsByClass("nav6c");
-			fichero = new FileWriter("mov_nivel.txt",true);
+			Elements nombres = doc.getElementsByClass("bordeambos");
+			Elements niveles = nombres.get(nombres.size()-1).select("td");
+			String primerNivel = niveles.get(2).text();
+			String segundoNivel = niveles.get(4).text();
+			System.out.println(indice + "," + primerNivel + "," + segundoNivel);
+			fichero = new FileWriter("evolucion_pokemon.txt", true);
 			pw = new PrintWriter(fichero);
-			int i = 0;
-			int j = 0;
-			int old = 0;
-			pw.println(indice);
-			while (i < niveles.size()) {
+			Scanner palabra = new Scanner(primerNivel);
+			palabra.next();
+			Scanner palabra2 = new Scanner(segundoNivel);
+			try {
+				int nivel1 = palabra.nextInt();
+				palabra2.next();
 				try {
-					int nivel = Integer.parseInt(niveles.get(i).text());
-					if (nivel >= old) {
-						String nombre = nombres.get(j).text();
-						System.out.println(nivel + ";" + nombre);
-						pw.println(nivel+","+nombre);
-						i = i + 2;
-						j = j + 2;
-						old = nivel;
-					} else {
-						i++;
-					}
+					int nivel2 = palabra2.nextInt();
+					pw.println(indice + "," + nivel1 + "," + nivel2 + ",");
 
 				} catch (Exception e) {
-					i++;
+					pw.println(indice + "," + nivel1 + ",");
 				}
+			} catch (Exception e) {
+				// Nada
 			}
-			pw.println(";");
+			palabra.close();
+			palabra2.close();
 			pw.close();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return "";
 	}
 }
