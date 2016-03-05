@@ -118,7 +118,7 @@ public class Game extends JPanel {
 		frame.setSize(1920, 1080);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		//frame.setUndecorated(true);
+		frame.setUndecorated(true);
 		game.repaint();
 		try {
 			Clip clip = AudioSystem.getClip();
