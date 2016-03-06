@@ -11,6 +11,9 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -22,14 +25,15 @@ import javax.sound.sampled.Clip;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import sonido.Reproductor;
+
 @SuppressWarnings("serial")
 public class Game extends JPanel {
 
-	int x = 0;
-	int y = 0;
-	int xa = 1;
-	int ya = 1;
 	static boolean show = true;
+	private static int fase = 0;
+	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	private static Reproductor rep= new Reproductor();
 
 	public Game() {
 		KeyListener listener = new MyKeyListener();
@@ -37,52 +41,53 @@ public class Game extends JPanel {
 		setFocusable(true);
 	}
 
-	private void moveBall() {
-		if (x + xa < 0)
-			xa = 1;
-		if (x + xa > getWidth() - 30)
-			xa = -1;
-		if (y + ya < 0)
-			ya = 1;
-		if (y + ya > getHeight() - 30)
-			ya = -1;
-
-		x = x + xa;
-		y = y + ya;
+	
+	public void setFase(int fase){
+		this.fase = fase;
 	}
 
 	@Override
 	public void paint(Graphics g) {
-		/*
-		 * super.paint(g); Graphics2D g2d = (Graphics2D) g;
-		 * g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-		 * RenderingHints.VALUE_ANTIALIAS_ON); g.fillOval(x, y, 25, 380);
-		 */
-		super.paint(g);
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.setColor(Color.GRAY);
-		Font font = null;
-		try {
-			font = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File("resources/font.ttf")));
-		} catch (FontFormatException | IOException e) {
-			e.printStackTrace();
-		}
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		ge.registerFont(font);
-		g2d.setFont(new Font(font.getName(), Font.BOLD, 30));
-
-		try {
-			Image backgroundImage = ImageIO.read(new File("resources/portada.jpg"));
-			g.drawImage(backgroundImage, 0, 0, this);
-			if (show) {
-				g2d.drawString("Pulsa INTRO para continuar", 650, 950);
-			} else {
-				g.drawImage(backgroundImage, 0, 0, this);
+		switch(fase){
+		case 0:
+			super.paint(g);			
+			Font font = null;
+			try {
+				font = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File("resources/font.ttf")));
+			} catch (FontFormatException | IOException e) {
+				e.printStackTrace();
 			}
+			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			ge.registerFont(font);
+			g2d.setFont(new Font(font.getName(), Font.BOLD, 30));
+			try {
+				Image backgroundImage = ImageIO.read(new File("resources/portada.jpg"));
+				g.drawImage(backgroundImage, 0, 0, screenSize.width, screenSize.height, this);
+				if (show) {
+					g2d.drawString("Pulsa INTRO para continuar", (int) (screenSize.width*0.33), (int) (screenSize.height*0.85));
+				} else {
+					g.drawImage(backgroundImage, 0, 0, screenSize.width, screenSize.height, this);
+				}
 
-		} catch (IOException e) {
-			e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			break;
+		case 1:
+			g.setColor(Color.cyan);
+			g.fillRect(0, 0, screenSize.width, screenSize.height);
+			HojaSprites spr = new HojaSprites();
+			try {
+				spr.cargarHoja(new File("resources/Celda.png"), 10, 2);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			g.drawImage(spr.sprites[0], 0, 0, spr.sprites[0].getWidth(), spr.sprites[0].getHeight(), this);			
+			break;
 		}
+		
 
 	}
 
@@ -94,6 +99,15 @@ public class Game extends JPanel {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			System.out.println("keyPressed=" + KeyEvent.getKeyText(e.getKeyCode()));
+			if(KeyEvent.getKeyText(e.getKeyCode()).equals("Intro")){
+				fase = 1;
+			}
+			if(KeyEvent.getKeyText(e.getKeyCode()).equals("Abajo")){
+				fase = 1;
+			}
+			if(KeyEvent.getKeyText(e.getKeyCode()).equals("Arriba")){
+				fase = 1;
+			}
 		}
 
 		@Override
@@ -122,44 +136,29 @@ public class Game extends JPanel {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setUndecorated(true);
-		game.repaint();
-		try {
-			Clip clip = AudioSystem.getClip();
-			File file = new File("resources/title.wav");
-			AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
-			clip.open(inputStream);
-			clip.start();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-		while (true) {
+		game.repaint();
+		pantallaInicio(game);
+		menuPrincipal(game);
+		
+	}
+
+	private static void pantallaInicio(Game game) throws InterruptedException {
+		rep.reproducir(new File("resources/title.wav"));			
+		while (fase==0) {
 			Thread.sleep(400);
 			show = (show == true) ? false : true;
 			game.repaint();
 		}
-
-		//
-		// Font font = null;
-		// try {
-		// font = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new
-		// File("resources/font.ttf")));
-		// } catch (FontFormatException | IOException e) {
-		// e.printStackTrace();
-		// }
-		// GraphicsEnvironment ge =
-		// GraphicsEnvironment.getLocalGraphicsEnvironment();
-		// ge.registerFont(font);
-		// JLabel jlabel = new JLabel("Pulsa INTRO para continuar",
-		// JLabel.CENTER);
-		// jlabel.setVerticalTextPosition(JLabel.BOTTOM);
-		// jlabel.setHorizontalTextPosition(JLabel.CENTER);
-		//
-		// jlabel.setFont(new Font(font.getName(), Font.PLAIN, 20));
-		// jlabel.setMaximumSize(new Dimension(200, 300));
-		// jlabel.setOpaque(true);
-		// frame.add(jlabel);
+	}
+	
+	private static void menuPrincipal(Game game) {
+		rep.stop();
+		while (fase==1){
+			game.repaint();
+		}
+		
 	}
 
 }
