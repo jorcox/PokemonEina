@@ -11,6 +11,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.AffineTransform;
+import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -73,11 +75,12 @@ public class Game extends JPanel {
 
 		try {
 			Image backgroundImage = ImageIO.read(new File("resources/portada.jpg"));
-			g.drawImage(backgroundImage, 0, 0, this);
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			g.drawImage(backgroundImage, 0, 0, screenSize.width, screenSize.height, this);
 			if (show) {
-				g2d.drawString("Pulsa INTRO para continuar", 650, 950);
+				g2d.drawString("Pulsa INTRO para continuar", (int) (screenSize.width*0.33), (int) (screenSize.height*0.85));
 			} else {
-				g.drawImage(backgroundImage, 0, 0, this);
+				g.drawImage(backgroundImage, 0, 0, screenSize.width, screenSize.height, this);
 			}
 
 		} catch (IOException e) {
