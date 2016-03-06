@@ -34,6 +34,7 @@ public class Game extends JPanel {
 	private static int fase = 0;
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private static Reproductor rep= new Reproductor();
+	private int i = 0;
 
 	public Game() {
 		KeyListener listener = new MyKeyListener();
@@ -69,15 +70,28 @@ public class Game extends JPanel {
 				} else {
 					g.drawImage(backgroundImage, 0, 0, screenSize.width, screenSize.height, this);
 				}
-
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			
+			HojaSprites spr = new HojaSprites();
+			try {
+				spr.cargarHoja(new File("resources/pajaro.png"), 1, 6);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			
+			g.drawImage(spr.sprites[i], (int) (screenSize.getWidth()*0.8), (int) (screenSize.getHeight()*0.8), spr.sprites[i].getWidth(), spr.sprites[i].getHeight(), this);
+			i++;
+			if (i==6) 
+				i=0;
+			
 			break;
 		case 1:
 			g.setColor(Color.cyan);
 			g.fillRect(0, 0, screenSize.width, screenSize.height);
-			HojaSprites spr = new HojaSprites();
+			spr = new HojaSprites();
 			try {
 				spr.cargarHoja(new File("resources/Celda.png"), 10, 2);
 			} catch (IOException e) {
