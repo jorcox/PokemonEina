@@ -161,6 +161,9 @@ public class Combate {
 		this.pokemon = pokemon;
 	}
 	
+	
+	//Cambiar todos estos metodos para que se pinte el texto en el juego
+	
 	private void printInicioCombate() {
 		Pokemon p1 = entrenador.getEquipo().get(0);
 		System.out.println("Un " + pokemon.getNombre() + " salvaje quiere luchar!");
@@ -224,10 +227,6 @@ public class Combate {
 		} else if (factor >= 2) {
 			System.out.println("Es muy efectivo!");
 		}
-	}
-	
-	public static void main(String[] args) {
-		
 	}
 	
 }
