@@ -9,8 +9,8 @@ public class DesktopLauncher {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "Pokemon Ada Byron";
         config.useGL30 = false;
-        config.width = 1000;
-        config.height = 700;
+        config.width = 720;
+        config.height = 540;
        
         new LwjglApplication(new PokemonAdaByron(), config);
     }
