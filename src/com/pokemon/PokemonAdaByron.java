@@ -3,16 +3,27 @@ package com.pokemon;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-import pokemon.ada.byron.screens.Play;
+import com.pokemon.pantallas.Menu;
+import com.pokemon.pantallas.PantallaInicio;
+import com.pokemon.pantallas.Play;
 
 public class PokemonAdaByron extends Game {
-	SpriteBatch batch;
-	Texture img;
+	
+	/*
+	 * Log
+	 */
+	public static final String LOG = "Pokemon Ada Byron"; 
+	
+	public int WIDTH = 1000;
+	
+	public int HEIGHT = 700;
+	
+	private SpriteBatch batch;
+	private Texture img;
 
 	@Override
 	public void create() {
-		setScreen(new Play());
+		setScreen(new PantallaInicio());
 	}
 
 	@Override

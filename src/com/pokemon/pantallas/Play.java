@@ -1,4 +1,4 @@
-package pokemon.ada.byron.screens;
+package com.pokemon.pantallas;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
