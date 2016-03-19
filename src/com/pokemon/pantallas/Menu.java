@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pokemon.PokemonAdaByron;
-import com.utilidades.ArchivoGuardado;
+import com.pokemon.utilidades.ArchivoGuardado;
 
 public class Menu implements Screen, InputProcessor {
 
@@ -29,9 +29,9 @@ public class Menu implements Screen, InputProcessor {
 
 	Sprite bg, regButton, regButton2, regButton3, butContinue;
 
-	private boolean saveFileExists = ArchivoGuardado.existe;
+	private boolean archivoGuardado = ArchivoGuardado.existe;
 
-	private int choiceSelected = 1;
+	private int seleccion = 2;
 
 	public Menu() {
 		ArchivoGuardado.musica = null;
@@ -47,19 +47,19 @@ public class Menu implements Screen, InputProcessor {
 		bg.draw(batch);
 		updateSelection();
 
-		regButton.draw(batch);
 		regButton2.draw(batch);
 		regButton3.draw(batch);
-
-		if (saveFileExists) {
-			font.draw(batch, "Continue", 190, 475);
-			font.draw(batch, "New Game", 190, 190);
-			font.draw(batch, "Credits", 190, 90);
+		
+		if (archivoGuardado) {
+			regButton.draw(batch);			
+			font.draw(batch, "Continuar", 190, 475);
+			font.draw(batch, "Nueva Partida", 190, 190);
+			font.draw(batch, "Creditos", 190, 90);
 
 		} else {
-			font.draw(batch, "New Game", 190, 440);
-			font.draw(batch, "Continue", 190, 340);
-			font.draw(batch, "Credits", 190, 240);
+			//font.draw(batch, "Continuar", 190, 440);
+			font.draw(batch, "Nueva Partida", 190, 340);
+			font.draw(batch, "Creditos", 190, 240);
 		}
 		batch.end();
 
@@ -67,9 +67,9 @@ public class Menu implements Screen, InputProcessor {
 
 	private void updateSelection() {
 		resetSelection();
-		switch (choiceSelected) {
+		switch (seleccion) {
 			case 1:
-				if (saveFileExists) {
+				if (archivoGuardado) {
 					regButton = new Sprite(selConButton);
 					regButton.setX(150);
 					regButton.setY(250);
@@ -81,7 +81,7 @@ public class Menu implements Screen, InputProcessor {
 				break;
 			case 2:
 				regButton2 = new Sprite(selButton);
-				if (saveFileExists) {
+				if (archivoGuardado) {
 					regButton2.setX(150);
 					regButton2.setY(150);
 				} else {
@@ -91,7 +91,7 @@ public class Menu implements Screen, InputProcessor {
 				break;
 			case 3:
 				regButton3 = new Sprite(selButton);
-				if (saveFileExists) {
+				if (archivoGuardado) {
 					regButton3.setX(150);
 					regButton3.setY(50);
 				} else {
@@ -105,7 +105,7 @@ public class Menu implements Screen, InputProcessor {
 	}
 
 	private void resetSelection() {
-		if (saveFileExists) {
+		if (archivoGuardado) {
 			regButton = new Sprite(conButton);
 			regButton2 = new Sprite(button);
 			regButton3 = new Sprite(button);
@@ -143,7 +143,7 @@ public class Menu implements Screen, InputProcessor {
 	public void show() {
 
 		Gdx.input.setInputProcessor(this);
-		bg = new Sprite(new Texture("res/imgs/MainMenuBG.png"));
+		bg = new Sprite(new Texture("res/imgs/loadbg.png"));
 
 		button = new Texture("res/imgs/menubutton.png");
 		conButton = new Texture("res/imgs/buttoncontinue.png");
@@ -155,7 +155,7 @@ public class Menu implements Screen, InputProcessor {
 		regButton2 = new Sprite(button);
 		regButton3 = new Sprite(button);
 
-		if (saveFileExists) {
+		if (archivoGuardado) {
 			regButton = new Sprite(conButton);
 			regButton.setX(150);
 			regButton.setY(250);
@@ -205,17 +205,24 @@ public class Menu implements Screen, InputProcessor {
 	public boolean keyDown(int keycode) {
 		switch (keycode) {
 			case (Keys.UP):
-				if (choiceSelected != 1) {
-					choiceSelected -= 1;
+				if (archivoGuardado) {
+					if (seleccion != 1) {
+						seleccion -= 1;
+					}
+				} else{
+					if (seleccion != 2) {
+						seleccion -= 1;
+					}
 				}
+				
 				break;
 			case (Keys.DOWN):
-				if (choiceSelected != 3) {
-					choiceSelected += 1;
+				if (seleccion != 3) {
+					seleccion += 1;
 				}
 				break;
-			case (Keys.SPACE):
-				startAction(choiceSelected);
+			case (Keys.ENTER):
+				hacerAccion(seleccion);
 				break;
 			case (Keys.ESCAPE):
 				Gdx.app.exit();
@@ -224,24 +231,26 @@ public class Menu implements Screen, InputProcessor {
 		return true;
 	}
 
-	private void startAction(int i) {
+	private void hacerAccion(int i) {
 		if (i == 1) {
-			if (saveFileExists) {
-				Gdx.app.log(PokemonAdaByron.LOG, "Run Game From Save File");
+			if (archivoGuardado) {
+				Gdx.app.log(PokemonAdaByron.LOG, "Cargar juego de un fichero de guardado");
+				// TODO				
 			} else {
-				Gdx.app.log(PokemonAdaByron.LOG, "Create a New Game");
-				//game.setScreen(new NGIntro(game));
+				Gdx.app.log(PokemonAdaByron.LOG, "Crear nueva partida");
+				// TODO
+				((Game) Gdx.app.getApplicationListener())
+				.setScreen(new Bienvenida(game));
 			}
 		} else if (i == 2) {
-			if (saveFileExists) {
-				Gdx.app.log(PokemonAdaByron.LOG, "Create a New Game");
-				//game.setScreen(new NGIntro(game));
-			} else {
-				Gdx.app.log(PokemonAdaByron.LOG, "No Save File!");
-
-			}
+			
+				Gdx.app.log(PokemonAdaByron.LOG, "Crear nueva partida");
+				//m.stop();
+				((Game) Gdx.app.getApplicationListener())
+						.setScreen(new Bienvenida(game));
 		} else if (i == 3) {
-			Gdx.app.log(PokemonAdaByron.LOG, "Credits");
+			Gdx.app.log(PokemonAdaByron.LOG, "Creditos");
+			// TODO
 			//((Game) Gdx.app.getApplicationListener())
 			//		.setScreen(new ScrollingCredits());
 		}
