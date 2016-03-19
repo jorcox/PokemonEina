@@ -14,6 +14,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 import com.pokemon.PokemonAdaByron;
 import com.pokemon.dialogo.Dialogo;
 import com.pokemon.utilidades.ArchivoGuardado;
@@ -146,28 +148,45 @@ public class Bienvenida implements Screen, InputProcessor {
 	public void dispose() {
 
 	}
+	
+	private void setLineas(String l1, String l2) {
+		Timer.schedule(new Task(){
+				int i = 1;
+				int j = 1;
+				public void run() {
+					if (i < l1.length()) {
+						lineaUno = l1.substring(0, i++);
+					} else if (j < l2.length()) {
+						lineaDos = l2.substring(0, j++);
+					}
+				}
+			}, 0, (float) 0.1, l1.length() + l2.length());
+	}
 
 	@Override
 	public boolean keyDown(int keycode) {
 		switch (keycode) {
-			case (Keys.ENTER):				
-					lineaUno = siguienteLinea();
-					lineaDos = siguienteLinea();
-				if (lineaUno!=null) {
-					if(lineaDos==null){lineaDos="";}
+			case (Keys.ENTER):
+				String l1 = siguienteLinea();
+				String l2 = siguienteLinea();
+					
+				if (l1!=null) {
+					if(l2==null){l2="";}
 					optionsVisible = false;
 
-					if (lineaUno.contains("${NOMBRE}")) {
-						lineaUno = lineaUno.replace(
+					if (l1.contains("${NOMBRE}")) {
+						l1 = l1.replace(
 								"${NOMBRE}", ArchivoGuardado.nombreJugador);
-					} else if (lineaDos.contains("${NOMBRE}")) {
-						lineaDos = lineaDos.replace(
+					} else if (l2.contains("${NOMBRE}")) {
+						l2 = l2.replace(
 								"${NOMBRE}", ArchivoGuardado.nombreJugador);
-					} else if (lineaUno.contains("${CREACION_NOMBRE}") || lineaDos.contains("${CREACION_NOMBRE}")) {
-						lineaUno = lineaUno.replace("${CREACION_NOMBRE}", "");
-						lineaDos = lineaDos.replace("${CREACION_NOMBRE}", "");
+					} else if (l1.contains("${CREACION_NOMBRE}") || l2.contains("${CREACION_NOMBRE}")) {
+						l1 = l1.replace("${CREACION_NOMBRE}", "");
+						l2 = l2.replace("${CREACION_NOMBRE}", "");
 						ArchivoGuardado.nombreJugador = "Antonio";
 					}
+					
+					setLineas(l1, l2);
 /*
 					if (script[counter].contains("(OPTION)")) {
 						script[counter] = script[counter].replace(
