@@ -14,57 +14,78 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 import com.pokemon.PokemonAdaByron;
 
 public class PantallaInicio implements Screen, InputProcessor {
 
 	PokemonAdaByron game;
 
-	Music music = Gdx.audio.newMusic(Gdx.files
-			.internal("resources/title.wav"));
+	Music music = Gdx.audio.newMusic(Gdx.files.internal("res/music/PokemonHGSS.mp3"));
 
 	Texture portada;
-	
+
 	Sprite bg;
 
 	SpriteBatch batch;
 
-	//TweenManager manager;
+	// TweenManager manager;
 
-	BitmapFont font = new BitmapFont(
-			Gdx.files.internal("res/font/pokemon.fnt"),
+	BitmapFont font = new BitmapFont(Gdx.files.internal("res/font/pokemon.fnt"),
 			Gdx.files.internal("res/font/pokemon.png"), false);
-	
+
 	FreeTypeFontGenerator generator;
 
 	boolean startFading = false;
 
 	private int musicState = 0;
 
+	private boolean letras = true;
+
 	public PantallaInicio() {
+		/*
+		 * Configuracion musica
+		 */
 		music.play();
 		music.setLooping(true);
 		music.setVolume(0.01f);
+		/*
+		 * Listener teclas
+		 */
 		Gdx.input.setInputProcessor(this);
+		/*
+		 * Configuracion fuente
+		 */
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("res/font/PokemonFont.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 40;
 		font = generator.generateFont(parameter); // font size 30 pixels
+
+		new Timer().scheduleTask(new Task() {
+			public void run() {
+				letras = letras ? false : true;
+			}
+		}, (float) 0.5,(float) 0.5);
 	}
 
 	@Override
 	public void render(float delta) {
+		/*
+		 * Eso no se que es pero tiene que estar
+		 */
 		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
+		Gdx.gl.glClear(GL20.GL_ARRAY_BUFFER);
+
 		font.setColor(Color.BLACK);
-		//manager.update(delta);
+		// manager.update(delta);
 		batch.begin();
-		batch.draw(bg,0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		//bg.draw(batch);
-		
-		font.draw(batch, "Presiona ENTER",
-				(Gdx.graphics.getWidth() / 2) - 45, 100);
+		batch.draw(bg, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		// bg.draw(batch);
+
+		if (letras) {
+			font.draw(batch, "Presiona ENTER", (Gdx.graphics.getWidth() / 2) - 45, 100);
+		}
 		batch.end();
 
 		changeMusicVol(delta);
@@ -73,33 +94,32 @@ public class PantallaInicio implements Screen, InputProcessor {
 	private void changeMusicVol(float delta) {
 		float volume = music.getVolume();
 		switch (musicState) {
-			case 1:
-				if (music.isLooping() || music.isPlaying()) {
-					if (volume > 0.10f)
-						volume -= delta;
-					else {
-						changeToMainMenu();
-					}
-					music.setVolume(Math.abs(volume));
+		case 1:
+			if (music.isLooping() || music.isPlaying()) {
+				if (volume > 0.10f)
+					volume -= delta;
+				else {
+					changeToMainMenu();
 				}
-				break;
-			case 0:
-				if (music.isLooping() || music.isPlaying()) {
-					if (volume < 1.0f)
-						volume += delta * 3;
-					else {
-						volume = 1.0f;
-					}
-					music.setVolume(volume);
+				music.setVolume(Math.abs(volume));
+			}
+			break;
+		case 0:
+			if (music.isLooping() || music.isPlaying()) {
+				if (volume < 1.0f)
+					volume += delta * 3;
+				else {
+					volume = 1.0f;
 				}
-				break;
+				music.setVolume(volume);
+			}
+			break;
 		}
 	}
 
 	private void changeToMainMenu() {
 		music.stop();
-		((Game) Gdx.app.getApplicationListener())
-				.setScreen(new Menu());
+		((Game) Gdx.app.getApplicationListener()).setScreen(new Menu());
 	}
 
 	@Override
@@ -109,17 +129,17 @@ public class PantallaInicio implements Screen, InputProcessor {
 
 	@Override
 	public void show() {
-		portada = new Texture("resources/portada.jpg");
+		portada = new Texture("res/imgs/Portada.jpg");
 		bg = new Sprite(portada);
 		batch = new SpriteBatch();
 
-		//Tween.registerAccessor(BitmapFont.class,
-		//		new BitmapFontTween());
+		// Tween.registerAccessor(BitmapFont.class,
+		// new BitmapFontTween());
 
-		//manager = new TweenManager();
+		// manager = new TweenManager();
 
-		//Tween.to(font, BitmapFontTween.BETA, 1f).target(1)
-		//		.repeatYoyo(1000000, .5f).start(manager);
+		// Tween.to(font, BitmapFontTween.BETA, 1f).target(1)
+		// .repeatYoyo(1000000, .5f).start(manager);
 	}
 
 	protected void tweenCompleted() {
@@ -168,14 +188,12 @@ public class PantallaInicio implements Screen, InputProcessor {
 	}
 
 	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer,
-			int button) {
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		return false;
 	}
 
 	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer,
-			int button) {
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		return false;
 	}
 
