@@ -42,6 +42,8 @@ public class Bienvenida implements Screen, InputProcessor {
 	private String lineaUno = "";
 
 	private String lineaDos = "";
+	
+	private boolean writing = false;
 
 	ArchivoGuardado guardado;
 
@@ -149,50 +151,70 @@ public class Bienvenida implements Screen, InputProcessor {
 
 	}
 	
+	/**
+	 * Muestra las dos lineas por pantalla letra a letra. Escribe una letra
+	 * cada 0,05s.
+	 * 
+	 * @param l1
+	 * @param l2
+	 */
 	private void setLineas(String l1, String l2) {
+		/* Antes hay que borrarlas */
+		lineaUno = "";
+		lineaDos = "";
+		
 		Timer.schedule(new Task(){
 				int i = 1;
 				int j = 1;
 				public void run() {
+					writing = true;
+					
 					if (i < l1.length()) {
 						lineaUno = l1.substring(0, i++);
 					} else if (j < l2.length()) {
 						lineaDos = l2.substring(0, j++);
+					} else {
+						writing = false;
 					}
 				}
-			}, 0, (float) 0.1, l1.length() + l2.length());
+			}, 0, (float) 0.05, l1.length() + l2.length() + 1);
 	}
 
 	@Override
 	public boolean keyDown(int keycode) {
-		switch (keycode) {
+		if (!writing) {
+			switch (keycode) {
 			case (Keys.ENTER):
 				String l1 = siguienteLinea();
 				String l2 = siguienteLinea();
-					
-				if (l1!=null) {
-					if(l2==null){l2="";}
+				
+				if (l1 != null) {
+					if (l2 == null) {
+						l2 = "";
+					}
 					optionsVisible = false;
 
 					if (l1.contains("${NOMBRE}")) {
-						l1 = l1.replace(
-								"${NOMBRE}", ArchivoGuardado.nombreJugador);
+						l1 = l1.replace("${NOMBRE}",
+								ArchivoGuardado.nombreJugador);
 					} else if (l2.contains("${NOMBRE}")) {
-						l2 = l2.replace(
-								"${NOMBRE}", ArchivoGuardado.nombreJugador);
-					} else if (l1.contains("${CREACION_NOMBRE}") || l2.contains("${CREACION_NOMBRE}")) {
+						l2 = l2.replace("${NOMBRE}",
+								ArchivoGuardado.nombreJugador);
+					} else if (l1.contains("${CREACION_NOMBRE}")
+							|| l2.contains("${CREACION_NOMBRE}")) {
 						l1 = l1.replace("${CREACION_NOMBRE}", "");
 						l2 = l2.replace("${CREACION_NOMBRE}", "");
 						ArchivoGuardado.nombreJugador = "Antonio";
 					}
-					
+
+					/* Escribe letra a letra el dialogo */
 					setLineas(l1, l2);
-/*
-					if (script[counter].contains("(OPTION)")) {
-						script[counter] = script[counter].replace(
-								"(OPTION)", "");
-						optionsVisible = true;
-					}*/
+					
+					/*
+					 * if (script[counter].contains("(OPTION)")) {
+					 * script[counter] = script[counter].replace( "(OPTION)",
+					 * ""); optionsVisible = true; }
+					 */
 				} else {
 					m.stop();
 					((Game) Gdx.app.getApplicationListener())
@@ -209,6 +231,7 @@ public class Bienvenida implements Screen, InputProcessor {
 
 				}
 				break;
+			}
 		}
 
 		return false;
