@@ -19,17 +19,16 @@ public class MenuPlay implements Screen, InputProcessor {
 
 	Play play;
 
-	Texture t, button, conButton;
+	Texture t, button, selButton, p, pSel, b, bSel, o, oSel, s, sSel;
 
 	BitmapFont font = new BitmapFont(
 			Gdx.files.internal("res/font/pokemon.fnt"),
 			Gdx.files.internal("res/font/pokemon.png"), false);
 
-	Texture selButton;
-
 	SpriteBatch batch;
 
-	Sprite bg, regButton, regButton2, regButton3, regButton4, regButton5;
+	Sprite bg, regButton, regButton2, regButton3, regButton4, poke, bag, opt,
+			save;
 
 	private boolean archivoGuardado = ArchivoGuardado.existe;
 
@@ -46,18 +45,20 @@ public class MenuPlay implements Screen, InputProcessor {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		batch.begin();
-		batch.draw(bg,0,0,720,540);
-		//bg.draw(batch);
+		batch.draw(bg, 0, 0, 720, 540);
 		updateSelection();
-
-		regButton.draw(batch);
-		regButton2.draw(batch);
-		regButton3.draw(batch);
-		regButton4.draw(batch);
-		font.draw(batch, "Pokémon", 150, 275);
-		font.draw(batch, "Bolsa", 150, 175);
-		font.draw(batch, "Opciones", 250, 275);
-		font.draw(batch, "Guardar", 250, 175);
+		batch.draw(regButton, 100, 350);
+		batch.draw(regButton2, 100, 200);
+		batch.draw(regButton3, 400, 350);
+		batch.draw(regButton4, 400, 200);
+		batch.draw(poke, 108, 365);
+		batch.draw(bag, 108, 215);
+		batch.draw(opt, 408, 365);
+		batch.draw(save, 408, 215);
+		font.draw(batch, "Pokémon", 170, 395);
+		font.draw(batch, "Bolsa", 170, 245);
+		font.draw(batch, "Opciones", 470, 395);
+		font.draw(batch, "Guardar", 470, 245);
 		batch.end();
 
 	}
@@ -67,23 +68,19 @@ public class MenuPlay implements Screen, InputProcessor {
 		switch (seleccion) {
 		case 1:
 			regButton = new Sprite(selButton);
-			regButton.setX(150);
-			regButton.setY(275);
+			poke = new Sprite(pSel);
 			break;
 		case 2:
 			regButton2 = new Sprite(selButton);
-			regButton2.setX(150);
-			regButton2.setY(175);
+			bag = new Sprite(bSel);
 			break;
 		case 3:
 			regButton3 = new Sprite(selButton);
-			regButton3.setX(250);
-			regButton3.setY(275);
+			opt = new Sprite(oSel);
 			break;
 		case 4:
 			regButton4 = new Sprite(selButton);
-			regButton4.setX(250);
-			regButton4.setY(175);
+			save = new Sprite(sSel);
 			break;
 
 		}
@@ -95,18 +92,10 @@ public class MenuPlay implements Screen, InputProcessor {
 		regButton2 = new Sprite(button);
 		regButton3 = new Sprite(button);
 		regButton4 = new Sprite(button);
-
-		regButton.setX(150);
-		regButton.setY(275);
-
-		regButton2.setX(150);
-		regButton2.setY(175);
-
-		regButton3.setX(250);
-		regButton3.setY(275);
-
-		regButton4.setX(250);
-		regButton4.setY(175);
+		poke = new Sprite(p);
+		bag = new Sprite(b);
+		opt = new Sprite(o);
+		save = new Sprite(s);
 	}
 
 	@Override
@@ -120,26 +109,24 @@ public class MenuPlay implements Screen, InputProcessor {
 		Gdx.input.setInputProcessor(this);
 		bg = new Sprite(new Texture("res/imgs/background.png"));
 		button = new Texture("res/imgs/panel.png");
-
 		selButton = new Texture("res/imgs/panel2.png");
+		p = new Texture("res/imgs/party.png");
+		pSel = new Texture("res/imgs/party2.png");
+		b = new Texture("res/imgs/bag.png");
+		bSel = new Texture("res/imgs/bag2.png");
+		o = new Texture("res/imgs/options.png");
+		oSel = new Texture("res/imgs/options.png");
+		s = new Texture("res/imgs/save.png");
+		sSel = new Texture("res/imgs/save2.png");
 
 		regButton = new Sprite(button);
 		regButton2 = new Sprite(button);
 		regButton3 = new Sprite(button);
 		regButton4 = new Sprite(button);
-
-		regButton.setX(150);
-		regButton.setY(275);
-
-		regButton2.setX(150);
-		regButton2.setY(175);
-
-		regButton3.setX(250);
-		regButton3.setY(275);
-
-		regButton4.setX(150);
-		regButton4.setY(175);
-
+		poke = new Sprite(p);
+		bag = new Sprite(b);
+		opt = new Sprite(o);
+		save = new Sprite(s);
 		batch = new SpriteBatch();
 	}
 
@@ -167,13 +154,23 @@ public class MenuPlay implements Screen, InputProcessor {
 	public boolean keyDown(int keycode) {
 		switch (keycode) {
 		case (Keys.UP):
-			if (seleccion != 1) {
+			if (seleccion != 1 && seleccion != 3) {
 				seleccion -= 1;
 			}
 			break;
 		case (Keys.DOWN):
-			if (seleccion != 4) {
+			if (seleccion != 2 && seleccion != 4) {
 				seleccion += 1;
+			}
+			break;
+		case Keys.LEFT:
+			if (seleccion != 1 && seleccion != 2) {
+				seleccion -= 2;
+			}
+			break;
+		case Keys.RIGHT:
+			if (seleccion != 3 && seleccion != 4) {
+				seleccion += 2;
 			}
 			break;
 		case (Keys.ENTER):
