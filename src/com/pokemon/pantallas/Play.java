@@ -1,5 +1,6 @@
 package com.pokemon.pantallas;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -26,7 +27,7 @@ public class Play implements Screen {
 	@Override
 	public void show() {
 		TmxMapLoader loader = new TmxMapLoader();
-		map = loader.load("assets/maps/Hall.tmx");
+		map = loader.load("assets/maps/Tranvia_n.tmx");
 
 		renderer = new OrthogonalTiledMapRenderer(map);
 
@@ -65,7 +66,15 @@ public class Play implements Screen {
 
 		renderer.getBatch().begin();
 		player.draw(renderer.getBatch());
+		if(player.getSpacePressed()){
+			//Show menu
+			openMenuPlay();
+		}
 		renderer.getBatch().end();
+	}
+	
+	public void openMenuPlay(){
+		((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPlay(this));
 	}
 
 	@Override
