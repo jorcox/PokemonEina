@@ -128,9 +128,9 @@ public class Player extends Sprite implements InputProcessor {
 						.getProperties().containsKey("blocked");
 
 		} else if (velocity.y > 0) {
-			// Top left
-			//collisionY = collisionLayer.getCell((int) (getX() / tileWidth), (int) ((getY() + getHeight()) / tileHeight))
-			//		.getTile().getProperties().containsKey("blocked");
+			//Top left
+			collisionY = collisionLayer.getCell((int) (getX() / tileWidth), (int) ((getY() + getHeight()) / tileHeight))
+					.getTile().getProperties().containsKey("blocked");
 			// Top middle
 			if (!collisionY)
 				collisionY |= collisionLayer

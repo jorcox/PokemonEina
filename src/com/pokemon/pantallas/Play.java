@@ -26,7 +26,7 @@ public class Play implements Screen {
 	@Override
 	public void show() {
 		TmxMapLoader loader = new TmxMapLoader();
-		map = loader.load("assets/maps/Hall.tmx");
+		map = loader.load("res/maps/Hall.tmx");
 
 		renderer = new OrthogonalTiledMapRenderer(map);
 
