@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="64" tilewidth="32" tileheight="32" nextobjectid="1">
  <tileset firstgid="1" name="Outside" tilewidth="32" tileheight="32" tilecount="4016" columns="8">
-  <image source="Outside.png" trans="ffffff" width="256" height="16064"/>
+  <image source="../Tilesets/Outside.png" trans="ffffff" width="256" height="16064"/>
  </tileset>
  <tileset firstgid="4017" name="Interior Modern" tilewidth="32" tileheight="32" tilecount="3320" columns="8">
-  <image source="Interior Modern.png" trans="ffffff" width="256" height="13311"/>
+  <image source="../Tilesets/Interior Modern.png" trans="ffffff" width="256" height="13311"/>
  </tileset>
  <tileset firstgid="7337" name="Entorno" tilewidth="32" tileheight="32" tilecount="5" columns="5">
-  <image source="Entorno.png" trans="ffffff" width="160" height="32"/>
+  <image source="../Tilesets/Entorno.png" trans="ffffff" width="160" height="32"/>
   <tile id="0">
    <properties>
     <property name="blocked" value=""/>

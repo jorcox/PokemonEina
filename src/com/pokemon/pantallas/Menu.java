@@ -20,8 +20,8 @@ public class Menu implements Screen, InputProcessor {
 	Texture t, button, conButton;
 
 	BitmapFont font = new BitmapFont(
-			Gdx.files.internal("res/font/pokemon.fnt"),
-			Gdx.files.internal("res/font/pokemon.png"), false);
+			Gdx.files.internal("res/fuentes/pokemon.fnt"),
+			Gdx.files.internal("res/fuentes/pokemon.png"), false);
 
 	Texture selButton, selConButton;
 

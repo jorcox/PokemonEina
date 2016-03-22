@@ -22,8 +22,8 @@ public class MenuPlay implements Screen, InputProcessor {
 	Texture t, button, selButton, p, pSel, b, bSel, o, oSel, s, sSel;
 
 	BitmapFont font = new BitmapFont(
-			Gdx.files.internal("res/font/pokemon.fnt"),
-			Gdx.files.internal("res/font/pokemon.png"), false);
+			Gdx.files.internal("res/fuentes/pokemon.fnt"),
+			Gdx.files.internal("res/fuentes/pokemon.png"), false);
 
 	SpriteBatch batch;
 
@@ -55,7 +55,7 @@ public class MenuPlay implements Screen, InputProcessor {
 		batch.draw(bag, 108, 215);
 		batch.draw(opt, 408, 365);
 		batch.draw(save, 408, 215);
-		font.draw(batch, "Pokémon", 170, 395);
+		font.draw(batch, "Pokï¿½mon", 170, 395);
 		font.draw(batch, "Bolsa", 170, 245);
 		font.draw(batch, "Opciones", 470, 395);
 		font.draw(batch, "Guardar", 470, 245);

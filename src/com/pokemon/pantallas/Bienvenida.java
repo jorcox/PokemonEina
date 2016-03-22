@@ -57,7 +57,7 @@ public class Bienvenida implements Screen, InputProcessor {
 
 	// private boolean profVisible = true;
 	private Music m = Gdx.audio.newMusic(Gdx.files
-			.internal("res/music/ProfessorIntro.mp3"));
+			.internal("res/musica/ProfessorIntro.mp3"));
 
 	private int optionsScreen = 1;
 
@@ -68,7 +68,7 @@ public class Bienvenida implements Screen, InputProcessor {
 		Gdx.input.setInputProcessor(this);
 		m.play();
 		m.setLooping(true);
-		generator = new FreeTypeFontGenerator(Gdx.files.internal("res/font/PokemonFont.ttf"));
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 35;
 		font = generator.generateFont(parameter); // font size 35 pixels

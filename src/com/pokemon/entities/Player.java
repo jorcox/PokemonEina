@@ -237,6 +237,7 @@ public class Player extends Sprite implements InputProcessor {
 			break;
 		case Keys.S:
 			velocity.y = -speed;
+
 			velocity.x = 0;
 			animationTime = 0;
 			if(lastPressed==0)
