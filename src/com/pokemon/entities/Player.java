@@ -18,7 +18,7 @@ public class Player extends Sprite implements InputProcessor {
 	private Animation cara, izquierda, derecha, espalda;
 	private TiledMapTileLayer collisionLayer;
 
-	private boolean APressed = false, WPressed = false, SPressed = false, DPressed = false;
+	private boolean APressed = false, WPressed = false, SPressed = false, DPressed = false, SpacePressed=false;
 	private int lastPressed; //A=1, W=2, S=3, D=4
 
 	public Player(Animation cara, Animation izquierda, Animation derecha, Animation espalda,
@@ -180,6 +180,10 @@ public class Player extends Sprite implements InputProcessor {
 		}
 	}
 
+	public boolean getSpacePressed(){
+		return SpacePressed;
+	}
+	
 	public Vector2 getVelocity() {
 		return velocity;
 	}
@@ -246,6 +250,9 @@ public class Player extends Sprite implements InputProcessor {
 			if(lastPressed==0)
 				lastPressed = 4;
 			DPressed = true;
+			break;
+		case Keys.SPACE:
+			SpacePressed=true;
 			break;
 		}
 		return true;
@@ -321,6 +328,9 @@ public class Player extends Sprite implements InputProcessor {
 			animationTime = 0;
 			lastPressed = 4;
 			DPressed = false;
+			break;
+		case Keys.SPACE:
+			SpacePressed=false;
 			break;
 		}
 		return true;
