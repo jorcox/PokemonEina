@@ -4,4 +4,8 @@
 /bin/*
 /bin/
 /build/
+<<<<<<< HEAD
 /.gradle/
+=======
+/.metadata/
+>>>>>>> refs/remotes/origin/master

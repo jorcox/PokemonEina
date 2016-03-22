@@ -18,7 +18,7 @@ public class Player extends Sprite implements InputProcessor {
 	private Animation cara, izquierda, derecha, espalda;
 	private TiledMapTileLayer collisionLayer;
 
-	private boolean APressed = false, WPressed = false, SPressed = false, DPressed = false;
+	private boolean APressed = false, WPressed = false, SPressed = false, DPressed = false, SpacePressed=false;
 	private int lastPressed; //A=1, W=2, S=3, D=4
 
 	public Player(Animation cara, Animation izquierda, Animation derecha, Animation espalda,
@@ -128,9 +128,9 @@ public class Player extends Sprite implements InputProcessor {
 						.getProperties().containsKey("blocked");
 
 		} else if (velocity.y > 0) {
-			//Top left
-			collisionY = collisionLayer.getCell((int) (getX() / tileWidth), (int) ((getY() + getHeight()) / tileHeight))
-					.getTile().getProperties().containsKey("blocked");
+			// Top left
+			//collisionY = collisionLayer.getCell((int) (getX() / tileWidth), (int) ((getY() + getHeight()) / tileHeight))
+			//		.getTile().getProperties().containsKey("blocked");
 			// Top middle
 			if (!collisionY)
 				collisionY |= collisionLayer
@@ -180,6 +180,10 @@ public class Player extends Sprite implements InputProcessor {
 		}
 	}
 
+	public boolean getSpacePressed(){
+		return SpacePressed;
+	}
+	
 	public Vector2 getVelocity() {
 		return velocity;
 	}
@@ -233,6 +237,7 @@ public class Player extends Sprite implements InputProcessor {
 			break;
 		case Keys.S:
 			velocity.y = -speed;
+
 			velocity.x = 0;
 			animationTime = 0;
 			if(lastPressed==0)
@@ -246,6 +251,9 @@ public class Player extends Sprite implements InputProcessor {
 			if(lastPressed==0)
 				lastPressed = 4;
 			DPressed = true;
+			break;
+		case Keys.SPACE:
+			SpacePressed=true;
 			break;
 		}
 		return true;
@@ -321,6 +329,9 @@ public class Player extends Sprite implements InputProcessor {
 			animationTime = 0;
 			lastPressed = 4;
 			DPressed = false;
+			break;
+		case Keys.SPACE:
+			SpacePressed=false;
 			break;
 		}
 		return true;
