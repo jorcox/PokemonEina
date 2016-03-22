@@ -18,6 +18,8 @@ public class Play implements Screen {
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer renderer;
 	private OrthographicCamera camera;
+	private float x;
+	private float y;
 
 	private TextureAtlas playerAtlas;
 
@@ -25,6 +27,10 @@ public class Play implements Screen {
 	// Texture("assets/maps/tilesInterior.png")));
 	private Player player;
 
+	public Play(float x, float y){
+		
+	}
+	
 	@Override
 	public void show() {
 		TmxMapLoader loader = new TmxMapLoader();
