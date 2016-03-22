@@ -28,13 +28,13 @@ public class Play implements Screen {
 	@Override
 	public void show() {
 		TmxMapLoader loader = new TmxMapLoader();
-		map = loader.load("assets/maps/Tranvia_n.tmx");
+		map = loader.load("res/mapas/Tranvia_n.tmx");
 
 		renderer = new OrthogonalTiledMapRenderer(map);
 
 		camera = new OrthographicCamera();
 
-		playerAtlas = new TextureAtlas("assets/img/protagonista.pack");
+		playerAtlas = new TextureAtlas("res/imgs/protagonista.pack");
 
 		Animation cara, derecha, izquierda, espalda;
 		cara = new Animation(1 / 10f, playerAtlas.findRegions("cara"));

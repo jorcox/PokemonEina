@@ -1,5 +1,9 @@
 package com.pokemon.dialogo;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -40,7 +44,9 @@ public class Dialogo {
 		this.pais = pais;
 
 		locale = new Locale(idioma, pais);
-		bundle = ResourceBundle.getBundle("Dialogos", locale);
+
+			bundle = ResourceBundle.getBundle("Dialogos", locale);
+		
 	}
 
 	public String getIdioma() {

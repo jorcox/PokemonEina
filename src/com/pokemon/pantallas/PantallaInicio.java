@@ -22,7 +22,7 @@ public class PantallaInicio implements Screen, InputProcessor {
 
 	PokemonAdaByron game;
 
-	Music music = Gdx.audio.newMusic(Gdx.files.internal("res/music/PokemonHGSS.mp3"));
+	Music music = Gdx.audio.newMusic(Gdx.files.internal("res/musica/PokemonHGSS.mp3"));
 
 	Texture portada;
 
@@ -32,8 +32,8 @@ public class PantallaInicio implements Screen, InputProcessor {
 
 	// TweenManager manager;
 
-	BitmapFont font = new BitmapFont(Gdx.files.internal("res/font/pokemon.fnt"),
-			Gdx.files.internal("res/font/pokemon.png"), false);
+	BitmapFont font = new BitmapFont(Gdx.files.internal("res/fuentes/pokemon.fnt"),
+			Gdx.files.internal("res/fuentes/pokemon.png"), false);
 
 	FreeTypeFontGenerator generator;
 
@@ -57,7 +57,7 @@ public class PantallaInicio implements Screen, InputProcessor {
 		/*
 		 * Configuracion fuente
 		 */
-		generator = new FreeTypeFontGenerator(Gdx.files.internal("res/font/PokemonFont.ttf"));
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 40;
 		font = generator.generateFont(parameter); // font size 30 pixels
