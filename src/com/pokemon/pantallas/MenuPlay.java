@@ -60,7 +60,6 @@ public class MenuPlay implements Screen, InputProcessor {
 		font.draw(batch, "Opciones", 470, 395);
 		font.draw(batch, "Guardar", 470, 245);
 		batch.end();
-
 	}
 
 	private void updateSelection() {
