@@ -165,16 +165,16 @@ public class Player extends Sprite implements InputProcessor {
 		} else {
 			switch (lastPressed){
 			case 1 : //A
-				izquierda.getKeyFrame(1);
+				setRegion(izquierda.getKeyFrame(0));
 				break;
 			case 2 : //W
-				espalda.getKeyFrame(1);
+				setRegion(espalda.getKeyFrame(0));
 				break;
 			case 3 : //S
-				cara.getKeyFrame(1);
+				setRegion(cara.getKeyFrame(0));
 				break;
 			case 4 : //D
-				derecha.getKeyFrame(1);
+				setRegion(derecha.getKeyFrame(1));
 				break;
 			}
 		}
@@ -335,6 +335,14 @@ public class Player extends Sprite implements InputProcessor {
 			break;
 		}
 		return true;
+	}
+	
+	public int getLastPressed(){
+		return lastPressed;
+	}
+	
+	public void setLastPressed(int lastPressed){
+		this.lastPressed=lastPressed;
 	}
 
 	@Override

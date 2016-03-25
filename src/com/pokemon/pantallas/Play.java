@@ -18,12 +18,20 @@ public class Play implements Screen {
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer renderer;
 	private OrthographicCamera camera;
+	private float x, y;
+	private int lastPressed;
 
 	private TextureAtlas playerAtlas;
 
 	// private Player player = new Player(new Sprite(new
 	// Texture("assets/maps/tilesInterior.png")));
 	private Player player;
+
+	public Play(float x, float y, int lastPressed) {
+		this.x = x;
+		this.y = y;
+		this.lastPressed=lastPressed;
+	}
 
 	@Override
 	public void show() {
@@ -48,10 +56,9 @@ public class Play implements Screen {
 
 		player = new Player(cara, izquierda, derecha, espalda,
 				(TiledMapTileLayer) map.getLayers().get("Entorno"));
-		player.setPosition(250, 340);
-
+		player.setPosition(x, y);
+		player.setLastPressed(lastPressed);
 		Gdx.input.setInputProcessor(player);
-
 	}
 
 	@Override
@@ -76,7 +83,8 @@ public class Play implements Screen {
 	}
 
 	public void openMenuPlay() {
-		((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPlay(this));
+		((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPlay(player
+				.getX(), player.getY(), player.getLastPressed()));
 	}
 
 	@Override
@@ -113,8 +121,8 @@ public class Play implements Screen {
 		playerAtlas.dispose();
 
 	}
-	
-	public Player getPlayer(){
+
+	public Player getPlayer() {
 		return player;
 	}
 

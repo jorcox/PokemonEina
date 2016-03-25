@@ -21,29 +21,17 @@ import com.pokemon.dialogo.Dialogo;
 import com.pokemon.utilidades.ArchivoGuardado;
 import com.pokemon.utilidades.Importador;
 
-public class Bienvenida implements Screen, InputProcessor {
+public class Bienvenida extends Dialogo implements Screen, InputProcessor {
 
 	PokemonAdaByron game;
 
-	Dialogo dialogo;
-
-	String[] frases;
-
 	private int counter = 0;
-
-	private int len;
 
 	private Sprite optionBox;
 
 	BitmapFont font;
 
 	SpriteBatch batch;
-
-	private String lineaUno = "";
-
-	private String lineaDos = "";
-	
-	private boolean writing = false;
 
 	ArchivoGuardado guardado;
 
@@ -64,6 +52,7 @@ public class Bienvenida implements Screen, InputProcessor {
 	private boolean optionsVisible = false;
 
 	public Bienvenida(PokemonAdaByron game) {
+		super("es", "ES");
 		this.game = game;
 		Gdx.input.setInputProcessor(this);
 		m.play();
@@ -72,18 +61,9 @@ public class Bienvenida implements Screen, InputProcessor {
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 35;
 		font = generator.generateFont(parameter); // font size 35 pixels
-		procesarDialogo();
+		frases = getDialogo("jamarro_intro");
 	}
 
-	private void procesarDialogo() {
-		dialogo = new Dialogo("es", "ES");
-		len = 0;
-		frases = dialogo.getDialogo("jamarro_intro");
-	}
-
-	public String siguienteLinea() {		
-		return dialogo.getSiguienteLinea(frases);
-	}
 
 	@Override
 	public void render(float delta) {
@@ -151,34 +131,7 @@ public class Bienvenida implements Screen, InputProcessor {
 
 	}
 	
-	/**
-	 * Muestra las dos lineas por pantalla letra a letra. Escribe una letra
-	 * cada 0,05s.
-	 * 
-	 * @param l1
-	 * @param l2
-	 */
-	private void setLineas(String l1, String l2) {
-		/* Antes hay que borrarlas */
-		lineaUno = "";
-		lineaDos = "";
-		
-		Timer.schedule(new Task(){
-				int i = 1;
-				int j = 1;
-				public void run() {
-					writing = true;
-					
-					if (i < l1.length()) {
-						lineaUno = l1.substring(0, i++);
-					} else if (j < l2.length()) {
-						lineaDos = l2.substring(0, j++);
-					} else {
-						writing = false;
-					}
-				}
-			}, 0, (float) 0.05, l1.length() + l2.length() + 1);
-	}
+	
 
 	@Override
 	public boolean keyDown(int keycode) {
@@ -218,7 +171,7 @@ public class Bienvenida implements Screen, InputProcessor {
 				} else {
 					m.stop();
 					((Game) Gdx.app.getApplicationListener())
-							.setScreen(new Play());
+							.setScreen(new Play(60,60,3));
 				}
 				break;
 			case (Keys.UP):
