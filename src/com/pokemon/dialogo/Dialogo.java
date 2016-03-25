@@ -8,6 +8,9 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
+
 /**
  * 
  * @author Javier Beltran, Jorge Cancer, Alejandro Dieste
@@ -38,6 +41,11 @@ public class Dialogo {
 	private int indiceActual;
 	private int subIndiceActual;
 	private int indicePalabra;
+	protected String lineaUno = "";
+	protected String lineaDos = "";
+	protected boolean writing = false;
+	protected int len;
+	protected String[] frases;
 
 	public Dialogo(String idioma, String pais) {
 		this.idioma = idioma;
@@ -45,8 +53,10 @@ public class Dialogo {
 
 		locale = new Locale(idioma, pais);
 
-			bundle = ResourceBundle.getBundle("Dialogos", locale);
+		bundle = ResourceBundle.getBundle("Dialogos", locale);
+		len = 0;
 		
+
 	}
 
 	public String getIdioma() {
@@ -127,7 +137,41 @@ public class Dialogo {
 		}
 		return i;
 	}
+
+	/**
+	 * Muestra las dos lineas por pantalla letra a letra. Escribe una letra cada
+	 * 0,05s.
+	 * 
+	 * @param l1
+	 * @param l2
+	 */
+	protected void setLineas(String l1, String l2) {
+		/* Antes hay que borrarlas */
+		lineaUno = "";
+		lineaDos = "";
+
+		Timer.schedule(new Task() {
+			int i = 1;
+			int j = 1;
+
+			public void run() {
+				writing = true;
+
+				if (i < l1.length()) {
+					lineaUno = l1.substring(0, i++);
+				} else if (j < l2.length()) {
+					lineaDos = l2.substring(0, j++);
+				} else {
+					writing = false;
+				}
+			}
+		}, 0, (float) 0.05, l1.length() + l2.length() + 1);
+	}
 	
-	
+
+
+	public String siguienteLinea() {		
+		return getSiguienteLinea(frases);
+	}
 
 }
