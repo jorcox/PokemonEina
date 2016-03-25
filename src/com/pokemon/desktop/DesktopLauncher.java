@@ -16,5 +16,6 @@ public class DesktopLauncher {
         config.addIcon("res/imgs/Pokeball.png", FileType.Internal);
         
         new LwjglApplication(new PokemonAdaByron(), config);
+ 
     }
 }

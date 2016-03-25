@@ -218,7 +218,7 @@ public class Bienvenida implements Screen, InputProcessor {
 				} else {
 					m.stop();
 					((Game) Gdx.app.getApplicationListener())
-							.setScreen(new Play());
+							.setScreen(new Play(60,60,3));
 				}
 				break;
 			case (Keys.UP):

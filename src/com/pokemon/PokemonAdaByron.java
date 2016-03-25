@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pokemon.pantallas.Menu;
 import com.pokemon.pantallas.PantallaInicio;
 import com.pokemon.pantallas.Play;
+import com.pokemon.pantallas.Salvaje;
 
 public class PokemonAdaByron extends Game {
 	
@@ -23,7 +24,7 @@ public class PokemonAdaByron extends Game {
 
 	@Override
 	public void create() {
-		setScreen(new PantallaInicio());
+		setScreen(new Salvaje(280,280,3));
 	}
 
 	@Override

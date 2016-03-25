@@ -127,5 +127,7 @@ public class Dialogo {
 		}
 		return i;
 	}
+	
+	
 
 }

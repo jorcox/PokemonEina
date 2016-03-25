@@ -17,7 +17,8 @@ public class MenuPlay implements Screen, InputProcessor {
 
 	PokemonAdaByron game;
 
-	Play play;
+	private float x, y;
+	private int lastPressed;
 
 	Texture t, button, selButton, p, pSel, b, bSel, o, oSel, s, sSel;
 
@@ -34,9 +35,11 @@ public class MenuPlay implements Screen, InputProcessor {
 
 	private int seleccion = 1;
 
-	public MenuPlay(Play play) {
+	public MenuPlay(float x, float y, int lastPressed) {
 		ArchivoGuardado.musica = null;
-		this.play = play;
+		this.x = x;
+		this.y = y;
+		this.lastPressed = lastPressed;
 	}
 
 	@Override
@@ -179,7 +182,8 @@ public class MenuPlay implements Screen, InputProcessor {
 			Gdx.app.exit();
 			break;
 		case Keys.SPACE:
-			((Game) Gdx.app.getApplicationListener()).setScreen(play);
+			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(x, y,
+					lastPressed));
 			break;
 		}
 		return true;
