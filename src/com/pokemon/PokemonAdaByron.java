@@ -8,6 +8,8 @@ import com.pokemon.pantallas.PantallaInicio;
 import com.pokemon.pantallas.Play;
 import com.pokemon.pantallas.Salvaje;
 
+import entrenadores.Entrenador;
+
 public class PokemonAdaByron extends Game {
 	
 	/*

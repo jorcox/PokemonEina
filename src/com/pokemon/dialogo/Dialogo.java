@@ -46,6 +46,7 @@ public class Dialogo {
 	protected boolean writing = false;
 	protected int len;
 	protected String[] frases;
+	protected String id;
 
 	public Dialogo(String idioma, String pais) {
 		this.idioma = idioma;
@@ -77,6 +78,7 @@ public class Dialogo {
 	 * @return el dialogo cuya clave es id.
 	 */
 	public String[] getDialogo(String id) {
+		this.id=id;
 		int i = contarFrases(id);
 		String[] dialogo = new String[i];
 		for (int j = 1; j < i; j++) {
