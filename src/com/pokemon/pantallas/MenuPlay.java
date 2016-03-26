@@ -58,7 +58,7 @@ public class MenuPlay implements Screen, InputProcessor {
 		batch.draw(bag, 108, 215);
 		batch.draw(opt, 408, 365);
 		batch.draw(save, 408, 215);
-		font.draw(batch, "Pok�mon", 170, 395);
+		font.draw(batch, "Pokemon", 170, 395);
 		font.draw(batch, "Bolsa", 170, 245);
 		font.draw(batch, "Opciones", 470, 395);
 		font.draw(batch, "Guardar", 470, 245);

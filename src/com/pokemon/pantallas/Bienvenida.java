@@ -157,7 +157,7 @@ public class Bienvenida extends Dialogo implements Screen, InputProcessor {
 							|| l2.contains("${CREACION_NOMBRE}")) {
 						l1 = l1.replace("${CREACION_NOMBRE}", "");
 						l2 = l2.replace("${CREACION_NOMBRE}", "");
-						ArchivoGuardado.nombreJugador = "Antonio";
+						ArchivoGuardado.nombreJugador = "Sara";
 					}
 
 					/* Escribe letra a letra el dialogo */
