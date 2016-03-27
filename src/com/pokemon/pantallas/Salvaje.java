@@ -1,5 +1,11 @@
 package com.pokemon.pantallas;
 
+import habilidad.Habilidad;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import pokemon.Pokemon;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenManager;
@@ -16,6 +22,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.pokemon.dialogo.Dialogo;
@@ -23,6 +30,7 @@ import com.pokemon.tween.SpriteAccessor;
 import com.pokemon.utilidades.ArchivoGuardado;
 
 import core.Combate;
+import db.BaseDatos;
 import entrenadores.Entrenador;
 
 public class Salvaje extends Dialogo implements Screen, InputProcessor {
@@ -32,26 +40,37 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 	private float lastPressed;
 	private int fase = 1;
 	private double alfa = 0;
+	private Pokemon pkmn;
+	private Habilidad[] habilidades;
 	FreeTypeFontGenerator generator;
 	private TweenManager tweenManager;
 	private Combate combate;
 	private Entrenador e;
-	private Pokemon p;
 	private int seleccion = 1;
 	BitmapFont font;
+	BaseDatos db;
 
 	SpriteBatch batch;
+	Texture tipos;
+	TextureRegion[] regionesTipo;
 	Sprite bg, base, baseEnemy, message, salvaje, pokemon, bgOp, bgOpTrans,
-			boton, luchar, mochila, pokemonOp, huir, dedo;
+			boton, luchar, mochila, pokemonOp, huir, dedo, cajaLuchar, tipo1,
+			tipo2, tipo3, tipo4;
 
 	public Salvaje(float x, float y, float lastPressed) {
 		super("es", "ES");
 		this.x = x;
 		this.y = y;
 		this.lastPressed = lastPressed;
-		this.e = e;
-		this.p = p;
-		combate = new Combate(e, p);
+
+		try {
+			db = new BaseDatos("pokemon_base");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		pkmn = db.getPokemon(0);
+
 		Gdx.input.setInputProcessor(this);
 		generator = new FreeTypeFontGenerator(
 				Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
@@ -69,6 +88,7 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 		tweenManager.update(delta);
 
 		batch.begin();
+
 		bg.draw(batch);
 
 		bg.setSize(720, 540);
@@ -93,12 +113,12 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 			pokemonOp.draw(batch);
 			huir.draw(batch);
 			dedo.draw(batch);
-
-			/*
-			 * bgOp.setSize(720, 120); bgOp.draw(batch);
-			 * bgOpTrans.setAlpha((float) 0.75); bgOpTrans.setPosition(0, 120);
-			 * bgOpTrans.setSize(720, 50); bgOpTrans.draw(batch);
-			 */
+		}
+		if (fase == 4) {
+			pokemon.draw(batch);
+			cajaLuchar.setSize(720, 120);
+			cajaLuchar.draw(batch);
+			dibujarTipos();
 
 		}
 		batch.end();
@@ -111,6 +131,7 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 		tweenManager = new TweenManager();
 		Tween.registerAccessor(Sprite.class, new SpriteAccessor());
 		batch = new SpriteBatch();
+
 		bg = new Sprite(new Texture("res/imgs/batallas/battlebgForestEve.png"));
 		base = new Sprite(new Texture(
 				"res/imgs/batallas/playerbaseForestGrassEve.png"));
@@ -126,7 +147,11 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 		message = new Sprite(new Texture("res/imgs/batallas/battleMessage.png"));
 		salvaje = new Sprite(new Texture("res/imgs/pokemon/151.png"));
 		pokemon = new Sprite(new Texture("res/imgs/pokemon/espalda/25.png"));
-
+		cajaLuchar = new Sprite(
+				new Texture("res/imgs/batallas/battleFight.png"));
+		tipos = new Texture("res/imgs/batallas/battleFightButtons.png");
+		tipo1 = new Sprite(tipos);
+		regionesTipos();
 		Tween.set(bg, SpriteAccessor.ALPHA).target(0).start(tweenManager);
 		Tween.to(bg, SpriteAccessor.ALPHA, 2).target(1).start(tweenManager);
 		Tween.set(base, SpriteAccessor.SLIDE).target(500, 120)
@@ -149,46 +174,62 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 		if (!writing) {
 			switch (keycode) {
 			case (Keys.ENTER):
-				String l1 = siguienteLinea();
-				String l2 = siguienteLinea();
 
-				if (l1 != null) {
-					if (l2 == null) {
-						l2 = "";
-					}
-					if (id.equals("salvaje")) {
-						if (l1.contains("${SALVAJE}")) {
-							l1 = l1.replace("${SALVAJE}", "Mew");
-						}
-						if (l1.contains("${POKEMON}")) {
-							l1 = l1.replace("${POKEMON}", "Pikachu");
-							fase++;
-							frases = getDialogo("combate");
-						}
-					} else if (id.equals("combate")) {
-						if (l1.contains("${POKEMON}")) {
-							l1 = l1.replace("${POKEMON}", "Pikachu");
-						}
-						if (l1.equals(" ")) {
-							fase++;
-						}
-					}
-
-					/* Escribe letra a letra el dialogo */
-					setLineas(l1, l2);
+				if (fase == 1 || fase == 2) {
 					/*
-					 * if (script[counter].contains("(OPTION)")) {
-					 * script[counter] = script[counter].replace( "(OPTION)",
-					 * ""); optionsVisible = true; }
+					 * Dialogo de comienzo del combate
 					 */
-				} else {
-					// m.stop();
-					// ((Game) Gdx.app.getApplicationListener())
-					// .setScreen(new Combate(60, 60, 3));
+					String l1 = siguienteLinea();
+					String l2 = siguienteLinea();
+
+					if (l1 != null) {
+						if (l2 == null) {
+							l2 = "";
+						}
+						if (id.equals("salvaje")) {
+							if (l1.contains("${SALVAJE}")) {
+								l1 = l1.replace("${SALVAJE}", "Mew");
+							}
+							if (l1.contains("${POKEMON}")) {
+								l1 = l1.replace("${POKEMON}", "Pikachu");
+								fase++;
+								frases = getDialogo("combate");
+							}
+						} else if (id.equals("combate")) {
+							if (l1.contains("${POKEMON}")) {
+								l1 = l1.replace("${POKEMON}", "Pikachu");
+							}
+							if (l1.equals(" ")) {
+								fase++;
+							}
+						}
+
+						/* Escribe letra a letra el dialogo */
+						setLineas(l1, l2);
+						/*
+						 * if (script[counter].contains("(OPTION)")) {
+						 * script[counter] = script[counter].replace(
+						 * "(OPTION)", ""); optionsVisible = true; }
+						 */
+					}
+				} else if (fase == 3) {
+					switch (seleccion) {
+					case 1: // luchar
+						fase = 4;
+						break;
+					case 2: // mochila
+						break;
+					case 3: // pokemon
+						break;
+					case 4: // huir
+						break;
+					default:
+						break;
+					}
 				}
 				break;
 			case Keys.LEFT:
-				if (seleccion != 1 ) {
+				if (seleccion != 1) {
 					seleccion -= 1;
 				}
 				break;
@@ -314,4 +355,35 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 		huir.setSize(120, 50);
 	}
 
+	public void regionesTipos() {
+		habilidades = pkmn.getHabilidades();
+		regionesTipo = new TextureRegion[4];
+		for (int i = 0; i < habilidades.length; i++) {
+			if (habilidades[i] != null) {
+				regionesTipo[i] = new TextureRegion(tipos, 0,
+						45 * habilidades[i].getIndiceTextura(), 192, 47);
+			} else {
+				regionesTipo[i] = null;
+			}
+		}
+	}
+
+	public void dibujarTipos() {
+		
+		batch.draw(regionesTipo[0], 8, 62, 265, 52);
+		font.draw(batch, habilidades[0].getNombre(), 60, 90);
+		if (regionesTipo[1] != null) {
+			batch.draw(regionesTipo[1], 272, 62, 266, 52);
+			font.draw(batch, habilidades[1].getNombre(), 325, 90);
+		}
+		if (regionesTipo[2] != null) {
+			batch.draw(regionesTipo[2], 8, 10, 265, 52);
+			font.draw(batch, habilidades[2].getNombre(), 60, 40);
+		}
+		if (regionesTipo[3] != null) {
+			batch.draw(regionesTipo[3], 272, 10, 266, 52);
+			font.draw(batch, habilidades[3].getNombre(), 325, 40);
+
+		}
+	}
 }
