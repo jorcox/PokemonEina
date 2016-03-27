@@ -19,6 +19,8 @@ public class Pokemon {
 	private Habilidad[] habilidades;
 	private int psMax;
 	private int ps;
+	private int experiencia;
+	private int estado;
 	
 	public String getNombre() {
 		return nombre;
@@ -128,5 +130,19 @@ public class Pokemon {
 	public boolean vivo() {
 		return ps>0;
 	}
+	public int getExperiencia() {
+		return experiencia;
+	}
+	public void setExperiencia(int experiencia) {
+		this.experiencia = experiencia;
+	}
+	public int getEstado() {
+		return estado;
+	}
+	public void setEstado(int estado) {
+		this.estado = estado;
+	}
+	
+	
 	
 }

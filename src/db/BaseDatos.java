@@ -30,12 +30,18 @@ package db;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import habilidad.Categoria;
+import habilidad.Habilidad;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import logica.Tipo;
+import pokemon.Pokemon;
 
 /**
  * Title: Testdb Description: simple hello world db example of a standalone
@@ -86,7 +92,7 @@ public class BaseDatos {
 	}
 
 	// use for SQL command SELECT
-	public synchronized void query(String expression) throws SQLException {
+	public synchronized ResultSet query(String expression) throws SQLException {
 
 		Statement st = null;
 		ResultSet rs = null;
@@ -107,6 +113,7 @@ public class BaseDatos {
 		// the result set is invalidated also if you recycle an Statement
 		// and try to execute some other query before the result set has been
 		// completely examined.
+		return rs;
 	}
 
 	// use for SQL commands CREATE, DROP, INSERT and UPDATE
@@ -152,14 +159,17 @@ public class BaseDatos {
 	} // void dump( ResultSet rs )
 
 	public static void main(String[] args) {
-		LeerDatos pb=new LeerDatos();
-		//pb.introducirPokemon();
-		//pb.introducirMovimientos();
-		//pb.query("SELECT * FROM movimientos");
-		//pb.introducirMovPorNivel();
-		//pb.query("SELECT * FROM movs_nivel");
-		pb.introducirEvolucion();
-		pb.query("SELECT * FROM pokemon_tipo");
+		IntroducirDatos pb = new IntroducirDatos();
+		// pb.crearPokemon();
+		// pb.introducirPokemon(25, 69);
+		// LeerDatos pb=new LeerDatos();
+		// pb.introducirPokemon();
+		// pb.introducirMovimientos();
+		// pb.query("SELECT * FROM movimientos");
+		// pb.introducirMovPorNivel();
+		// pb.query("SELECT * FROM movs_nivel");
+		// pb.introducirEvolucion();
+		// pb.query("SELECT * FROM pokemon_tipo");
 		pb.shutdown();
 		/*
 		 * BaseDatos db = null;
@@ -200,4 +210,71 @@ public class BaseDatos {
 		 * ex3.printStackTrace(); }
 		 */
 	} // main()
+
+	public Pokemon getPokemon(int id) {
+		Pokemon poke = new Pokemon();
+		Habilidad[] habilidades = new Habilidad[4];
+		Statement st;
+		try {
+			st = conn.createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM pokemon where id="
+					+ id);
+			rs.next();
+			System.out.println();
+			poke.setNivel(rs.getInt("nivel"));
+			poke.setNombre(rs.getString("nombre"));
+			poke.setPs(rs.getInt("ps"));
+			poke.setAtaque(rs.getInt("ataque"));
+			poke.setAtaqueEsp(rs.getInt("ataque_esp"));
+			poke.setDefensa(rs.getInt("defensa"));
+			poke.setDefensaEsp(rs.getInt("defensa_esp"));
+			poke.setVelocidad(rs.getInt("velocidad"));
+			poke.setEvasion(100);
+			poke.setPrecision(100);
+			habilidades[0] = getHabilidad(rs.getInt("mov1"));
+			habilidades[1] = getHabilidad(rs.getInt("mov2"));
+			habilidades[2] = getHabilidad(rs.getInt("mov3"));
+			habilidades[3] = getHabilidad(rs.getInt("mov4"));
+			poke.setHabilidades(habilidades);
+			poke.setExperiencia(rs.getInt("experiencia"));
+			poke.setEstado(rs.getInt("estado"));
+			rs.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return poke;
+	}
+
+	public Habilidad getHabilidad(int id) {
+		if (id > 0) {
+			Habilidad habilidad = new Habilidad();
+			Statement st;
+			try {
+				st = conn.createStatement();
+				ResultSet rs = st
+						.executeQuery("SELECT * FROM movimientos where id="
+								+ id);
+				rs.next();
+				habilidad = new Habilidad();
+				habilidad.setNombre(rs.getString("nombre"));
+				habilidad.setPoder(rs.getInt("poder"));
+				habilidad.setTipo(habilidad.getTipo(rs.getString("tipo_mov")));
+				habilidad.setCategoria(habilidad.getCategoria(rs
+						.getString("tipo")));
+				habilidad.setPrecision(rs.getInt("precision"));
+				habilidad.setPp(rs.getInt("pp"));
+				habilidad.setDescripcion(rs.getString("descripcion"));
+
+				rs.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return habilidad;
+		} else {
+			return null;
+		}
+	}
+
 } // class Testdb
