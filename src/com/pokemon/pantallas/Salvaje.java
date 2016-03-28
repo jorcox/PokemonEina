@@ -40,22 +40,23 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 	private float lastPressed;
 	private int fase = 1;
 	private double alfa = 0;
-	private Pokemon pkmn;
+	private Pokemon pkmn, pkmnSalvaje;
 	private Habilidad[] habilidades;
 	FreeTypeFontGenerator generator;
 	private TweenManager tweenManager;
 	private Combate combate;
 	private Entrenador e;
 	private int seleccion = 1;
-	BitmapFont font;
+	private int seleccionAtaque = 1;
+	BitmapFont font, fontC;
 	BaseDatos db;
 
 	SpriteBatch batch;
-	Texture tipos;
-	TextureRegion[] regionesTipo;
+	Texture tipos, barraVida;
+	TextureRegion[] regionesTipo, regionesTipoSel, barrasVida;
 	Sprite bg, base, baseEnemy, message, salvaje, pokemon, bgOp, bgOpTrans,
 			boton, luchar, mochila, pokemonOp, huir, dedo, cajaLuchar, tipo1,
-			tipo2, tipo3, tipo4;
+			tipo2, tipo3, tipo4, cajaPkmn, cajaPkmnSalvaje;
 
 	public Salvaje(float x, float y, float lastPressed) {
 		super("es", "ES");
@@ -70,13 +71,16 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 			e.printStackTrace();
 		}
 		pkmn = db.getPokemon(0);
-
+		pkmnSalvaje = db.getPokemon(1);
 		Gdx.input.setInputProcessor(this);
 		generator = new FreeTypeFontGenerator(
 				Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 35;
+		FreeTypeFontParameter parameterC = new FreeTypeFontParameter();
+		parameterC.size = 30;
 		font = generator.generateFont(parameter); // font size 35 pixels
+		fontC = generator.generateFont(parameterC);
 		frases = getDialogo("salvaje");
 	}
 
@@ -107,18 +111,16 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 		}
 		if (fase == 3) {
 			pokemon.draw(batch);
-			updateSelection();
-			luchar.draw(batch);
-			mochila.draw(batch);
-			pokemonOp.draw(batch);
-			huir.draw(batch);
-			dedo.draw(batch);
+			dibujarMenuCombate();
+			dibujarCajasVida();
 		}
 		if (fase == 4) {
 			pokemon.draw(batch);
 			cajaLuchar.setSize(720, 120);
 			cajaLuchar.draw(batch);
-			dibujarTipos();
+			dibujarCajasVida();
+			updateSeleccionAtaque();
+			// dibujarTipos();
 
 		}
 		batch.end();
@@ -150,8 +152,11 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 		cajaLuchar = new Sprite(
 				new Texture("res/imgs/batallas/battleFight.png"));
 		tipos = new Texture("res/imgs/batallas/battleFightButtons.png");
-		tipo1 = new Sprite(tipos);
-		regionesTipos();
+		barraVida = new Texture("res/imgs/batallas/hpbars.png");
+		cajaPkmn = new Sprite(new Texture("res/imgs/batallas/cajaPkmn.png"));
+		cajaPkmnSalvaje = new Sprite(new Texture(
+				"res/imgs/batallas/cajaPkmnSalvaje.png"));
+
 		Tween.set(bg, SpriteAccessor.ALPHA).target(0).start(tweenManager);
 		Tween.to(bg, SpriteAccessor.ALPHA, 2).target(1).start(tweenManager);
 		Tween.set(base, SpriteAccessor.SLIDE).target(500, 120)
@@ -167,6 +172,9 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 		Tween.to(salvaje, SpriteAccessor.SLIDE, 2).target(400, 350)
 				.start(tweenManager);
 		font.setColor(Color.BLACK);
+		fontC.setColor(Color.BLACK);
+		regionesTipos();
+		regionesTiposSel();
 	}
 
 	@Override
@@ -229,16 +237,44 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 				}
 				break;
 			case Keys.LEFT:
-				if (seleccion != 1) {
-					seleccion -= 1;
+				if (fase == 3) {
+					if (seleccion != 1) {
+						seleccion -= 1;
+					}
+				} else if (fase == 4) {
+					if (seleccionAtaque != 1 && seleccionAtaque != 3) {
+						seleccionAtaque -= 1;
+					}
 				}
+
 				break;
 			case Keys.RIGHT:
-				if (seleccion != 4) {
-					seleccion += 1;
+				if (fase == 3) {
+					if (seleccion != 4) {
+						seleccion += 1;
+					}
+				} else if (fase == 4) {
+					if (seleccionAtaque != 2 && seleccionAtaque != 4) {
+						seleccionAtaque += 1;
+					}
+				}
+				break;
+			case Keys.UP:
+				if (fase == 4) {
+					if (seleccionAtaque != 1 && seleccionAtaque != 2) {
+						seleccionAtaque -= 2;
+					}
+				}
+				break;
+			case Keys.DOWN:
+				if (fase == 4) {
+					if (seleccionAtaque != 3 && seleccionAtaque != 4) {
+						seleccionAtaque += 2;
+					}
 				}
 				break;
 			}
+
 		}
 
 		return false;
@@ -355,6 +391,9 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 		huir.setSize(120, 50);
 	}
 
+	/**
+	 * 
+	 */
 	public void regionesTipos() {
 		habilidades = pkmn.getHabilidades();
 		regionesTipo = new TextureRegion[4];
@@ -368,8 +407,71 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 		}
 	}
 
+	/**
+	 * 
+	 */
+	public void regionesTiposSel() {
+		habilidades = pkmn.getHabilidades();
+		regionesTipoSel = new TextureRegion[4];
+		for (int i = 0; i < habilidades.length; i++) {
+			if (habilidades[i] != null) {
+				regionesTipoSel[i] = new TextureRegion(tipos, 192,
+						45 * habilidades[i].getIndiceTextura(), 192, 47);
+			} else {
+				regionesTipoSel[i] = null;
+			}
+		}
+	}
+
+	/**
+	 * 
+	 */
+	public void dibujarMenuCombate() {
+		updateSelection();
+		luchar.draw(batch);
+		mochila.draw(batch);
+		pokemonOp.draw(batch);
+		huir.draw(batch);
+		dedo.draw(batch);
+	}
+
+	/**
+	 * 
+	 */
+	public void updateSeleccionAtaque() {
+		dibujarTipos();
+		switch (seleccionAtaque) {
+		case 1:
+			batch.draw(regionesTipoSel[0], 8, 62, 265, 52);
+			font.draw(batch, habilidades[0].getNombre(), 60, 90);
+
+			break;
+		case 2:
+			batch.draw(regionesTipoSel[1], 272, 62, 266, 52);
+			font.draw(batch, habilidades[1].getNombre(), 325, 90);
+			break;
+		case 3:
+			batch.draw(regionesTipoSel[2], 8, 10, 265, 52);
+			font.draw(batch, habilidades[2].getNombre(), 60, 40);
+			break;
+		case 4:
+			batch.draw(regionesTipoSel[3], 272, 10, 266, 52);
+			font.draw(batch, habilidades[3].getNombre(), 325, 40);
+			break;
+
+		}
+		font.draw(batch, "PP " + habilidades[seleccionAtaque - 1].getPp(), 600,
+				85);
+		fontC.draw(batch, "TIPO/" + habilidades[seleccionAtaque - 1].getTipo(), 570,
+				50);
+
+	}
+
+	/**
+	 * 
+	 */
 	public void dibujarTipos() {
-		
+
 		batch.draw(regionesTipo[0], 8, 62, 265, 52);
 		font.draw(batch, habilidades[0].getNombre(), 60, 90);
 		if (regionesTipo[1] != null) {
@@ -385,5 +487,38 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 			font.draw(batch, habilidades[3].getNombre(), 325, 40);
 
 		}
+	}
+
+	/**
+	 * 
+	 */
+	public void dibujarCajasVida() {
+		cajaPkmn.setPosition(425, 160);
+		cajaPkmn.setSize(305, 95);
+		cajaPkmnSalvaje.setPosition(0, 400);
+		cajaPkmnSalvaje.setSize(250, 70);
+		cajaPkmn.draw(batch);
+		cajaPkmnSalvaje.draw(batch);
+		/*
+		 * Atributos de nuestro pokemon
+		 */
+		fontC.draw(batch, pkmn.getNombre(), 480, 235);
+		fontC.draw(batch, "Nv " + pkmn.getNivel(), 620, 235);
+		fontC.draw(batch, pkmn.getPs() + "/" + pkmn.getPsMax(), 595, 195);
+		getBarraVida();
+		batch.draw(barrasVida[0], 582, 202, 116, 10);
+		/*
+		 * Atributos del pokemon salvaje
+		 */
+		fontC.draw(batch, pkmnSalvaje.getNombre(), 20, 450);
+		fontC.draw(batch, "Nv " + pkmnSalvaje.getNivel(), 150, 450);
+		batch.draw(barrasVida[0], 111, 416, 96, 10);
+	}
+
+	public void getBarraVida() {
+		barrasVida = new TextureRegion[3];
+		barrasVida[0] = new TextureRegion(barraVida, 0, 0, 180, 18);
+		barrasVida[1] = new TextureRegion(barraVida, 0, 18, 180, 18);
+		barrasVida[2] = new TextureRegion(barraVida, 0, 36, 180, 18);
 	}
 }

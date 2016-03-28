@@ -161,7 +161,7 @@ public class BaseDatos {
 	public static void main(String[] args) {
 		IntroducirDatos pb = new IntroducirDatos();
 		// pb.crearPokemon();
-		// pb.introducirPokemon(25, 69);
+		//pb.introducirPokemon(25, 69);
 		// LeerDatos pb=new LeerDatos();
 		// pb.introducirPokemon();
 		// pb.introducirMovimientos();
@@ -224,6 +224,7 @@ public class BaseDatos {
 			poke.setNivel(rs.getInt("nivel"));
 			poke.setNombre(rs.getString("nombre"));
 			poke.setPs(rs.getInt("ps"));
+			poke.setPsMax(rs.getInt("ps"));
 			poke.setAtaque(rs.getInt("ataque"));
 			poke.setAtaqueEsp(rs.getInt("ataque_esp"));
 			poke.setDefensa(rs.getInt("defensa"));
