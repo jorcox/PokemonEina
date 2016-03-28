@@ -18,7 +18,7 @@ public class IntroducirDatos {
 	public void introducirPokemon(int i, int nivel) {
 		try {
 			db.update("INSERT INTO pokemon(nivel,nombre,ps,ataque,defensa,ataque_esp,defensa_esp,velocidad,mov1,mov2,mov3,mov4,experiencia,estado)"
-					+ " VALUES(100, 'Pikachu', 1000, 1000, 1000, 1000, 1000, 1000,1,2,3,4,0, 0)");
+					+ " VALUES(100, 'Mew', 1000, 1000, 1000, 1000, 1000, 1000,100,25,53,400,0, 0)");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
