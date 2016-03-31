@@ -38,7 +38,7 @@ public class Dialogo {
 	private Locale locale;
 	private ResourceBundle bundle;
 	private String[] dialogoActual;
-	private int indiceActual;
+	protected int indiceActual;
 	private int subIndiceActual;
 	private int indicePalabra;
 	protected String lineaUno = "";
