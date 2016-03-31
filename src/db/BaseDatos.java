@@ -161,11 +161,12 @@ public class BaseDatos {
 	public static void main(String[] args) {
 		IntroducirDatos pb = new IntroducirDatos();
 		// pb.crearPokemon();
-		//pb.introducirPokemon(25, 69);
+		pb.introducirPokemon(25, 69);
 		// LeerDatos pb=new LeerDatos();
 		// pb.introducirPokemon();
 		// pb.introducirMovimientos();
-		// pb.query("SELECT * FROM movimientos");
+
+		//query("SELECT * FROM movimientos");
 		// pb.introducirMovPorNivel();
 		// pb.query("SELECT * FROM movs_nivel");
 		// pb.introducirEvolucion();
@@ -223,6 +224,7 @@ public class BaseDatos {
 			System.out.println();
 			poke.setNivel(rs.getInt("nivel"));
 			poke.setNombre(rs.getString("nombre"));
+			poke.setTipo(getTipo(rs.getString("tipo")));
 			poke.setPs(rs.getInt("ps"));
 			poke.setPsMax(rs.getInt("ps"));
 			poke.setAtaque(rs.getInt("ataque"));
@@ -278,4 +280,46 @@ public class BaseDatos {
 		}
 	}
 
+	public Tipo getTipo(String tipo) {
+		switch (tipo) {
+		case "STEEL":
+			return Tipo.ACERO;
+		case "WATER":
+			return Tipo.AGUA;
+		case "BUG":
+			return Tipo.BICHO;
+		case "DRAGON":
+			return Tipo.DRAGON;
+		case "ELECTRIC":
+			return Tipo.ELECTRICO;
+		case "GHOST":
+			return Tipo.FANTASMA;
+		case "FIRE":
+			return Tipo.FUEGO;
+		case "FAIRY":
+			return Tipo.HADA;
+		case "ICE":
+			return Tipo.HIELO;
+		case "FIGHTING":
+			return Tipo.LUCHA;
+		case "NORMAL":
+			return Tipo.NORMAL;
+		case "GRASS":
+			return Tipo.PLANTA;
+		case "PSYCHIC":
+			return Tipo.PSIQUICO;
+		case "ROCK":
+			return Tipo.ROCA;
+		case "DARK":
+			return Tipo.SINIESTRO;
+		case "GROUND":
+			return Tipo.TIERRA;
+		case "POISON":
+			return Tipo.VENENO;
+		case "FLYING":
+			return Tipo.VOLADOR;
+		default:
+			return null;
+		}
+	}
 } // class Testdb
