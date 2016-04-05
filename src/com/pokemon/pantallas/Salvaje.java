@@ -45,6 +45,8 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 	private float lastPressed;
 	private int fase = 1;
 	private double alfa = 0;
+	private int vida = 100;
+	private int vidaS = 100;
 	private Pokemon pkmn, pkmnSalvaje;
 	private Habilidad[] habilidades;
 	FreeTypeFontGenerator generator;
@@ -127,7 +129,7 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 			pokemon.draw(batch);
 			dibujarMenuCombate();
 			dibujarCajasVida();
-			dibujarVida();
+			dibujarVidas();
 		}
 		/*
 		 * Decisión de ataque
@@ -137,8 +139,10 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 			cajaLuchar.setSize(720, 120);
 			cajaLuchar.draw(batch);
 			dibujarCajasVida();
-			dibujarVida();
+			dibujarVidas();
 			updateSeleccionAtaque();
+			vida = 100;
+			vidaS = 100;
 		}
 
 		if (fase == 5 || fase == 6) {
@@ -146,10 +150,10 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 			dibujarCajasVida();
 			if ((orden && fase == 5) || (!orden && fase == 6)) {
 				animacionVida(pkmnSalvaje, true);
-				dibujarVida();
+				dibujarVida(true);
 			} else {
 				animacionVida(pkmn, false);
-				dibujarVida();
+				dibujarVida(false);
 			}
 		}
 		batch.end();
@@ -552,42 +556,57 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 
 	}
 
-	public void dibujarVida() {
-		batch.draw(barrasVida[0], 582, 202,
-				(int) (116 * (pkmn.getPs() / (double) pkmn.getPsMax())), 10);
-		batch.draw(barrasVida[0], 111, 416,
-				(int) (96 * (pkmnSalvaje.getPs() / (double) pkmnSalvaje
-						.getPsMax())), 10);
+	public void dibujarVida(boolean who) {
+		if (who) {
+			batch.draw(barrasVida[0], 582, 202,
+					(int) (116 * (pkmn.getPs() / (double) pkmn.getPsMax())), 10);
+		} else {
+			batch.draw(barrasVida[0], 111, 416, (int) (96 * (pkmnSalvaje
+					.getPs() / (double) pkmnSalvaje.getPsMax())), 10);
+		}
+	}
+
+	public void dibujarVidas() {
+		dibujarVida(true);
+		dibujarVida(false);
 	}
 
 	public void animacionVida(Pokemon poke, boolean who) {
 		double diff = (poke.getPsMax() - poke.getPs()) / 100.0;
-		for (int i = 100; i >= 0; i--) {
-			if (who) {
-
+		if (who) {
+			if (vida > 0) {
 				batch.draw(
 						barrasVida[0],
 						111,
 						416,
-						(int) ((96 * (pkmnSalvaje.getPs() / (double) pkmnSalvaje
-								.getPsMax()) + (diff * i)
-								/ (double) pkmnSalvaje.getPsMax())), 10);
-			} else {
+						(int) (96 * ((pkmnSalvaje.getPs() / (double) pkmnSalvaje
+								.getPsMax()) + ((diff * vida) / (double) pkmnSalvaje
+								.getPsMax()))), 10);
+				vida--;
+			}
+			else{
+				dibujarVida(false);
+			}
+		} else {
+			if (vidaS > 0) {
 				batch.draw(
 						barrasVida[0],
 						582,
 						202,
-						(int) ((116 * (pkmn.getPs() / (double) pkmn.getPsMax()) + (diff * i)
-								/ (double) pkmn.getPsMax())), 10);
+						(int) (116 * ((pkmn.getPs() / (double) pkmn.getPsMax()) + ((diff * vidaS) / (double) pkmn
+								.getPsMax()))), 10);
+				vidaS--;
+			}
+			else{
+				dibujarVida(true);
 			}
 		}
-
 	}
 
 	public void getBarraVida() {
 		barrasVida = new TextureRegion[3];
 		barrasVida[0] = new TextureRegion(barraVida, 0, 0, 180, 18);
-		barrasVida[1] = new TextureRegion(barraVida, 0, 18, 180, 18);
+		barrasVida[1] = new TextureRegion(barraVida, 0, 20, 180, 18);
 		barrasVida[2] = new TextureRegion(barraVida, 0, 36, 180, 18);
 	}
 
