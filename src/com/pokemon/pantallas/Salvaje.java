@@ -27,6 +27,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 import com.pokemon.dialogo.Dialogo;
 import com.pokemon.tween.SpriteAccessor;
 import com.pokemon.utilidades.ArchivoGuardado;
@@ -49,6 +51,7 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 	private TweenManager tweenManager;
 	private Combate combate;
 	private Entrenador en;
+	private boolean orden;
 	private int seleccion = 1;
 	private int seleccionAtaque = 1;
 	BitmapFont font, fontC;
@@ -76,6 +79,7 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 		en = new Jugador("Sara", true);
 		en.setEquipo(lPoke);
 		combate = new Combate(en, pkmnSalvaje);
+		orden = combate.getVelocidad();
 		this.x = x;
 		this.y = y;
 		this.lastPressed = lastPressed;
@@ -123,6 +127,7 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 			pokemon.draw(batch);
 			dibujarMenuCombate();
 			dibujarCajasVida();
+			dibujarVida();
 		}
 		/*
 		 * Decisión de ataque
@@ -132,12 +137,20 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 			cajaLuchar.setSize(720, 120);
 			cajaLuchar.draw(batch);
 			dibujarCajasVida();
+			dibujarVida();
 			updateSeleccionAtaque();
 		}
 
 		if (fase == 5 || fase == 6) {
 			pokemon.draw(batch);
 			dibujarCajasVida();
+			if ((orden && fase == 5) || (!orden && fase == 6)) {
+				animacionVida(pkmnSalvaje, true);
+				dibujarVida();
+			} else {
+				animacionVida(pkmn, false);
+				dibujarVida();
+			}
 		}
 		batch.end();
 	}
@@ -248,12 +261,12 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 					/*
 					 * Primer ataque
 					 */
-					combate(combate.getVelocidad());
+					combate();
 				} else if (fase == 5) {
 					/*
 					 * Segundo ataque
 					 */
-					combate(combate.getVelocidad());
+					combate();
 				} else if (fase == 6) {
 					fase = 3;
 					lineaUno = "";
@@ -530,16 +543,45 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 		fontC.draw(batch, "Nv " + pkmn.getNivel(), 620, 235);
 		fontC.draw(batch, pkmn.getPs() + "/" + pkmn.getPsMax(), 595, 195);
 		getBarraVida();
-		batch.draw(barrasVida[0], 582, 202,
-				(int) (116 * (pkmn.getPs() / (double) pkmn.getPsMax())), 10);
+
 		/*
 		 * Atributos del pokemon salvaje
 		 */
 		fontC.draw(batch, pkmnSalvaje.getNombre(), 20, 450);
 		fontC.draw(batch, "Nv " + pkmnSalvaje.getNivel(), 150, 450);
+
+	}
+
+	public void dibujarVida() {
+		batch.draw(barrasVida[0], 582, 202,
+				(int) (116 * (pkmn.getPs() / (double) pkmn.getPsMax())), 10);
 		batch.draw(barrasVida[0], 111, 416,
 				(int) (96 * (pkmnSalvaje.getPs() / (double) pkmnSalvaje
 						.getPsMax())), 10);
+	}
+
+	public void animacionVida(Pokemon poke, boolean who) {
+		double diff = (poke.getPsMax() - poke.getPs()) / 100.0;
+		for (int i = 100; i >= 0; i--) {
+			if (who) {
+
+				batch.draw(
+						barrasVida[0],
+						111,
+						416,
+						(int) ((96 * (pkmnSalvaje.getPs() / (double) pkmnSalvaje
+								.getPsMax()) + (diff * i)
+								/ (double) pkmnSalvaje.getPsMax())), 10);
+			} else {
+				batch.draw(
+						barrasVida[0],
+						582,
+						202,
+						(int) ((116 * (pkmn.getPs() / (double) pkmn.getPsMax()) + (diff * i)
+								/ (double) pkmn.getPsMax())), 10);
+			}
+		}
+
 	}
 
 	public void getBarraVida() {
@@ -549,7 +591,7 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 		barrasVida[2] = new TextureRegion(barraVida, 0, 36, 180, 18);
 	}
 
-	public void combate(boolean orden) {
+	public void combate() {
 		if ((orden && fase == 4) || (!orden && fase == 5)) {
 
 			frases = frasesAtaque(pkmn, seleccionAtaque);
