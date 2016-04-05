@@ -47,6 +47,8 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 	private double alfa = 0;
 	private int vida = 100;
 	private int vidaS = 100;
+	private int actualPs;
+	private int actualPsS;
 	private Pokemon pkmn, pkmnSalvaje;
 	private Habilidad[] habilidades;
 	FreeTypeFontGenerator generator;
@@ -78,6 +80,8 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 		List<Pokemon> lPoke = new ArrayList<Pokemon>();
 		lPoke.add(pkmn);
 		pkmnSalvaje = db.getPokemon(0);
+		actualPs = pkmn.getPs();
+		actualPsS = pkmnSalvaje.getPs();
 		en = new Jugador("Sara", true);
 		en.setEquipo(lPoke);
 		combate = new Combate(en, pkmnSalvaje);
@@ -149,10 +153,10 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 			pokemon.draw(batch);
 			dibujarCajasVida();
 			if ((orden && fase == 5) || (!orden && fase == 6)) {
-				animacionVida(pkmnSalvaje, true);
+				animacionVida(true);
 				dibujarVida(true);
 			} else {
-				animacionVida(pkmn, false);
+				animacionVida(false);
 				dibujarVida(false);
 			}
 		}
@@ -272,9 +276,13 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 					 */
 					combate();
 				} else if (fase == 6) {
-					fase = 3;
-					lineaUno = "";
-					lineaDos = "";
+					if (pkmn.getPs() <= 0 || pkmnSalvaje.getPs() <= 0) {
+						fase = 7;
+					} else {
+						fase = 3;
+						lineaUno = "";
+						lineaDos = "";
+					}
 				}
 				break;
 			case Keys.LEFT:
@@ -571,33 +579,34 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 		dibujarVida(false);
 	}
 
-	public void animacionVida(Pokemon poke, boolean who) {
-		double diff = (poke.getPsMax() - poke.getPs()) / 100.0;
+	public void animacionVida(boolean who) {
+
 		if (who) {
-			if (vida > 0) {
+			double diff = (actualPsS - pkmnSalvaje.getPs()) / 100.0;
+			if (vidaS > 0) {
 				batch.draw(
 						barrasVida[0],
 						111,
 						416,
 						(int) (96 * ((pkmnSalvaje.getPs() / (double) pkmnSalvaje
-								.getPsMax()) + ((diff * vida) / (double) pkmnSalvaje
+								.getPsMax()) + ((diff * vidaS) / (double) pkmnSalvaje
 								.getPsMax()))), 10);
-				vida--;
-			}
-			else{
+				vidaS--;
+			} else {
 				dibujarVida(false);
 			}
 		} else {
-			if (vidaS > 0) {
+			double diff = (actualPs - pkmn.getPs()) / 100.0;
+
+			if (vida > 0) {
 				batch.draw(
 						barrasVida[0],
 						582,
 						202,
-						(int) (116 * ((pkmn.getPs() / (double) pkmn.getPsMax()) + ((diff * vidaS) / (double) pkmn
+						(int) (116 * ((pkmn.getPs() / (double) pkmn.getPsMax()) + ((diff * vida) / (double) pkmn
 								.getPsMax()))), 10);
-				vidaS--;
-			}
-			else{
+				vida--;
+			} else {
 				dibujarVida(true);
 			}
 		}
@@ -619,8 +628,10 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 			String l2 = siguienteLinea();
 			setLineas(l1, l2);
 			if (!writing) {
+				actualPsS = pkmnSalvaje.getPs();
 				combate.ejecutar(pkmn, pkmnSalvaje,
 						pkmn.getHabilidad(seleccionAtaque));
+
 				fase++;
 			}
 
@@ -633,8 +644,10 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 			String l2 = siguienteLinea();
 			setLineas(l1, l2);
 			if (!writing) {
+				actualPs = pkmn.getPs();
 				combate.ejecutar(pkmnSalvaje, pkmn,
 						pkmnSalvaje.getHabilidad(seleccionEnemigo));
+
 				fase++;
 			}
 

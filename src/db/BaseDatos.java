@@ -161,7 +161,7 @@ public class BaseDatos {
 	public static void main(String[] args) {
 		IntroducirDatos pb = new IntroducirDatos();
 		// pb.crearPokemon();
-		pb.introducirPokemon(25, 69);
+		//pb.introducirPokemon(25, 69);
 		// LeerDatos pb=new LeerDatos();
 		// pb.introducirPokemon();
 		// pb.introducirMovimientos();
