@@ -160,6 +160,16 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 				dibujarVida(false);
 			}
 		}
+		if (fase == 7) {
+			pokemon.draw(batch);
+			dibujarCajasVida();
+			dibujarVidas();
+			if (pkmnSalvaje.getPs() <= 0) {
+				salvaje.setAlpha(0);
+			} else if (pkmn.getPs() <= 0) {
+				pokemon.setAlpha(0);
+			}
+		}
 		batch.end();
 	}
 
@@ -274,15 +284,37 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 					/*
 					 * Segundo ataque
 					 */
-					combate();
-				} else if (fase == 6) {
 					if (pkmn.getPs() <= 0 || pkmnSalvaje.getPs() <= 0) {
 						fase = 7;
+						frases = getDialogo("pokemon_muerto");
+					} else {
+						combate();
+					}
+
+				} else if (fase == 6) {
+
+					if (pkmn.getPs() <= 0 || pkmnSalvaje.getPs() <= 0) {
+						fase = 7;
+						frases = getDialogo("pokemon_muerto");
 					} else {
 						fase = 3;
+						seleccionAtaque = 1;
 						lineaUno = "";
 						lineaDos = "";
 					}
+				} else if (fase == 7) {
+					String l1 = siguienteLinea();
+					String l2 = siguienteLinea();
+					if (l1.contains("${POKEMON}")) {
+						if (pkmn.getPs() <= 0) {
+							l1 = l1.replace("${POKEMON}", pkmn.getNombre());
+						} else {
+							l1 = l1.replace("${POKEMON}",
+									pkmnSalvaje.getNombre());
+						}
+					}
+					setLineas(l1, l2);
+
 				}
 				break;
 			case Keys.LEFT:
