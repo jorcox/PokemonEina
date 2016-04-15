@@ -44,12 +44,13 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 	private float y;
 	private float lastPressed;
 	private int fase = 1;
-	private double alfa = 0;
 	private int vida = 100;
 	private int vidaS = 100;
 	private int actualPs;
 	private int actualPsS;
 	private Pokemon pkmn, pkmnSalvaje;
+	private int tamanoPokemon=1;
+	private int xPokemon=100;
 	private Habilidad[] habilidades;
 	FreeTypeFontGenerator generator;
 	private TweenManager tweenManager;
@@ -122,8 +123,9 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 		 * Aparacion de pokemon salvaje
 		 */
 		if (fase == 2) {
-			pokemon.setSize(180, 180);
-			pokemon.setPosition(50, 99);
+			
+			
+			aparicionPokemon();
 			pokemon.draw(batch);
 		}
 		/*
@@ -694,7 +696,7 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 				combate.ejecutar(pkmn, pkmnSalvaje,
 						pkmn.getHabilidad(seleccionAtaque));
 
-					fase++;
+				fase++;
 			}
 
 		} else {
@@ -705,7 +707,7 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 				combate.ejecutar(pkmnSalvaje, pkmn,
 						pkmnSalvaje.getHabilidad(seleccionEnemigo));
 
-					fase++;
+				fase++;
 			}
 
 		}
@@ -717,5 +719,17 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 				"¡" + pokemon.getNombre() + " uso "
 						+ pokemon.getHabilidad(id).getNombre() + "!", "" };
 		return frase;
+	}
+
+	public void aparicionPokemon() {
+		pokemon.setSize(tamanoPokemon, tamanoPokemon);
+		pokemon.setPosition(xPokemon, 99);
+		if(tamanoPokemon<180){
+			tamanoPokemon=tamanoPokemon+8;
+		}
+		if(xPokemon>50){
+			xPokemon=xPokemon-3;
+		}
+		
 	}
 }
