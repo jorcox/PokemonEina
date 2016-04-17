@@ -224,9 +224,25 @@
     <property name="cartel" value="tranvia_1"/>
    </properties>
   </object>
-  <object id="15" gid="953" x="1730" y="671" width="32" height="32"/>
-  <object id="16" gid="953" x="1729" y="1087" width="32" height="32"/>
-  <object id="17" gid="948" x="320" y="800" width="32" height="32"/>
-  <object id="18" gid="948" x="289" y="799" width="32" height="32"/>
+  <object id="15" gid="953" x="1730" y="671" width="32" height="32">
+   <properties>
+    <property name="cartel" value="tranvia_3"/>
+   </properties>
+  </object>
+  <object id="16" gid="953" x="1729" y="1087" width="32" height="32">
+   <properties>
+    <property name="cartel" value="tranvia_2"/>
+   </properties>
+  </object>
+  <object id="17" gid="948" x="320" y="800" width="32" height="32">
+   <properties>
+    <property name="corte" value="tranvia_1"/>
+   </properties>
+  </object>
+  <object id="18" gid="948" x="289" y="799" width="32" height="32">
+   <properties>
+    <property name="corte" value="tranvia_2"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

@@ -186,22 +186,13 @@ public class Player extends Sprite implements InputProcessor {
 		}
 		
 		/* Eventos con objetos */
-		if (collisionX) {
-			for (MapObject o : objectLayer.getObjects()) {
-				int pos = (int) ((getX() + getWidth()) / tileWidth);
-				TextureMapObject t = (TextureMapObject) o;
-				if (Math.abs(pos - (t.getX() - 160)) < 50) {
-					interact(t);
-					break;
-				}
-			}
-		} else if (collisionY) {
-			Gdx.app.log("cartel", "ve colision y");
+		if (collisionX || collisionY) {
 			for (MapObject o : objectLayer.getObjects()) {
 				TextureMapObject t = (TextureMapObject) o;
-				Gdx.app.log("cartel", "distancia " + Math.abs(getY() - t.getY()));
-				if (Math.abs(getY() - t.getY()) < 50) {
-					Gdx.app.log("cartel", "entra");
+				Gdx.app.log("cartel", "distancia " + distance(t));
+				
+				/* Dispara evento si estan muy cerca jugador y objeto */
+				if (distance(t) < 50) {
 					interact(t);
 					break;
 				}
@@ -210,6 +201,19 @@ public class Player extends Sprite implements InputProcessor {
 		
 	}
 	
+	/**
+	 * Calcula la distancia entre el jugador y el objeto de texturas t.
+	 * 
+	 * @param t el objeto de texturas.
+	 * @return la distancia euclidea.
+	 */
+	private int distance(TextureMapObject t) {
+		double aux = t.getX() - 160;
+		double dx = Math.pow(getX() - aux, 2);
+		double dy = Math.pow(getY() - t.getY(), 2);
+		return (int) (Math.sqrt(dx + dy));
+	}
+
 	/**
 	 * Gestiona las interacciones entre el jugador y el objeto obj, que
 	 * puede ser un cartel, pokeball, etc.
