@@ -58,7 +58,8 @@ public class Play implements Screen {
 		espalda.setPlayMode(Animation.PlayMode.LOOP);
 
 		player = new Player(cara, izquierda, derecha, espalda,
-				(TiledMapTileLayer) map.getLayers().get("Entorno"));
+				(TiledMapTileLayer) map.getLayers().get("Entorno"),
+				map.getLayers().get("Objetos"));
 		player.setPosition(x, y);
 		player.setLastPressed(lastPressed);
 		Gdx.input.setInputProcessor(player);
