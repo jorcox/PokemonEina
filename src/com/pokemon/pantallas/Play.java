@@ -7,16 +7,19 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.pokemon.entities.Player;
+import com.pokemon.render.TextureMapObjectRenderer;
 
 public class Play implements Screen {
 
 	private TiledMap map;
-	private OrthogonalTiledMapRenderer renderer;
+	private TextureMapObjectRenderer renderer;
 	private OrthographicCamera camera;
 	private float x, y;
 	private int lastPressed;
@@ -38,7 +41,7 @@ public class Play implements Screen {
 		TmxMapLoader loader = new TmxMapLoader();
 		map = loader.load("res/mapas/Tranvia_n.tmx");
 
-		renderer = new OrthogonalTiledMapRenderer(map);
+		renderer = new TextureMapObjectRenderer(map);
 
 		camera = new OrthographicCamera();
 
@@ -55,10 +58,18 @@ public class Play implements Screen {
 		espalda.setPlayMode(Animation.PlayMode.LOOP);
 
 		player = new Player(cara, izquierda, derecha, espalda,
-				(TiledMapTileLayer) map.getLayers().get("Entorno"));
+				(TiledMapTileLayer) map.getLayers().get("Entorno"),
+				map.getLayers().get("Objetos"));
 		player.setPosition(x, y);
 		player.setLastPressed(lastPressed);
 		Gdx.input.setInputProcessor(player);
+		
+		/* Mostrar objetos */
+		renderer.getBatch().begin();
+		for (MapObject o : map.getLayers().get("Objetos").getObjects()) {
+			renderer.renderObject(o);
+		}
+		renderer.getBatch().end();
 	}
 
 	@Override

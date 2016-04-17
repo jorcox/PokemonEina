@@ -6,6 +6,10 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 
@@ -17,18 +21,20 @@ public class Player extends Sprite implements InputProcessor {
 
 	private Animation cara, izquierda, derecha, espalda;
 	private TiledMapTileLayer collisionLayer;
+	private MapLayer objectLayer;
 
 	private boolean APressed = false, WPressed = false, SPressed = false, DPressed = false, SpacePressed=false;
 	private int lastPressed; //A=1, W=2, S=3, D=4
 
 	public Player(Animation cara, Animation izquierda, Animation derecha, Animation espalda,
-			TiledMapTileLayer collisionLayer) {
+			TiledMapTileLayer collisionLayer, MapLayer objectLayer) {
 		super(cara.getKeyFrame(0));
 		this.cara = cara;
 		this.izquierda = izquierda;
 		this.derecha = derecha;
 		this.espalda = espalda;
 		this.collisionLayer = collisionLayer;
+		this.objectLayer = objectLayer;
 	}
 
 	@Override
@@ -177,6 +183,47 @@ public class Player extends Sprite implements InputProcessor {
 				setRegion(derecha.getKeyFrame(1));
 				break;
 			}
+		}
+		
+		/* Eventos con objetos */
+		if (collisionX || collisionY) {
+			for (MapObject o : objectLayer.getObjects()) {
+				TextureMapObject t = (TextureMapObject) o;
+				Gdx.app.log("cartel", "distancia " + distance(t));
+				
+				/* Dispara evento si estan muy cerca jugador y objeto */
+				if (distance(t) < 50) {
+					interact(t);
+					break;
+				}
+			}
+		}
+		
+	}
+	
+	/**
+	 * Calcula la distancia entre el jugador y el objeto de texturas t.
+	 * 
+	 * @param t el objeto de texturas.
+	 * @return la distancia euclidea.
+	 */
+	private int distance(TextureMapObject t) {
+		double aux = t.getX() - 160;
+		double dx = Math.pow(getX() - aux, 2);
+		double dy = Math.pow(getY() - t.getY(), 2);
+		return (int) (Math.sqrt(dx + dy));
+	}
+
+	/**
+	 * Gestiona las interacciones entre el jugador y el objeto obj, que
+	 * puede ser un cartel, pokeball, etc.
+	 * 
+	 * @param obj el objeto declarado en la capa de objetos.
+	 */
+	private void interact(TextureMapObject obj) {
+		if (obj.getProperties().containsKey("cartel")) {
+			String value = (String) obj.getProperties().get("cartel");
+			Gdx.app.log("Cartel", value);
 		}
 	}
 
