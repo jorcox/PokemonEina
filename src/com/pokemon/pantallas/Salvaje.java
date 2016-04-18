@@ -751,6 +751,7 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 					intervalo--;
 				}
 			} else {
+				trans=1;
 				pokemon.setAlpha(1);
 			}
 		} else {
@@ -764,6 +765,7 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 					intervalo--;
 				}
 			} else {
+				trans=1;
 				salvaje.setAlpha(1);
 			}
 		}
