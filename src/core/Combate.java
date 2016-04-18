@@ -128,7 +128,7 @@ public class Combate {
 	 * @param habilidad
 	 *            la habilidad que p1 realiza sobre p2.
 	 */
-	public void ejecutar(Pokemon p1, Pokemon p2, Habilidad habilidad) {
+	public boolean ejecutar(Pokemon p1, Pokemon p2, Habilidad habilidad) {
 		printAtaque(p1, habilidad);
 
 		/* Decide si acierta o no */
@@ -148,6 +148,7 @@ public class Combate {
 		} else {
 			printFallo();
 		}
+		return acierto;
 	}
 
 	public Entrenador getEntrenador() {
