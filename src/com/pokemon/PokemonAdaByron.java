@@ -3,6 +3,7 @@ package com.pokemon;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.pokemon.pantallas.Bienvenida;
 import com.pokemon.pantallas.Menu;
 import com.pokemon.pantallas.PantallaInicio;
 import com.pokemon.pantallas.Play;
@@ -26,8 +27,9 @@ public class PokemonAdaByron extends Game {
 
 	@Override
 	public void create() {
-		//setScreen(new Salvaje(280,280,3));
-		setScreen(new Play(280, 280, 3));
+		setScreen(new Salvaje(280,280,3));
+		//setScreen(new Play(280, 280, 3));
+		//setScreen(new Bienvenida(this));
 	}
 
 	@Override

@@ -38,7 +38,7 @@ import db.BaseDatos;
 import entrenadores.Entrenador;
 import entrenadores.Jugador;
 
-public class Salvaje extends Dialogo implements Screen, InputProcessor {
+public class Salvaje implements Screen, InputProcessor {
 
 	private float x;
 	private float y;
@@ -62,6 +62,7 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 	private int veces = 8;
 	private int seleccion = 1;
 	private int seleccionAtaque = 1;
+	private Dialogo dialogo;
 	BitmapFont font, fontC;
 	BaseDatos db;
 
@@ -73,7 +74,7 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 			tipo2, tipo3, tipo4, cajaPkmn, cajaPkmnSalvaje;
 
 	public Salvaje(float x, float y, float lastPressed) {
-		super("es", "ES");
+		dialogo = new Dialogo("es", "ES");
 		try {
 			db = new BaseDatos("pokemon_base");
 
@@ -102,7 +103,7 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 		parameterC.size = 30;
 		font = generator.generateFont(parameter); // font size 35 pixels
 		fontC = generator.generateFont(parameterC);
-		frases = getDialogo("salvaje");
+		dialogo.procesarDialogo("salvaje");
 	}
 
 	@Override
@@ -120,8 +121,8 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 		message.setSize(720, 120);
 		salvaje.draw(batch);
 		salvaje.setSize(120, 120);
-		font.draw(batch, lineaUno, 50, 85);
-		font.draw(batch, lineaDos, 50, 35);
+		font.draw(batch, dialogo.getLinea1(), 50, 85);
+		font.draw(batch, dialogo.getLinea2(), 50, 35);
 		/*
 		 * Aparacion de pokemon salvaje
 		 */
@@ -246,7 +247,7 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		if (!writing) {
+		if (!dialogo.isWriting()) {
 			switch (keycode) {
 			case (Keys.ENTER):
 
@@ -254,14 +255,14 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 					/*
 					 * Dialogo de comienzo del combate
 					 */
-					String l1 = siguienteLinea();
-					String l2 = siguienteLinea();
+					String l1 = dialogo.siguienteLinea();
+					String l2 = dialogo.siguienteLinea();
 
 					if (l1 != null) {
 						if (l2 == null) {
 							l2 = "";
 						}
-						if (id.equals("salvaje")) {
+						if (dialogo.getId().equals("salvaje")) {
 							if (l1.contains("${SALVAJE}")) {
 								l1 = l1.replace("${SALVAJE}",
 										pkmnSalvaje.getNombre());
@@ -269,9 +270,9 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 							if (l1.contains("${POKEMON}")) {
 								l1 = l1.replace("${POKEMON}", pkmn.getNombre());
 								fase++;
-								frases = getDialogo("combate");
+								dialogo.procesarDialogo("combate");
 							}
-						} else if (id.equals("combate")) {
+						} else if (dialogo.getId().equals("combate")) {
 							if (l1.contains("${POKEMON}")) {
 								l1 = l1.replace("${POKEMON}", pkmn.getNombre());
 							}
@@ -280,7 +281,7 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 							}
 						}
 						/* Escribe letra a letra el dialogo */
-						setLineas(l1, l2);
+						dialogo.setLineas(l1, l2);
 					}
 				} else if (fase == 3) {
 					switch (seleccion) {
@@ -307,7 +308,7 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 					veces=8;
 					if (pkmn.getPs() <= 0 || pkmnSalvaje.getPs() <= 0) {
 						fase = 9;
-						frases = getDialogo("pokemon_muerto");
+						dialogo.procesarDialogo("pokemon_muerto");
 					} else {
 						fraseAtaque();
 					}
@@ -317,16 +318,15 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 					veces=8;
 					if (pkmn.getPs() <= 0 || pkmnSalvaje.getPs() <= 0) {
 						fase = 9;
-						frases = getDialogo("pokemon_muerto");
+						dialogo.procesarDialogo("pokemon_muerto");
 					} else {
 						fase = 3;
 						seleccionAtaque = 1;
-						lineaUno = "";
-						lineaDos = "";
+						dialogo.limpiar();
 					}
 				} else if (fase == 9) {
-					String l1 = siguienteLinea();
-					String l2 = siguienteLinea();
+					String l1 = dialogo.siguienteLinea();
+					String l2 = dialogo.siguienteLinea();
 					if (l1.contains("${POKEMON}")) {
 						if (pkmn.getPs() <= 0) {
 							l1 = l1.replace("${POKEMON}", pkmn.getNombre());
@@ -335,7 +335,7 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 									pkmnSalvaje.getNombre());
 						}
 					}
-					setLineas(l1, l2);
+					dialogo.setLineas(l1, l2);
 
 				}
 				break;
@@ -675,20 +675,18 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 
 	public void fraseAtaque() {
 		if ((orden && fase == 4) || (!orden && fase == 6)) {
-			frases = frasesAtaque(pkmn, seleccionAtaque);
-			indiceActual = 0;
-			String l1 = siguienteLinea();
-			String l2 = siguienteLinea();
-			setLineas(l1, l2);
+			dialogo.setFrases(frasesAtaque(pkmn, seleccionAtaque));
+			String l1 = dialogo.siguienteLinea();
+			String l2 = dialogo.siguienteLinea();
+			dialogo.setLineas(l1, l2);
 			fase++;
 		} else {
 			int seleccionEnemigo = combate.decidir(pkmnSalvaje);
 
-			frases = frasesAtaque(pkmnSalvaje, seleccionEnemigo);
-			indiceActual = 0;
-			String l1 = siguienteLinea();
-			String l2 = siguienteLinea();
-			setLineas(l1, l2);
+			dialogo.setFrases(frasesAtaque(pkmnSalvaje, seleccionEnemigo));
+			String l1 = dialogo.siguienteLinea();
+			String l2 = dialogo.siguienteLinea();
+			dialogo.setLineas(l1, l2);
 			fase++;
 		}
 
@@ -697,7 +695,7 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 	public void combate() {
 		if ((orden && fase == 5) || (!orden && fase == 7)) {
 
-			if (!writing) {
+			if (!dialogo.isWriting()) {
 				actualPsS = pkmnSalvaje.getPs();
 				combate.ejecutar(pkmn, pkmnSalvaje,
 						pkmn.getHabilidad(seleccionAtaque));
@@ -708,7 +706,7 @@ public class Salvaje extends Dialogo implements Screen, InputProcessor {
 		} else {
 			int seleccionEnemigo = combate.decidir(pkmnSalvaje);
 
-			if (!writing) {
+			if (!dialogo.isWriting()) {
 				actualPs = pkmn.getPs();
 				combate.ejecutar(pkmnSalvaje, pkmn,
 						pkmnSalvaje.getHabilidad(seleccionEnemigo));
