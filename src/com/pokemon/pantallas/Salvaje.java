@@ -77,14 +77,14 @@ public class Salvaje implements Screen, InputProcessor {
 		dialogo = new Dialogo("es", "ES");
 		try {
 			db = new BaseDatos("pokemon_base");
-
+			pkmn = db.getPokemon(1);
+			pkmnSalvaje = db.getPokemon(0);
+			db.shutdown();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		pkmn = db.getPokemon(1);
 		List<Pokemon> lPoke = new ArrayList<Pokemon>();
 		lPoke.add(pkmn);
-		pkmnSalvaje = db.getPokemon(0);
 		actualPs = pkmn.getPs();
 		actualPsS = pkmnSalvaje.getPs();
 		en = new Jugador("Sara", true);
