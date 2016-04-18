@@ -8,8 +8,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -38,6 +40,9 @@ public class Play implements Screen, InputProcessor {
 	private FreeTypeFontGenerator generator;
 
 	private TextureAtlas playerAtlas;
+	
+	private Sprite box;	
+	public boolean optionsVisible = false;
 
 	// private Player player = new Player(new Sprite(new
 	// Texture("assets/maps/tilesInterior.png")));
@@ -81,12 +86,15 @@ public class Play implements Screen, InputProcessor {
 
 		player = new Player(cara, izquierda, derecha, espalda,
 				(TiledMapTileLayer) map.getLayers().get("Entorno"),
-				map.getLayers().get("Objetos"), dialogo);
+				map.getLayers().get("Objetos"), dialogo, this);
 		player.setPosition(x, y);
 		player.setLastPressed(lastPressed);
-		Gdx.input.setInputProcessor(player);
+		Gdx.input.setInputProcessor(this);
 		
 		batch = new SpriteBatch();
+		box = new Sprite(new Texture("res/imgs/OptionBox.png"));
+		box.setScale((float) 4.5, (float) 1.5);
+		box.setX(box.getX() + 160);
 		
 		font.setColor(Color.BLACK);
 		
@@ -118,11 +126,15 @@ public class Play implements Screen, InputProcessor {
 		}
 		renderer.getBatch().end();
 		
-		batch.begin();
-		font.setColor(Color.BLACK);
-		font.draw(batch, dialogo.getLinea1(), 50, 125);
-		font.draw(batch, dialogo.getLinea2(), 50, 75);
-		batch.end();
+		if (optionsVisible) {
+			batch.begin();
+			box.draw(batch);
+			font.setColor(Color.BLACK);
+			font.draw(batch, dialogo.getLinea1(), 50, 125);
+			font.draw(batch, dialogo.getLinea2(), 50, 75);
+			batch.end();
+		}
+		
 	}
 
 	public void openMenuPlay() {
@@ -175,9 +187,47 @@ public class Play implements Screen, InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		if (!dialogo.isWriting()) {
-			switch (keycode) {
-			case (Keys.ENTER):
+		switch (keycode) {
+		case Keys.W:
+			player.velocity.y = player.speed;
+			player.velocity.x = 0;
+			player.animationTime = 0;
+			if(lastPressed==0)
+				lastPressed = 2;
+			player.WPressed = true;
+			break;
+		case Keys.A:
+			player.velocity.x = -player.speed;
+			player.velocity.y = 0;
+			player.animationTime = 0;
+			if(lastPressed==0)
+				lastPressed = 1;
+			player.APressed = true;
+			break;
+		case Keys.S:
+			player.velocity.y = -player.speed;
+
+			player.velocity.x = 0;
+			player.animationTime = 0;
+			if(lastPressed==0)
+				lastPressed = 3;
+			player.SPressed = true;
+			break;
+		case Keys.D:
+			player.velocity.x = player.speed;
+			player.velocity.y = 0;
+			player.animationTime = 0;
+			if(lastPressed==0)
+				lastPressed = 4;
+			player.DPressed = true;
+			break;
+		case Keys.SPACE:
+			player.SpacePressed=true;
+			break;
+		case Keys.ENTER:
+			optionsVisible = true;
+
+			if (!dialogo.isWriting()) {
 				String l1 = dialogo.siguienteLinea();
 				String l2 = dialogo.siguienteLinea();
 				
@@ -185,7 +235,7 @@ public class Play implements Screen, InputProcessor {
 					if (l2 == null) {
 						l2 = "";
 					}
-
+					
 					if (l1.contains("${NOMBRE}")) {
 						l1 = l1.replace("${NOMBRE}",
 								ArchivoGuardado.nombreJugador);
@@ -209,9 +259,10 @@ public class Play implements Screen, InputProcessor {
 					 */
 				} else {
 					dialogo.limpiar();
+					optionsVisible = false;
 				}
-				break;
 			}
+			break;
 		}
 
 		return false;
@@ -219,7 +270,79 @@ public class Play implements Screen, InputProcessor {
 
 	@Override
 	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
+		switch (keycode) {
+		case Keys.W:
+			if (player.SPressed) {
+				player.velocity.x = 0;
+				player.velocity.y = -player.speed;
+			} else if(player.APressed) {
+				player.velocity.y = 0;
+				player.velocity.x = -player.speed;				
+			} else if(player.DPressed) {
+				player.velocity.y = 0;
+				player.velocity.x = player.speed;				
+			} else{
+				player.velocity.y = 0;
+			}
+			player.animationTime = 0;
+			lastPressed = 2;
+			player.WPressed = false;
+			break;
+		case Keys.A:
+			if (player.DPressed) {
+				player.velocity.y = 0;
+				player.velocity.x = player.speed;
+			} else if(player.WPressed) {
+				player.velocity.x = 0;
+				player.velocity.y = player.speed;				
+			} else if(player.SPressed) {
+				player.velocity.x = 0;
+				player.velocity.y = -player.speed;				
+			} else{
+				player.velocity.x = 0;
+			}
+			player.animationTime = 0;
+			lastPressed = 1;
+			player.APressed = false;
+			break;
+		case Keys.S:
+			if (player.WPressed) {
+				player.velocity.x = 0;
+				player.velocity.y = player.speed;
+			} else if(player.APressed) {
+				player.velocity.y = 0;
+				player.velocity.x = -player.speed;				
+			} else if(player.DPressed) {
+				player.velocity.y = 0;
+				player.velocity.x = player.speed;				
+			} else{
+				player.velocity.y = 0;
+			}
+			player.animationTime = 0;
+			lastPressed = 3;
+			player.SPressed = false;
+			break;
+		case Keys.D:
+			if (player.APressed) {
+				player.velocity.y = 0;
+				player.velocity.x = -player.speed;
+			} else if(player.WPressed) {
+				player.velocity.x = 0;
+				player.velocity.y = player.speed;				
+			} else if(player.SPressed) {
+				player.velocity.x = 0;
+				player.velocity.y = -player.speed;				
+			} else{
+				player.velocity.x = 0;
+			}
+			player.animationTime = 0;
+			lastPressed = 4;
+			player.DPressed = false;
+			break;
+		case Keys.SPACE:
+			player.SpacePressed=false;
+			break;
+		}
 		return false;
 	}
 

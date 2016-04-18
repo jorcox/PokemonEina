@@ -13,24 +13,38 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.pokemon.dialogo.Dialogo;
+import com.pokemon.pantallas.Play;
 import com.pokemon.utilidades.ArchivoGuardado;
 
-public class Player extends Sprite implements InputProcessor {
+public class Player extends Sprite {
 
-	private Vector2 velocity = new Vector2();
+	public Vector2 velocity = new Vector2();
 
-	private float speed = 60 * 2, gravity = 60 * 1.8f, animationTime = 0;
+	public float speed = 60 * 2;
+
+	private float gravity = 60 * 1.8f;
+
+	public float animationTime = 0;
 
 	private Animation cara, izquierda, derecha, espalda;
 	private TiledMapTileLayer collisionLayer;
 	private MapLayer objectLayer;
 	private Dialogo dialogo;
+	private Play play;
 
-	private boolean APressed = false, WPressed = false, SPressed = false, DPressed = false, SpacePressed=false;
-	private int lastPressed; //A=1, W=2, S=3, D=4
+	public boolean APressed = false;
+
+	public boolean WPressed = false;
+
+	public boolean SPressed = false;
+
+	public boolean DPressed = false;
+
+	public boolean SpacePressed=false;
+	public int lastPressed; //A=1, W=2, S=3, D=4
 
 	public Player(Animation cara, Animation izquierda, Animation derecha, Animation espalda,
-			TiledMapTileLayer collisionLayer, MapLayer objectLayer, Dialogo dialogo) {
+			TiledMapTileLayer collisionLayer, MapLayer objectLayer, Dialogo dialogo, Play play) {
 		super(cara.getKeyFrame(0));
 		this.cara = cara;
 		this.izquierda = izquierda;
@@ -39,8 +53,7 @@ public class Player extends Sprite implements InputProcessor {
 		this.collisionLayer = collisionLayer;
 		this.objectLayer = objectLayer;
 		this.dialogo = dialogo;
-		
-		Gdx.input.setInputProcessor(this);
+		this.play = play;
 	}
 
 	@Override
@@ -228,6 +241,8 @@ public class Player extends Sprite implements InputProcessor {
 	 */
 	private void interact(TextureMapObject obj) {
 		if (obj.getProperties().containsKey("cartel")) {
+			play.optionsVisible = true;
+			
 			String value = (String) obj.getProperties().get("cartel");
 			dialogo.procesarDialogo("cartel_" + value);
 			dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
@@ -269,163 +284,6 @@ public class Player extends Sprite implements InputProcessor {
 	public void setCollisionLayer(TiledMapTileLayer collisionLayer) {
 		this.collisionLayer = collisionLayer;
 	}
-
-	@Override
-	public boolean keyDown(int keycode) {
-		switch (keycode) {
-		case Keys.W:
-			velocity.y = speed;
-			velocity.x = 0;
-			animationTime = 0;
-			if(lastPressed==0)
-				lastPressed = 2;
-			WPressed = true;
-			break;
-		case Keys.A:
-			velocity.x = -speed;
-			velocity.y = 0;
-			animationTime = 0;
-			if(lastPressed==0)
-				lastPressed = 1;
-			APressed = true;
-			break;
-		case Keys.S:
-			velocity.y = -speed;
-
-			velocity.x = 0;
-			animationTime = 0;
-			if(lastPressed==0)
-				lastPressed = 3;
-			SPressed = true;
-			break;
-		case Keys.D:
-			velocity.x = speed;
-			velocity.y = 0;
-			animationTime = 0;
-			if(lastPressed==0)
-				lastPressed = 4;
-			DPressed = true;
-			break;
-		case Keys.SPACE:
-			SpacePressed=true;
-			break;
-		case Keys.ENTER:
-			if (!dialogo.isWriting()) {
-				String l1 = dialogo.siguienteLinea();
-				String l2 = dialogo.siguienteLinea();
-				
-				if (l1 != null) {
-					if (l2 == null) {
-						l2 = "";
-					}
-
-					if (l1.contains("${NOMBRE}")) {
-						l1 = l1.replace("${NOMBRE}",
-								ArchivoGuardado.nombreJugador);
-					} else if (l2.contains("${NOMBRE}")) {
-						l2 = l2.replace("${NOMBRE}",
-								ArchivoGuardado.nombreJugador);
-					} else if (l1.contains("${CREACION_NOMBRE}")
-							|| l2.contains("${CREACION_NOMBRE}")) {
-						l1 = l1.replace("${CREACION_NOMBRE}", "");
-						l2 = l2.replace("${CREACION_NOMBRE}", "");
-						ArchivoGuardado.nombreJugador = "Sara";
-					}
-
-					/* Escribe letra a letra el dialogo */
-					dialogo.setLineas(l1, l2);
-					
-					/*
-					 * if (script[counter].contains("(OPTION)")) {
-					 * script[counter] = script[counter].replace( "(OPTION)",
-					 * ""); optionsVisible = true; }
-					 */
-				} else {
-					dialogo.limpiar();
-				}
-			}
-			break;
-		}
-		return true;
-	}
-
-	@Override
-	public boolean keyUp(int keycode) {
-		switch (keycode) {
-		case Keys.W:
-			if (SPressed) {
-				velocity.x = 0;
-				velocity.y = -speed;
-			} else if(APressed) {
-				velocity.y = 0;
-				velocity.x = -speed;				
-			} else if(DPressed) {
-				velocity.y = 0;
-				velocity.x = speed;				
-			} else{
-				velocity.y = 0;
-			}
-			animationTime = 0;
-			lastPressed = 2;
-			WPressed = false;
-			break;
-		case Keys.A:
-			if (DPressed) {
-				velocity.y = 0;
-				velocity.x = speed;
-			} else if(WPressed) {
-				velocity.x = 0;
-				velocity.y = speed;				
-			} else if(SPressed) {
-				velocity.x = 0;
-				velocity.y = -speed;				
-			} else{
-				velocity.x = 0;
-			}
-			animationTime = 0;
-			lastPressed = 1;
-			APressed = false;
-			break;
-		case Keys.S:
-			if (WPressed) {
-				velocity.x = 0;
-				velocity.y = speed;
-			} else if(APressed) {
-				velocity.y = 0;
-				velocity.x = -speed;				
-			} else if(DPressed) {
-				velocity.y = 0;
-				velocity.x = speed;				
-			} else{
-				velocity.y = 0;
-			}
-			animationTime = 0;
-			lastPressed = 3;
-			SPressed = false;
-			break;
-		case Keys.D:
-			if (APressed) {
-				velocity.y = 0;
-				velocity.x = -speed;
-			} else if(WPressed) {
-				velocity.x = 0;
-				velocity.y = speed;				
-			} else if(SPressed) {
-				velocity.x = 0;
-				velocity.y = -speed;				
-			} else{
-				velocity.x = 0;
-			}
-			animationTime = 0;
-			lastPressed = 4;
-			DPressed = false;
-			break;
-		case Keys.SPACE:
-			SpacePressed=false;
-			break;
-		}
-		return true;
-	}
 	
 	public int getLastPressed(){
 		return lastPressed;
@@ -433,42 +291,6 @@ public class Player extends Sprite implements InputProcessor {
 	
 	public void setLastPressed(int lastPressed){
 		this.lastPressed=lastPressed;
-	}
-
-	@Override
-	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean scrolled(int amount) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }
