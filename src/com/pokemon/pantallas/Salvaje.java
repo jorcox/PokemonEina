@@ -157,6 +157,7 @@ public class Salvaje implements Screen, InputProcessor {
 			/*
 			 * Dialogo Ataque
 			 */
+			pokemon.setAlpha(1);
 			pokemon.draw(batch);
 			dibujarCajasVida();
 			dibujarVidas();
@@ -182,6 +183,7 @@ public class Salvaje implements Screen, InputProcessor {
 			/*
 			 * Dialogo muerte o fase = 3
 			 */
+			pokemon.setAlpha(1);
 			pokemon.draw(batch);
 			dibujarCajasVida();
 			dibujarVidas();
@@ -191,7 +193,11 @@ public class Salvaje implements Screen, InputProcessor {
 				pokemon.setAlpha(0);
 			}
 		}
-
+		if (fase == 10 || fase == 11) {
+			pokemon.draw(batch);
+			dibujarCajasVida();
+			dibujarVidas();
+		}
 		batch.end();
 	}
 
@@ -305,7 +311,7 @@ public class Salvaje implements Screen, InputProcessor {
 				} else if (fase == 5) {
 					combate();
 				} else if (fase == 6) {
-					veces=8;
+					veces = 8;
 					if (pkmn.getPs() <= 0 || pkmnSalvaje.getPs() <= 0) {
 						fase = 9;
 						dialogo.procesarDialogo("pokemon_muerto");
@@ -315,7 +321,7 @@ public class Salvaje implements Screen, InputProcessor {
 				} else if (fase == 7) {
 					combate();
 				} else if (fase == 8) {
-					veces=8;
+					veces = 8;
 					if (pkmn.getPs() <= 0 || pkmnSalvaje.getPs() <= 0) {
 						fase = 9;
 						dialogo.procesarDialogo("pokemon_muerto");
@@ -337,6 +343,13 @@ public class Salvaje implements Screen, InputProcessor {
 					}
 					dialogo.setLineas(l1, l2);
 
+				} else if (fase == 10) {
+					fase = 7;
+					dialogo.limpiar();
+
+				} else if (fase == 11) {
+					fase = 3;
+					dialogo.limpiar();
 				}
 				break;
 			case Keys.LEFT:
@@ -697,23 +710,40 @@ public class Salvaje implements Screen, InputProcessor {
 
 			if (!dialogo.isWriting()) {
 				actualPsS = pkmnSalvaje.getPs();
-				combate.ejecutar(pkmn, pkmnSalvaje,
-						pkmn.getHabilidad(seleccionAtaque));
-
-				fase++;
+				if (combate.ejecutar(pkmn, pkmnSalvaje,
+						pkmn.getHabilidad(seleccionAtaque))) {
+					fase++;
+				} else {
+					// Ataque fallido
+					fase = 10;
+					String[] frase = {
+							"¡" + pkmn.getNombre() + " falló! Vaya mierdas...",
+							"" };
+					dialogo.setFrases(frase);
+					String l1 = dialogo.siguienteLinea();
+					String l2 = dialogo.siguienteLinea();
+					dialogo.setLineas(l1, l2);
+				}
 			}
-
 		} else {
 			int seleccionEnemigo = combate.decidir(pkmnSalvaje);
 
 			if (!dialogo.isWriting()) {
 				actualPs = pkmn.getPs();
-				combate.ejecutar(pkmnSalvaje, pkmn,
-						pkmnSalvaje.getHabilidad(seleccionEnemigo));
-
-				fase++;
+				if (combate.ejecutar(pkmnSalvaje, pkmn,
+						pkmnSalvaje.getHabilidad(seleccionEnemigo))) {
+					fase++;
+				} else {
+					fase = 11;
+					String[] frase = {
+							"¡" + pkmnSalvaje.getNombre()
+									+ " falló! Vaya mierdas...", "" };
+					dialogo.setFrases(frase);
+					String l1 = dialogo.siguienteLinea();
+					String l2 = dialogo.siguienteLinea();
+					dialogo.setLineas(l1, l2);
+				}
 			}
-
 		}
 
 	}
@@ -749,7 +779,7 @@ public class Salvaje implements Screen, InputProcessor {
 					intervalo--;
 				}
 			} else {
-				trans=1;
+				trans = 1;
 				pokemon.setAlpha(1);
 			}
 		} else {
@@ -763,7 +793,7 @@ public class Salvaje implements Screen, InputProcessor {
 					intervalo--;
 				}
 			} else {
-				trans=1;
+				trans = 1;
 				salvaje.setAlpha(1);
 			}
 		}
