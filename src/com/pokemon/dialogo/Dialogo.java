@@ -45,13 +45,10 @@ public class Dialogo {
 	public Dialogo(String idioma, String pais) {
 		this.idioma = idioma;
 		this.pais = pais;
-
+		
 		locale = new Locale(idioma, pais);
-
 		bundle = ResourceBundle.getBundle("Dialogos", locale);
 		len = 0;
-		
-
 	}
 
 	public String getIdioma() {
@@ -60,6 +57,22 @@ public class Dialogo {
 
 	public String getPais() {
 		return pais;
+	}
+	
+	public boolean isWriting() {
+		return writing;
+	}
+	
+	public String getId() {
+		return id;
+	}
+
+	public String getLinea1() {
+		return lineaUno;
+	}
+	
+	public String getLinea2() {
+		return lineaDos;
 	}
 
 	/**
@@ -75,10 +88,11 @@ public class Dialogo {
 		this.id=id;
 		int i = contarFrases(id);
 		String[] dialogo = new String[i];
-		for (int j = 1; j < i; j++) {
-			dialogo[j] = bundle.getString(id + "_" + j);
+		for (int j = 0; j < i; j++) {
+			dialogo[j] = bundle.getString(id + "_" + (j+1));
 		}
-		indiceActual = 1;
+		indiceActual = 0;
+		indicePalabra = 0;
 		frases = dialogo;
 	}
 
@@ -129,7 +143,7 @@ public class Dialogo {
 			}
 		} catch (MissingResourceException e) {
 		}
-		return i;
+		return (i-1);
 	}
 
 	/**
@@ -169,22 +183,6 @@ public class Dialogo {
 
 	public String siguienteLinea() {		
 		return getSiguienteLinea(frases);
-	}
-	
-	public boolean isWriting() {
-		return writing;
-	}
-	
-	public String getId() {
-		return id;
-	}
-
-	public String getLinea1() {
-		return lineaUno;
-	}
-	
-	public String getLinea2() {
-		return lineaDos;
 	}
 	
 	public void limpiar() {

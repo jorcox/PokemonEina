@@ -12,6 +12,7 @@ import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
+import com.pokemon.dialogo.Dialogo;
 
 public class Player extends Sprite implements InputProcessor {
 
@@ -22,12 +23,13 @@ public class Player extends Sprite implements InputProcessor {
 	private Animation cara, izquierda, derecha, espalda;
 	private TiledMapTileLayer collisionLayer;
 	private MapLayer objectLayer;
+	private Dialogo dialogo;
 
 	private boolean APressed = false, WPressed = false, SPressed = false, DPressed = false, SpacePressed=false;
 	private int lastPressed; //A=1, W=2, S=3, D=4
 
 	public Player(Animation cara, Animation izquierda, Animation derecha, Animation espalda,
-			TiledMapTileLayer collisionLayer, MapLayer objectLayer) {
+			TiledMapTileLayer collisionLayer, MapLayer objectLayer, Dialogo dialogo) {
 		super(cara.getKeyFrame(0));
 		this.cara = cara;
 		this.izquierda = izquierda;
@@ -35,6 +37,7 @@ public class Player extends Sprite implements InputProcessor {
 		this.espalda = espalda;
 		this.collisionLayer = collisionLayer;
 		this.objectLayer = objectLayer;
+		this.dialogo = dialogo;
 	}
 
 	@Override
@@ -223,7 +226,8 @@ public class Player extends Sprite implements InputProcessor {
 	private void interact(TextureMapObject obj) {
 		if (obj.getProperties().containsKey("cartel")) {
 			String value = (String) obj.getProperties().get("cartel");
-			Gdx.app.log("Cartel", value);
+			dialogo.procesarDialogo("cartel_" + value);
+			dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
 		}
 	}
 

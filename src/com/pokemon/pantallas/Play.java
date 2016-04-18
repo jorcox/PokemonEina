@@ -2,6 +2,7 @@ package com.pokemon.pantallas;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -13,16 +14,18 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.pokemon.dialogo.Dialogo;
 import com.pokemon.entities.Player;
 import com.pokemon.render.TextureMapObjectRenderer;
 
-public class Play implements Screen {
+public class Play implements Screen, InputProcessor {
 
 	private TiledMap map;
 	private TextureMapObjectRenderer renderer;
 	private OrthographicCamera camera;
 	private float x, y;
 	private int lastPressed;
+	private Dialogo dialogo;
 
 	private TextureAtlas playerAtlas;
 
@@ -31,6 +34,7 @@ public class Play implements Screen {
 	private Player player;
 
 	public Play(float x, float y, int lastPressed) {
+		dialogo = new Dialogo("es", "ES");
 		this.x = x;
 		this.y = y;
 		this.lastPressed=lastPressed;
@@ -59,7 +63,7 @@ public class Play implements Screen {
 
 		player = new Player(cara, izquierda, derecha, espalda,
 				(TiledMapTileLayer) map.getLayers().get("Entorno"),
-				map.getLayers().get("Objetos"));
+				map.getLayers().get("Objetos"), dialogo);
 		player.setPosition(x, y);
 		player.setLastPressed(lastPressed);
 		Gdx.input.setInputProcessor(player);
@@ -139,6 +143,54 @@ public class Play implements Screen {
 
 	public void setPlayer(Player player) {
 		this.player = player;
+	}
+
+	@Override
+	public boolean keyDown(int keycode) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean keyUp(int keycode) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean keyTyped(char character) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean scrolled(int amount) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
