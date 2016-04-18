@@ -21,7 +21,7 @@ import com.pokemon.dialogo.Dialogo;
 import com.pokemon.utilidades.ArchivoGuardado;
 import com.pokemon.utilidades.Importador;
 
-public class Bienvenida extends Dialogo implements Screen, InputProcessor {
+public class Bienvenida implements Screen, InputProcessor {
 
 	PokemonAdaByron game;
 
@@ -50,9 +50,12 @@ public class Bienvenida extends Dialogo implements Screen, InputProcessor {
 	private int optionsScreen = 1;
 
 	private boolean optionsVisible = false;
+	
+	private Dialogo dialogo;
 
 	public Bienvenida(PokemonAdaByron game) {
-		super("es", "ES");
+		dialogo = new Dialogo("es", "ES");
+		//super("es", "ES");
 		this.game = game;
 		Gdx.input.setInputProcessor(this);
 		m.play();
@@ -61,7 +64,7 @@ public class Bienvenida extends Dialogo implements Screen, InputProcessor {
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 35;
 		font = generator.generateFont(parameter); // font size 35 pixels
-		frases = getDialogo("jamarro_intro");
+		dialogo.procesarDialogo("jamarro_intro");
 	}
 
 
@@ -80,8 +83,8 @@ public class Bienvenida extends Dialogo implements Screen, InputProcessor {
 		prof.setSize(169, (float) 417.5);
 		prof.setX(540);
 		prof.setY(55);
-		font.draw(batch, lineaUno, 50, 125);
-		font.draw(batch, lineaDos, 50, 75);
+		font.draw(batch, dialogo.getLinea1(), 50, 125);
+		font.draw(batch, dialogo.getLinea2(), 50, 75);
 
 		if (optionsVisible) {
 			optionBox.draw(batch);
@@ -135,11 +138,11 @@ public class Bienvenida extends Dialogo implements Screen, InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		if (!writing) {
+		if (!dialogo.isWriting()) {
 			switch (keycode) {
 			case (Keys.ENTER):
-				String l1 = siguienteLinea();
-				String l2 = siguienteLinea();
+				String l1 = dialogo.siguienteLinea();
+				String l2 = dialogo.siguienteLinea();
 				
 				if (l1 != null) {
 					if (l2 == null) {
@@ -161,7 +164,7 @@ public class Bienvenida extends Dialogo implements Screen, InputProcessor {
 					}
 
 					/* Escribe letra a letra el dialogo */
-					setLineas(l1, l2);
+					dialogo.setLineas(l1, l2);
 					
 					/*
 					 * if (script[counter].contains("(OPTION)")) {

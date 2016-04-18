@@ -1,9 +1,5 @@
 package com.pokemon.dialogo;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -37,9 +33,7 @@ public class Dialogo {
 	private String pais;
 	private Locale locale;
 	private ResourceBundle bundle;
-	private String[] dialogoActual;
 	protected int indiceActual;
-	private int subIndiceActual;
 	private int indicePalabra;
 	protected String lineaUno = "";
 	protected String lineaDos = "";
@@ -51,13 +45,10 @@ public class Dialogo {
 	public Dialogo(String idioma, String pais) {
 		this.idioma = idioma;
 		this.pais = pais;
-
+		
 		locale = new Locale(idioma, pais);
-
 		bundle = ResourceBundle.getBundle("Dialogos", locale);
 		len = 0;
-		
-
 	}
 
 	public String getIdioma() {
@@ -66,6 +57,22 @@ public class Dialogo {
 
 	public String getPais() {
 		return pais;
+	}
+	
+	public boolean isWriting() {
+		return writing;
+	}
+	
+	public String getId() {
+		return id;
+	}
+
+	public String getLinea1() {
+		return lineaUno;
+	}
+	
+	public String getLinea2() {
+		return lineaDos;
 	}
 
 	/**
@@ -77,17 +84,16 @@ public class Dialogo {
 	 *            la clave que identifica al dialogo.
 	 * @return el dialogo cuya clave es id.
 	 */
-	public String[] getDialogo(String id) {
+	public void procesarDialogo(String id) {
 		this.id=id;
 		int i = contarFrases(id);
 		String[] dialogo = new String[i];
-		for (int j = 1; j < i; j++) {
-			dialogo[j] = bundle.getString(id + "_" + j);
+		for (int j = 0; j < i; j++) {
+			dialogo[j] = bundle.getString(id + "_" + (j+1));
 		}
-		dialogoActual = null;
-		indiceActual = 1;
-		subIndiceActual = 0;
-		return dialogo;
+		indiceActual = 0;
+		indicePalabra = 0;
+		frases = dialogo;
 	}
 
 	public String getSiguienteLinea(String[] dialogo) {
@@ -137,7 +143,7 @@ public class Dialogo {
 			}
 		} catch (MissingResourceException e) {
 		}
-		return i;
+		return (i-1);
 	}
 
 	/**
@@ -147,7 +153,7 @@ public class Dialogo {
 	 * @param l1
 	 * @param l2
 	 */
-	protected void setLineas(String l1, String l2) {
+	public void setLineas(String l1, String l2) {
 		/* Antes hay que borrarlas */
 		lineaUno = "";
 		lineaDos = "";
@@ -170,10 +176,18 @@ public class Dialogo {
 		}, 0, (float) 0.05, l1.length() + l2.length() + 1);
 	}
 	
-
+	public void setFrases(String[] frases) {
+		this.frases = frases;
+		indiceActual = 0;
+	}
 
 	public String siguienteLinea() {		
 		return getSiguienteLinea(frases);
+	}
+	
+	public void limpiar() {
+		lineaUno = "";
+		lineaDos = "";
 	}
 
 }
