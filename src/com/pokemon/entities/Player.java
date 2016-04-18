@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.pokemon.dialogo.Dialogo;
+import com.pokemon.utilidades.ArchivoGuardado;
 
 public class Player extends Sprite implements InputProcessor {
 
@@ -38,6 +39,8 @@ public class Player extends Sprite implements InputProcessor {
 		this.collisionLayer = collisionLayer;
 		this.objectLayer = objectLayer;
 		this.dialogo = dialogo;
+		
+		Gdx.input.setInputProcessor(this);
 	}
 
 	@Override
@@ -305,6 +308,42 @@ public class Player extends Sprite implements InputProcessor {
 			break;
 		case Keys.SPACE:
 			SpacePressed=true;
+			break;
+		case Keys.ENTER:
+			if (!dialogo.isWriting()) {
+				String l1 = dialogo.siguienteLinea();
+				String l2 = dialogo.siguienteLinea();
+				
+				if (l1 != null) {
+					if (l2 == null) {
+						l2 = "";
+					}
+
+					if (l1.contains("${NOMBRE}")) {
+						l1 = l1.replace("${NOMBRE}",
+								ArchivoGuardado.nombreJugador);
+					} else if (l2.contains("${NOMBRE}")) {
+						l2 = l2.replace("${NOMBRE}",
+								ArchivoGuardado.nombreJugador);
+					} else if (l1.contains("${CREACION_NOMBRE}")
+							|| l2.contains("${CREACION_NOMBRE}")) {
+						l1 = l1.replace("${CREACION_NOMBRE}", "");
+						l2 = l2.replace("${CREACION_NOMBRE}", "");
+						ArchivoGuardado.nombreJugador = "Sara";
+					}
+
+					/* Escribe letra a letra el dialogo */
+					dialogo.setLineas(l1, l2);
+					
+					/*
+					 * if (script[counter].contains("(OPTION)")) {
+					 * script[counter] = script[counter].replace( "(OPTION)",
+					 * ""); optionsVisible = true; }
+					 */
+				} else {
+					dialogo.limpiar();
+				}
+			}
 			break;
 		}
 		return true;
