@@ -1,5 +1,6 @@
 package com.pokemon.entities;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
@@ -29,6 +30,7 @@ public class Player extends Sprite {
 	private Animation cara, izquierda, derecha, espalda;
 	private TiledMapTileLayer collisionLayer;
 	private MapLayer objectLayer;
+	private MapLayer transLayer;
 	private Dialogo dialogo;
 	private Play play;
 
@@ -40,18 +42,22 @@ public class Player extends Sprite {
 
 	public boolean DPressed = false;
 
-	public boolean SpacePressed=false;
-	public int lastPressed; //A=1, W=2, S=3, D=4
+	public boolean SpacePressed = false;
+	public int lastPressed; // A=1, W=2, S=3, D=4
 
-	public Player(Animation cara, Animation izquierda, Animation derecha, Animation espalda,
-			TiledMapTileLayer collisionLayer, MapLayer objectLayer, Dialogo dialogo, Play play) {
+	public Player(Animation cara, Animation izquierda, Animation derecha,
+			Animation espalda, TiledMapTileLayer collisionLayer,
+			MapLayer objectLayer, MapLayer transLayer, Dialogo dialogo,
+			Play play) {
 		super(cara.getKeyFrame(0));
 		this.cara = cara;
 		this.izquierda = izquierda;
 		this.derecha = derecha;
 		this.espalda = espalda;
 		this.collisionLayer = collisionLayer;
+		this.setTransLayer(transLayer);
 		this.objectLayer = objectLayer;
+		this.transLayer = transLayer;
 		this.dialogo = dialogo;
 		this.play = play;
 	}
@@ -81,8 +87,8 @@ public class Player extends Sprite {
 		/*
 		 * Guardar la posicion anterior
 		 */
-		float oldX = getX(), oldY = getY(), tileWidth = collisionLayer.getTileWidth(),
-				tileHeight = collisionLayer.getTileHeight();
+		float oldX = getX(), oldY = getY(), tileWidth = collisionLayer
+				.getTileWidth(), tileHeight = collisionLayer.getTileHeight();
 		boolean collisionX = false, collisionY = false;
 
 		/*
@@ -92,24 +98,29 @@ public class Player extends Sprite {
 
 		if (velocity.x < 0) {
 			// Top left
-			//collisionX = collisionLayer.getCell((int) (getX() / tileWidth), (int) ((getY() + getHeight()) / tileHeight))
-			//		.getTile().getProperties().containsKey("blocked");
+			// collisionX = collisionLayer.getCell((int) (getX() / tileWidth),
+			// (int) ((getY() + getHeight()) / tileHeight))
+			// .getTile().getProperties().containsKey("blocked");
 			// Middle left
 			if (!collisionX)
 				collisionX |= collisionLayer
-						.getCell((int) (getX() / tileWidth), (int) ((getY() + getHeight() / 2) / tileHeight)).getTile()
-						.getProperties().containsKey("blocked");
+						.getCell((int) (getX() / tileWidth),
+								(int) ((getY() + getHeight() / 2) / tileHeight))
+						.getTile().getProperties().containsKey("blocked");
 
 			// Bottom left
 			if (!collisionX)
-				collisionX |= collisionLayer.getCell((int) (getX() / tileWidth), (int) (getY() / tileHeight)).getTile()
+				collisionX |= collisionLayer
+						.getCell((int) (getX() / tileWidth),
+								(int) (getY() / tileHeight)).getTile()
 						.getProperties().containsKey("blocked");
 
 		} else if (velocity.x > 0) {
 			// Top right
-			//collisionX = collisionLayer
-			//		.getCell((int) ((getX() + getWidth()) / tileWidth), (int) ((getY() + getHeight()) / tileHeight))
-			//		.getTile().getProperties().containsKey("blocked");
+			// collisionX = collisionLayer
+			// .getCell((int) ((getX() + getWidth()) / tileWidth), (int)
+			// ((getY() + getHeight()) / tileHeight))
+			// .getTile().getProperties().containsKey("blocked");
 			// Middle right
 			if (!collisionX)
 				collisionX |= collisionLayer
@@ -120,7 +131,8 @@ public class Player extends Sprite {
 			// Bottom right
 			if (!collisionX)
 				collisionX |= collisionLayer
-						.getCell((int) ((getX() + getWidth()) / tileWidth), (int) (getY() / tileHeight)).getTile()
+						.getCell((int) ((getX() + getWidth()) / tileWidth),
+								(int) (getY() / tileHeight)).getTile()
 						.getProperties().containsKey("blocked");
 
 		}
@@ -131,31 +143,36 @@ public class Player extends Sprite {
 			setX(oldX);
 			velocity.x = 0;
 		}
-		
+
 		/*
 		 * Movimiento en Y
 		 */
 		setY(getY() + velocity.y * delta);
 		if (velocity.y < 0) {
 			// Bottom left
-			collisionY = collisionLayer.getCell((int) (getX() / tileWidth), (int) (getY() / tileHeight)).getTile()
+			collisionY = collisionLayer
+					.getCell((int) (getX() / tileWidth),
+							(int) (getY() / tileHeight)).getTile()
 					.getProperties().containsKey("blocked");
 			// Bottom middle
 			if (!collisionY)
 				collisionY |= collisionLayer
-						.getCell((int) ((getX() + getWidth() / 2) / tileWidth), (int) ((getY()) / tileHeight)).getTile()
+						.getCell((int) ((getX() + getWidth() / 2) / tileWidth),
+								(int) ((getY()) / tileHeight)).getTile()
 						.getProperties().containsKey("blocked");
 
 			// Bottom right
 			if (!collisionY)
 				collisionY |= collisionLayer
-						.getCell((int) ((getX() + getWidth()) / tileWidth), (int) (getY() / tileHeight)).getTile()
+						.getCell((int) ((getX() + getWidth()) / tileWidth),
+								(int) (getY() / tileHeight)).getTile()
 						.getProperties().containsKey("blocked");
 
 		} else if (velocity.y > 0) {
 			// Top left
-			//collisionY = collisionLayer.getCell((int) (getX() / tileWidth), (int) ((getY() + getHeight()) / tileHeight))
-			//		.getTile().getProperties().containsKey("blocked");
+			// collisionY = collisionLayer.getCell((int) (getX() / tileWidth),
+			// (int) ((getY() + getHeight()) / tileHeight))
+			// .getTile().getProperties().containsKey("blocked");
 			// Top middle
 			if (!collisionY)
 				collisionY |= collisionLayer
@@ -164,10 +181,11 @@ public class Player extends Sprite {
 						.getTile().getProperties().containsKey("blocked");
 
 			// Top right
-			//if (!collisionY)
-			//	collisionY |= collisionLayer
-			//			.getCell((int) ((getX() + getWidth()) / tileWidth), (int) ((getY() + getHeight()) / tileHeight))
-			//			.getTile().getProperties().containsKey("blocked");
+			// if (!collisionY)
+			// collisionY |= collisionLayer
+			// .getCell((int) ((getX() + getWidth()) / tileWidth), (int)
+			// ((getY() + getHeight()) / tileHeight))
+			// .getTile().getProperties().containsKey("blocked");
 		}
 		/*
 		 * Reacción al colisionar en Y
@@ -176,57 +194,74 @@ public class Player extends Sprite {
 			setY(oldY);
 			velocity.y = 0;
 		}
-		
+
 		/*
 		 * Actualizar animacion
 		 */
 		animationTime += delta;
-		if ((WPressed || APressed || SPressed || DPressed) && (!collisionX && !collisionY) && (!(velocity.x == 0) || !(velocity.y == 0))) {
-			setRegion(
-					velocity.x < 0 ? izquierda.getKeyFrame(animationTime)
-							: velocity.x > 0 ? derecha.getKeyFrame(animationTime)
-									: velocity.y > 0 ? espalda.getKeyFrame(animationTime)
-											: cara.getKeyFrame(animationTime));
+		if ((WPressed || APressed || SPressed || DPressed)
+				&& (!collisionX && !collisionY)
+				&& (!(velocity.x == 0) || !(velocity.y == 0))) {
+			setRegion(velocity.x < 0 ? izquierda.getKeyFrame(animationTime)
+					: velocity.x > 0 ? derecha.getKeyFrame(animationTime)
+							: velocity.y > 0 ? espalda
+									.getKeyFrame(animationTime) : cara
+									.getKeyFrame(animationTime));
 		} else {
-			switch (lastPressed){
-			case 1 : //A
+			switch (lastPressed) {
+			case 1: // A
 				setRegion(izquierda.getKeyFrame(0));
 				break;
-			case 2 : //W
+			case 2: // W
 				setRegion(espalda.getKeyFrame(0));
 				break;
-			case 3 : //S
+			case 3: // S
 				setRegion(cara.getKeyFrame(0));
 				break;
-			case 4 : //D
+			case 4: // D
 				setRegion(derecha.getKeyFrame(1));
 				break;
 			}
 		}
-		
+
 		/* Eventos con objetos */
 		if (collisionX || collisionY) {
 			for (MapObject o : objectLayer.getObjects()) {
 				TextureMapObject t = (TextureMapObject) o;
 				Gdx.app.log("cartel", "distancia " + distance(t));
-				
+
 				/* Dispara evento si estan muy cerca jugador y objeto */
 				if (distance(t) < 50) {
 					interact(t);
 					break;
 				}
 			}
+			for (MapObject o : transLayer.getObjects()) {
+				TextureMapObject t = (TextureMapObject) o;
+
+				/* Dispara evento si estan muy cerca jugador y objeto */
+				if (distance(t) < 50) {
+					((Game) Gdx.app.getApplicationListener())
+							.setScreen(new Play(Integer.parseInt((String) t
+									.getProperties().get("x")), Integer
+									.parseInt((String) t.getProperties().get(
+											"y")), getLastPressed(), t
+									.getProperties().get("mapa") + ".tmx"));
+					break;
+				}
+			}
 		}
-		
+
 	}
-	
+
 	/**
 	 * Calcula la distancia entre el jugador y el objeto de texturas t.
 	 * 
-	 * @param t el objeto de texturas.
+	 * @param t
+	 *            el objeto de texturas.
 	 * @return la distancia euclidea.
 	 */
-	private int distance(TextureMapObject t) {
+	public int distance(TextureMapObject t) {
 		double aux = t.getX();
 		double dx = Math.pow(getX() - aux, 2);
 		double dy = Math.pow(getY() - t.getY(), 2);
@@ -234,25 +269,27 @@ public class Player extends Sprite {
 	}
 
 	/**
-	 * Gestiona las interacciones entre el jugador y el objeto obj, que
-	 * puede ser un cartel, pokeball, etc.
+	 * Gestiona las interacciones entre el jugador y el objeto obj, que puede
+	 * ser un cartel, pokeball, etc.
 	 * 
-	 * @param obj el objeto declarado en la capa de objetos.
+	 * @param obj
+	 *            el objeto declarado en la capa de objetos.
 	 */
 	private void interact(TextureMapObject obj) {
 		if (obj.getProperties().containsKey("cartel")) {
 			play.optionsVisible = true;
-			
+
 			String value = (String) obj.getProperties().get("cartel");
 			dialogo.procesarDialogo("cartel_" + value);
-			dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
+			dialogo.setLineas(dialogo.siguienteLinea(),
+					dialogo.siguienteLinea());
 		}
 	}
 
-	public boolean getSpacePressed(){
+	public boolean getSpacePressed() {
 		return SpacePressed;
 	}
-	
+
 	public Vector2 getVelocity() {
 		return velocity;
 	}
@@ -284,13 +321,21 @@ public class Player extends Sprite {
 	public void setCollisionLayer(TiledMapTileLayer collisionLayer) {
 		this.collisionLayer = collisionLayer;
 	}
-	
-	public int getLastPressed(){
+
+	public int getLastPressed() {
 		return lastPressed;
 	}
-	
-	public void setLastPressed(int lastPressed){
-		this.lastPressed=lastPressed;
+
+	public void setLastPressed(int lastPressed) {
+		this.lastPressed = lastPressed;
+	}
+
+	public MapLayer getTransLayer() {
+		return transLayer;
+	}
+
+	public void setTransLayer(MapLayer transLayer) {
+		this.transLayer = transLayer;
 	}
 
 }
