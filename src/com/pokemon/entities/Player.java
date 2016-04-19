@@ -12,6 +12,7 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
 import com.pokemon.dialogo.Dialogo;
 import com.pokemon.pantallas.Play;
@@ -283,6 +284,15 @@ public class Player extends Sprite {
 			dialogo.procesarDialogo("cartel_" + value);
 			dialogo.setLineas(dialogo.siguienteLinea(),
 					dialogo.siguienteLinea());
+		} else if (obj.getProperties().containsKey("item")) {
+			play.optionsVisible = true;
+			
+			String value = (String) obj.getProperties().get("item");
+			dialogo.procesarDialogo("item_" + value);
+			dialogo.setLineas(dialogo.siguienteLinea(),
+					dialogo.siguienteLinea());
+			
+			collisionLayer.setCell((int)obj.getX(),(int)obj.getY(), null); // no va
 		}
 	}
 
