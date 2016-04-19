@@ -157,6 +157,17 @@ public class Dialogo {
 		/* Antes hay que borrarlas */
 		lineaUno = "";
 		lineaDos = "";
+		String l11, l22;
+		if (l1 == null) {
+			l11 = "";
+		} else {
+			l11 = l1;
+		}
+		if (l2 == null) {
+			l22 = "";
+		} else {
+			l22 = l2;
+		}
 
 		Timer.schedule(new Task() {
 			int i = 1;
@@ -165,15 +176,15 @@ public class Dialogo {
 			public void run() {
 				writing = true;
 
-				if (i < l1.length()) {
-					lineaUno = l1.substring(0, i++);
-				} else if (j < l2.length()) {
-					lineaDos = l2.substring(0, j++);
+				if (i < l11.length()) {
+					lineaUno = l11.substring(0, i++);
+				} else if (j < l22.length()) {
+					lineaDos = l22.substring(0, j++);
 				} else {
 					writing = false;
 				}
 			}
-		}, 0, (float) 0.05, l1.length() + l2.length() + 1);
+		}, 0, (float) 0.05, l11.length() + l22.length() + 1);
 	}
 	
 	public void setFrases(String[] frases) {
