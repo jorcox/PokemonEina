@@ -40,8 +40,8 @@ public class Play implements Screen, InputProcessor {
 	private FreeTypeFontGenerator generator;
 
 	private TextureAtlas playerAtlas;
-	
-	private Sprite box;	
+
+	private Sprite box;
 	public boolean optionsVisible = false;
 
 	// private Player player = new Player(new Sprite(new
@@ -52,12 +52,13 @@ public class Play implements Screen, InputProcessor {
 		dialogo = new Dialogo("es", "ES");
 		this.x = x;
 		this.y = y;
-		this.lastPressed=lastPressed;
-		
+		this.lastPressed = lastPressed;
+
 		Gdx.input.setInputProcessor(this);
-		
+
 		/* Prepara fuente para escritura */
-		generator = new FreeTypeFontGenerator(Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
+		generator = new FreeTypeFontGenerator(
+				Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 35;
 		font = generator.generateFont(parameter);
@@ -85,19 +86,20 @@ public class Play implements Screen, InputProcessor {
 		espalda.setPlayMode(Animation.PlayMode.LOOP);
 
 		player = new Player(cara, izquierda, derecha, espalda,
-				(TiledMapTileLayer) map.getLayers().get("Entorno"),
-				map.getLayers().get("Objetos"), dialogo, this);
+				(TiledMapTileLayer) map.getLayers().get("Entorno"), map
+						.getLayers().get("Objetos"), map.getLayers().get(
+						"Trans"), dialogo, this);
 		player.setPosition(x, y);
 		player.setLastPressed(lastPressed);
 		Gdx.input.setInputProcessor(this);
-		
+
 		batch = new SpriteBatch();
 		box = new Sprite(new Texture("res/imgs/OptionBox.png"));
 		box.setScale((float) 4.5, (float) 1.5);
 		box.setX(box.getX() + 160);
-		
+
 		font.setColor(Color.BLACK);
-		
+
 		/* Mostrar objetos */
 		renderer.getBatch().begin();
 		for (MapObject o : map.getLayers().get("Objetos").getObjects()) {
@@ -125,7 +127,7 @@ public class Play implements Screen, InputProcessor {
 			openMenuPlay();
 		}
 		renderer.getBatch().end();
-		
+
 		if (optionsVisible) {
 			batch.begin();
 			box.draw(batch);
@@ -134,7 +136,19 @@ public class Play implements Screen, InputProcessor {
 			font.draw(batch, dialogo.getLinea2(), 50, 75);
 			batch.end();
 		}
-		
+		TiledMapTileLayer collisionLayer = player.getCollisionLayer();
+		if (collisionLayer
+				.getCell(
+						(int) (player.getX() / collisionLayer.getWidth()),
+						(int) (player.getY() + player.getHeight() / 2)
+								/ collisionLayer.getHeight()).getTile()
+				.getProperties().containsKey("trans")) {
+			/*
+			 * Tile de transicion
+			 */
+			
+		}
+
 	}
 
 	public void openMenuPlay() {
@@ -192,7 +206,7 @@ public class Play implements Screen, InputProcessor {
 			player.velocity.y = player.speed;
 			player.velocity.x = 0;
 			player.animationTime = 0;
-			if(lastPressed==0)
+			if (lastPressed == 0)
 				lastPressed = 2;
 			player.WPressed = true;
 			break;
@@ -200,7 +214,7 @@ public class Play implements Screen, InputProcessor {
 			player.velocity.x = -player.speed;
 			player.velocity.y = 0;
 			player.animationTime = 0;
-			if(lastPressed==0)
+			if (lastPressed == 0)
 				lastPressed = 1;
 			player.APressed = true;
 			break;
@@ -209,7 +223,7 @@ public class Play implements Screen, InputProcessor {
 
 			player.velocity.x = 0;
 			player.animationTime = 0;
-			if(lastPressed==0)
+			if (lastPressed == 0)
 				lastPressed = 3;
 			player.SPressed = true;
 			break;
@@ -217,12 +231,12 @@ public class Play implements Screen, InputProcessor {
 			player.velocity.x = player.speed;
 			player.velocity.y = 0;
 			player.animationTime = 0;
-			if(lastPressed==0)
+			if (lastPressed == 0)
 				lastPressed = 4;
 			player.DPressed = true;
 			break;
 		case Keys.SPACE:
-			player.SpacePressed=true;
+			player.SpacePressed = true;
 			break;
 		case Keys.ENTER:
 			optionsVisible = true;
@@ -230,12 +244,12 @@ public class Play implements Screen, InputProcessor {
 			if (!dialogo.isWriting()) {
 				String l1 = dialogo.siguienteLinea();
 				String l2 = dialogo.siguienteLinea();
-				
+
 				if (l1 != null) {
 					if (l2 == null) {
 						l2 = "";
 					}
-					
+
 					if (l1.contains("${NOMBRE}")) {
 						l1 = l1.replace("${NOMBRE}",
 								ArchivoGuardado.nombreJugador);
@@ -251,7 +265,7 @@ public class Play implements Screen, InputProcessor {
 
 					/* Escribe letra a letra el dialogo */
 					dialogo.setLineas(l1, l2);
-					
+
 					/*
 					 * if (script[counter].contains("(OPTION)")) {
 					 * script[counter] = script[counter].replace( "(OPTION)",
@@ -275,13 +289,13 @@ public class Play implements Screen, InputProcessor {
 			if (player.SPressed) {
 				player.velocity.x = 0;
 				player.velocity.y = -player.speed;
-			} else if(player.APressed) {
+			} else if (player.APressed) {
 				player.velocity.y = 0;
-				player.velocity.x = -player.speed;				
-			} else if(player.DPressed) {
+				player.velocity.x = -player.speed;
+			} else if (player.DPressed) {
 				player.velocity.y = 0;
-				player.velocity.x = player.speed;				
-			} else{
+				player.velocity.x = player.speed;
+			} else {
 				player.velocity.y = 0;
 			}
 			player.animationTime = 0;
@@ -292,13 +306,13 @@ public class Play implements Screen, InputProcessor {
 			if (player.DPressed) {
 				player.velocity.y = 0;
 				player.velocity.x = player.speed;
-			} else if(player.WPressed) {
+			} else if (player.WPressed) {
 				player.velocity.x = 0;
-				player.velocity.y = player.speed;				
-			} else if(player.SPressed) {
+				player.velocity.y = player.speed;
+			} else if (player.SPressed) {
 				player.velocity.x = 0;
-				player.velocity.y = -player.speed;				
-			} else{
+				player.velocity.y = -player.speed;
+			} else {
 				player.velocity.x = 0;
 			}
 			player.animationTime = 0;
@@ -309,13 +323,13 @@ public class Play implements Screen, InputProcessor {
 			if (player.WPressed) {
 				player.velocity.x = 0;
 				player.velocity.y = player.speed;
-			} else if(player.APressed) {
+			} else if (player.APressed) {
 				player.velocity.y = 0;
-				player.velocity.x = -player.speed;				
-			} else if(player.DPressed) {
+				player.velocity.x = -player.speed;
+			} else if (player.DPressed) {
 				player.velocity.y = 0;
-				player.velocity.x = player.speed;				
-			} else{
+				player.velocity.x = player.speed;
+			} else {
 				player.velocity.y = 0;
 			}
 			player.animationTime = 0;
@@ -326,13 +340,13 @@ public class Play implements Screen, InputProcessor {
 			if (player.APressed) {
 				player.velocity.y = 0;
 				player.velocity.x = -player.speed;
-			} else if(player.WPressed) {
+			} else if (player.WPressed) {
 				player.velocity.x = 0;
-				player.velocity.y = player.speed;				
-			} else if(player.SPressed) {
+				player.velocity.y = player.speed;
+			} else if (player.SPressed) {
 				player.velocity.x = 0;
-				player.velocity.y = -player.speed;				
-			} else{
+				player.velocity.y = -player.speed;
+			} else {
 				player.velocity.x = 0;
 			}
 			player.animationTime = 0;
@@ -340,7 +354,7 @@ public class Play implements Screen, InputProcessor {
 			player.DPressed = false;
 			break;
 		case Keys.SPACE:
-			player.SpacePressed=false;
+			player.SpacePressed = false;
 			break;
 		}
 		return false;
