@@ -17,7 +17,7 @@ public class TextureMapObjectRenderer extends OrthogonalTiledMapRenderer {
 	public void renderObject(MapObject object) {
 		if (object instanceof TextureMapObject) {
 			TextureMapObject texture = (TextureMapObject) object;
-			batch.draw(texture.getTextureRegion(), texture.getX() - 160, texture.getY());
+			batch.draw(texture.getTextureRegion(), texture.getX(), texture.getY());
 			//Gdx.app.log("Cartel", " "+texture.getX() + " " + texture.getY() + " " + texture.getOriginX() + 
 			//		" " + texture.getOriginY() + " " + texture.getScaleX() + " " + texture.getScaleY());
 
