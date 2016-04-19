@@ -12,7 +12,9 @@ public class DesktopLauncher {
         config.useGL30 = false;
         config.width = 720;
         config.height = 540;
+        
         config.addIcon("res/imgs/Pokeball.png", FileType.Internal);
+        
         new LwjglApplication(new PokemonAdaByron(), config);
  
     }

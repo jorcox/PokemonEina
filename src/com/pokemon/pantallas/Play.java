@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -34,6 +35,7 @@ public class Play implements Screen, InputProcessor {
 	private OrthographicCamera camera;
 	private float x, y;
 	private int lastPressed;
+	private String map_;
 	private Dialogo dialogo;
 	private SpriteBatch batch;
 	private BitmapFont font;
@@ -48,11 +50,12 @@ public class Play implements Screen, InputProcessor {
 	// Texture("assets/maps/tilesInterior.png")));
 	private Player player;
 
-	public Play(float x, float y, int lastPressed) {
+	public Play(float x, float y, int lastPressed, String mapa) {
 		dialogo = new Dialogo("es", "ES");
 		this.x = x;
 		this.y = y;
 		this.lastPressed = lastPressed;
+		this.map_ = mapa;
 
 		Gdx.input.setInputProcessor(this);
 
@@ -67,10 +70,10 @@ public class Play implements Screen, InputProcessor {
 	@Override
 	public void show() {
 		TmxMapLoader loader = new TmxMapLoader();
-		//map = loader.load("res/mapas/Tranvia_n.tmx");
-		map = loader.load("res/mapas/Bosque.tmx");
-		//map = loader.load("res/mapas/Cueva.tmx");
-		//map = loader.load("res/mapas/Hall.tmx");
+		// map = loader.load("res/mapas/Tranvia_n.tmx");
+		map = loader.load("res/mapas/" + map_);
+		// map = loader.load("res/mapas/Cueva.tmx");
+		// map = loader.load("res/mapas/Hall.tmx");
 
 		renderer = new TextureMapObjectRenderer(map);
 
@@ -139,24 +142,12 @@ public class Play implements Screen, InputProcessor {
 			font.draw(batch, dialogo.getLinea2(), 50, 75);
 			batch.end();
 		}
-		TiledMapTileLayer collisionLayer = player.getCollisionLayer();
-		if (collisionLayer
-				.getCell(
-						(int) (player.getX() / collisionLayer.getWidth()),
-						(int) (player.getY() + player.getHeight() / 2)
-								/ collisionLayer.getHeight()).getTile()
-				.getProperties().containsKey("trans")) {
-			/*
-			 * Tile de transicion
-			 */
-			
-		}
 
 	}
 
 	public void openMenuPlay() {
 		((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPlay(player
-				.getX(), player.getY(), player.getLastPressed()));
+				.getX(), player.getY(), player.getLastPressed(), map_));
 	}
 
 	@Override

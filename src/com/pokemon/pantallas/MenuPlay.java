@@ -19,6 +19,7 @@ public class MenuPlay implements Screen, InputProcessor {
 
 	private float x, y;
 	private int lastPressed;
+	private String map;
 
 	Texture t, button, selButton, p, pSel, b, bSel, o, oSel, s, sSel;
 
@@ -35,11 +36,12 @@ public class MenuPlay implements Screen, InputProcessor {
 
 	private int seleccion = 1;
 
-	public MenuPlay(float x, float y, int lastPressed) {
+	public MenuPlay(float x, float y, int lastPressed, String map) {
 		ArchivoGuardado.musica = null;
 		this.x = x;
 		this.y = y;
 		this.lastPressed = lastPressed;
+		this.map = map;
 	}
 
 	@Override
@@ -183,7 +185,7 @@ public class MenuPlay implements Screen, InputProcessor {
 			break;
 		case Keys.SPACE:
 			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(x, y,
-					lastPressed));
+					lastPressed, map));
 			break;
 		}
 		return true;

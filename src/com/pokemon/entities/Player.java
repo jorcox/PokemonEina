@@ -1,5 +1,6 @@
 package com.pokemon.entities;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
@@ -56,6 +57,7 @@ public class Player extends Sprite {
 		this.collisionLayer = collisionLayer;
 		this.setTransLayer(transLayer);
 		this.objectLayer = objectLayer;
+		this.transLayer = transLayer;
 		this.dialogo = dialogo;
 		this.play = play;
 	}
@@ -234,6 +236,20 @@ public class Player extends Sprite {
 					break;
 				}
 			}
+			for (MapObject o : transLayer.getObjects()) {
+				TextureMapObject t = (TextureMapObject) o;
+
+				/* Dispara evento si estan muy cerca jugador y objeto */
+				if (distance(t) < 50) {
+					((Game) Gdx.app.getApplicationListener())
+							.setScreen(new Play(Integer.parseInt((String) t
+									.getProperties().get("x")), Integer
+									.parseInt((String) t.getProperties().get(
+											"y")), getLastPressed(), t
+									.getProperties().get("mapa") + ".tmx"));
+					break;
+				}
+			}
 		}
 
 	}
@@ -245,7 +261,7 @@ public class Player extends Sprite {
 	 *            el objeto de texturas.
 	 * @return la distancia euclidea.
 	 */
-	private int distance(TextureMapObject t) {
+	public int distance(TextureMapObject t) {
 		double aux = t.getX();
 		double dx = Math.pow(getX() - aux, 2);
 		double dy = Math.pow(getY() - t.getY(), 2);
