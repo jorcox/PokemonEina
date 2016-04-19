@@ -439,21 +439,6 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="Objetos">
-  <object id="5" gid="9226" x="2210" y="2464" width="32" height="32"/>
-  <object id="6" gid="9225" x="606" y="2976" width="32" height="32"/>
-  <object id="7" gid="9225" x="2530" y="1440" width="32" height="32"/>
-  <object id="8" gid="9225" x="1183" y="510" width="32" height="32"/>
-  <object id="9" gid="9220" x="1598" y="1536" width="32" height="32"/>
-  <object id="10" gid="9220" x="2208" y="1536" width="32" height="32"/>
-  <object id="11" gid="9220" x="1372" y="1058" width="32" height="32"/>
-  <object id="13" gid="9221" x="1248" y="3070" width="32" height="32"/>
-  <object id="15" gid="9221" x="256" y="1888" width="32" height="32"/>
-  <object id="17" gid="9221" x="2242" y="2560" width="32" height="32"/>
-  <object id="19" gid="9221" x="1918" y="1442" width="32" height="32"/>
-  <object id="20" gid="9221" x="1952" y="768" width="32" height="32"/>
-  <object id="23" gid="9225" x="415" y="514" width="32" height="32"/>
- </objectgroup>
  <layer name="Arboles" width="100" height="100">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -662,4 +647,59 @@
 19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19210,19210,19210,19210,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209,19209
 </data>
  </layer>
+ <objectgroup name="Objetos">
+  <object id="5" gid="9226" x="2210" y="2464" width="32" height="32">
+   <properties>
+    <property name="cartel" value="bosque2"/>
+   </properties>
+  </object>
+  <object id="6" gid="9225" x="606" y="2976" width="32" height="32">
+   <properties>
+    <property name="cartel" value="bosque1"/>
+   </properties>
+  </object>
+  <object id="7" gid="9225" x="2530" y="1440" width="32" height="32">
+   <properties>
+    <property name="cartel" value="bosque3"/>
+   </properties>
+  </object>
+  <object id="8" gid="9225" x="1183" y="510" width="32" height="32">
+   <properties>
+    <property name="cartel" value="bosque4"/>
+   </properties>
+  </object>
+  <object id="9" gid="9220" x="1598" y="1536" width="32" height="32"/>
+  <object id="10" gid="9220" x="2208" y="1536" width="32" height="32"/>
+  <object id="11" gid="9220" x="1372" y="1058" width="32" height="32"/>
+  <object id="13" gid="9221" x="1248" y="3070" width="32" height="32">
+   <properties>
+    <property name="item" value="bosque1"/>
+   </properties>
+  </object>
+  <object id="15" gid="9221" x="256" y="1888" width="32" height="32">
+   <properties>
+    <property name="item" value="bosque3"/>
+   </properties>
+  </object>
+  <object id="17" gid="9221" x="2242" y="2560" width="32" height="32">
+   <properties>
+    <property name="item" value="bosque2"/>
+   </properties>
+  </object>
+  <object id="19" gid="9221" x="1918" y="1442" width="32" height="32">
+   <properties>
+    <property name="item" value="bosque4"/>
+   </properties>
+  </object>
+  <object id="20" gid="9221" x="1952" y="768" width="32" height="32">
+   <properties>
+    <property name="item" value="bosque5"/>
+   </properties>
+  </object>
+  <object id="23" gid="9225" x="415" y="514" width="32" height="32">
+   <properties>
+    <property name="cartel" value="bosque5"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

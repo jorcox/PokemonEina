@@ -67,7 +67,10 @@ public class Play implements Screen, InputProcessor {
 	@Override
 	public void show() {
 		TmxMapLoader loader = new TmxMapLoader();
-		map = loader.load("res/mapas/Tranvia_n.tmx");
+		//map = loader.load("res/mapas/Tranvia_n.tmx");
+		map = loader.load("res/mapas/Bosque.tmx");
+		//map = loader.load("res/mapas/Cueva.tmx");
+		//map = loader.load("res/mapas/Hall.tmx");
 
 		renderer = new TextureMapObjectRenderer(map);
 

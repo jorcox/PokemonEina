@@ -28,7 +28,7 @@ public class PokemonAdaByron extends Game {
 	@Override
 	public void create() {
 		//setScreen(new Salvaje(280,280,3));
-		setScreen(new Play(1000, 280, 3));
+		setScreen(new Play(1200, 2600, 3));
 		//setScreen(new Bienvenida(this));
 	}
 

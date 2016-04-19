@@ -246,7 +246,7 @@ public class Player extends Sprite {
 	 * @return la distancia euclidea.
 	 */
 	private int distance(TextureMapObject t) {
-		double aux = t.getX() - 160;
+		double aux = t.getX();
 		double dx = Math.pow(getX() - aux, 2);
 		double dy = Math.pow(getY() - t.getY(), 2);
 		return (int) (Math.sqrt(dx + dy));
