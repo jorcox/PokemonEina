@@ -12,8 +12,12 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
 import com.pokemon.dialogo.Dialogo;
+import com.pokemon.mochila.Antidoto;
+import com.pokemon.mochila.Mochila;
+import com.pokemon.mochila.Pocion;
 import com.pokemon.pantallas.Play;
 import com.pokemon.utilidades.ArchivoGuardado;
 
@@ -44,6 +48,8 @@ public class Player extends Sprite {
 
 	public boolean SpacePressed = false;
 	public int lastPressed; // A=1, W=2, S=3, D=4
+	
+	public Mochila mochila;
 
 	public Player(Animation cara, Animation izquierda, Animation derecha,
 			Animation espalda, TiledMapTileLayer collisionLayer,
@@ -60,6 +66,8 @@ public class Player extends Sprite {
 		this.transLayer = transLayer;
 		this.dialogo = dialogo;
 		this.play = play;
+		
+		mochila = new Mochila();
 	}
 
 	@Override
@@ -279,10 +287,27 @@ public class Player extends Sprite {
 		if (obj.getProperties().containsKey("cartel")) {
 			play.optionsVisible = true;
 
+			/* Leer cartel */
 			String value = (String) obj.getProperties().get("cartel");
 			dialogo.procesarDialogo("cartel_" + value);
 			dialogo.setLineas(dialogo.siguienteLinea(),
 					dialogo.siguienteLinea());
+		} else if (obj.getProperties().containsKey("item")) {
+			play.optionsVisible = true;
+			
+			/* Leer objeto recogido */
+			String value = (String) obj.getProperties().get("item");
+			dialogo.procesarDialogo("item_" + value);
+			dialogo.setLineas(dialogo.siguienteLinea(),
+					dialogo.siguienteLinea());
+			
+			/* Introduce en mochila */
+			if (value.equals("Poción")) {
+				mochila.add(new Pocion());
+			} else if (value.equals("Antídoto")) {
+				mochila.add(new Antidoto());
+			}
+			
 		}
 	}
 
