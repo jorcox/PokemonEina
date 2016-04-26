@@ -4,8 +4,8 @@ import pokemon.Pokemon;
 
 public class Antidoto extends Objeto {
 
-	public Antidoto(String nombre) {
-		super(nombre);
+	public Antidoto() {
+		super("Antídoto");
 	}
 
 	@Override

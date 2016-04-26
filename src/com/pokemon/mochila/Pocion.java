@@ -4,16 +4,13 @@ import pokemon.Pokemon;
 
 public class Pocion extends Objeto {
 
-	private int ps;
-	
-	public Pocion(String nombre, int ps) {
-		super(nombre);
-		this.ps = ps;
+	public Pocion() {
+		super("Poción");
 	}
 
 	@Override
 	public void use(Pokemon pokemon) {
-		pokemon.setPs(pokemon.getPs() + ps);
+		pokemon.setPs(pokemon.getPs() + 20);
 	}
 
 }
