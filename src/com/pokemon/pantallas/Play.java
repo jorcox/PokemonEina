@@ -35,7 +35,7 @@ import com.pokemon.utilidades.ArchivoGuardado;
 
 public class Play implements Screen, InputProcessor {
 
-	private TiledMap map;
+	public TiledMap map;
 	private TextureMapObjectRenderer renderer;
 	private OrthographicCamera camera;
 	private float x, y;
@@ -82,6 +82,7 @@ public class Play implements Screen, InputProcessor {
 		map = loader.load("res/mapas/" + map_);
 		// map = loader.load("res/mapas/Cueva.tmx");
 		// map = loader.load("res/mapas/Hall.tmx");
+		//map = loader.load("res/mapas/Bosque.tmx");
 
 		renderer = new TextureMapObjectRenderer(map);
 
