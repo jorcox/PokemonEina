@@ -291,8 +291,6 @@ public class Player extends Sprite {
 			dialogo.procesarDialogo("item_" + value);
 			dialogo.setLineas(dialogo.siguienteLinea(),
 					dialogo.siguienteLinea());
-			
-			collisionLayer.setCell((int)obj.getX(),(int)obj.getY(), null); // no va
 		}
 	}
 
