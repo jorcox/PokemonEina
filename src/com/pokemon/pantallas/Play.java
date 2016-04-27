@@ -33,6 +33,8 @@ import com.pokemon.render.TextureMapObjectRenderer;
 import com.pokemon.tween.SpriteAccessor;
 import com.pokemon.utilidades.ArchivoGuardado;
 
+import db.BaseDatos;
+
 public class Play implements Screen, InputProcessor {
 
 	public TiledMap map;
@@ -106,6 +108,7 @@ public class Play implements Screen, InputProcessor {
 						"Trans"), dialogo, this);
 		player.setPosition(x, y);
 		player.setLastPressed(lastPressed);
+		equipoPokemon();
 		Gdx.input.setInputProcessor(this);
 
 		batch = new SpriteBatch();
@@ -365,6 +368,17 @@ public class Play implements Screen, InputProcessor {
 			break;
 		}
 		return false;
+	}
+	
+	void equipoPokemon(){
+		
+		try {
+			BaseDatos db = new BaseDatos("pokemon_base");
+			player.setPokemon(db.getPokemon(1));
+			db.shutdown();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

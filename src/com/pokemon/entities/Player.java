@@ -1,5 +1,7 @@
 package com.pokemon.entities;
 
+import pokemon.Pokemon;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -48,8 +50,10 @@ public class Player extends Sprite {
 
 	public boolean SpacePressed = false;
 	public int lastPressed; // A=1, W=2, S=3, D=4
-	
+
 	public Mochila mochila;
+	public Pokemon[] pokemon;
+	private int p;
 
 	public Player(Animation cara, Animation izquierda, Animation derecha,
 			Animation espalda, TiledMapTileLayer collisionLayer,
@@ -66,8 +70,10 @@ public class Player extends Sprite {
 		this.transLayer = transLayer;
 		this.dialogo = dialogo;
 		this.play = play;
-		
+
 		mochila = new Mochila();
+		pokemon = new Pokemon[6];
+		p = 0;
 	}
 
 	@Override
@@ -294,20 +300,20 @@ public class Player extends Sprite {
 					dialogo.siguienteLinea());
 		} else if (obj.getProperties().containsKey("item")) {
 			play.optionsVisible = true;
-			
+
 			/* Leer objeto recogido */
 			String value = (String) obj.getProperties().get("item");
 			dialogo.procesarDialogo("item_" + value);
 			dialogo.setLineas(dialogo.siguienteLinea(),
 					dialogo.siguienteLinea());
-			
+
 			/* Introduce en mochila */
 			if (value.equals("Poción")) {
 				mochila.add(new Pocion());
 			} else if (value.equals("Antídoto")) {
 				mochila.add(new Antidoto());
 			}
-			
+
 		}
 	}
 
@@ -361,6 +367,21 @@ public class Player extends Sprite {
 
 	public void setTransLayer(MapLayer transLayer) {
 		this.transLayer = transLayer;
+	}
+
+	public void setPokemon(Pokemon pokemon) {
+		if (p < 6) {
+			this.pokemon[p] = pokemon;
+		} else {
+			System.out.println("Solo puedes tener 6 pokemon en tu equipo.");
+		}
+	}
+
+	public Pokemon getPokemon(int i) {
+		if (i < 6)
+			return pokemon[i];
+		else
+			return null;
 	}
 
 }

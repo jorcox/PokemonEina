@@ -76,9 +76,10 @@ public class Salvaje implements Screen, InputProcessor {
 
 	public Salvaje(Player player) {
 		dialogo = new Dialogo("es", "ES");
+		pkmn = player.getPokemon(0);
 		try {
 			db = new BaseDatos("pokemon_base");
-			pkmn = db.getPokemon(1);
+			
 			pkmnSalvaje = db.getPokemon(0);
 			db.shutdown();
 		} catch (Exception e) {
