@@ -82,7 +82,7 @@ public class Play implements Screen, InputProcessor {
 		map = loader.load("res/mapas/" + map_);
 		// map = loader.load("res/mapas/Cueva.tmx");
 		// map = loader.load("res/mapas/Hall.tmx");
-		//map = loader.load("res/mapas/Bosque.tmx");
+		// map = loader.load("res/mapas/Bosque.tmx");
 
 		renderer = new TextureMapObjectRenderer(map);
 
@@ -279,6 +279,10 @@ public class Play implements Screen, InputProcessor {
 					optionsVisible = false;
 				}
 			}
+			break;
+		case Keys.C:
+			((Game) Gdx.app.getApplicationListener()).setScreen(new Salvaje(
+					player));
 			break;
 		}
 

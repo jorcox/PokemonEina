@@ -30,6 +30,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.pokemon.dialogo.Dialogo;
+import com.pokemon.entities.Player;
 import com.pokemon.tween.SpriteAccessor;
 import com.pokemon.utilidades.ArchivoGuardado;
 
@@ -73,7 +74,7 @@ public class Salvaje implements Screen, InputProcessor {
 			boton, luchar, mochila, pokemonOp, huir, dedo, cajaLuchar, tipo1,
 			tipo2, tipo3, tipo4, cajaPkmn, cajaPkmnSalvaje;
 
-	public Salvaje(float x, float y, float lastPressed) {
+	public Salvaje(Player player) {
 		dialogo = new Dialogo("es", "ES");
 		try {
 			db = new BaseDatos("pokemon_base");
