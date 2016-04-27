@@ -29,7 +29,7 @@ public class PokemonAdaByron extends Game {
 	public void create() {
 		//setScreen(new Salvaje(280,280,3));
 		//setScreen(new Play(1200, 2600, 3, "Bosque.tmx"));
-		setScreen(new Play(1200, 1700, 3, "Tranvia_n.tmx"));
+		setScreen(new Play(100, 100, 3, "Hall.tmx"));
 		//setScreen(new Bienvenida(this));
 	}
 

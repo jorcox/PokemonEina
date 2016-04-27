@@ -1,10 +1,12 @@
 package com.pokemon.pantallas;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -16,14 +18,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.pokemon.dialogo.Dialogo;
+import com.pokemon.entities.NPC;
 import com.pokemon.entities.Player;
 import com.pokemon.render.TextureMapObjectRenderer;
 import com.pokemon.utilidades.ArchivoGuardado;
@@ -49,6 +51,7 @@ public class Play implements Screen, InputProcessor {
 	// private Player player = new Player(new Sprite(new
 	// Texture("assets/maps/tilesInterior.png")));
 	private Player player;
+	private ArrayList<NPC> npcs = new ArrayList<>();
 
 	public Play(float x, float y, int lastPressed, String mapa) {
 		dialogo = new Dialogo("es", "ES");
@@ -60,8 +63,7 @@ public class Play implements Screen, InputProcessor {
 		Gdx.input.setInputProcessor(this);
 
 		/* Prepara fuente para escritura */
-		generator = new FreeTypeFontGenerator(
-				Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 35;
 		font = generator.generateFont(parameter);
@@ -74,32 +76,33 @@ public class Play implements Screen, InputProcessor {
 		map = loader.load("res/mapas/" + map_);
 		// map = loader.load("res/mapas/Cueva.tmx");
 		// map = loader.load("res/mapas/Hall.tmx");
-		//map = loader.load("res/mapas/Bosque.tmx");
+		// map = loader.load("res/mapas/Bosque.tmx");
 
 		renderer = new TextureMapObjectRenderer(map);
 
 		camera = new OrthographicCamera();
-
+		
+		/* Player */
 		playerAtlas = new TextureAtlas("res/imgs/protagonista.pack");
-
-		Animation cara, derecha, izquierda, espalda;
-		cara = new Animation(1 / 10f, playerAtlas.findRegions("cara"));
-		derecha = new Animation(1 / 10f, playerAtlas.findRegions("derecha"));
-		izquierda = new Animation(1 / 10f, playerAtlas.findRegions("izquierda"));
-		espalda = new Animation(1 / 10f, playerAtlas.findRegions("espalda"));
-		cara.setPlayMode(Animation.PlayMode.LOOP);
-		derecha.setPlayMode(Animation.PlayMode.LOOP);
-		izquierda.setPlayMode(Animation.PlayMode.LOOP);
-		espalda.setPlayMode(Animation.PlayMode.LOOP);
-
-		player = new Player(cara, izquierda, derecha, espalda,
-				(TiledMapTileLayer) map.getLayers().get("Entorno"), map
-						.getLayers().get("Objetos"), map.getLayers().get(
-						"Trans"), dialogo, this);
+		player = new Player(playerAtlas, (TiledMapTileLayer) map.getLayers().get("Entorno"),
+				map.getLayers().get("Objetos"), map.getLayers().get("Trans"), dialogo, this);
 		player.setPosition(x, y);
 		player.setLastPressed(lastPressed);
+		
+		/* Carga de NPCs */
+		MapLayer npcLayer = map.getLayers().get("Personajes");
+		for (MapObject o : npcLayer.getObjects()) {
+			TextureMapObject t = (TextureMapObject) o;
+			String dirVista = (String) t.getProperties().get("dir");  // Cara Derecha Izquierda Espalda
+			int disVista = Integer.parseInt((String) t.getProperties().get("dis"));
+			TextureAtlas personajePack = new TextureAtlas("res/imgs/" + (String) t.getProperties().get("pack") + ".pack");
+			NPC npc = new NPC(personajePack, new Animation(1 / 10f, playerAtlas.findRegions(dirVista)), disVista, this);
+			npc.setPosition(t.getX(), t.getY());
+			npcs.add(npc);
+		}
+		
+		
 		Gdx.input.setInputProcessor(this);
-
 		batch = new SpriteBatch();
 		box = new Sprite(new Texture("res/imgs/OptionBox.png"));
 		box.setScale((float) 4.5, (float) 1.5);
@@ -120,19 +123,23 @@ public class Play implements Screen, InputProcessor {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		camera.position.set(player.getX() + (player.getWidth() / 2),
-				player.getY() + (player.getHeight() / 2), 0);
+		camera.position.set(player.getX() + (player.getWidth() / 2), player.getY() + (player.getHeight() / 2), 0);
 		camera.zoom = (float) 1;
 		camera.update();
 		renderer.setView(camera);
 		renderer.render();
 
 		renderer.getBatch().begin();
+		/* Player */
 		player.draw(renderer.getBatch());
 		if (player.getSpacePressed()) {
 			// Show menu
 			openMenuPlay();
 		}
+		/* NPC */
+		for (NPC npc : npcs) {
+			npc.draw(renderer.getBatch());
+		}		
 		renderer.getBatch().end();
 
 		if (optionsVisible) {
@@ -147,8 +154,8 @@ public class Play implements Screen, InputProcessor {
 	}
 
 	public void openMenuPlay() {
-		((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPlay(player
-				.getX(), player.getY(), player.getLastPressed(), map_));
+		((Game) Gdx.app.getApplicationListener())
+				.setScreen(new MenuPlay(player.getX(), player.getY(), player.getLastPressed(), map_));
 	}
 
 	@Override
@@ -201,16 +208,20 @@ public class Play implements Screen, InputProcessor {
 			player.velocity.y = player.speed;
 			player.velocity.x = 0;
 			player.animationTime = 0;
-			if (lastPressed == 0)
-				lastPressed = 2;
+			player.setLastPressed(2);
+			if (lastPressed == 0){
+				lastPressed = 2;				
+			}
 			player.WPressed = true;
 			break;
 		case Keys.A:
 			player.velocity.x = -player.speed;
 			player.velocity.y = 0;
 			player.animationTime = 0;
-			if (lastPressed == 0)
-				lastPressed = 1;
+			player.setLastPressed(1);
+			if (lastPressed == 0){
+				lastPressed = 1;				
+			}
 			player.APressed = true;
 			break;
 		case Keys.S:
@@ -218,16 +229,20 @@ public class Play implements Screen, InputProcessor {
 
 			player.velocity.x = 0;
 			player.animationTime = 0;
-			if (lastPressed == 0)
-				lastPressed = 3;
+			player.setLastPressed(3);
+			if (lastPressed == 0){
+				lastPressed = 3;				
+			}
 			player.SPressed = true;
 			break;
 		case Keys.D:
 			player.velocity.x = player.speed;
 			player.velocity.y = 0;
 			player.animationTime = 0;
-			if (lastPressed == 0)
-				lastPressed = 4;
+			player.setLastPressed(4);
+			if (lastPressed == 0){
+				lastPressed = 4;				
+			}
 			player.DPressed = true;
 			break;
 		case Keys.SPACE:
@@ -246,13 +261,10 @@ public class Play implements Screen, InputProcessor {
 					}
 
 					if (l1.contains("${NOMBRE}")) {
-						l1 = l1.replace("${NOMBRE}",
-								ArchivoGuardado.nombreJugador);
+						l1 = l1.replace("${NOMBRE}", ArchivoGuardado.nombreJugador);
 					} else if (l2.contains("${NOMBRE}")) {
-						l2 = l2.replace("${NOMBRE}",
-								ArchivoGuardado.nombreJugador);
-					} else if (l1.contains("${CREACION_NOMBRE}")
-							|| l2.contains("${CREACION_NOMBRE}")) {
+						l2 = l2.replace("${NOMBRE}", ArchivoGuardado.nombreJugador);
+					} else if (l1.contains("${CREACION_NOMBRE}") || l2.contains("${CREACION_NOMBRE}")) {
 						l1 = l1.replace("${CREACION_NOMBRE}", "");
 						l2 = l2.replace("${CREACION_NOMBRE}", "");
 						ArchivoGuardado.nombreJugador = "Sara";
