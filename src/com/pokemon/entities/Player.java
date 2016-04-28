@@ -4,24 +4,20 @@ import pokemon.Pokemon;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
 import com.pokemon.dialogo.Dialogo;
 import com.pokemon.mochila.Antidoto;
 import com.pokemon.mochila.Mochila;
 import com.pokemon.mochila.Pocion;
 import com.pokemon.pantallas.Play;
-import com.pokemon.utilidades.ArchivoGuardado;
 
 public class Player extends Sprite {
 
@@ -49,21 +45,24 @@ public class Player extends Sprite {
 	public boolean DPressed = false;
 
 	public boolean SpacePressed = false;
-	public int lastPressed; // A=1, W=2, S=3, D=4
 
 	public Mochila mochila;
 	public Pokemon[] pokemon;
 	private int p;
+	
+	private int lastPressed; // A=1, W=2, S=3, D=4
 
-	public Player(Animation cara, Animation izquierda, Animation derecha,
-			Animation espalda, TiledMapTileLayer collisionLayer,
-			MapLayer objectLayer, MapLayer transLayer, Dialogo dialogo,
-			Play play) {
-		super(cara.getKeyFrame(0));
-		this.cara = cara;
-		this.izquierda = izquierda;
-		this.derecha = derecha;
-		this.espalda = espalda;
+	public Player(TextureAtlas playerAtlas, TiledMapTileLayer collisionLayer, MapLayer objectLayer, MapLayer transLayer,
+			Dialogo dialogo, Play play) {
+		super(new Animation(1 / 10f, playerAtlas.findRegions("cara")).getKeyFrame(0));
+		cara = new Animation(1 / 10f, playerAtlas.findRegions("cara"));
+		derecha = new Animation(1 / 10f, playerAtlas.findRegions("derecha"));
+		izquierda = new Animation(1 / 10f, playerAtlas.findRegions("izquierda"));
+		espalda = new Animation(1 / 10f, playerAtlas.findRegions("espalda"));
+		cara.setPlayMode(Animation.PlayMode.LOOP);
+		derecha.setPlayMode(Animation.PlayMode.LOOP);
+		izquierda.setPlayMode(Animation.PlayMode.LOOP);
+		espalda.setPlayMode(Animation.PlayMode.LOOP);
 		this.collisionLayer = collisionLayer;
 		this.setTransLayer(transLayer);
 		this.objectLayer = objectLayer;
@@ -101,8 +100,8 @@ public class Player extends Sprite {
 		/*
 		 * Guardar la posicion anterior
 		 */
-		float oldX = getX(), oldY = getY(), tileWidth = collisionLayer
-				.getTileWidth(), tileHeight = collisionLayer.getTileHeight();
+		float oldX = getX(), oldY = getY(), tileWidth = collisionLayer.getTileWidth(),
+				tileHeight = collisionLayer.getTileHeight();
 		boolean collisionX = false, collisionY = false;
 
 		/*
@@ -118,15 +117,12 @@ public class Player extends Sprite {
 			// Middle left
 			if (!collisionX)
 				collisionX |= collisionLayer
-						.getCell((int) (getX() / tileWidth),
-								(int) ((getY() + getHeight() / 2) / tileHeight))
-						.getTile().getProperties().containsKey("blocked");
+						.getCell((int) (getX() / tileWidth), (int) ((getY() + getHeight() / 2) / tileHeight)).getTile()
+						.getProperties().containsKey("blocked");
 
 			// Bottom left
 			if (!collisionX)
-				collisionX |= collisionLayer
-						.getCell((int) (getX() / tileWidth),
-								(int) (getY() / tileHeight)).getTile()
+				collisionX |= collisionLayer.getCell((int) (getX() / tileWidth), (int) (getY() / tileHeight)).getTile()
 						.getProperties().containsKey("blocked");
 
 		} else if (velocity.x > 0) {
@@ -145,8 +141,7 @@ public class Player extends Sprite {
 			// Bottom right
 			if (!collisionX)
 				collisionX |= collisionLayer
-						.getCell((int) ((getX() + getWidth()) / tileWidth),
-								(int) (getY() / tileHeight)).getTile()
+						.getCell((int) ((getX() + getWidth()) / tileWidth), (int) (getY() / tileHeight)).getTile()
 						.getProperties().containsKey("blocked");
 
 		}
@@ -164,22 +159,18 @@ public class Player extends Sprite {
 		setY(getY() + velocity.y * delta);
 		if (velocity.y < 0) {
 			// Bottom left
-			collisionY = collisionLayer
-					.getCell((int) (getX() / tileWidth),
-							(int) (getY() / tileHeight)).getTile()
+			collisionY = collisionLayer.getCell((int) (getX() / tileWidth), (int) (getY() / tileHeight)).getTile()
 					.getProperties().containsKey("blocked");
 			// Bottom middle
 			if (!collisionY)
 				collisionY |= collisionLayer
-						.getCell((int) ((getX() + getWidth() / 2) / tileWidth),
-								(int) ((getY()) / tileHeight)).getTile()
+						.getCell((int) ((getX() + getWidth() / 2) / tileWidth), (int) ((getY()) / tileHeight)).getTile()
 						.getProperties().containsKey("blocked");
 
 			// Bottom right
 			if (!collisionY)
 				collisionY |= collisionLayer
-						.getCell((int) ((getX() + getWidth()) / tileWidth),
-								(int) (getY() / tileHeight)).getTile()
+						.getCell((int) ((getX() + getWidth()) / tileWidth), (int) (getY() / tileHeight)).getTile()
 						.getProperties().containsKey("blocked");
 
 		} else if (velocity.y > 0) {
@@ -213,14 +204,13 @@ public class Player extends Sprite {
 		 * Actualizar animacion
 		 */
 		animationTime += delta;
-		if ((WPressed || APressed || SPressed || DPressed)
-				&& (!collisionX && !collisionY)
+		if ((WPressed || APressed || SPressed || DPressed) && (!collisionX && !collisionY)
 				&& (!(velocity.x == 0) || !(velocity.y == 0))) {
-			setRegion(velocity.x < 0 ? izquierda.getKeyFrame(animationTime)
-					: velocity.x > 0 ? derecha.getKeyFrame(animationTime)
-							: velocity.y > 0 ? espalda
-									.getKeyFrame(animationTime) : cara
-									.getKeyFrame(animationTime));
+			setRegion(
+					velocity.x < 0 ? izquierda.getKeyFrame(animationTime)
+							: velocity.x > 0 ? derecha.getKeyFrame(animationTime)
+									: velocity.y > 0 ? espalda.getKeyFrame(animationTime)
+											: cara.getKeyFrame(animationTime));
 		} else {
 			switch (lastPressed) {
 			case 1: // A
@@ -256,11 +246,9 @@ public class Player extends Sprite {
 				/* Dispara evento si estan muy cerca jugador y objeto */
 				if (distance(t) < 50) {
 					((Game) Gdx.app.getApplicationListener())
-							.setScreen(new Play(Integer.parseInt((String) t
-									.getProperties().get("x")), Integer
-									.parseInt((String) t.getProperties().get(
-											"y")), getLastPressed(), t
-									.getProperties().get("mapa") + ".tmx"));
+							.setScreen(new Play(Integer.parseInt((String) t.getProperties().get("x")),
+									Integer.parseInt((String) t.getProperties().get("y")), getLastPressed(),
+									t.getProperties().get("mapa") + ".tmx"));
 					break;
 				}
 			}
@@ -296,21 +284,19 @@ public class Player extends Sprite {
 			/* Leer cartel */
 			String value = (String) obj.getProperties().get("cartel");
 			dialogo.procesarDialogo("cartel_" + value);
-			dialogo.setLineas(dialogo.siguienteLinea(),
-					dialogo.siguienteLinea());
+			dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
 		} else if (obj.getProperties().containsKey("item")) {
 			play.optionsVisible = true;
 
 			/* Leer objeto recogido */
 			String value = (String) obj.getProperties().get("item");
 			dialogo.procesarDialogo("item_" + value);
-			dialogo.setLineas(dialogo.siguienteLinea(),
-					dialogo.siguienteLinea());
+			dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
 
 			/* Introduce en mochila */
-			if (value.equals("Poción")) {
+			if (value.equals("Pociï¿½n")) {
 				mochila.add(new Pocion());
-			} else if (value.equals("Antídoto")) {
+			} else if (value.equals("Antï¿½doto")) {
 				mochila.add(new Antidoto());
 			}
 
@@ -369,6 +355,12 @@ public class Player extends Sprite {
 		this.transLayer = transLayer;
 	}
 
+	public float getAnimationTime() {
+		return animationTime;
+	}
 
+	public void setAnimationTime(float animationTime) {
+		this.animationTime = animationTime;
+	}
 
 }
