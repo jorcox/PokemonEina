@@ -71,6 +71,12 @@ public class Player extends Sprite {
 		// Objetos de prueba metidos a pelo
 		mochila.add(new Pocion());
 		mochila.add(new Antidoto());
+		mochila.add(new Antidoto());
+		mochila.add(new Antidoto());
+		mochila.add(new Pocion());
+		mochila.add(new Pocion());
+		mochila.add(new Antidoto());
+		mochila.add(new Pocion());
 	}
 
 	@Override
