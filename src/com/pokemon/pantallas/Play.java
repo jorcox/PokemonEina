@@ -1,5 +1,8 @@
 package com.pokemon.pantallas;
 
+import java.util.ArrayList;
+
+import pokemon.Pokemon;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenManager;
 
@@ -34,6 +37,7 @@ import com.pokemon.tween.SpriteAccessor;
 import com.pokemon.utilidades.ArchivoGuardado;
 
 import db.BaseDatos;
+import entrenadores.Jugador;
 
 public class Play implements Screen, InputProcessor {
 
@@ -57,6 +61,7 @@ public class Play implements Screen, InputProcessor {
 	// private Player player = new Player(new Sprite(new
 	// Texture("assets/maps/tilesInterior.png")));
 	private Player player;
+	private Jugador jugador;
 	private Stage stage;
 
 	public Play(float x, float y, int lastPressed, String mapa) {
@@ -74,6 +79,8 @@ public class Play implements Screen, InputProcessor {
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 35;
 		font = generator.generateFont(parameter);
+
+		setJugador();
 	}
 
 	@Override
@@ -284,8 +291,8 @@ public class Play implements Screen, InputProcessor {
 			}
 			break;
 		case Keys.C:
-			((Game) Gdx.app.getApplicationListener()).setScreen(new Salvaje(
-					player));
+			((Game) Gdx.app.getApplicationListener()).setScreen(new CombateP(
+					player, jugador, true, "Gvalles"));
 			break;
 		}
 
@@ -369,12 +376,17 @@ public class Play implements Screen, InputProcessor {
 		}
 		return false;
 	}
-	
-	void equipoPokemon(){
-		
+
+	public void setJugador() {
+		jugador = new Jugador("Sara", false);
+	}
+
+	public void equipoPokemon() {
+		ArrayList<Pokemon> arrayP=new ArrayList<Pokemon>();
 		try {
 			BaseDatos db = new BaseDatos("pokemon_base");
-			player.setPokemon(db.getPokemon(1));
+			arrayP.add(db.getPokemon(1));
+			jugador.setEquipo(arrayP);
 			db.shutdown();
 		} catch (Exception e) {
 			e.printStackTrace();

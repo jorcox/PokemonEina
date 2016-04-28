@@ -369,19 +369,6 @@ public class Player extends Sprite {
 		this.transLayer = transLayer;
 	}
 
-	public void setPokemon(Pokemon pokemon) {
-		if (p < 6) {
-			this.pokemon[p] = pokemon;
-		} else {
-			System.out.println("Solo puedes tener 6 pokemon en tu equipo.");
-		}
-	}
 
-	public Pokemon getPokemon(int i) {
-		if (i < 6)
-			return pokemon[i];
-		else
-			return null;
-	}
 
 }

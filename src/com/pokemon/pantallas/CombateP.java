@@ -39,11 +39,8 @@ import db.BaseDatos;
 import entrenadores.Entrenador;
 import entrenadores.Jugador;
 
-public class Salvaje implements Screen, InputProcessor {
+public class CombateP implements Screen, InputProcessor {
 
-	private float x;
-	private float y;
-	private float lastPressed;
 	private int fase = 1;
 	private int vida = 100;
 	private int vidaS = 100;
@@ -74,12 +71,13 @@ public class Salvaje implements Screen, InputProcessor {
 			boton, luchar, mochila, pokemonOp, huir, dedo, cajaLuchar, tipo1,
 			tipo2, tipo3, tipo4, cajaPkmn, cajaPkmnSalvaje;
 
-	public Salvaje(Player player) {
+	public CombateP(Player player, Jugador jugador, boolean entrenador,
+			String idEntrenador) {
 		dialogo = new Dialogo("es", "ES");
-		pkmn = player.getPokemon(0);
+		pkmn = jugador.getPokemon(0);
 		try {
 			db = new BaseDatos("pokemon_base");
-			
+
 			pkmnSalvaje = db.getPokemon(0);
 			db.shutdown();
 		} catch (Exception e) {
@@ -93,9 +91,6 @@ public class Salvaje implements Screen, InputProcessor {
 		en.setEquipo(lPoke);
 		combate = new Combate(en, pkmnSalvaje);
 		orden = combate.getVelocidad();
-		this.x = x;
-		this.y = y;
-		this.lastPressed = lastPressed;
 		Gdx.input.setInputProcessor(this);
 		generator = new FreeTypeFontGenerator(
 				Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
