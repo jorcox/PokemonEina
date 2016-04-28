@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="40" tilewidth="32" tileheight="32" nextobjectid="31">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="40" tilewidth="32" tileheight="32" nextobjectid="43">
  <tileset firstgid="1" name="Entorno" tilewidth="32" tileheight="32" tilecount="5" columns="5">
   <image source="../Tilesets/Entorno.png" width="160" height="32"/>
   <tile id="0">
@@ -22,6 +22,9 @@
  </tileset>
  <tileset firstgid="17622" name="Museum interior" tilewidth="32" tileheight="32" tilecount="184" columns="8">
   <image source="../Tilesets/Museum interior.PNG" width="256" height="736"/>
+ </tileset>
+ <tileset firstgid="17806" name="CustomTiles" tilewidth="32" tileheight="32" tilecount="10" columns="10">
+  <image source="../Tilesets/CustomTiles.png" trans="ffffff" width="320" height="32"/>
  </tileset>
  <layer name="Suelo" width="100" height="40">
   <data encoding="csv">
@@ -150,7 +153,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,2835,2836,2837,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,2843,2844,2845,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,2851,2852,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,2851,2852,2853,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
@@ -203,44 +206,9 @@
 </data>
  </layer>
  <objectgroup name="Personajes" visible="0">
-  <object id="14" gid="5" x="669" y="414" width="32" height="32" visible="0">
+  <object id="41" gid="17813" x="688" y="335" width="32" height="32">
    <properties>
     <property name="dir" value="cara"/>
-    <property name="dis" value="5"/>
-    <property name="pack" value="protagonista"/>
-   </properties>
-  </object>
-  <object id="26" gid="5" x="388" y="270" width="32" height="32" visible="0">
-   <properties>
-    <property name="dir" value="cara"/>
-    <property name="dis" value="5"/>
-    <property name="pack" value="protagonista"/>
-   </properties>
-  </object>
-  <object id="27" gid="5" x="476" y="357" width="32" height="32" visible="0">
-   <properties>
-    <property name="dir" value="cara"/>
-    <property name="dis" value="5"/>
-    <property name="pack" value="protagonista"/>
-   </properties>
-  </object>
-  <object id="28" gid="5" x="643" y="301" width="32" height="32" visible="0">
-   <properties>
-    <property name="dir" value="cara"/>
-    <property name="dis" value="5"/>
-    <property name="pack" value="protagonista"/>
-   </properties>
-  </object>
-  <object id="29" gid="5" x="849" y="442" width="32" height="32" visible="0">
-   <properties>
-    <property name="dir" value="cara"/>
-    <property name="dis" value="5"/>
-    <property name="pack" value="protagonista"/>
-   </properties>
-  </object>
-  <object id="30" gid="5" x="238" y="293" width="32" height="32" visible="0">
-   <properties>
-    <property name="dir" value="derecha"/>
     <property name="dis" value="5"/>
     <property name="pack" value="protagonista"/>
    </properties>
