@@ -67,6 +67,10 @@ public class Player extends Sprite {
 		this.play = play;
 
 		mochila = new Mochila();
+		
+		// Objetos de prueba metidos a pelo
+		mochila.add(new Pocion());
+		mochila.add(new Antidoto());
 	}
 
 	@Override

@@ -25,5 +25,30 @@ public class Mochila {
 	public void add(MO mo) {
 		mos.add(mo);
 	}
+
+	public ArrayList<Objeto> getObjetos() {
+		return objetos;
+	}
+
+	public void setObjetos(ArrayList<Objeto> objetos) {
+		this.objetos = objetos;
+	}
+
+	public ArrayList<Ball> getBalls() {
+		return balls;
+	}
+
+	public void setBalls(ArrayList<Ball> balls) {
+		this.balls = balls;
+	}
+
+	public ArrayList<MO> getMos() {
+		return mos;
+	}
+
+	public void setMos(ArrayList<MO> mos) {
+		this.mos = mos;
+	}
+	
 	
 }

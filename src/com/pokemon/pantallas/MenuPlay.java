@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -202,7 +203,7 @@ public class MenuPlay implements Screen, InputProcessor {
 			break;
 		case 2:
 			((Game) Gdx.app.getApplicationListener()).setScreen(new MenuMochila(
-					mochila));
+					mochila, this));
 			break;
 		case 3:
 			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(x, y,
