@@ -88,6 +88,14 @@ public class Player extends Sprite {
 		mochila.add(new Pokeball());
 		mochila.add(new Superball());
 		mochila.add(new Pokeball());
+		
+		// Pokemon vacios de prueba metido a pelo
+		pokemon[0] = new Pokemon();
+		pokemon[1] = new Pokemon();
+		pokemon[2] = new Pokemon();
+		pokemon[3] = new Pokemon();
+		pokemon[4] = new Pokemon();
+		pokemon[5] = new Pokemon();
 	}
 
 	@Override

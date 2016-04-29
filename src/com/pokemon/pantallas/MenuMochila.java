@@ -124,7 +124,6 @@ public class MenuMochila implements Screen, InputProcessor {
 	@Override
 	public void hide() {
 		dispose();
-
 	}
 
 	@Override
