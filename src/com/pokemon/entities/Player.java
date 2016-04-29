@@ -17,6 +17,8 @@ import com.pokemon.dialogo.Dialogo;
 import com.pokemon.mochila.Antidoto;
 import com.pokemon.mochila.Mochila;
 import com.pokemon.mochila.Pocion;
+import com.pokemon.mochila.Pokeball;
+import com.pokemon.mochila.Superball;
 import com.pokemon.pantallas.Play;
 
 public class Player extends Sprite {
@@ -73,6 +75,19 @@ public class Player extends Sprite {
 		mochila = new Mochila();
 		pokemon = new Pokemon[6];
 		p = 0;
+		
+		// Objetos de prueba metidos a pelo
+		mochila.add(new Pocion());
+		mochila.add(new Antidoto());
+		mochila.add(new Antidoto());
+		mochila.add(new Antidoto());
+		mochila.add(new Pocion());
+		mochila.add(new Pocion());
+		mochila.add(new Antidoto());
+		mochila.add(new Pocion());
+		mochila.add(new Pokeball());
+		mochila.add(new Superball());
+		mochila.add(new Pokeball());
 	}
 
 	@Override
