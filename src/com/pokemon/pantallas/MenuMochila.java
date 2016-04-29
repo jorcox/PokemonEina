@@ -162,6 +162,8 @@ public class MenuMochila implements Screen, InputProcessor {
 		case Keys.RIGHT:
 			/* Pasa a la siguiente lista de la mochila */
 			seccion = (seccion + 1) % NUM_SECCIONES;
+			first = 0;
+			pointer = 0;
 			break;
 		case Keys.LEFT:
 			/* Pasa a la anterior lista de la mochila */
@@ -169,6 +171,8 @@ public class MenuMochila implements Screen, InputProcessor {
 			if (seccion < 0) {
 				seccion += NUM_SECCIONES;
 			}
+			first = 0;
+			pointer = 0;
 			break;
 		}
 		return false;
