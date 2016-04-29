@@ -2,6 +2,9 @@ package com.pokemon.pantallas;
 
 import java.util.ArrayList;
 
+import pokemon.Pokemon;
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -24,11 +27,17 @@ import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.pokemon.dialogo.Dialogo;
 import com.pokemon.entities.NPC;
 import com.pokemon.entities.Player;
 import com.pokemon.render.TextureMapObjectRenderer;
+import com.pokemon.tween.SpriteAccessor;
 import com.pokemon.utilidades.ArchivoGuardado;
+
+import db.BaseDatos;
+import entrenadores.Jugador;
 
 public class Play implements Screen, InputProcessor {
 
@@ -42,6 +51,7 @@ public class Play implements Screen, InputProcessor {
 	private SpriteBatch batch;
 	private BitmapFont font;
 	private FreeTypeFontGenerator generator;
+	private TweenManager tweenManager;
 
 	private TextureAtlas playerAtlas;
 
@@ -51,6 +61,8 @@ public class Play implements Screen, InputProcessor {
 	// private Player player = new Player(new Sprite(new
 	// Texture("assets/maps/tilesInterior.png")));
 	private Player player;
+	private Jugador jugador;
+	private Stage stage;
 	private ArrayList<NPC> npcs = new ArrayList<>();
 
 	public Play(float x, float y, int lastPressed, String mapa) {
@@ -67,11 +79,14 @@ public class Play implements Screen, InputProcessor {
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 35;
 		font = generator.generateFont(parameter);
+
+		setJugador();
 	}
 
 	@Override
 	public void show() {
 		TmxMapLoader loader = new TmxMapLoader();
+		tweenManager = new TweenManager();
 		// map = loader.load("res/mapas/Tranvia_n.tmx");
 		map = loader.load("res/mapas/" + map_);
 		// map = loader.load("res/mapas/Cueva.tmx");
@@ -88,6 +103,7 @@ public class Play implements Screen, InputProcessor {
 				map.getLayers().get("Objetos"), map.getLayers().get("Trans"), dialogo, this);
 		player.setPosition(x, y);
 		player.setLastPressed(lastPressed);
+		equipoPokemon();
 		
 		/* Carga de NPCs */
 		MapLayer npcLayer = map.getLayers().get("Personajes");
@@ -122,6 +138,7 @@ public class Play implements Screen, InputProcessor {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		tweenManager.update(delta);
 
 		camera.position.set(player.getX() + (player.getWidth() / 2), player.getY() + (player.getHeight() / 2), 0);
 		camera.zoom = (float) 1;
@@ -284,6 +301,10 @@ public class Play implements Screen, InputProcessor {
 				}
 			}
 			break;
+		case Keys.C:
+			((Game) Gdx.app.getApplicationListener()).setScreen(new CombateP(
+					player, jugador, true, "Gvalles"));
+			break;
 		}
 
 		return false;
@@ -365,6 +386,22 @@ public class Play implements Screen, InputProcessor {
 			break;
 		}
 		return false;
+	}
+
+	public void setJugador() {
+		jugador = new Jugador("Sara", false);
+	}
+
+	public void equipoPokemon() {
+		ArrayList<Pokemon> arrayP=new ArrayList<Pokemon>();
+		try {
+			BaseDatos db = new BaseDatos("pokemon_base");
+			arrayP.add(db.getPokemon(1));
+			jugador.setEquipo(arrayP);
+			db.shutdown();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

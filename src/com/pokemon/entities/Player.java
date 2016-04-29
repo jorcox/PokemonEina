@@ -1,5 +1,7 @@
 package com.pokemon.entities;
 
+import pokemon.Pokemon;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -45,10 +47,12 @@ public class Player extends Sprite {
 	public boolean DPressed = false;
 
 	public boolean SpacePressed = false;
-	
-	private int lastPressed; // A=1, W=2, S=3, D=4
 
 	public Mochila mochila;
+	public Pokemon[] pokemon;
+	private int p;
+	
+	private int lastPressed; // A=1, W=2, S=3, D=4
 
 	public Player(TextureAtlas playerAtlas, TiledMapTileLayer collisionLayer, MapLayer objectLayer, MapLayer transLayer,
 			Dialogo dialogo, Play play) {
@@ -69,6 +73,8 @@ public class Player extends Sprite {
 		this.play = play;
 
 		mochila = new Mochila();
+		pokemon = new Pokemon[6];
+		p = 0;
 		
 		// Objetos de prueba metidos a pelo
 		mochila.add(new Pocion());

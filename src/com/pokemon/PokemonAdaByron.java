@@ -7,7 +7,7 @@ import com.pokemon.pantallas.Bienvenida;
 import com.pokemon.pantallas.Menu;
 import com.pokemon.pantallas.PantallaInicio;
 import com.pokemon.pantallas.Play;
-import com.pokemon.pantallas.Salvaje;
+import com.pokemon.pantallas.CombateP;
 
 import entrenadores.Entrenador;
 
@@ -29,6 +29,7 @@ public class PokemonAdaByron extends Game {
 	public void create() {
 		//setScreen(new Salvaje(280,280,3));
 		//setScreen(new Play(1200, 2600, 3, "Bosque.tmx"));
+		//setScreen(new Play(1200, 1800, 3, "Tranvia_n.tmx"));
 		setScreen(new Play(100, 100, 3, "Hall.tmx"));
 		//setScreen(new Bienvenida(this));
 	}
