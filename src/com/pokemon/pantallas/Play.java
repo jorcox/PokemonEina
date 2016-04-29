@@ -171,8 +171,8 @@ public class Play implements Screen, InputProcessor {
 	}
 
 	public void openMenuPlay() {
-		((Game) Gdx.app.getApplicationListener())
-				.setScreen(new MenuPlay(player.getX(), player.getY(), player.getLastPressed(), map_));
+		((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPlay(player
+				.getX(), player.getY(), player.getLastPressed(), map_, player.mochila));
 	}
 
 	@Override
