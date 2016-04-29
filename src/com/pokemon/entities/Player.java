@@ -108,6 +108,9 @@ public class Player extends Sprite {
 		 * Movimiento en X
 		 */
 		setX(getX() + velocity.x * delta);
+		
+		
+		TextureMapObject texture = (TextureMapObject) objectLayer.getObjects().get(0);
 
 		if (velocity.x < 0) {
 			// Top left
