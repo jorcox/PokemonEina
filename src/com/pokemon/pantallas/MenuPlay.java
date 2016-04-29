@@ -5,12 +5,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pokemon.PokemonAdaByron;
+import com.pokemon.mochila.Mochila;
 import com.pokemon.utilidades.ArchivoGuardado;
 
 public class MenuPlay implements Screen, InputProcessor {
@@ -35,13 +37,15 @@ public class MenuPlay implements Screen, InputProcessor {
 	private boolean archivoGuardado = ArchivoGuardado.existe;
 
 	private int seleccion = 1;
+	private Mochila mochila;
 
-	public MenuPlay(float x, float y, int lastPressed, String map) {
+	public MenuPlay(float x, float y, int lastPressed, String map, Mochila mochila) {
 		ArchivoGuardado.musica = null;
 		this.x = x;
 		this.y = y;
 		this.lastPressed = lastPressed;
 		this.map = map;
+		this.mochila = mochila;
 	}
 
 	@Override
@@ -191,7 +195,27 @@ public class MenuPlay implements Screen, InputProcessor {
 		return true;
 	}
 
-	private void hacerAccion(int i) {
+	private void hacerAccion(int seleccion) {
+		switch (seleccion) {
+		case 1:
+			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(x, y,
+					lastPressed, map));
+			break;
+		case 2:
+			((Game) Gdx.app.getApplicationListener()).setScreen(new MenuMochila(
+					mochila, this));
+			break;
+		case 3:
+			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(x, y,
+					lastPressed, map));
+			break;
+		case 4:
+			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(x, y,
+					lastPressed, map));
+			break;
+		default:
+			break;
+		}
 	}
 
 	@Override
