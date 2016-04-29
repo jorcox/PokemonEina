@@ -9,11 +9,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.pokemon.mochila.Antidoto;
 import com.pokemon.mochila.Mochila;
-import com.pokemon.mochila.Pocion;
 
 public class MenuMochila implements Screen, InputProcessor {
 
@@ -61,13 +58,18 @@ public class MenuMochila implements Screen, InputProcessor {
 
 		batch.begin();
 		
+		/* La imagen de fondo ocupa toda la pantalla */
 		if (seccion == 0) {
 			batch.draw(tFondoObj, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			font.draw(batch, "Bolsillo de Objetos", 150, 100);
 		} else if (seccion == 1) {
 			batch.draw(tFondoBalls, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			font.draw(batch, "Bolsillo de Pokeballs", 150, 100);
 		} else if (seccion == 2) {
 			batch.draw(tFondoMOs, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			font.draw(batch, "Bolsillo de MO", 150, 100);
 		}
+		font.draw(batch, "Pulsa IZDA o DCHA para cambiar de bolsillo", 150, 50);
 		
 		drawItems();
 		drawSelection();
