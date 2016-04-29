@@ -25,6 +25,45 @@ public class Mochila {
 	public void add(MO mo) {
 		mos.add(mo);
 	}
+	
+	/**
+	 * Devuelve un objeto de una lista.
+	 * 
+	 * @param seccion 0 (objetos), 1 (balls), 2 (mos).
+	 * @param i indice del elemento en la lista.
+	 * @return el elemento i-esimo de la seccion indicada,
+	 * o null si se indica una seccion inexistente.
+	 */
+	public Item get(int seccion, int i) {
+		if (seccion == 0) {
+			return objetos.get(i);
+		} else if (seccion == 1) {
+			return balls.get(i);
+		} else if (seccion == 2) {
+			return mos.get(i);
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Devuelve el num de elementos de una lista.
+	 * 
+	 * @param seccion 0 (objetos), 1 (balls), 2 (mos).
+	 * @return el numero de elementos de esa seccion,
+	 * o -1 si la seccion no existe.
+	 */
+	public int size(int seccion) {
+		if (seccion == 0) {
+			return objetos.size();
+		} else if (seccion == 1) {
+			return balls.size();
+		} else if (seccion == 2) {
+			return mos.size();
+		} else {
+			return -1;
+		}
+	}
 
 	public ArrayList<Objeto> getObjetos() {
 		return objetos;

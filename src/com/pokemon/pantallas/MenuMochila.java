@@ -17,16 +17,17 @@ import com.pokemon.mochila.Pocion;
 
 public class MenuMochila implements Screen, InputProcessor {
 
-	private static final int MAX_ITEMS = 6;
+	private static final int MAX_ITEMS = 6;	/* Items que caben a la vez en pantalla */
+	private static final int NUM_SECCIONES = 3; /* Secciones de la mochila */
 	
 	private Mochila mochila;
 	private MenuPlay menuPlay;
-	private int first;
-	private int pointer;
+	private int first;	/* Indice del primer elemento de la lista en mostrarse */
+	private int pointer;	/* Indice del seleccionado de los MAX_ITEMS que caben */
+	private int seccion;
 	
 	private SpriteBatch batch;
-	private Texture tFondo, tSelected;
-	private Sprite fondo;
+	private Texture tFondoObj, tFondoBalls, tFondoMOs, tSelected;
 	BitmapFont font = new BitmapFont(
 			Gdx.files.internal("res/fuentes/pokemon.fnt"),
 			Gdx.files.internal("res/fuentes/pokemon.png"), false);
@@ -34,16 +35,21 @@ public class MenuMochila implements Screen, InputProcessor {
 	public MenuMochila(Mochila mochila, MenuPlay menuPlay) {
 		this.mochila = mochila;
 		this.menuPlay = menuPlay;
+		
+		/* Empieza mostrando primera seccion (objeto) marcando primer objeto */
+		seccion = 0;
 		first = 0;
 		pointer = 0;
+		
 	}
 
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(this);
-		tFondo = new Texture("res/imgs/mochila/bag_objetos.png");
+		tFondoObj = new Texture("res/imgs/mochila/bag_objetos.png");
+		tFondoBalls = new Texture("res/imgs/mochila/bag_pokeball.png");
+		tFondoMOs = new Texture("res/imgs/mochila/bag_mo.png");
 		tSelected = new Texture("res/imgs/mochila/bag_selected.png");
-		fondo = new Sprite(tFondo);
 		
 		batch = new SpriteBatch();
 	}
@@ -54,14 +60,26 @@ public class MenuMochila implements Screen, InputProcessor {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		batch.begin();
-		batch.draw(tFondo, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		
+		if (seccion == 0) {
+			batch.draw(tFondoObj, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		} else if (seccion == 1) {
+			batch.draw(tFondoBalls, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		} else if (seccion == 2) {
+			batch.draw(tFondoMOs, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		}
+		
 		drawItems();
 		drawSelection();
 		batch.end();
 	}
 
 	private void drawSelection() {
-		batch.draw(tSelected, 280, Gdx.graphics.getHeight() - (80+50*pointer));
+		if (mochila.size(seccion) > 0) {
+			batch.draw(tSelected, 280, Gdx.graphics.getHeight() - (80+50*pointer));
+		} else {
+			font.draw(batch, "No hay items", 300, Gdx.graphics.getHeight() - 200);
+		}
 	}
 
 	/**
@@ -70,14 +88,14 @@ public class MenuMochila implements Screen, InputProcessor {
 	 */
 	private void drawItems() {
 		/* MaxItems es el maximo de objetos a renderizar */
-		int maxItems = (mochila.getObjetos().size() < MAX_ITEMS) ? 
-				mochila.getObjetos().size() : MAX_ITEMS;
+		int maxItems = (mochila.size(seccion) < MAX_ITEMS) ? 
+				mochila.size(seccion) : MAX_ITEMS;
 		font.setColor(Color.BLACK);
 		
 		/* Dibuja el texto de cada objeto que quepa */
 		int pos = 50;
 		for (int i=first; i<first + maxItems; i++) {
-			font.draw(batch, mochila.getObjetos().get(i).getNombre(),
+			font.draw(batch, mochila.get(seccion, i).getNombre(),
 					300, Gdx.graphics.getHeight() - pos);
 			pos += 50;
 		}
@@ -116,17 +134,41 @@ public class MenuMochila implements Screen, InputProcessor {
 	public boolean keyDown(int keycode) {
 		switch (keycode) {
 		case Keys.SPACE:
+			/* Vuelve al menu */
 			((Game) Gdx.app.getApplicationListener()).setScreen(menuPlay);
 			break;
 		case Keys.ENTER:
 			break;
 		case Keys.DOWN:
-			if (pointer < MAX_ITEMS -1) {
+			/* Desciende en la lista de la mochila */
+			if (pointer < MAX_ITEMS -1 && pointer < mochila.size(seccion) -1) {
+				/* Baja el puntero si quedan posiciones por bajar */
 				pointer++;
-			} else {
+			} else if ((first+MAX_ITEMS-1) < mochila.size(seccion) -1) {
+				/* Mueve la lista abajo si el puntero esta ya abajo */
 				first++;
 			}
-			
+			break;
+		case Keys.UP:
+			/* Asciende en la lista de la mochila */
+			if (pointer > 0) {
+				/* Si el puntero no esta arriba, se sube */
+				pointer--;
+			} else if (first > 0){
+				/* Si el puntero ya esta arriba, se sube la lista */
+				first--;
+			}
+			break;
+		case Keys.RIGHT:
+			/* Pasa a la siguiente lista de la mochila */
+			seccion = (seccion + 1) % NUM_SECCIONES;
+			break;
+		case Keys.LEFT:
+			/* Pasa a la anterior lista de la mochila */
+			seccion = (seccion - 1) % NUM_SECCIONES;
+			if (seccion < 0) {
+				seccion += NUM_SECCIONES;
+			}
 			break;
 		}
 		return false;
