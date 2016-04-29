@@ -2,6 +2,8 @@ package com.pokemon.entities;
 
 import pokemon.Pokemon;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -52,10 +54,12 @@ public class Player extends Sprite {
 	public Pokemon[] pokemon;
 	private int p;
 	
+	ArrayList<NPC> npcs;
+
 	private int lastPressed; // A=1, W=2, S=3, D=4
 
 	public Player(TextureAtlas playerAtlas, TiledMapTileLayer collisionLayer, MapLayer objectLayer, MapLayer transLayer,
-			Dialogo dialogo, Play play) {
+			ArrayList<NPC> npcs, Dialogo dialogo, Play play) {
 		super(new Animation(1 / 10f, playerAtlas.findRegions("cara")).getKeyFrame(0));
 		cara = new Animation(1 / 10f, playerAtlas.findRegions("cara"));
 		derecha = new Animation(1 / 10f, playerAtlas.findRegions("derecha"));
@@ -71,11 +75,12 @@ public class Player extends Sprite {
 		this.transLayer = transLayer;
 		this.dialogo = dialogo;
 		this.play = play;
+		this.npcs = npcs;
 
 		mochila = new Mochila();
 		pokemon = new Pokemon[6];
 		p = 0;
-		
+
 		// Objetos de prueba metidos a pelo
 		mochila.add(new Pocion());
 		mochila.add(new Antidoto());
@@ -117,8 +122,8 @@ public class Player extends Sprite {
 		 */
 		float oldX = getX(), oldY = getY(), tileWidth = collisionLayer.getTileWidth(),
 				tileHeight = collisionLayer.getTileHeight();
-		boolean collisionX = false, collisionY = false;
-
+		boolean collisionX = false, collisionY = false, collisionObj = false, collisionNpc = false;
+		
 		/*
 		 * Movimiento en X
 		 */
@@ -139,7 +144,16 @@ public class Player extends Sprite {
 			if (!collisionX)
 				collisionX |= collisionLayer.getCell((int) (getX() / tileWidth), (int) (getY() / tileHeight)).getTile()
 						.getProperties().containsKey("blocked");
-
+//			/* Objetos */
+//			if (!collisionX) {
+//				for (MapObject object : objectLayer.getObjects()) {
+//					TextureMapObject texture = (TextureMapObject) object;
+//					collisionX = ((texture.getX() + texture.getTextureRegion().getRegionWidth() / 2.5) > getX())
+//							&& ((texture.getX() - texture.getTextureRegion().getRegionWidth() / 2.5) < getX())
+//							&& ((texture.getY() + texture.getTextureRegion().getRegionHeight() / 2.5) > getY())
+//							&& ((texture.getY() - texture.getTextureRegion().getRegionHeight() / 2.5) < getY());
+//				}
+//			}
 		} else if (velocity.x > 0) {
 			// Top right
 			// collisionX = collisionLayer
@@ -157,7 +171,17 @@ public class Player extends Sprite {
 			if (!collisionX)
 				collisionX |= collisionLayer
 						.getCell((int) ((getX() + getWidth()) / tileWidth), (int) (getY() / tileHeight)).getTile()
-						.getProperties().containsKey("blocked");
+						.getProperties().containsKey("blocked");			
+//			/* Objetos */
+//			if (!collisionX) {
+//				for (MapObject object : objectLayer.getObjects()) {
+//					TextureMapObject texture = (TextureMapObject) object;
+//					collisionX = ((texture.getX() + texture.getTextureRegion().getRegionWidth() / 2.5) < getX())
+//							&& ((texture.getX() - texture.getTextureRegion().getRegionWidth() / 2.5) < getX())
+//							&& ((texture.getY() + texture.getTextureRegion().getRegionHeight() / 2.5) > getY())
+//							&& ((texture.getY() - texture.getTextureRegion().getRegionHeight() / 2.5) < getY());
+//				}
+//			}
 
 		}
 		/*
@@ -212,6 +236,36 @@ public class Player extends Sprite {
 		 */
 		if (collisionY) {
 			setY(oldY);
+			velocity.y = 0;
+		}
+		
+		 /*
+		  * Colision de objetos
+		  */
+		for (MapObject object : objectLayer.getObjects()) {
+			TextureMapObject texture = (TextureMapObject) object;
+			collisionObj |= ((texture.getX() + texture.getTextureRegion().getRegionWidth() / 2) > getX())
+					&& ((texture.getX() - texture.getTextureRegion().getRegionWidth() / 2) < getX())
+					&& ((texture.getY() + texture.getTextureRegion().getRegionHeight() / 1.5) > getY())
+					&& ((texture.getY() - texture.getTextureRegion().getRegionHeight() / 2) < getY());
+		}
+		
+		 /*
+		  * Colision de NPC
+		  */
+		int anchura = 32;
+		int altura = 32;
+		for (NPC npc : npcs) {
+			collisionNpc |= ((npc.getX() + anchura / 1.5) > getX())
+					&& ((npc.getX() - anchura / 1.5) < getX())
+					&& ((npc.getY() + altura / 1.5) > getY())
+					&& ((npc.getY() - altura / 0.9) < getY());
+		}
+		
+		if (collisionObj || collisionNpc) {
+			setX(oldX);
+			setY(oldY);
+			velocity.x = 0;
 			velocity.y = 0;
 		}
 
