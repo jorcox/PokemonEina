@@ -703,4 +703,5 @@
   </object>
  </objectgroup>
  <objectgroup name="Trans"/>
+ <objectgroup name="Personajes"/>
 </map>
