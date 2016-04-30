@@ -349,7 +349,9 @@ public class Play implements Screen, InputProcessor {
 			String value = (String) obj.getProperties().get("cartel");
 			dialogo.procesarDialogo("cartel_" + value);
 			dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
-		} else if (obj.getProperties().containsKey("item")) {
+		} else if (obj.getProperties().containsKey("item") && 
+				obj.getProperties().containsKey("used") && 
+				obj.getProperties().get("used").equals("false")) {
 			optionsVisible = true;
 			dialogando = true;
 
@@ -364,7 +366,9 @@ public class Play implements Screen, InputProcessor {
 			} else if (value.equals("Antídoto")) {
 				player.mochila.add(new Antidoto());
 			}
-
+			
+			/* Asi no se puede volver a coger ese item */
+			obj.getProperties().put("used", "true");
 		}
 	}
 	
