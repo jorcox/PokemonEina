@@ -15,6 +15,8 @@ import com.pokemon.PokemonAdaByron;
 import com.pokemon.mochila.Mochila;
 import com.pokemon.utilidades.ArchivoGuardado;
 
+import pokemon.Pokemon;
+
 public class MenuPlay implements Screen, InputProcessor {
 
 	PokemonAdaByron game;
@@ -38,14 +40,17 @@ public class MenuPlay implements Screen, InputProcessor {
 
 	private int seleccion = 1;
 	private Mochila mochila;
+	private Pokemon[] listaPokemon;
 
-	public MenuPlay(float x, float y, int lastPressed, String map, Mochila mochila) {
+	public MenuPlay(float x, float y, int lastPressed, String map, Mochila mochila,
+			Pokemon[] listaPokemon) {
 		ArchivoGuardado.musica = null;
 		this.x = x;
 		this.y = y;
 		this.lastPressed = lastPressed;
 		this.map = map;
 		this.mochila = mochila;
+		this.listaPokemon = listaPokemon;
 	}
 
 	@Override
@@ -198,8 +203,8 @@ public class MenuPlay implements Screen, InputProcessor {
 	private void hacerAccion(int seleccion) {
 		switch (seleccion) {
 		case 1:
-			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(x, y,
-					lastPressed, map));
+			((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPokemon(
+					listaPokemon, this));
 			break;
 		case 2:
 			((Game) Gdx.app.getApplicationListener()).setScreen(new MenuMochila(
