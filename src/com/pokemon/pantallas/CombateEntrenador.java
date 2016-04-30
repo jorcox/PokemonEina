@@ -23,11 +23,11 @@ public class CombateEntrenador extends Enfrentamiento {
 	private String idEntrenador;
 	private Jugador entrenadorE;
 	private int iPokemonEnemigo = 0;
-	private Sprite pokemonEnemigo;
 	TextureRegion[] spritesEntrenador;
 
 	public CombateEntrenador(Player player, Jugador jugador, String idEntrenador) {
 		super(player, jugador);
+		fase = 0;
 		this.idEntrenador = idEntrenador;
 		/*
 		 * Base de datos?
@@ -55,14 +55,16 @@ public class CombateEntrenador extends Enfrentamiento {
 
 		font.draw(batch, dialogo.getLinea1(), 50, 85);
 		font.draw(batch, dialogo.getLinea2(), 50, 35);
-		if (fase == 1) {
+		if (fase == 0) {
+
 			entrenador.draw(batch);
 			protagonista.draw(batch);
+
 		}
 		/*
 		 * Aparacion de pokemon enemigo
 		 */
-		if (fase == 2) {
+		if (fase == 1) {
 
 			aparicionPokemonEnemigo(pokemonEnemigo);
 			protagonista.draw(batch);
@@ -72,20 +74,23 @@ public class CombateEntrenador extends Enfrentamiento {
 		/*
 		 * Aparicion de pokemon nuestro
 		 */
-		if (fase == 3) {
+		if (fase == 2) {
 			aparicionPokemon(pokemon);
 			pokemonEnemigo.draw(batch);
 			pokemon.draw(batch);
 		}
+		if (fase > 2)
+			pokemonEnemigo.draw(batch);
 
 		/*
 		 * Decidir accion (Luchar, Mochila, Pokemon, Huir)
 		 */
-		if (fase == 4) {
+		if (fase == 3) {
 			pokemon.draw(batch);
 			dibujarMenuCombate();
 			dibujarCajasVida();
 			dibujarVidas();
+			dibujarPokeballs();
 		}
 		/*
 		 * Decisión de ataque
@@ -97,6 +102,7 @@ public class CombateEntrenador extends Enfrentamiento {
 			dibujarCajasVida();
 			dibujarVidas();
 			updateSeleccionAtaque();
+			dibujarPokeballs();
 			vida = 100;
 			vidaS = 100;
 		}
@@ -108,6 +114,7 @@ public class CombateEntrenador extends Enfrentamiento {
 			pokemon.draw(batch);
 			dibujarCajasVida();
 			dibujarVidas();
+			dibujarPokeballs();
 		}
 		if (fase == 6 || fase == 8) {
 			/*
@@ -116,6 +123,7 @@ public class CombateEntrenador extends Enfrentamiento {
 			pokemon.draw(batch);
 			dibujarCajasVida();
 			dibujarVidas();
+			dibujarPokeballs();
 			if ((orden && fase == 6) || (!orden && fase == 8)) {
 				ataqueRecibido(true);
 				animacionVida(true);
@@ -134,8 +142,9 @@ public class CombateEntrenador extends Enfrentamiento {
 			pokemon.draw(batch);
 			dibujarCajasVida();
 			dibujarVidas();
-			if (pkmnSalvaje.getPs() <= 0) {
-				salvaje.setAlpha(0);
+			dibujarPokeballs();
+			if (pkmnpokemonEnemigo.getPs() <= 0) {
+				pokemonEnemigo.setAlpha(0);
 			} else if (pkmn.getPs() <= 0) {
 				pokemon.setAlpha(0);
 			}
@@ -144,6 +153,7 @@ public class CombateEntrenador extends Enfrentamiento {
 			pokemon.draw(batch);
 			dibujarCajasVida();
 			dibujarVidas();
+			dibujarPokeballs();
 		}
 		batch.end();
 	}
@@ -159,6 +169,7 @@ public class CombateEntrenador extends Enfrentamiento {
 		protagonista = new Sprite(
 				new Texture("res/imgs/entrenadores/prota.png"));
 		protagonista.setSize(150, 240);
+
 		Tween.set(bg, SpriteAccessor.ALPHA).target(0).start(tweenManager);
 		Tween.to(bg, SpriteAccessor.ALPHA, 2).target(1).start(tweenManager);
 		Tween.set(base, SpriteAccessor.SLIDE).target(500, 120)
@@ -185,7 +196,7 @@ public class CombateEntrenador extends Enfrentamiento {
 			switch (keycode) {
 			case (Keys.ENTER):
 
-				if (fase == 1 || fase == 2 || fase == 3) {
+				if (fase == 0 || fase == 1 || fase == 2) {
 					/*
 					 * Dialogo de comienzo del combate
 					 */
@@ -209,34 +220,36 @@ public class CombateEntrenador extends Enfrentamiento {
 								l1 = l1.replace("${POKEMONE}", entrenadorE
 										.getEquipo().get(iPokemonEnemigo)
 										.getNombre());
-								
+
 								fase++;
 								// dialogo.procesarDialogo("combate");
 							}
 							if (l1.contains("${POKEMON}")) {
 								l1 = l1.replace("${POKEMON}", jugador
 										.getEquipo().get(0).getNombre());
-								tamanoPokemon=1;
+								tamanoPokemon = 1;
 								fase++;
-								// dialogo.procesarDialogo("combate");
+								dialogo.procesarDialogo("combate");
+							}
+							if (l1.equals(" ")) {
+								fase++;
 							}
 						} else if (dialogo.getId().equals("combate")) {
 							if (l1.contains("${POKEMON}")) {
-								l1 = l1.replace("${POKEMON}", entrenadorE
-										.getEquipo().get(iPokemonEnemigo)
-										.getNombre());
-							}
-							if (l1.equals(" ")) {
+								l1 = l1.replace("${POKEMON}", jugador
+										.getEquipo().get(0).getNombre());
+
+							} else {
 								fase++;
 							}
 						}
 						/* Escribe letra a letra el dialogo */
 						dialogo.setLineas(l1, l2);
 					}
-				} else if (fase == 4) {
+				} else if (fase == 3) {
 					switch (seleccion) {
 					case 1: // luchar
-						fase = 5;
+						fase = 4;
 						break;
 					case 2: // mochila
 						break;
@@ -256,7 +269,7 @@ public class CombateEntrenador extends Enfrentamiento {
 					combate();
 				} else if (fase == 6) {
 					veces = 8;
-					if (pkmn.getPs() <= 0 || pkmnSalvaje.getPs() <= 0) {
+					if (pkmn.getPs() <= 0 || pkmnpokemonEnemigo.getPs() <= 0) {
 						fase = 9;
 						dialogo.procesarDialogo("pokemon_muerto");
 					} else {
@@ -266,7 +279,7 @@ public class CombateEntrenador extends Enfrentamiento {
 					combate();
 				} else if (fase == 8) {
 					veces = 8;
-					if (pkmn.getPs() <= 0 || pkmnSalvaje.getPs() <= 0) {
+					if (pkmn.getPs() <= 0 || pkmnpokemonEnemigo.getPs() <= 0) {
 						fase = 9;
 						dialogo.procesarDialogo("pokemon_muerto");
 					} else {
@@ -282,7 +295,7 @@ public class CombateEntrenador extends Enfrentamiento {
 							l1 = l1.replace("${POKEMON}", pkmn.getNombre());
 						} else {
 							l1 = l1.replace("${POKEMON}",
-									pkmnSalvaje.getNombre());
+									pkmnpokemonEnemigo.getNombre());
 						}
 					}
 					dialogo.setLineas(l1, l2);
@@ -415,8 +428,56 @@ public class CombateEntrenador extends Enfrentamiento {
 	public void setEntrenador() {
 		entrenadorE = new Jugador(idEntrenador, true);
 		ArrayList<Pokemon> lPoke = new ArrayList<Pokemon>();
-		lPoke.add(pkmnSalvaje);
+		lPoke.add(pkmnpokemonEnemigo);
 		entrenadorE.setEquipo(lPoke);
+	}
+
+	public void dibujarPokeballs() {
+		int nPoke = jugador.getEquipo().size();
+		int nPokeEnemigo = entrenadorE.getEquipo().size();
+		int xP = 650;
+		int xE = 180;
+		Sprite[] balls = new Sprite[6];
+		Sprite[] ballsEnemigo = new Sprite[6];
+		for (int i = 0; i < 6; i++) {
+			if (i < nPoke) {
+				if (jugador.getEquipo().get(i).vivo()) {
+					balls[i] = new Sprite(new Texture(
+							"res/imgs/batallas/ballnormal.png"));
+				} else {
+					balls[i] = new Sprite(new Texture(
+							"res/imgs/batallas/ballfainted.png"));
+				}
+			} else {
+				balls[i] = new Sprite(new Texture(
+						"res/imgs/batallas/ballempty.png"));
+
+			}
+			balls[i].setPosition(xP, 130);
+			balls[i].draw(batch);
+			xP = xP - 30;
+			if (i < nPokeEnemigo) {
+				if (entrenadorE.getEquipo().get(i).vivo()) {
+					ballsEnemigo[i] = new Sprite(new Texture(
+							"res/imgs/batallas/ballnormal.png"));
+				} else {
+					ballsEnemigo[i] = new Sprite(new Texture(
+							"res/imgs/batallas/ballfainted.png"));
+				}
+			} else {
+				ballsEnemigo[i] = new Sprite(new Texture(
+						"res/imgs/batallas/ballempty.png"));
+
+			}
+			ballsEnemigo[i].setPosition(xE, 370);
+			ballsEnemigo[i].draw(batch);
+			xE = xE - 30;
+		}
+		/*
+		 * pokeball = pokeballVacio = new Sprite(new Texture(
+		 * "res/imgs/batallas/ballempty.png")); pokeballMuerto = new Sprite(new
+		 * Texture( "res/imgs/batallas/ballfainted.png"));
+		 */
 	}
 
 }

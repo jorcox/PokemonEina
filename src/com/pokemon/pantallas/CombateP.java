@@ -33,12 +33,12 @@ public class CombateP extends Enfrentamiento {
 		baseEnemy.draw(batch);
 		message.draw(batch);
 		message.setSize(720, 120);
-		salvaje.draw(batch);
-		salvaje.setSize(120, 120);
+		pokemonEnemigo.draw(batch);
+		pokemonEnemigo.setSize(120, 120);
 		font.draw(batch, dialogo.getLinea1(), 50, 85);
 		font.draw(batch, dialogo.getLinea2(), 50, 35);
 		/*
-		 * Aparacion de pokemon salvaje
+		 * Aparacion de pokemon pokemonEnemigo
 		 */
 		if (fase == 2) {
 
@@ -101,8 +101,8 @@ public class CombateP extends Enfrentamiento {
 			pokemon.draw(batch);
 			dibujarCajasVida();
 			dibujarVidas();
-			if (pkmnSalvaje.getPs() <= 0) {
-				salvaje.setAlpha(0);
+			if (pkmnpokemonEnemigo.getPs() <= 0) {
+				pokemonEnemigo.setAlpha(0);
 			} else if (pkmn.getPs() <= 0) {
 				pokemon.setAlpha(0);
 			}
@@ -128,9 +128,9 @@ public class CombateP extends Enfrentamiento {
 				.start(tweenManager);
 		Tween.to(baseEnemy, SpriteAccessor.SLIDE, 2).target(350, 300)
 				.start(tweenManager);
-		Tween.set(salvaje, SpriteAccessor.SLIDE).target(-250, 350)
+		Tween.set(pokemonEnemigo, SpriteAccessor.SLIDE).target(-250, 350)
 				.start(tweenManager);
-		Tween.to(salvaje, SpriteAccessor.SLIDE, 2).target(400, 350)
+		Tween.to(pokemonEnemigo, SpriteAccessor.SLIDE, 2).target(400, 350)
 				.start(tweenManager);
 
 	}
@@ -155,7 +155,7 @@ public class CombateP extends Enfrentamiento {
 						if (dialogo.getId().equals("salvaje")) {
 							if (l1.contains("${SALVAJE}")) {
 								l1 = l1.replace("${SALVAJE}",
-										pkmnSalvaje.getNombre());
+										pkmnpokemonEnemigo.getNombre());
 							}
 							if (l1.contains("${POKEMON}")) {
 								l1 = l1.replace("${POKEMON}", pkmn.getNombre());
@@ -196,7 +196,7 @@ public class CombateP extends Enfrentamiento {
 					combate();
 				} else if (fase == 6) {
 					veces = 8;
-					if (pkmn.getPs() <= 0 || pkmnSalvaje.getPs() <= 0) {
+					if (pkmn.getPs() <= 0 || pkmnpokemonEnemigo.getPs() <= 0) {
 						fase = 9;
 						dialogo.procesarDialogo("pokemon_muerto");
 					} else {
@@ -206,7 +206,7 @@ public class CombateP extends Enfrentamiento {
 					combate();
 				} else if (fase == 8) {
 					veces = 8;
-					if (pkmn.getPs() <= 0 || pkmnSalvaje.getPs() <= 0) {
+					if (pkmn.getPs() <= 0 || pkmnpokemonEnemigo.getPs() <= 0) {
 						fase = 9;
 						dialogo.procesarDialogo("pokemon_muerto");
 					} else {
@@ -222,7 +222,7 @@ public class CombateP extends Enfrentamiento {
 							l1 = l1.replace("${POKEMON}", pkmn.getNombre());
 						} else {
 							l1 = l1.replace("${POKEMON}",
-									pkmnSalvaje.getNombre());
+									pkmnpokemonEnemigo.getNombre());
 						}
 					}
 					dialogo.setLineas(l1, l2);

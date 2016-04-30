@@ -36,7 +36,7 @@ public class Enfrentamiento implements Screen, InputProcessor {
 	protected int actualPs;
 	protected int actualPsS;
 	protected Pokemon pkmn;
-	protected Pokemon pkmnSalvaje;
+	protected Pokemon pkmnpokemonEnemigo;
 	protected int tamanoPokemon = 1;
 	protected int xPokemon = 100;
 	protected int xPokemonEnemigo = 450;
@@ -59,9 +59,9 @@ public class Enfrentamiento implements Screen, InputProcessor {
 	SpriteBatch batch;
 	Texture tipos, barraVida;
 	TextureRegion[] regionesTipo, regionesTipoSel, barrasVida;
-	protected Sprite bg, base, baseEnemy, message, salvaje, pokemon, bgOp,
+	protected Sprite bg, base, baseEnemy, message, pokemonEnemigo, pokemon, bgOp,
 			bgOpTrans, boton, luchar, mochila, pokemonOp, huir, dedo,
-			cajaLuchar, tipo1, tipo2, tipo3, tipo4, cajaPkmn, cajaPkmnSalvaje,
+			cajaLuchar, tipo1, tipo2, tipo3, tipo4, cajaPkmn, cajaPkmnpokemonEnemigo,
 			entrenador, protagonista;
 
 	public Enfrentamiento(Player player, Jugador jugador) {
@@ -71,7 +71,7 @@ public class Enfrentamiento implements Screen, InputProcessor {
 		try {
 			db = new BaseDatos("pokemon_base");
 
-			pkmnSalvaje = db.getPokemon(0);
+			pkmnpokemonEnemigo = db.getPokemon(0);
 			db.shutdown();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -79,10 +79,10 @@ public class Enfrentamiento implements Screen, InputProcessor {
 		List<Pokemon> lPoke = new ArrayList<Pokemon>();
 		lPoke.add(pkmn);
 		actualPs = pkmn.getPs();
-		actualPsS = pkmnSalvaje.getPs();
+		actualPsS = pkmnpokemonEnemigo.getPs();
 		en = new Jugador("Sara", true);
 		en.setEquipo(lPoke);
-		combate = new Combate(en, pkmnSalvaje);
+		combate = new Combate(en, pkmnpokemonEnemigo);
 		orden = combate.getVelocidad();
 		Gdx.input.setInputProcessor(this);
 		generator = new FreeTypeFontGenerator(
@@ -164,15 +164,15 @@ public class Enfrentamiento implements Screen, InputProcessor {
 		pokemonOp = new Sprite(new Texture("res/imgs/batallas/pokemon.png"));
 		huir = new Sprite(new Texture("res/imgs/batallas/huir.png"));
 		message = new Sprite(new Texture("res/imgs/batallas/battleMessage.png"));
-		salvaje = new Sprite(new Texture("res/imgs/pokemon/mew.png"));
+		pokemonEnemigo = new Sprite(new Texture("res/imgs/pokemon/mew.png"));
 		pokemon = new Sprite(new Texture("res/imgs/pokemon/espalda/25.png"));
 		cajaLuchar = new Sprite(
 				new Texture("res/imgs/batallas/battleFight.png"));
 		tipos = new Texture("res/imgs/batallas/battleFightButtons.png");
 		barraVida = new Texture("res/imgs/batallas/hpbars.png");
 		cajaPkmn = new Sprite(new Texture("res/imgs/batallas/cajaPkmn.png"));
-		cajaPkmnSalvaje = new Sprite(new Texture(
-				"res/imgs/batallas/cajaPkmnSalvaje.png"));
+		cajaPkmnpokemonEnemigo = new Sprite(new Texture(
+				"res/imgs/batallas/cajaPkmnEnemigo.png"));
 		font.setColor(Color.BLACK);
 		fontC.setColor(Color.BLACK);
 		regionesTipos();
@@ -358,10 +358,10 @@ public class Enfrentamiento implements Screen, InputProcessor {
 	public void dibujarCajasVida() {
 		cajaPkmn.setPosition(425, 160);
 		cajaPkmn.setSize(305, 95);
-		cajaPkmnSalvaje.setPosition(0, 400);
-		cajaPkmnSalvaje.setSize(250, 70);
+		cajaPkmnpokemonEnemigo.setPosition(0, 400);
+		cajaPkmnpokemonEnemigo.setSize(250, 70);
 		cajaPkmn.draw(batch);
-		cajaPkmnSalvaje.draw(batch);
+		cajaPkmnpokemonEnemigo.draw(batch);
 		/*
 		 * Atributos de nuestro pokemon
 		 */
@@ -371,10 +371,10 @@ public class Enfrentamiento implements Screen, InputProcessor {
 		getBarraVida();
 
 		/*
-		 * Atributos del pokemon salvaje
+		 * Atributos del pokemon pokemonEnemigo
 		 */
-		fontC.draw(batch, pkmnSalvaje.getNombre(), 20, 450);
-		fontC.draw(batch, "Nv " + pkmnSalvaje.getNivel(), 150, 450);
+		fontC.draw(batch, pkmnpokemonEnemigo.getNombre(), 20, 450);
+		fontC.draw(batch, "Nv " + pkmnpokemonEnemigo.getNivel(), 150, 450);
 
 	}
 
@@ -383,8 +383,8 @@ public class Enfrentamiento implements Screen, InputProcessor {
 			batch.draw(barrasVida[0], 582, 202,
 					(int) (116 * (pkmn.getPs() / (double) pkmn.getPsMax())), 10);
 		} else {
-			batch.draw(barrasVida[0], 111, 416, (int) (96 * (pkmnSalvaje
-					.getPs() / (double) pkmnSalvaje.getPsMax())), 10);
+			batch.draw(barrasVida[0], 111, 416, (int) (96 * (pkmnpokemonEnemigo
+					.getPs() / (double) pkmnpokemonEnemigo.getPsMax())), 10);
 		}
 	}
 
@@ -396,20 +396,22 @@ public class Enfrentamiento implements Screen, InputProcessor {
 	public void animacionVida(boolean who) {
 
 		if (who) {
-			double diff = (actualPsS - pkmnSalvaje.getPs()) / 100.0;
+			pokemon.setAlpha(1);
+			double diff = (actualPsS - pkmnpokemonEnemigo.getPs()) / 100.0;
 			if (vidaS > 0) {
 				batch.draw(
 						barrasVida[0],
 						111,
 						416,
-						(int) (96 * ((pkmnSalvaje.getPs() / (double) pkmnSalvaje
-								.getPsMax()) + ((diff * vidaS) / (double) pkmnSalvaje
+						(int) (96 * ((pkmnpokemonEnemigo.getPs() / (double) pkmnpokemonEnemigo
+								.getPsMax()) + ((diff * vidaS) / (double) pkmnpokemonEnemigo
 								.getPsMax()))), 10);
 				vidaS--;
 			} else {
 				dibujarVida(false);
 			}
 		} else {
+			pokemonEnemigo.setAlpha(1);
 			double diff = (actualPs - pkmn.getPs()) / 100.0;
 
 			if (vida > 0) {
@@ -441,9 +443,9 @@ public class Enfrentamiento implements Screen, InputProcessor {
 			dialogo.setLineas(l1, l2);
 			fase++;
 		} else {
-			int seleccionEnemigo = combate.decidir(pkmnSalvaje);
+			int seleccionEnemigo = combate.decidir(pkmnpokemonEnemigo);
 
-			dialogo.setFrases(frasesAtaque(pkmnSalvaje, seleccionEnemigo));
+			dialogo.setFrases(frasesAtaque(pkmnpokemonEnemigo, seleccionEnemigo));
 			String l1 = dialogo.siguienteLinea();
 			String l2 = dialogo.siguienteLinea();
 			dialogo.setLineas(l1, l2);
@@ -456,8 +458,8 @@ public class Enfrentamiento implements Screen, InputProcessor {
 		if ((orden && fase == 5) || (!orden && fase == 7)) {
 
 			if (!dialogo.isWriting()) {
-				actualPsS = pkmnSalvaje.getPs();
-				if (combate.ejecutar(pkmn, pkmnSalvaje,
+				actualPsS = pkmnpokemonEnemigo.getPs();
+				if (combate.ejecutar(pkmn, pkmnpokemonEnemigo,
 						pkmn.getHabilidad(seleccionAtaque))) {
 					fase++;
 				} else {
@@ -473,17 +475,17 @@ public class Enfrentamiento implements Screen, InputProcessor {
 				}
 			}
 		} else {
-			int seleccionEnemigo = combate.decidir(pkmnSalvaje);
+			int seleccionEnemigo = combate.decidir(pkmnpokemonEnemigo);
 
 			if (!dialogo.isWriting()) {
 				actualPs = pkmn.getPs();
-				if (combate.ejecutar(pkmnSalvaje, pkmn,
-						pkmnSalvaje.getHabilidad(seleccionEnemigo))) {
+				if (combate.ejecutar(pkmnpokemonEnemigo, pkmn,
+						pkmnpokemonEnemigo.getHabilidad(seleccionEnemigo))) {
 					fase++;
 				} else {
 					fase = 11;
 					String[] frase = {
-							"¡" + pkmnSalvaje.getNombre()
+							"¡" + pkmnpokemonEnemigo.getNombre()
 									+ " falló! Vaya mierdas...", "" };
 					dialogo.setFrases(frase);
 					String l1 = dialogo.siguienteLinea();
@@ -544,7 +546,7 @@ public class Enfrentamiento implements Screen, InputProcessor {
 		} else {
 			if (veces > 0) {
 				if (intervalo == 0) {
-					salvaje.setAlpha(trans);
+					pokemonEnemigo.setAlpha(trans);
 					trans = (trans + 1) % 2;
 					intervalo = 4;
 					veces--;
@@ -553,7 +555,7 @@ public class Enfrentamiento implements Screen, InputProcessor {
 				}
 			} else {
 				trans = 1;
-				salvaje.setAlpha(1);
+				pokemonEnemigo.setAlpha(1);
 			}
 		}
 	}
