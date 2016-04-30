@@ -97,14 +97,9 @@ public class Play implements Screen, InputProcessor {
 
 		camera = new OrthographicCamera();
 		
-		/* Player */
 		playerAtlas = new TextureAtlas("res/imgs/protagonista.pack");
-		player = new Player(playerAtlas, (TiledMapTileLayer) map.getLayers().get("Entorno"),
-				map.getLayers().get("Objetos"), map.getLayers().get("Trans"), dialogo, this);
-		player.setPosition(x, y);
-		player.setLastPressed(lastPressed);
-		equipoPokemon();
 		
+	
 		/* Carga de NPCs */
 		MapLayer npcLayer = map.getLayers().get("Personajes");
 		for (MapObject o : npcLayer.getObjects()) {
@@ -116,6 +111,13 @@ public class Play implements Screen, InputProcessor {
 			npc.setPosition(t.getX(), t.getY());
 			npcs.add(npc);
 		}
+		
+		/* Player */		
+		player = new Player(playerAtlas, (TiledMapTileLayer) map.getLayers().get("Entorno"),
+				map.getLayers().get("Objetos"), map.getLayers().get("Trans"), npcs, dialogo, this);
+		player.setPosition(x, y);
+		player.setLastPressed(lastPressed);
+		equipoPokemon();
 		
 		
 		Gdx.input.setInputProcessor(this);
