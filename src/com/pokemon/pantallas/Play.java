@@ -32,6 +32,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.pokemon.dialogo.Dialogo;
 import com.pokemon.entities.NPC;
 import com.pokemon.entities.Player;
+import com.pokemon.mochila.Antidoto;
+import com.pokemon.mochila.Pocion;
 import com.pokemon.render.TextureMapObjectRenderer;
 import com.pokemon.tween.SpriteAccessor;
 import com.pokemon.utilidades.ArchivoGuardado;
@@ -64,6 +66,7 @@ public class Play implements Screen, InputProcessor {
 	private Jugador jugador;
 	private Stage stage;
 	private ArrayList<NPC> npcs = new ArrayList<>();
+	private boolean dialogando;
 
 	public Play(float x, float y, int lastPressed, String mapa) {
 		dialogo = new Dialogo("es", "ES");
@@ -71,6 +74,7 @@ public class Play implements Screen, InputProcessor {
 		this.y = y;
 		this.lastPressed = lastPressed;
 		this.map_ = mapa;
+		dialogando = false;
 
 		Gdx.input.setInputProcessor(this);
 
@@ -269,38 +273,54 @@ public class Play implements Screen, InputProcessor {
 			player.SpacePressed = true;
 			break;
 		case Keys.ENTER:
-			optionsVisible = true;
+			if (dialogando) {
+				/* Esta en pleno dialogo, Enter lo va avanzando */
+				optionsVisible = true;
 
-			if (!dialogo.isWriting()) {
-				String l1 = dialogo.siguienteLinea();
-				String l2 = dialogo.siguienteLinea();
+				if (!dialogo.isWriting()) {
+					String l1 = dialogo.siguienteLinea();
+					String l2 = dialogo.siguienteLinea();
 
-				if (l1 != null) {
-					if (l2 == null) {
-						l2 = "";
+					if (l1 != null) {
+						if (l2 == null) {
+							l2 = "";
+						}
+
+						if (l1.contains("${NOMBRE}")) {
+							l1 = l1.replace("${NOMBRE}", ArchivoGuardado.nombreJugador);
+						} else if (l2.contains("${NOMBRE}")) {
+							l2 = l2.replace("${NOMBRE}", ArchivoGuardado.nombreJugador);
+						} else if (l1.contains("${CREACION_NOMBRE}") || l2.contains("${CREACION_NOMBRE}")) {
+							l1 = l1.replace("${CREACION_NOMBRE}", "");
+							l2 = l2.replace("${CREACION_NOMBRE}", "");
+							ArchivoGuardado.nombreJugador = "Sara";
+						}
+
+						/* Escribe letra a letra el dialogo */
+						dialogo.setLineas(l1, l2);
+
+						/*
+						 * if (script[counter].contains("(OPTION)")) {
+						 * script[counter] = script[counter].replace( "(OPTION)",
+						 * ""); optionsVisible = true; }
+						 */
+					} else {
+						dialogo.limpiar();
+						optionsVisible = false;
+						dialogando = false;
 					}
+				}
+			} else {
+				/* Busca interactuar con algo */
+				for (MapObject o : map.getLayers().get("Objetos").getObjects()) {
+					TextureMapObject t = (TextureMapObject) o;
+					Gdx.app.log("cartel", "distancia " + distance(t));
 
-					if (l1.contains("${NOMBRE}")) {
-						l1 = l1.replace("${NOMBRE}", ArchivoGuardado.nombreJugador);
-					} else if (l2.contains("${NOMBRE}")) {
-						l2 = l2.replace("${NOMBRE}", ArchivoGuardado.nombreJugador);
-					} else if (l1.contains("${CREACION_NOMBRE}") || l2.contains("${CREACION_NOMBRE}")) {
-						l1 = l1.replace("${CREACION_NOMBRE}", "");
-						l2 = l2.replace("${CREACION_NOMBRE}", "");
-						ArchivoGuardado.nombreJugador = "Sara";
+					/* Dispara evento si estan muy cerca jugador y objeto */
+					if (distance(t) < 50) {
+						interact(t);
+						break;
 					}
-
-					/* Escribe letra a letra el dialogo */
-					dialogo.setLineas(l1, l2);
-
-					/*
-					 * if (script[counter].contains("(OPTION)")) {
-					 * script[counter] = script[counter].replace( "(OPTION)",
-					 * ""); optionsVisible = true; }
-					 */
-				} else {
-					dialogo.limpiar();
-					optionsVisible = false;
 				}
 			}
 			break;
@@ -311,6 +331,55 @@ public class Play implements Screen, InputProcessor {
 		}
 
 		return false;
+	}
+	
+	/**
+	 * Gestiona las interacciones entre el jugador y el objeto obj, que puede
+	 * ser un cartel, pokeball, etc.
+	 * 
+	 * @param obj
+	 *            el objeto declarado en la capa de objetos.
+	 */
+	private void interact(TextureMapObject obj) {
+		if (obj.getProperties().containsKey("cartel")) {
+			optionsVisible = true;
+			dialogando = true;
+			
+			/* Leer cartel */
+			String value = (String) obj.getProperties().get("cartel");
+			dialogo.procesarDialogo("cartel_" + value);
+			dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
+		} else if (obj.getProperties().containsKey("item")) {
+			optionsVisible = true;
+			dialogando = true;
+
+			/* Leer objeto recogido */
+			String value = (String) obj.getProperties().get("item");
+			dialogo.procesarDialogo("item_" + value);
+			dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
+
+			/* Introduce en mochila */
+			if (value.equals("Poción")) {
+				player.mochila.add(new Pocion());
+			} else if (value.equals("Antídoto")) {
+				player.mochila.add(new Antidoto());
+			}
+
+		}
+	}
+	
+	/**
+	 * Calcula la distancia entre el jugador y el objeto de texturas t.
+	 * 
+	 * @param t
+	 *            el objeto de texturas.
+	 * @return la distancia euclidea.
+	 */
+	public int distance(TextureMapObject t) {
+		double aux = t.getX();
+		double dx = Math.pow(player.getX() - aux, 2);
+		double dy = Math.pow(player.getY() - t.getY(), 2);
+		return (int) (Math.sqrt(dx + dy));
 	}
 
 	@Override

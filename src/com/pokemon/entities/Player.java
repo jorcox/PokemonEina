@@ -199,6 +199,21 @@ public class Player extends Sprite {
 			setX(oldX);
 			velocity.x = 0;
 		}
+		
+		if (collisionX || collisionY) {
+			for (MapObject o : transLayer.getObjects()) {
+				TextureMapObject t = (TextureMapObject) o;
+
+				/* Dispara evento si estan muy cerca jugador y objeto */
+				if (play.distance(t) < 50) {
+					((Game) Gdx.app.getApplicationListener())
+							.setScreen(new Play(Integer.parseInt((String) t.getProperties().get("x")),
+									Integer.parseInt((String) t.getProperties().get("y")), getLastPressed(),
+									t.getProperties().get("mapa") + ".tmx"));
+					break;
+				}
+			}
+		}
 
 		/*
 		 * Movimiento en Y
@@ -303,80 +318,6 @@ public class Player extends Sprite {
 				setRegion(derecha.getKeyFrame(1));
 				break;
 			}
-		}
-
-		/* Eventos con objetos */
-		if (collisionX || collisionY) {
-			for (MapObject o : objectLayer.getObjects()) {
-				TextureMapObject t = (TextureMapObject) o;
-				Gdx.app.log("cartel", "distancia " + distance(t));
-
-				/* Dispara evento si estan muy cerca jugador y objeto */
-				if (distance(t) < 50) {
-					interact(t);
-					break;
-				}
-			}
-			for (MapObject o : transLayer.getObjects()) {
-				TextureMapObject t = (TextureMapObject) o;
-
-				/* Dispara evento si estan muy cerca jugador y objeto */
-				if (distance(t) < 50) {
-					((Game) Gdx.app.getApplicationListener())
-							.setScreen(new Play(Integer.parseInt((String) t.getProperties().get("x")),
-									Integer.parseInt((String) t.getProperties().get("y")), getLastPressed(),
-									t.getProperties().get("mapa") + ".tmx"));
-					break;
-				}
-			}
-		}
-
-	}
-
-	/**
-	 * Calcula la distancia entre el jugador y el objeto de texturas t.
-	 * 
-	 * @param t
-	 *            el objeto de texturas.
-	 * @return la distancia euclidea.
-	 */
-	public int distance(TextureMapObject t) {
-		double aux = t.getX();
-		double dx = Math.pow(getX() - aux, 2);
-		double dy = Math.pow(getY() - t.getY(), 2);
-		return (int) (Math.sqrt(dx + dy));
-	}
-
-	/**
-	 * Gestiona las interacciones entre el jugador y el objeto obj, que puede
-	 * ser un cartel, pokeball, etc.
-	 * 
-	 * @param obj
-	 *            el objeto declarado en la capa de objetos.
-	 */
-	private void interact(TextureMapObject obj) {
-		if (obj.getProperties().containsKey("cartel")) {
-			play.optionsVisible = true;
-
-			/* Leer cartel */
-			String value = (String) obj.getProperties().get("cartel");
-			dialogo.procesarDialogo("cartel_" + value);
-			dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
-		} else if (obj.getProperties().containsKey("item")) {
-			play.optionsVisible = true;
-
-			/* Leer objeto recogido */
-			String value = (String) obj.getProperties().get("item");
-			dialogo.procesarDialogo("item_" + value);
-			dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
-
-			/* Introduce en mochila */
-			if (value.equals("Poci�n")) {
-				mochila.add(new Pocion());
-			} else if (value.equals("Ant�doto")) {
-				mochila.add(new Antidoto());
-			}
-
 		}
 	}
 
