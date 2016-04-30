@@ -241,6 +241,7 @@ public class BaseDatos {
 			poke.setHabilidades(habilidades);
 			poke.setExperiencia(rs.getInt("experiencia"));
 			poke.setEstado(rs.getInt("estado"));
+			poke.setId(id);
 			rs.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

@@ -21,6 +21,7 @@ public class Pokemon {
 	private int ps;
 	private int experiencia;
 	private int estado;
+	private int id;
 	
 	public String getNombre() {
 		return nombre;
@@ -141,6 +142,12 @@ public class Pokemon {
 	}
 	public void setEstado(int estado) {
 		this.estado = estado;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	

@@ -303,7 +303,11 @@ public class Play implements Screen, InputProcessor {
 			break;
 		case Keys.C:
 			((Game) Gdx.app.getApplicationListener()).setScreen(new CombateP(
-					player, jugador, true, "Gvalles"));
+					player, jugador ));
+			break;
+		case Keys.V:
+			((Game) Gdx.app.getApplicationListener()).setScreen(new CombateEntrenador(
+					player, jugador,"reverte"));
 			break;
 		}
 

@@ -1,23 +1,40 @@
 package com.pokemon.pantallas;
 
+import java.util.ArrayList;
+
+import pokemon.Pokemon;
 import aurelienribon.tweenengine.Tween;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.pokemon.entities.Player;
 import com.pokemon.tween.SpriteAccessor;
 
+import entrenadores.Entrenador;
 import entrenadores.Jugador;
 
-public class CombateP extends Enfrentamiento {
+public class CombateEntrenador extends Enfrentamiento {
 
+	private String idEntrenador;
+	private Jugador entrenadorE;
+	private int iPokemonEnemigo = 0;
+	private Sprite pokemonEnemigo;
+	TextureRegion[] spritesEntrenador;
 
+	public CombateEntrenador(Player player, Jugador jugador, String idEntrenador) {
+		super(player, jugador);
+		this.idEntrenador = idEntrenador;
+		/*
+		 * Base de datos?
+		 */
+		setEntrenador();
 
-	public CombateP(Player player, Jugador jugador) {
-		super(player,jugador);
-		dialogo.procesarDialogo("salvaje");
+		dialogo.procesarDialogo("combate_entrenador");
 	}
 
 	@Override
@@ -30,25 +47,41 @@ public class CombateP extends Enfrentamiento {
 		bg.draw(batch);
 		bg.setSize(720, 540);
 		base.draw(batch);
+
 		baseEnemy.draw(batch);
+
 		message.draw(batch);
 		message.setSize(720, 120);
-		salvaje.draw(batch);
-		salvaje.setSize(120, 120);
+
 		font.draw(batch, dialogo.getLinea1(), 50, 85);
 		font.draw(batch, dialogo.getLinea2(), 50, 35);
+		if (fase == 1) {
+			entrenador.draw(batch);
+			protagonista.draw(batch);
+		}
 		/*
-		 * Aparacion de pokemon salvaje
+		 * Aparacion de pokemon enemigo
 		 */
 		if (fase == 2) {
 
+			aparicionPokemonEnemigo(pokemonEnemigo);
+			protagonista.draw(batch);
+			pokemonEnemigo.draw(batch);
+
+		}
+		/*
+		 * Aparicion de pokemon nuestro
+		 */
+		if (fase == 3) {
 			aparicionPokemon(pokemon);
+			pokemonEnemigo.draw(batch);
 			pokemon.draw(batch);
 		}
+
 		/*
 		 * Decidir accion (Luchar, Mochila, Pokemon, Huir)
 		 */
-		if (fase == 3) {
+		if (fase == 4) {
 			pokemon.draw(batch);
 			dibujarMenuCombate();
 			dibujarCajasVida();
@@ -118,21 +151,32 @@ public class CombateP extends Enfrentamiento {
 	@Override
 	public void show() {
 		super.show();
+		entrenador = new Sprite(new Texture("res/imgs/entrenadores/"
+				+ idEntrenador + ".png"));
+		pokemonEnemigo = new Sprite(new Texture("res/imgs/pokemon/"
+				+ entrenadorE.getEquipo().get(iPokemonEnemigo).getNombre()
+				+ ".png"));
+		protagonista = new Sprite(
+				new Texture("res/imgs/entrenadores/prota.png"));
+		protagonista.setSize(150, 240);
 		Tween.set(bg, SpriteAccessor.ALPHA).target(0).start(tweenManager);
 		Tween.to(bg, SpriteAccessor.ALPHA, 2).target(1).start(tweenManager);
 		Tween.set(base, SpriteAccessor.SLIDE).target(500, 120)
 				.start(tweenManager);
 		Tween.to(base, SpriteAccessor.SLIDE, 2).target(-70, 120)
 				.start(tweenManager);
+		Tween.set(protagonista, SpriteAccessor.SLIDE).target(500, 120)
+				.start(tweenManager);
+		Tween.to(protagonista, SpriteAccessor.SLIDE, 2).target(100, 120)
+				.start(tweenManager);
 		Tween.set(baseEnemy, SpriteAccessor.SLIDE).target(-250, 300)
 				.start(tweenManager);
 		Tween.to(baseEnemy, SpriteAccessor.SLIDE, 2).target(350, 300)
 				.start(tweenManager);
-		Tween.set(salvaje, SpriteAccessor.SLIDE).target(-250, 350)
+		Tween.set(entrenador, SpriteAccessor.SLIDE).target(-250, 350)
 				.start(tweenManager);
-		Tween.to(salvaje, SpriteAccessor.SLIDE, 2).target(400, 350)
+		Tween.to(entrenador, SpriteAccessor.SLIDE, 2).target(400, 350)
 				.start(tweenManager);
-
 	}
 
 	@Override
@@ -141,7 +185,7 @@ public class CombateP extends Enfrentamiento {
 			switch (keycode) {
 			case (Keys.ENTER):
 
-				if (fase == 1 || fase == 2) {
+				if (fase == 1 || fase == 2 || fase == 3) {
 					/*
 					 * Dialogo de comienzo del combate
 					 */
@@ -152,19 +196,35 @@ public class CombateP extends Enfrentamiento {
 						if (l2 == null) {
 							l2 = "";
 						}
-						if (dialogo.getId().equals("salvaje")) {
-							if (l1.contains("${SALVAJE}")) {
-								l1 = l1.replace("${SALVAJE}",
-										pkmnSalvaje.getNombre());
+						if (dialogo.getId().equals("combate_entrenador")) {
+							if (l1.contains("${ENTRENADOR}")) {
+								l1 = l1.replace("${ENTRENADOR}", "ENTRENADOR "
+										+ idEntrenador.toUpperCase());
+							}
+							if (l2.contains("${ENTRENADOR}")) {
+								l2 = l2.replace("${ENTRENADOR}", "ENTRENADOR "
+										+ idEntrenador.toUpperCase());
+							}
+							if (l1.contains("${POKEMONE}")) {
+								l1 = l1.replace("${POKEMONE}", entrenadorE
+										.getEquipo().get(iPokemonEnemigo)
+										.getNombre());
+								
+								fase++;
+								// dialogo.procesarDialogo("combate");
 							}
 							if (l1.contains("${POKEMON}")) {
-								l1 = l1.replace("${POKEMON}", pkmn.getNombre());
+								l1 = l1.replace("${POKEMON}", jugador
+										.getEquipo().get(0).getNombre());
+								tamanoPokemon=1;
 								fase++;
-								dialogo.procesarDialogo("combate");
+								// dialogo.procesarDialogo("combate");
 							}
 						} else if (dialogo.getId().equals("combate")) {
 							if (l1.contains("${POKEMON}")) {
-								l1 = l1.replace("${POKEMON}", pkmn.getNombre());
+								l1 = l1.replace("${POKEMON}", entrenadorE
+										.getEquipo().get(iPokemonEnemigo)
+										.getNombre());
 							}
 							if (l1.equals(" ")) {
 								fase++;
@@ -173,10 +233,10 @@ public class CombateP extends Enfrentamiento {
 						/* Escribe letra a letra el dialogo */
 						dialogo.setLineas(l1, l2);
 					}
-				} else if (fase == 3) {
+				} else if (fase == 4) {
 					switch (seleccion) {
 					case 1: // luchar
-						fase = 4;
+						fase = 5;
 						break;
 					case 2: // mochila
 						break;
@@ -352,5 +412,11 @@ public class CombateP extends Enfrentamiento {
 
 	}
 
-	
+	public void setEntrenador() {
+		entrenadorE = new Jugador(idEntrenador, true);
+		ArrayList<Pokemon> lPoke = new ArrayList<Pokemon>();
+		lPoke.add(pkmnSalvaje);
+		entrenadorE.setEquipo(lPoke);
+	}
+
 }
