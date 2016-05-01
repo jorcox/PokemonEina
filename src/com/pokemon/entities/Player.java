@@ -325,7 +325,7 @@ public class Player extends Sprite {
 						(int) ((getY() + getHeight()) / collisionLayer.getTileHeight()))
 						.getTile().getProperties().containsKey("combat")) {
 			double combatOdds = new Random().nextDouble();
-			if (combatOdds < 0.2) {
+			if (combatOdds < 0.02) {
 				((Game) Gdx.app.getApplicationListener()).setScreen(new CombateP(
 						this, play.jugador, 1));
 			}
