@@ -3,6 +3,7 @@ package com.pokemon.entities;
 import pokemon.Pokemon;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -21,6 +22,7 @@ import com.pokemon.mochila.Mochila;
 import com.pokemon.mochila.Pocion;
 import com.pokemon.mochila.Pokeball;
 import com.pokemon.mochila.Superball;
+import com.pokemon.pantallas.CombateP;
 import com.pokemon.pantallas.Play;
 
 public class Player extends Sprite {
@@ -312,6 +314,24 @@ public class Player extends Sprite {
 		}
 	}
 
+	/**
+	 * Si el jugador esta en casilla de combate, elige aleatoriamente si
+	 * le aparece un pokemon salvaje con una probabilidad del 20%.
+	 * 
+	 * Por ahora solo comprueba al cambiar de tecla de moverse (arreglar).
+	 */
+	public void checkCombat() {
+		if (collisionLayer.getCell((int) ((getX() + getWidth()) / collisionLayer.getTileWidth()), 
+						(int) ((getY() + getHeight()) / collisionLayer.getTileHeight()))
+						.getTile().getProperties().containsKey("combat")) {
+			double combatOdds = new Random().nextDouble();
+			if (combatOdds < 0.2) {
+				((Game) Gdx.app.getApplicationListener()).setScreen(new CombateP(
+						this, play.jugador, 1));
+			}
+		}
+	}
+	
 	public boolean getSpacePressed() {
 		return SpacePressed;
 	}

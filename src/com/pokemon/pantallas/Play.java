@@ -64,7 +64,7 @@ public class Play implements Screen, InputProcessor {
 	// private Player player = new Player(new Sprite(new
 	// Texture("assets/maps/tilesInterior.png")));
 	private Player player;
-	private Jugador jugador;
+	public Jugador jugador;
 	private Stage stage;
 	private ArrayList<NPC> npcs = new ArrayList<>();
 	private boolean dialogando;
@@ -235,6 +235,7 @@ public class Play implements Screen, InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
+		player.checkCombat();
 		switch (keycode) {
 		case Keys.W:
 			player.velocity.y = player.speed;
