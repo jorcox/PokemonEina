@@ -23,7 +23,7 @@ public class MenuPokemon implements Screen, InputProcessor {
 
 	private Screen screen;
 	private List<Pokemon> listaPokemon;
-
+	private boolean combate;
 	private SpriteBatch batch;
 	private Texture tFondo, tMainVivo, tMainVivoSel, tMainMuerto,
 			tMainMuertoSel, tVivo, tVivoSel, tMuerto, tMuertoSel, tHpVivo,
@@ -32,14 +32,18 @@ public class MenuPokemon implements Screen, InputProcessor {
 	FreeTypeFontGenerator generator;
 	BitmapFont font;
 
-	public MenuPokemon(List<Pokemon> listaPokemon, Screen screen) {
+	private int selection = 0;
+
+	public MenuPokemon(List<Pokemon> listaPokemon, Screen screen,
+			boolean combate) {
 		this.screen = screen;
 		this.listaPokemon = listaPokemon;
+		this.combate = combate;
 		generator = new FreeTypeFontGenerator(
 				Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 30;
-		font = generator.generateFont(parameter); // font size 35 pixels
+		font = generator.generateFont(parameter);
 	}
 
 	@Override
@@ -74,6 +78,7 @@ public class MenuPokemon implements Screen, InputProcessor {
 		batch.begin();
 		batch.draw(tFondo, 0, 0, Gdx.graphics.getWidth(),
 				Gdx.graphics.getHeight());
+		pokeSelected();
 		if (listaPokemon.size() > 0) {
 			/* El primer slot de pokemon es distinto (fondo redondo) */
 			drawMainPokemon();
@@ -83,6 +88,10 @@ public class MenuPokemon implements Screen, InputProcessor {
 			drawPokemon(i);
 		}
 		batch.end();
+	}
+
+	private void pokeSelected() {
+
 	}
 
 	private void texturesPokemon() {
@@ -95,13 +104,23 @@ public class MenuPokemon implements Screen, InputProcessor {
 	private void drawMainPokemon() {
 		Pokemon pokemon = listaPokemon.get(0);
 		if (pokemon.vivo()) {
-			batch.draw(tMainVivo, 3, 400, Gdx.graphics.getWidth() / 2,
-					Gdx.graphics.getHeight() / (float) 3.5);
+			if (selection != 0) {
+				batch.draw(tMainVivo, 3, 400, Gdx.graphics.getWidth() / 2,
+						Gdx.graphics.getHeight() / (float) 3.5);
+			} else {
+				batch.draw(tMainVivoSel, 3, 400, Gdx.graphics.getWidth() / 2,
+						Gdx.graphics.getHeight() / (float) 3.5);
+			}
 			batch.draw(tHpVivo, 120, 450, 180, tHpVivo.getHeight());
 
 		} else {
-			batch.draw(tMainMuerto, 3, 400, Gdx.graphics.getWidth() / 2,
-					Gdx.graphics.getHeight() / (float) 3.5);
+			if (selection != 0) {
+				batch.draw(tMainMuerto, 3, 400, Gdx.graphics.getWidth() / 2,
+						Gdx.graphics.getHeight() / (float) 3.5);
+			} else {
+				batch.draw(tMainMuertoSel, 3, 400, Gdx.graphics.getWidth() / 2,
+						Gdx.graphics.getHeight() / (float) 3.5);
+			}
 			batch.draw(tHpVivo, 120, 450, 180, tHpVivo.getHeight());
 		}
 		font.draw(batch, pokemon.getNombre().toUpperCase(), 160, 500);
@@ -137,12 +156,17 @@ public class MenuPokemon implements Screen, InputProcessor {
 			xNv = 410;
 			yNv = 415 - 135 * (int) (i / 2);
 			xPok = 420;
-			yPok=440- 135 * (int) (i / 2);
+			yPok = 440 - 135 * (int) (i / 2);
 		}
 		Pokemon pokemon = listaPokemon.get(i);
 		if (pokemon.vivo()) {
-			batch.draw(tVivo, x, y, Gdx.graphics.getWidth() / 2,
-					Gdx.graphics.getHeight() / (float) 4);
+			if (selection != i) {
+				batch.draw(tVivo, x, y, Gdx.graphics.getWidth() / 2,
+						Gdx.graphics.getHeight() / (float) 4);
+			} else {
+				batch.draw(tVivoSel, x, y, Gdx.graphics.getWidth() / 2,
+						Gdx.graphics.getHeight() / (float) 4);
+			}
 			batch.draw(tHpVivo, xHp, yHp);
 			font.draw(batch, pokemon.getNombre().toUpperCase(), xName, yName);
 			font.draw(batch, pokemon.getPs() + "/" + pokemon.getPsMax(), xPs,
@@ -150,8 +174,13 @@ public class MenuPokemon implements Screen, InputProcessor {
 			font.draw(batch, "Nvº " + pokemon.getNivel(), xNv, yNv);
 			batch.draw(spPokemon.get(i), xPok, yPok, 60, 60);
 		} else {
-			batch.draw(tMuerto, x, y, Gdx.graphics.getWidth() / 2,
-					Gdx.graphics.getHeight() / (float) 4);
+			if (selection != i) {
+				batch.draw(tMuerto, x, y, Gdx.graphics.getWidth() / 2,
+						Gdx.graphics.getHeight() / (float) 4);
+			} else {
+				batch.draw(tMuertoSel, x, y, Gdx.graphics.getWidth() / 2,
+						Gdx.graphics.getHeight() / (float) 4);
+			}
 			batch.draw(tHpMuerto, xHp, yHp);
 			font.draw(batch, pokemon.getNombre().toUpperCase(), xName, yName);
 			font.draw(batch, pokemon.getPs() + "/" + pokemon.getPsMax(), xPs,
@@ -198,11 +227,29 @@ public class MenuPokemon implements Screen, InputProcessor {
 			((Game) Gdx.app.getApplicationListener()).setScreen(screen);
 			break;
 		case Keys.ENTER:
+			action(selection);
 			break;
 		case Keys.DOWN:
+			if (selection != 4 && selection != 5) {
+				selection = selection + 2;
+			}
 			break;
 		case Keys.UP:
+			if (selection != 0 && selection != 1) {
+				selection = selection - 2;
+			}
 			break;
+		case Keys.RIGHT:
+			if (selection != 1 && selection != 3 && selection != 5) {
+				selection = selection + 1;
+			}
+			break;
+		case Keys.LEFT:
+			if (selection != 0 && selection != 2 && selection != 4) {
+				selection = selection - 1;
+			}
+			break;
+
 		}
 		return false;
 	}
@@ -247,6 +294,19 @@ public class MenuPokemon implements Screen, InputProcessor {
 	public boolean scrolled(int amount) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	private void action(int i) {
+
+		if (combate) {
+			if (listaPokemon.get(i).vivo()) {
+				Enfrentamiento e = (Enfrentamiento) screen;
+				e.fase = 1;
+				e.dialogo.procesarDialogo("adelante");
+				e.setIPokemon(i);
+				((Game) Gdx.app.getApplicationListener()).setScreen(e);
+			}
+		}
 	}
 
 }

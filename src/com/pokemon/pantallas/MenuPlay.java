@@ -45,8 +45,8 @@ public class MenuPlay implements Screen, InputProcessor {
 	private Mochila mochila;
 	private List<Pokemon> listaPokemon;
 
-	public MenuPlay(float x, float y, int lastPressed, String map, Mochila mochila,
-			List<Pokemon> listaPokemon) {
+	public MenuPlay(float x, float y, int lastPressed, String map,
+			Mochila mochila, List<Pokemon> listaPokemon) {
 		ArchivoGuardado.musica = null;
 		this.x = x;
 		this.y = y;
@@ -206,12 +206,12 @@ public class MenuPlay implements Screen, InputProcessor {
 	private void hacerAccion(int seleccion) {
 		switch (seleccion) {
 		case 1:
-			((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPokemon(
-					listaPokemon, this));
+			((Game) Gdx.app.getApplicationListener())
+					.setScreen(new MenuPokemon(listaPokemon, this, false));
 			break;
 		case 2:
-			((Game) Gdx.app.getApplicationListener()).setScreen(new MenuMochila(
-					mochila, this));
+			((Game) Gdx.app.getApplicationListener())
+					.setScreen(new MenuMochila(mochila, this));
 			break;
 		case 3:
 			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(x, y,

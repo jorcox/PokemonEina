@@ -253,8 +253,8 @@ public class Combate {
 		}
 	}
 	
-	public boolean getVelocidad(){
-		Pokemon aliado = entrenador.getEquipo().get(0);
+	public boolean getVelocidad(int i){
+		Pokemon aliado = entrenador.getEquipo().get(i);
 		Pokemon enemigo = this.pokemon;
 		/* El pokemon mas veloz ataca antes que el otro */
 		return aliado.getVelocidad() >= enemigo.getVelocidad();
