@@ -42,18 +42,18 @@ public class MenuPlay implements Screen, InputProcessor {
 	private boolean archivoGuardado = ArchivoGuardado.existe;
 
 	private int seleccion = 1;
-	private Mochila mochila;
 	private List<Pokemon> listaPokemon;
+	private ArchivoGuardado ctx;
 
-	public MenuPlay(float x, float y, int lastPressed, String map,
-			Mochila mochila, List<Pokemon> listaPokemon) {
+	public MenuPlay(ArchivoGuardado ctx, float x, float y, int lastPressed, String map,
+			List<Pokemon> listaPokemon) {
 		ArchivoGuardado.musica = null;
 		this.x = x;
 		this.y = y;
 		this.lastPressed = lastPressed;
 		this.map = map;
-		this.mochila = mochila;
 		this.listaPokemon = listaPokemon;
+		this.ctx = ctx;
 	}
 
 	@Override
@@ -196,7 +196,7 @@ public class MenuPlay implements Screen, InputProcessor {
 			Gdx.app.exit();
 			break;
 		case Keys.SPACE:
-			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(x, y,
+			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(ctx, x, y,
 					lastPressed, map));
 			break;
 		}
@@ -210,15 +210,14 @@ public class MenuPlay implements Screen, InputProcessor {
 					.setScreen(new MenuPokemon(listaPokemon, this, false));
 			break;
 		case 2:
-			((Game) Gdx.app.getApplicationListener())
-					.setScreen(new MenuMochila(mochila, this));
+			((Game) Gdx.app.getApplicationListener()).setScreen(new MenuMochila(ctx, this));
 			break;
 		case 3:
-			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(x, y,
+			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(ctx, x, y,
 					lastPressed, map));
 			break;
 		case 4:
-			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(x, y,
+			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(ctx, x, y,
 					lastPressed, map));
 			break;
 		default:

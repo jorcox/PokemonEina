@@ -3,9 +3,11 @@ package com.pokemon.utilidades;
 import java.io.File;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.Vector2;
 import com.pokemon.PokemonAdaByron;
+import com.pokemon.mochila.Mochila;
 
 /**
  * Contiene los datos de la partida del jugador
@@ -51,6 +53,16 @@ public class ArchivoGuardado {
 	 * Dinero actual del jugador
 	 */
 	public static float dineroJugador;
+	
+	/*
+	 * Mochila del jugador
+	 */
+	public Mochila mochila;
+	
+	/*
+	 * Pantalla de retorno
+	 */
+	public static Screen pantallaRetorno;
 
 	public static void cargar() {
 		comprobarExistencia();
@@ -75,6 +87,10 @@ public class ArchivoGuardado {
 			carpeta.mkdir();
 			existe = false;
 		}
+	}
+	
+	public ArchivoGuardado() {
+		mochila = new Mochila();
 	}
 
 }

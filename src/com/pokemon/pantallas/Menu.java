@@ -32,8 +32,11 @@ public class Menu implements Screen, InputProcessor {
 	private boolean archivoGuardado = ArchivoGuardado.existe;
 
 	private int seleccion = 2;
+	
+	private ArchivoGuardado ctx;
 
-	public Menu() {
+	public Menu(ArchivoGuardado ctx) {
+		this.ctx = ctx;
 		ArchivoGuardado.musica = null;
 	}
 
@@ -240,14 +243,14 @@ public class Menu implements Screen, InputProcessor {
 				Gdx.app.log(PokemonAdaByron.LOG, "Crear nueva partida");
 				// TODO
 				((Game) Gdx.app.getApplicationListener())
-				.setScreen(new Bienvenida(game));
+				.setScreen(new Bienvenida(ctx, game));
 			}
 		} else if (i == 2) {
 			
 				Gdx.app.log(PokemonAdaByron.LOG, "Crear nueva partida");
 				//m.stop();
 				((Game) Gdx.app.getApplicationListener())
-						.setScreen(new Bienvenida(game));
+						.setScreen(new Bienvenida(ctx, game));
 		} else if (i == 3) {
 			Gdx.app.log(PokemonAdaByron.LOG, "Creditos");
 			// TODO

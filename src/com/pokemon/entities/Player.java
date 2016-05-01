@@ -24,6 +24,7 @@ import com.pokemon.mochila.Pokeball;
 import com.pokemon.mochila.Superball;
 import com.pokemon.pantallas.CombateP;
 import com.pokemon.pantallas.Play;
+import com.pokemon.utilidades.ArchivoGuardado;
 
 public class Player extends Sprite {
 
@@ -52,14 +53,15 @@ public class Player extends Sprite {
 
 	public boolean SpacePressed = false;
 
-	public Mochila mochila;
 	private int p;
 	
 	ArrayList<NPC> npcs;
 
 	private int lastPressed; // A=1, W=2, S=3, D=4
+	
+	private ArchivoGuardado ctx;
 
-	public Player(TextureAtlas playerAtlas, TiledMapTileLayer collisionLayer, MapLayer objectLayer, MapLayer transLayer,
+	public Player(ArchivoGuardado ctx, TextureAtlas playerAtlas, TiledMapTileLayer collisionLayer, MapLayer objectLayer, MapLayer transLayer,
 			ArrayList<NPC> npcs, Dialogo dialogo, Play play) {
 		super(new Animation(1 / 10f, playerAtlas.findRegions("cara")).getKeyFrame(0));
 		cara = new Animation(1 / 10f, playerAtlas.findRegions("cara"));
@@ -77,22 +79,17 @@ public class Player extends Sprite {
 		this.dialogo = dialogo;
 		this.play = play;
 		this.npcs = npcs;
+		this.ctx = ctx;
 
-		mochila = new Mochila();
+		this.ctx.mochila = new Mochila();
 		p = 0;
 
 		// Objetos de prueba metidos a pelo
-		mochila.add(new Pocion());
-		mochila.add(new Antidoto());
-		mochila.add(new Antidoto());
-		mochila.add(new Antidoto());
-		mochila.add(new Pocion());
-		mochila.add(new Pocion());
-		mochila.add(new Antidoto());
-		mochila.add(new Pocion());
-		mochila.add(new Pokeball());
-		mochila.add(new Superball());
-		mochila.add(new Pokeball());
+		this.ctx.mochila.add(new Pocion());
+		this.ctx.mochila.add(new Antidoto());
+		this.ctx.mochila.add(new Pokeball());
+		this.ctx.mochila.add(new Superball());
+		this.ctx.mochila.add(new Pokeball());
 		
 	}
 
@@ -179,7 +176,7 @@ public class Player extends Sprite {
 				/* Dispara evento si estan muy cerca jugador y objeto */
 				if (play.distance(t) < 50) {
 					((Game) Gdx.app.getApplicationListener())
-							.setScreen(new Play(Integer.parseInt((String) t.getProperties().get("x")),
+							.setScreen(new Play(ctx, Integer.parseInt((String) t.getProperties().get("x")),
 									Integer.parseInt((String) t.getProperties().get("y")), getLastPressed(),
 									t.getProperties().get("mapa") + ".tmx"));
 					break;
@@ -347,8 +344,8 @@ public class Player extends Sprite {
 						.getTile().getProperties().containsKey("combat")) {
 			double combatOdds = new Random().nextDouble();
 			if (combatOdds < 0.02) {
-				((Game) Gdx.app.getApplicationListener()).setScreen(new CombateP(
-						this, play.jugador, 1,play));
+				((Game) Gdx.app.getApplicationListener()).setScreen(new CombateP(ctx, 
+						this, play.jugador, 1, play));
 			}
 		}
 	}
