@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import pokemon.Pokemon;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenManager;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -79,7 +80,8 @@ public class Play implements Screen, InputProcessor {
 		Gdx.input.setInputProcessor(this);
 
 		/* Prepara fuente para escritura */
-		generator = new FreeTypeFontGenerator(Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
+		generator = new FreeTypeFontGenerator(
+				Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 35;
 		font = generator.generateFont(parameter);
@@ -100,30 +102,35 @@ public class Play implements Screen, InputProcessor {
 		renderer = new TextureMapObjectRenderer(map);
 
 		camera = new OrthographicCamera();
-		
+
 		playerAtlas = new TextureAtlas("res/imgs/protagonista.pack");
-		
-	
+
 		/* Carga de NPCs */
 		MapLayer npcLayer = map.getLayers().get("Personajes");
 		for (MapObject o : npcLayer.getObjects()) {
 			TextureMapObject t = (TextureMapObject) o;
-			String dirVista = (String) t.getProperties().get("dir");  // Cara Derecha Izquierda Espalda
-			int disVista = Integer.parseInt((String) t.getProperties().get("dis"));
-			TextureAtlas personajePack = new TextureAtlas("res/imgs/" + (String) t.getProperties().get("pack") + ".pack");
-			NPC npc = new NPC(personajePack, new Animation(1 / 10f, playerAtlas.findRegions(dirVista)), disVista, this);
+			String dirVista = (String) t.getProperties().get("dir"); // Cara
+																		// Derecha
+																		// Izquierda
+																		// Espalda
+			int disVista = Integer.parseInt((String) t.getProperties().get(
+					"dis"));
+			TextureAtlas personajePack = new TextureAtlas("res/imgs/"
+					+ (String) t.getProperties().get("pack") + ".pack");
+			NPC npc = new NPC(personajePack, new Animation(1 / 10f,
+					playerAtlas.findRegions(dirVista)), disVista, this);
 			npc.setPosition(t.getX(), t.getY());
 			npcs.add(npc);
 		}
-		
-		/* Player */		
-		player = new Player(playerAtlas, (TiledMapTileLayer) map.getLayers().get("Entorno"),
-				map.getLayers().get("Objetos"), map.getLayers().get("Trans"), npcs, dialogo, this);
+
+		/* Player */
+		player = new Player(playerAtlas, (TiledMapTileLayer) map.getLayers()
+				.get("Entorno"), map.getLayers().get("Objetos"), map
+				.getLayers().get("Trans"), npcs, dialogo, this);
 		player.setPosition(x, y);
 		player.setLastPressed(lastPressed);
 		equipoPokemon();
-		
-		
+
 		Gdx.input.setInputProcessor(this);
 		batch = new SpriteBatch();
 		box = new Sprite(new Texture("res/imgs/OptionBox.png"));
@@ -146,7 +153,8 @@ public class Play implements Screen, InputProcessor {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		tweenManager.update(delta);
 
-		camera.position.set(player.getX() + (player.getWidth() / 2), player.getY() + (player.getHeight() / 2), 0);
+		camera.position.set(player.getX() + (player.getWidth() / 2),
+				player.getY() + (player.getHeight() / 2), 0);
 		camera.zoom = (float) 1;
 		camera.update();
 		renderer.setView(camera);
@@ -162,7 +170,7 @@ public class Play implements Screen, InputProcessor {
 		/* NPC */
 		for (NPC npc : npcs) {
 			npc.draw(renderer.getBatch());
-		}		
+		}
 		renderer.getBatch().end();
 
 		if (optionsVisible) {
@@ -178,8 +186,8 @@ public class Play implements Screen, InputProcessor {
 
 	public void openMenuPlay() {
 		((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPlay(player
-				.getX(), player.getY(), player.getLastPressed(), map_, player.mochila,
-				player.pokemon));
+				.getX(), player.getY(), player.getLastPressed(), map_,
+				player.mochila, jugador.getEquipo()));
 	}
 
 	@Override
@@ -233,8 +241,8 @@ public class Play implements Screen, InputProcessor {
 			player.velocity.x = 0;
 			player.animationTime = 0;
 			player.setLastPressed(2);
-			if (lastPressed == 0){
-				lastPressed = 2;				
+			if (lastPressed == 0) {
+				lastPressed = 2;
 			}
 			player.WPressed = true;
 			break;
@@ -243,8 +251,8 @@ public class Play implements Screen, InputProcessor {
 			player.velocity.y = 0;
 			player.animationTime = 0;
 			player.setLastPressed(1);
-			if (lastPressed == 0){
-				lastPressed = 1;				
+			if (lastPressed == 0) {
+				lastPressed = 1;
 			}
 			player.APressed = true;
 			break;
@@ -254,8 +262,8 @@ public class Play implements Screen, InputProcessor {
 			player.velocity.x = 0;
 			player.animationTime = 0;
 			player.setLastPressed(3);
-			if (lastPressed == 0){
-				lastPressed = 3;				
+			if (lastPressed == 0) {
+				lastPressed = 3;
 			}
 			player.SPressed = true;
 			break;
@@ -264,8 +272,8 @@ public class Play implements Screen, InputProcessor {
 			player.velocity.y = 0;
 			player.animationTime = 0;
 			player.setLastPressed(4);
-			if (lastPressed == 0){
-				lastPressed = 4;				
+			if (lastPressed == 0) {
+				lastPressed = 4;
 			}
 			player.DPressed = true;
 			break;
@@ -287,10 +295,13 @@ public class Play implements Screen, InputProcessor {
 						}
 
 						if (l1.contains("${NOMBRE}")) {
-							l1 = l1.replace("${NOMBRE}", ArchivoGuardado.nombreJugador);
+							l1 = l1.replace("${NOMBRE}",
+									ArchivoGuardado.nombreJugador);
 						} else if (l2.contains("${NOMBRE}")) {
-							l2 = l2.replace("${NOMBRE}", ArchivoGuardado.nombreJugador);
-						} else if (l1.contains("${CREACION_NOMBRE}") || l2.contains("${CREACION_NOMBRE}")) {
+							l2 = l2.replace("${NOMBRE}",
+									ArchivoGuardado.nombreJugador);
+						} else if (l1.contains("${CREACION_NOMBRE}")
+								|| l2.contains("${CREACION_NOMBRE}")) {
 							l1 = l1.replace("${CREACION_NOMBRE}", "");
 							l2 = l2.replace("${CREACION_NOMBRE}", "");
 							ArchivoGuardado.nombreJugador = "Sara";
@@ -301,8 +312,8 @@ public class Play implements Screen, InputProcessor {
 
 						/*
 						 * if (script[counter].contains("(OPTION)")) {
-						 * script[counter] = script[counter].replace( "(OPTION)",
-						 * ""); optionsVisible = true; }
+						 * script[counter] = script[counter].replace(
+						 * "(OPTION)", ""); optionsVisible = true; }
 						 */
 					} else {
 						dialogo.limpiar();
@@ -326,13 +337,18 @@ public class Play implements Screen, InputProcessor {
 			break;
 		case Keys.C:
 			((Game) Gdx.app.getApplicationListener()).setScreen(new CombateP(
-					player, jugador, true, "Gvalles"));
+					player, jugador, 1));
+			break;
+		case Keys.V:
+			((Game) Gdx.app.getApplicationListener())
+					.setScreen(new CombateEntrenador(player, jugador,
+							"reverte", 0));
 			break;
 		}
 
 		return false;
 	}
-	
+
 	/**
 	 * Gestiona las interacciones entre el jugador y el objeto obj, que puede
 	 * ser un cartel, pokeball, etc.
@@ -344,7 +360,7 @@ public class Play implements Screen, InputProcessor {
 		if (obj.getProperties().containsKey("cartel")) {
 			optionsVisible = true;
 			dialogando = true;
-			
+
 			/* Leer cartel */
 			String value = (String) obj.getProperties().get("cartel");
 			dialogo.procesarDialogo("cartel_" + value);
@@ -358,7 +374,8 @@ public class Play implements Screen, InputProcessor {
 			/* Leer objeto recogido */
 			String value = (String) obj.getProperties().get("item");
 			dialogo.procesarDialogo("item_" + value);
-			dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
+			dialogo.setLineas(dialogo.siguienteLinea(),
+					dialogo.siguienteLinea());
 
 			/* Introduce en mochila */
 			if (value.equals("Poción")) {
@@ -371,7 +388,7 @@ public class Play implements Screen, InputProcessor {
 			obj.getProperties().put("used", "true");
 		}
 	}
-	
+
 	/**
 	 * Calcula la distancia entre el jugador y el objeto de texturas t.
 	 * 
@@ -466,13 +483,19 @@ public class Play implements Screen, InputProcessor {
 
 	public void setJugador() {
 		jugador = new Jugador("Sara", false);
+		equipoPokemon();
 	}
 
 	public void equipoPokemon() {
-		ArrayList<Pokemon> arrayP=new ArrayList<Pokemon>();
+		ArrayList<Pokemon> arrayP = new ArrayList<Pokemon>();
 		try {
 			BaseDatos db = new BaseDatos("pokemon_base");
+			arrayP.add(db.getPokemon(0));
 			arrayP.add(db.getPokemon(1));
+			arrayP.add(db.getPokemon(2));
+			arrayP.add(db.getPokemon(3));
+			arrayP.add(db.getPokemon(4));
+			arrayP.add(db.getPokemon(5));
 			jugador.setEquipo(arrayP);
 			db.shutdown();
 		} catch (Exception e) {

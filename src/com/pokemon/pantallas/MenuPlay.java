@@ -1,5 +1,8 @@
 package com.pokemon.pantallas;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -40,10 +43,10 @@ public class MenuPlay implements Screen, InputProcessor {
 
 	private int seleccion = 1;
 	private Mochila mochila;
-	private Pokemon[] listaPokemon;
+	private List<Pokemon> listaPokemon;
 
 	public MenuPlay(float x, float y, int lastPressed, String map, Mochila mochila,
-			Pokemon[] listaPokemon) {
+			List<Pokemon> listaPokemon) {
 		ArchivoGuardado.musica = null;
 		this.x = x;
 		this.y = y;

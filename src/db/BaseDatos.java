@@ -160,8 +160,8 @@ public class BaseDatos {
 
 	public static void main(String[] args) {
 		IntroducirDatos pb = new IntroducirDatos();
-		// pb.crearPokemon();
-		//pb.introducirPokemon(25, 69);
+		//pb.crearPokemon();
+		//pb.introducirPokemon();
 		// LeerDatos pb=new LeerDatos();
 		// pb.introducirPokemon();
 		// pb.introducirMovimientos();
@@ -241,6 +241,8 @@ public class BaseDatos {
 			poke.setHabilidades(habilidades);
 			poke.setExperiencia(rs.getInt("experiencia"));
 			poke.setEstado(rs.getInt("estado"));
+			poke.setId(id);
+			poke.setEntrenador(rs.getInt("entrenador"));
 			rs.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
