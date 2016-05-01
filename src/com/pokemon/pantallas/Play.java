@@ -235,7 +235,7 @@ public class Play implements Screen, InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		player.checkCombat();
+		//player.checkCombat();
 		switch (keycode) {
 		case Keys.W:
 			player.velocity.y = player.speed;
@@ -369,9 +369,11 @@ public class Play implements Screen, InputProcessor {
 		} else if (obj.getProperties().containsKey("item") && 
 				obj.getProperties().containsKey("used") && 
 				obj.getProperties().get("used").equals("false")) {
+			obj.setScaleX(0);
+			obj.setScaleY(0);
 			optionsVisible = true;
 			dialogando = true;
-
+			
 			/* Leer objeto recogido */
 			String value = (String) obj.getProperties().get("item");
 			dialogo.procesarDialogo("item_" + value);
