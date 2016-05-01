@@ -18,7 +18,7 @@ public class MenuMochila implements Screen, InputProcessor {
 	private static final int NUM_SECCIONES = 3; /* Secciones de la mochila */
 	
 	private Mochila mochila;
-	private MenuPlay menuPlay;
+	private Screen screen;
 	private int first;	/* Indice del primer elemento de la lista en mostrarse */
 	private int pointer;	/* Indice del seleccionado de los MAX_ITEMS que caben */
 	private int seccion;
@@ -29,9 +29,9 @@ public class MenuMochila implements Screen, InputProcessor {
 			Gdx.files.internal("res/fuentes/pokemon.fnt"),
 			Gdx.files.internal("res/fuentes/pokemon.png"), false);
 	
-	public MenuMochila(Mochila mochila, MenuPlay menuPlay) {
+	public MenuMochila(Mochila mochila, Screen screen) {
 		this.mochila = mochila;
-		this.menuPlay = menuPlay;
+		this.screen = screen;
 		
 		/* Empieza mostrando primera seccion (objeto) marcando primer objeto */
 		seccion = 0;
@@ -136,7 +136,7 @@ public class MenuMochila implements Screen, InputProcessor {
 		switch (keycode) {
 		case Keys.SPACE:
 			/* Vuelve al menu */
-			((Game) Gdx.app.getApplicationListener()).setScreen(menuPlay);
+			((Game) Gdx.app.getApplicationListener()).setScreen(screen);
 			break;
 		case Keys.ENTER:
 			break;

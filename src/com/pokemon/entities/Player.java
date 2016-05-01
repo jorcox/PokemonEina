@@ -51,7 +51,6 @@ public class Player extends Sprite {
 	public boolean SpacePressed = false;
 
 	public Mochila mochila;
-	public Pokemon[] pokemon;
 	private int p;
 	
 	ArrayList<NPC> npcs;
@@ -78,7 +77,6 @@ public class Player extends Sprite {
 		this.npcs = npcs;
 
 		mochila = new Mochila();
-		pokemon = new Pokemon[6];
 		p = 0;
 
 		// Objetos de prueba metidos a pelo
@@ -94,13 +92,6 @@ public class Player extends Sprite {
 		mochila.add(new Superball());
 		mochila.add(new Pokeball());
 		
-		// Pokemon vacios de prueba metido a pelo
-		pokemon[0] = new Pokemon();
-		pokemon[1] = new Pokemon();
-		pokemon[2] = new Pokemon();
-		pokemon[3] = new Pokemon();
-		pokemon[4] = new Pokemon();
-		pokemon[5] = new Pokemon();
 	}
 
 	@Override

@@ -15,8 +15,9 @@ public class CombateP extends Enfrentamiento {
 
 
 
-	public CombateP(Player player, Jugador jugador) {
+	public CombateP(Player player, Jugador jugador, int fase) {
 		super(player,jugador);
+		this.fase=fase;
 		dialogo.procesarDialogo("salvaje");
 	}
 

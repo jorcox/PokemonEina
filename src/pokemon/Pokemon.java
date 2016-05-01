@@ -22,6 +22,7 @@ public class Pokemon {
 	private int experiencia;
 	private int estado;
 	private int id;
+	private int entrenador;
 	
 	public String getNombre() {
 		return nombre;
@@ -148,6 +149,12 @@ public class Pokemon {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	public int getEntrenador() {
+		return entrenador;
+	}
+	public void setEntrenador(int entrenador) {
+		this.entrenador = entrenador;
 	}
 	
 	

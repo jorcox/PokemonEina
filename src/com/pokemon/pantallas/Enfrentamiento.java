@@ -8,6 +8,7 @@ import pokemon.Pokemon;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenManager;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -21,6 +22,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.pokemon.dialogo.Dialogo;
 import com.pokemon.entities.Player;
+import com.pokemon.mochila.Mochila;
 import com.pokemon.tween.SpriteAccessor;
 
 import core.Combate;
@@ -30,13 +32,15 @@ import entrenadores.Jugador;
 
 public class Enfrentamiento implements Screen, InputProcessor {
 
-	protected int fase = 1;
+	protected int fase;
 	protected int vida = 100;
 	protected int vidaS = 100;
 	protected int actualPs;
 	protected int actualPsS;
 	protected Pokemon pkmn;
 	protected Pokemon pkmnpokemonEnemigo;
+	protected int iPokemonEnemigo = 0;
+	protected int iPokemon = 0;
 	protected int tamanoPokemon = 1;
 	protected int xPokemon = 100;
 	protected int xPokemonEnemigo = 450;
@@ -45,6 +49,7 @@ public class Enfrentamiento implements Screen, InputProcessor {
 	protected TweenManager tweenManager;
 	protected Combate combate;
 	protected Entrenador en;
+	private Mochila mochila;
 	protected boolean orden;
 	protected float trans = 1;
 	protected int intervalo = 4;
@@ -53,20 +58,22 @@ public class Enfrentamiento implements Screen, InputProcessor {
 	protected int seleccionAtaque = 1;
 	protected Dialogo dialogo;
 	protected Jugador jugador;
+	protected Player player;
 	BitmapFont font, fontC;
 	BaseDatos db;
 
 	SpriteBatch batch;
 	Texture tipos, barraVida;
 	TextureRegion[] regionesTipo, regionesTipoSel, barrasVida;
-	protected Sprite bg, base, baseEnemy, message, pokemonEnemigo, pokemon, bgOp,
-			bgOpTrans, boton, luchar, mochila, pokemonOp, huir, dedo,
-			cajaLuchar, tipo1, tipo2, tipo3, tipo4, cajaPkmn, cajaPkmnpokemonEnemigo,
-			entrenador, protagonista;
+	protected Sprite bg, base, baseEnemy, message, pokemonEnemigo, pokemon,
+			bgOp, bgOpTrans, boton, luchar, mochilaS, pokemonOp, huir, dedo,
+			cajaLuchar, tipo1, tipo2, tipo3, tipo4, cajaPkmn,
+			cajaPkmnpokemonEnemigo, entrenador, protagonista;
 
 	public Enfrentamiento(Player player, Jugador jugador) {
 		dialogo = new Dialogo("es", "ES");
-		this.jugador=jugador;
+		this.jugador = jugador;
+		this.player = player;
 		pkmn = jugador.getPokemon(0);
 		try {
 			db = new BaseDatos("pokemon_base");
@@ -93,7 +100,7 @@ public class Enfrentamiento implements Screen, InputProcessor {
 		parameterC.size = 30;
 		font = generator.generateFont(parameter); // font size 35 pixels
 		fontC = generator.generateFont(parameterC);
-		
+
 	}
 
 	@Override
@@ -160,12 +167,14 @@ public class Enfrentamiento implements Screen, InputProcessor {
 		bgOpTrans = new Sprite(new Texture("res/imgs/batallas/bgOpTrans.png"));
 		dedo = new Sprite(new Texture("res/imgs/batallas/dedo.png"));
 		luchar = new Sprite(new Texture("res/imgs/batallas/luchar.png"));
-		mochila = new Sprite(new Texture("res/imgs/batallas/mochila.png"));
+		mochilaS = new Sprite(new Texture("res/imgs/batallas/mochila.png"));
 		pokemonOp = new Sprite(new Texture("res/imgs/batallas/pokemon.png"));
 		huir = new Sprite(new Texture("res/imgs/batallas/huir.png"));
 		message = new Sprite(new Texture("res/imgs/batallas/battleMessage.png"));
 		pokemonEnemigo = new Sprite(new Texture("res/imgs/pokemon/mew.png"));
-		pokemon = new Sprite(new Texture("res/imgs/pokemon/espalda/25.png"));
+		pokemon = new Sprite(new Texture("res/imgs/pokemon/espalda/"
+				+ jugador.getEquipo().get(iPokemon).getNombre().toLowerCase()
+				+ ".png"));
 		cajaLuchar = new Sprite(
 				new Texture("res/imgs/batallas/battleFight.png"));
 		tipos = new Texture("res/imgs/batallas/battleFightButtons.png");
@@ -226,7 +235,7 @@ public class Enfrentamiento implements Screen, InputProcessor {
 		case 2:
 			dedo.setPosition(265, 120);
 			font.draw(batch, "Mochila", 250, 35);
-			mochila.setPosition(230, 40);
+			mochilaS.setPosition(230, 40);
 			break;
 		case 3:
 			dedo.setPosition(415, 120);
@@ -246,8 +255,8 @@ public class Enfrentamiento implements Screen, InputProcessor {
 	private void resetSelection() {
 		luchar.setPosition(80, 30);
 		luchar.setSize(120, 50);
-		mochila.setPosition(230, 30);
-		mochila.setSize(120, 50);
+		mochilaS.setPosition(230, 30);
+		mochilaS.setSize(120, 50);
 		pokemonOp.setPosition(380, 30);
 		pokemonOp.setSize(120, 50);
 		huir.setPosition(530, 30);
@@ -292,7 +301,7 @@ public class Enfrentamiento implements Screen, InputProcessor {
 	public void dibujarMenuCombate() {
 		updateSelection();
 		luchar.draw(batch);
-		mochila.draw(batch);
+		mochilaS.draw(batch);
 		pokemonOp.draw(batch);
 		huir.draw(batch);
 		dedo.draw(batch);
@@ -515,7 +524,7 @@ public class Enfrentamiento implements Screen, InputProcessor {
 		}
 
 	}
-	
+
 	public void aparicionPokemonEnemigo(Sprite pokemon) {
 		pokemon.setSize(tamanoPokemon, tamanoPokemon);
 		pokemon.setPosition(xPokemonEnemigo, 350);
@@ -557,6 +566,26 @@ public class Enfrentamiento implements Screen, InputProcessor {
 				trans = 1;
 				pokemonEnemigo.setAlpha(1);
 			}
+		}
+	}
+
+	public void elegirOpcion() {
+		switch (seleccion) {
+		case 1: // luchar
+			fase = 4;
+			break;
+		case 2: // mochila
+			((Game) Gdx.app.getApplicationListener())
+					.setScreen(new MenuMochila(mochila, this));
+			break;
+		case 3: // pokemon
+			((Game) Gdx.app.getApplicationListener())
+					.setScreen(new MenuPokemon(jugador.getEquipo(), this));
+			break;
+		case 4: // huir
+			break;
+		default:
+			break;
 		}
 	}
 
