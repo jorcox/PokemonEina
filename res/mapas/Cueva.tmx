@@ -13,12 +13,22 @@
   <image source="../Tilesets/Entorno.png" trans="00aa00" width="160" height="32"/>
   <tile id="0">
    <properties>
-    <property name="blocked" value=""/>
+    <property name="blocked" value="true"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="combat" value="true"/>
    </properties>
   </tile>
  </tileset>
  <tileset firstgid="13886" name="Entorno1" tilewidth="32" tileheight="32" tilecount="10" columns="10">
   <image source="../Tilesets/Entorno1.png" trans="00aa00" width="320" height="32"/>
+  <tile id="2">
+   <properties>
+    <property name="combat" value="true"/>
+   </properties>
+  </tile>
  </tileset>
  <objectgroup name="Trans">
   <object id="20" gid="13891" x="800" y="1344" width="32" height="32">
@@ -474,6 +484,9 @@
 </data>
  </layer>
  <objectgroup name="Objetos">
+  <properties>
+   <property name="item" value="Poción"/>
+  </properties>
   <object id="1" gid="12352" x="2718.67" y="1116" width="32" height="32">
    <properties>
     <property name="cartel" value="cueva1"/>
@@ -489,7 +502,12 @@
   <object id="7" gid="9221" x="1668" y="2241.33" width="32" height="32"/>
   <object id="8" gid="9221" x="1498.67" y="2180" width="32" height="32"/>
   <object id="10" gid="9221" x="1693.33" y="1566.67" width="32" height="32"/>
-  <object id="12" gid="9221" x="669.333" y="924" width="32" height="32"/>
+  <object id="12" gid="9221" x="672.333" y="929" width="32" height="32">
+   <properties>
+    <property name="item" value="Poción"/>
+    <property name="used" value="false"/>
+   </properties>
+  </object>
   <object id="14" gid="9221" x="1374.67" y="798.667" width="32" height="32"/>
  </objectgroup>
  <layer name="Personajes" width="100" height="100">
