@@ -68,14 +68,16 @@ public class Play implements Screen, InputProcessor {
 	private Stage stage;
 	private ArrayList<NPC> npcs = new ArrayList<>();
 	private boolean dialogando;
+	private ArchivoGuardado ctx;
 
-	public Play(float x, float y, int lastPressed, String mapa) {
+	public Play(ArchivoGuardado ctx, float x, float y, int lastPressed, String mapa) {
 		dialogo = new Dialogo("es", "ES");
 		this.x = x;
 		this.y = y;
 		this.lastPressed = lastPressed;
 		this.map_ = mapa;
 		dialogando = false;
+		this.ctx = ctx;
 
 		Gdx.input.setInputProcessor(this);
 
@@ -124,7 +126,7 @@ public class Play implements Screen, InputProcessor {
 		}
 
 		/* Player */
-		player = new Player(playerAtlas, (TiledMapTileLayer) map.getLayers()
+		player = new Player(ctx, playerAtlas, (TiledMapTileLayer) map.getLayers()
 				.get("Entorno"), map.getLayers().get("Objetos"), map
 				.getLayers().get("Trans"), npcs, dialogo, this);
 		player.setPosition(x, y);
@@ -185,9 +187,8 @@ public class Play implements Screen, InputProcessor {
 	}
 
 	public void openMenuPlay() {
-		((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPlay(player
-				.getX(), player.getY(), player.getLastPressed(), map_,
-				player.mochila, jugador.getEquipo()));
+		((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPlay(ctx, player
+				.getX(), player.getY(), player.getLastPressed(), map_, jugador.getEquipo()));
 	}
 
 	@Override
@@ -338,11 +339,11 @@ public class Play implements Screen, InputProcessor {
 			break;
 		case Keys.C:
 			((Game) Gdx.app.getApplicationListener()).setScreen(new CombateP(
-					player, jugador, 1));
+					ctx, player, jugador, 1));
 			break;
 		case Keys.V:
 			((Game) Gdx.app.getApplicationListener())
-					.setScreen(new CombateEntrenador(player, jugador,
+					.setScreen(new CombateEntrenador(ctx, player, jugador,
 							"reverte", 0));
 			break;
 		}
@@ -382,9 +383,9 @@ public class Play implements Screen, InputProcessor {
 
 			/* Introduce en mochila */
 			if (value.equals("Poción")) {
-				player.mochila.add(new Pocion());
+				ctx.mochila.add(new Pocion());
 			} else if (value.equals("Antídoto")) {
-				player.mochila.add(new Antidoto());
+				ctx.mochila.add(new Antidoto());
 			}
 			
 			/* Asi no se puede volver a coger ese item */

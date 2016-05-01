@@ -24,6 +24,7 @@ import com.pokemon.dialogo.Dialogo;
 import com.pokemon.entities.Player;
 import com.pokemon.mochila.Mochila;
 import com.pokemon.tween.SpriteAccessor;
+import com.pokemon.utilidades.ArchivoGuardado;
 
 import core.Combate;
 import db.BaseDatos;
@@ -49,7 +50,6 @@ public class Enfrentamiento implements Screen, InputProcessor {
 	protected TweenManager tweenManager;
 	protected Combate combate;
 	protected Entrenador en;
-	private Mochila mochila;
 	protected boolean orden;
 	protected float trans = 1;
 	protected int intervalo = 4;
@@ -69,8 +69,10 @@ public class Enfrentamiento implements Screen, InputProcessor {
 			bgOp, bgOpTrans, boton, luchar, mochilaS, pokemonOp, huir, dedo,
 			cajaLuchar, tipo1, tipo2, tipo3, tipo4, cajaPkmn,
 			cajaPkmnpokemonEnemigo, entrenador, protagonista;
+	private ArchivoGuardado ctx;
 
-	public Enfrentamiento(Player player, Jugador jugador) {
+	public Enfrentamiento(ArchivoGuardado ctx, Player player, Jugador jugador) {
+		this.ctx = ctx;
 		dialogo = new Dialogo("es", "ES");
 		this.jugador = jugador;
 		this.player = player;
@@ -576,7 +578,7 @@ public class Enfrentamiento implements Screen, InputProcessor {
 			break;
 		case 2: // mochila
 			((Game) Gdx.app.getApplicationListener())
-					.setScreen(new MenuMochila(mochila, this));
+					.setScreen(new MenuMochila(ctx, this));
 			break;
 		case 3: // pokemon
 			((Game) Gdx.app.getApplicationListener())

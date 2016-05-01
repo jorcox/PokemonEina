@@ -52,8 +52,12 @@ public class Bienvenida implements Screen, InputProcessor {
 	private boolean optionsVisible = false;
 	
 	private Dialogo dialogo;
+	
+	private ArchivoGuardado ctx;
 
-	public Bienvenida(PokemonAdaByron game) {
+	public Bienvenida(ArchivoGuardado ctx, PokemonAdaByron game) {
+		this.ctx = ctx;
+		
 		dialogo = new Dialogo("es", "ES");
 		//super("es", "ES");
 		this.game = game;
@@ -174,7 +178,7 @@ public class Bienvenida implements Screen, InputProcessor {
 				} else {
 					m.stop();
 					((Game) Gdx.app.getApplicationListener())
-							.setScreen(new Play(60,60,3,"Tranvia_n.tmx"));
+							.setScreen(new Play(ctx, 60,60,3,"Tranvia_n.tmx"));
 				}
 				break;
 			case (Keys.UP):

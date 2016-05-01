@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.pokemon.entities.Player;
 import com.pokemon.tween.SpriteAccessor;
+import com.pokemon.utilidades.ArchivoGuardado;
 
 import entrenadores.Jugador;
 
@@ -15,8 +16,8 @@ public class CombateP extends Enfrentamiento {
 
 
 
-	public CombateP(Player player, Jugador jugador, int fase) {
-		super(player,jugador);
+	public CombateP(ArchivoGuardado ctx, Player player, Jugador jugador, int fase) {
+		super(ctx, player,jugador);
 		this.fase=fase;
 		dialogo.procesarDialogo("salvaje");
 	}
