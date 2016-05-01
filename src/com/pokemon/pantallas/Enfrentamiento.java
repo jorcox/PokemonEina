@@ -61,6 +61,7 @@ public class Enfrentamiento implements Screen, InputProcessor {
 	protected Player player;
 	BitmapFont font, fontC;
 	BaseDatos db;
+	protected Screen screen;
 
 	SpriteBatch batch;
 	Texture tipos, barraVida;
@@ -71,28 +72,24 @@ public class Enfrentamiento implements Screen, InputProcessor {
 			cajaPkmnpokemonEnemigo, entrenador, protagonista;
 	private ArchivoGuardado ctx;
 
-	public Enfrentamiento(ArchivoGuardado ctx, Player player, Jugador jugador) {
+	public Enfrentamiento(ArchivoGuardado ctx, Player player, Jugador jugador, Screen screen) {
 		this.ctx = ctx;
 		dialogo = new Dialogo("es", "ES");
 		this.jugador = jugador;
 		this.player = player;
-		pkmn = jugador.getPokemon(0);
+		this.screen = screen;
 		try {
 			db = new BaseDatos("pokemon_base");
 
-			pkmnpokemonEnemigo = db.getPokemon(0);
+			pkmnpokemonEnemigo = db.getPokemon(3);
 			db.shutdown();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		List<Pokemon> lPoke = new ArrayList<Pokemon>();
-		lPoke.add(pkmn);
-		actualPs = pkmn.getPs();
 		actualPsS = pkmnpokemonEnemigo.getPs();
-		en = new Jugador("Sara", true);
-		en.setEquipo(lPoke);
-		combate = new Combate(en, pkmnpokemonEnemigo);
-		orden = combate.getVelocidad();
+		combate = new Combate(jugador, pkmnpokemonEnemigo);
+		orden = combate.getVelocidad(iPokemon);
 		Gdx.input.setInputProcessor(this);
 		generator = new FreeTypeFontGenerator(
 				Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
@@ -173,7 +170,8 @@ public class Enfrentamiento implements Screen, InputProcessor {
 		pokemonOp = new Sprite(new Texture("res/imgs/batallas/pokemon.png"));
 		huir = new Sprite(new Texture("res/imgs/batallas/huir.png"));
 		message = new Sprite(new Texture("res/imgs/batallas/battleMessage.png"));
-		pokemonEnemigo = new Sprite(new Texture("res/imgs/pokemon/mew.png"));
+		pokemonEnemigo = new Sprite(new Texture("res/imgs/pokemon/"
+				+ pkmnpokemonEnemigo.getNombre().toLowerCase() + ".png"));
 		pokemon = new Sprite(new Texture("res/imgs/pokemon/espalda/"
 				+ jugador.getEquipo().get(iPokemon).getNombre().toLowerCase()
 				+ ".png"));
@@ -269,7 +267,7 @@ public class Enfrentamiento implements Screen, InputProcessor {
 	 * 
 	 */
 	public void regionesTipos() {
-		habilidades = pkmn.getHabilidades();
+		habilidades = jugador.getEquipo().get(iPokemon).getHabilidades();
 		regionesTipo = new TextureRegion[4];
 		for (int i = 0; i < habilidades.length; i++) {
 			if (habilidades[i] != null) {
@@ -477,8 +475,8 @@ public class Enfrentamiento implements Screen, InputProcessor {
 					// Ataque fallido
 					fase = 10;
 					String[] frase = {
-							"¡" + pkmn.getNombre() + " falló! Vaya mierdas...",
-							"" };
+							"¡" + jugador.getEquipo().get(iPokemon).getNombre()
+									+ " falló! Vaya mierdas...", "" };
 					dialogo.setFrases(frase);
 					String l1 = dialogo.siguienteLinea();
 					String l2 = dialogo.siguienteLinea();
@@ -582,13 +580,20 @@ public class Enfrentamiento implements Screen, InputProcessor {
 			break;
 		case 3: // pokemon
 			((Game) Gdx.app.getApplicationListener())
-					.setScreen(new MenuPokemon(jugador.getEquipo(), this));
+					.setScreen(new MenuPokemon(jugador.getEquipo(), this, true));
 			break;
 		case 4: // huir
+			((Game) Gdx.app.getApplicationListener())
+			.setScreen(screen);
 			break;
 		default:
 			break;
 		}
+	}
+
+	public void setIPokemon(int i) {
+		pkmn = jugador.getPokemon(i);
+		iPokemon = i;
 	}
 
 }

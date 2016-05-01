@@ -206,8 +206,8 @@ public class MenuPlay implements Screen, InputProcessor {
 	private void hacerAccion(int seleccion) {
 		switch (seleccion) {
 		case 1:
-			((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPokemon(
-					listaPokemon, this));
+			((Game) Gdx.app.getApplicationListener())
+					.setScreen(new MenuPokemon(listaPokemon, this, false));
 			break;
 		case 2:
 			((Game) Gdx.app.getApplicationListener()).setScreen(new MenuMochila(ctx, this));

@@ -66,10 +66,10 @@ public abstract class Entrenador {
 	 * @return true, si tiene algun pokemon vivo; false, en otro caso.
 	 */
 	public boolean vivo() {
-		boolean vivo = true;
-		for (int i = 0; i < equipo.size() && vivo; i++) {
-			if (!equipo.get(i).vivo()) {
-				vivo = false;
+		boolean vivo = false;
+		for (int i = 0; i < equipo.size() && !vivo; i++) {
+			if (equipo.get(i).vivo()) {
+				vivo = true;
 			}
 		}
 		return vivo;

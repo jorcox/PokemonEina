@@ -339,12 +339,12 @@ public class Play implements Screen, InputProcessor {
 			break;
 		case Keys.C:
 			((Game) Gdx.app.getApplicationListener()).setScreen(new CombateP(
-					ctx, player, jugador, 1));
+					ctx, player, jugador, 1, this));
 			break;
 		case Keys.V:
 			((Game) Gdx.app.getApplicationListener())
 					.setScreen(new CombateEntrenador(ctx, player, jugador,
-							"reverte", 0));
+							"reverte", this));
 			break;
 		}
 
@@ -387,7 +387,7 @@ public class Play implements Screen, InputProcessor {
 			} else if (value.equals("Antídoto")) {
 				ctx.mochila.add(new Antidoto());
 			}
-			
+
 			/* Asi no se puede volver a coger ese item */
 			obj.getProperties().put("used", "true");
 		}
