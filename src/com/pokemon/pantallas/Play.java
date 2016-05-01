@@ -118,7 +118,7 @@ public class Play implements Screen, InputProcessor {
 			TextureAtlas personajePack = new TextureAtlas("res/imgs/"
 					+ (String) t.getProperties().get("pack") + ".pack");
 			NPC npc = new NPC(personajePack, new Animation(1 / 10f,
-					playerAtlas.findRegions(dirVista)), disVista, this);
+					playerAtlas.findRegions(dirVista)), dirVista, disVista, this);
 			npc.setPosition(t.getX(), t.getY());
 			npcs.add(npc);
 		}
@@ -130,6 +130,10 @@ public class Play implements Screen, InputProcessor {
 		player.setPosition(x, y);
 		player.setLastPressed(lastPressed);
 		equipoPokemon();
+		
+		for (NPC npc : npcs) {
+			npc.setPlayer(player);
+		}
 
 		Gdx.input.setInputProcessor(this);
 		batch = new SpriteBatch();
@@ -381,9 +385,9 @@ public class Play implements Screen, InputProcessor {
 					dialogo.siguienteLinea());
 
 			/* Introduce en mochila */
-			if (value.equals("Poción")) {
+			if (value.equals("Pociï¿½n")) {
 				player.mochila.add(new Pocion());
-			} else if (value.equals("Antídoto")) {
+			} else if (value.equals("Antï¿½doto")) {
 				player.mochila.add(new Antidoto());
 			}
 			
