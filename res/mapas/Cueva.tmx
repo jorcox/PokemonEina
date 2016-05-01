@@ -13,12 +13,22 @@
   <image source="../Tilesets/Entorno.png" trans="00aa00" width="160" height="32"/>
   <tile id="0">
    <properties>
-    <property name="blocked" value=""/>
+    <property name="blocked" value="true"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="combat" value="true"/>
    </properties>
   </tile>
  </tileset>
  <tileset firstgid="13886" name="Entorno1" tilewidth="32" tileheight="32" tilecount="10" columns="10">
   <image source="../Tilesets/Entorno1.png" trans="00aa00" width="320" height="32"/>
+  <tile id="2">
+   <properties>
+    <property name="combat" value="true"/>
+   </properties>
+  </tile>
  </tileset>
  <objectgroup name="Trans">
   <object id="20" gid="13891" x="800" y="1344" width="32" height="32">
