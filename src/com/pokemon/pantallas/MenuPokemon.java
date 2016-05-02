@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
@@ -28,6 +29,8 @@ public class MenuPokemon extends Pantalla {
 	private Texture tFondo, tMainVivo, tMainVivoSel, tMainMuerto,
 			tMainMuertoSel, tVivo, tVivoSel, tMuerto, tMuertoSel, tHpVivo,
 			tHpMuerto;
+	private TextureRegion[] barrasVida;
+	Texture barraVida;
 	ArrayList<Sprite> spPokemon = new ArrayList<Sprite>();
 	FreeTypeFontGenerator generator;
 	BitmapFont font;
@@ -66,7 +69,9 @@ public class MenuPokemon extends Pantalla {
 				"res/imgs/listaPokemon/partyPanelRectSelFnt.png");
 		tHpVivo = new Texture("res/imgs/listaPokemon/partyHP.png");
 		tHpMuerto = new Texture("res/imgs/listaPokemon/partyHPfnt.png");
+		barraVida = new Texture("res/imgs/batallas/hpbars.png");
 		texturesPokemon();
+		getBarraVida();
 		font.setColor(Color.WHITE);
 	}
 
@@ -78,7 +83,6 @@ public class MenuPokemon extends Pantalla {
 		batch.begin();
 		batch.draw(tFondo, 0, 0, Gdx.graphics.getWidth(),
 				Gdx.graphics.getHeight());
-		pokeSelected();
 		if (listaPokemon.size() > 0) {
 			/* El primer slot de pokemon es distinto (fondo redondo) */
 			drawMainPokemon();
@@ -88,10 +92,6 @@ public class MenuPokemon extends Pantalla {
 			drawPokemon(i);
 		}
 		batch.end();
-	}
-
-	private void pokeSelected() {
-
 	}
 
 	private void texturesPokemon() {
@@ -114,6 +114,7 @@ public class MenuPokemon extends Pantalla {
 			batch.draw(tHpVivo, 120, 450, 180, tHpVivo.getHeight());
 
 		} else {
+
 			if (selection != 0) {
 				batch.draw(tMainMuerto, 3, 400, Gdx.graphics.getWidth() / 2,
 						Gdx.graphics.getHeight() / (float) 3.5);
@@ -123,6 +124,9 @@ public class MenuPokemon extends Pantalla {
 			}
 			batch.draw(tHpVivo, 120, 450, 180, tHpVivo.getHeight());
 		}
+		batch.draw(barrasVida[0], 158, 453,
+				(int) (132 * (pokemon.getPs() / (double) pokemon.getPsMax())),
+				9);
 		font.draw(batch, pokemon.getNombre().toUpperCase(), 160, 500);
 		font.draw(batch, pokemon.getPs() + "/" + pokemon.getPsMax(), 190, 440);
 		font.draw(batch, "Nvº " + pokemon.getNivel(), 60, 440);
@@ -130,7 +134,7 @@ public class MenuPokemon extends Pantalla {
 	}
 
 	private void drawPokemon(int i) {
-		int x, y, xHp, yHp, xName, yName, xPs, yPs, xNv, yNv, xPok, yPok;
+		int x, y, xHp, yHp, xName, yName, xPs, yPs, xNv, yNv, xPok, yPok, xVida, yVida;
 		if (i % 2 == 0) {
 			x = 1;
 			y = 268 - 135 * (int) (i / 4);
@@ -144,6 +148,8 @@ public class MenuPokemon extends Pantalla {
 			yNv = 300 - 135 * (int) (i / 4);
 			xPok = 60;
 			yPok = 320 - 135 * (int) (i / 4);
+			xVida = 180;
+			yVida = 316 - 135 * (int) (i / 4);
 		} else {
 			x = 360;
 			y = 380 - 135 * (int) (i / 2);
@@ -157,6 +163,8 @@ public class MenuPokemon extends Pantalla {
 			yNv = 415 - 135 * (int) (i / 2);
 			xPok = 420;
 			yPok = 440 - 135 * (int) (i / 2);
+			xVida = 530;
+			yVida = 428 - 135 * (int) (i / 2);
 		}
 		Pokemon pokemon = listaPokemon.get(i);
 		if (pokemon.vivo()) {
@@ -181,6 +189,7 @@ public class MenuPokemon extends Pantalla {
 				batch.draw(tMuertoSel, x, y, Gdx.graphics.getWidth() / 2,
 						Gdx.graphics.getHeight() / (float) 4);
 			}
+
 			batch.draw(tHpMuerto, xHp, yHp);
 			font.draw(batch, pokemon.getNombre().toUpperCase(), xName, yName);
 			font.draw(batch, pokemon.getPs() + "/" + pokemon.getPsMax(), xPs,
@@ -188,6 +197,9 @@ public class MenuPokemon extends Pantalla {
 			font.draw(batch, "Nvº " + pokemon.getNivel(), xNv, yNv);
 			batch.draw(spPokemon.get(i), xPok, yPok, 60, 60);
 		}
+		batch.draw(barrasVida[0], xVida, yVida,
+				(int) (100 * (pokemon.getPs() / (double) pokemon.getPsMax())),
+				9);
 
 	}
 
@@ -301,12 +313,21 @@ public class MenuPokemon extends Pantalla {
 		if (combate) {
 			if (listaPokemon.get(i).vivo()) {
 				Enfrentamiento e = (Enfrentamiento) screen;
-				e.fase = 1;
-				e.dialogo.procesarDialogo("adelante");
-				e.setIPokemon(i);
-				((Game) Gdx.app.getApplicationListener()).setScreen(e);
+				if (i != e.iPokemon) {
+					e.fase = 1;
+					e.dialogo.procesarDialogo("adelante");
+					e.setIPokemon(i);
+					((Game) Gdx.app.getApplicationListener()).setScreen(e);
+				}
 			}
 		}
+	}
+
+	public void getBarraVida() {
+		barrasVida = new TextureRegion[3];
+		barrasVida[0] = new TextureRegion(barraVida, 0, 0, 180, 18);
+		barrasVida[1] = new TextureRegion(barraVida, 0, 20, 180, 18);
+		barrasVida[2] = new TextureRegion(barraVida, 0, 36, 180, 18);
 	}
 
 }
