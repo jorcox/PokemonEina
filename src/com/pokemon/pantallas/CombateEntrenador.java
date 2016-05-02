@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.pokemon.entities.Player;
 import com.pokemon.tween.SpriteAccessor;
+import com.pokemon.utilidades.ArchivoGuardado;
 
 import db.BaseDatos;
 import entrenadores.Entrenador;
@@ -28,9 +29,9 @@ public class CombateEntrenador extends Enfrentamiento {
 
 	TextureRegion[] spritesEntrenador;
 
-	public CombateEntrenador(Player player, Jugador jugador,
+	public CombateEntrenador(ArchivoGuardado ctx, Player player, Jugador jugador,
 			String idEntrenador, Screen screen) {
-		super(player, jugador, screen);
+		super(ctx, player, jugador, screen);
 		this.fase = 0;
 		this.idEntrenador = idEntrenador;
 		pkmn = jugador.getPokemon(iPokemon);

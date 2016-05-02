@@ -50,8 +50,12 @@ public class NPC extends Sprite {
 	
 	private int distanciaVision;
 	
+	private String direccionVision;
+	
+	private Player player;
+	
 
-	public NPC(TextureAtlas playerAtlas, Animation face, int disVista, Play play) {
+	public NPC(TextureAtlas playerAtlas, Animation face, String dir, int disVista, Play play) {
 		super(face.getKeyFrame(0));
 		cara = new Animation(1 / 10f, playerAtlas.findRegions("cara"));
 		derecha = new Animation(1 / 10f, playerAtlas.findRegions("derecha"));
@@ -67,7 +71,9 @@ public class NPC extends Sprite {
 		this.transLayer = transLayer;
 		this.dialogo = dialogo;
 		this.play = play;
-
+		this.distanciaVision = disVista;
+		this.direccionVision = dir;
+		this.player = player;
 		mochila = new Mochila();
 	}
 
@@ -95,15 +101,16 @@ public class NPC extends Sprite {
 		/*
 		 * Guardar la posicion anterior
 		 */
-//		float oldX = getX(), oldY = getY(), tileWidth = collisionLayer.getTileWidth(),
-//				tileHeight = collisionLayer.getTileHeight();
-//		boolean collisionX = false, collisionY = false;
-//
-//		/*
-//		 * Movimiento en X
-//		 */
-//		setX(getX() + velocity.x * delta);
-//
+		float oldX = getX(), oldY = getY();
+		//tileWidth = collisionLayer.getTileWidth(),
+		//		tileHeight = collisionLayer.getTileHeight();
+		//boolean collisionX = false, collisionY = false;
+
+		/*
+		 * Movimiento en X
+		 */
+		setX(getX() + velocity.x * delta);
+
 //		if (velocity.x < 0) {
 //			// Top left
 //			// collisionX = collisionLayer.getCell((int) (getX() / tileWidth),
@@ -151,7 +158,7 @@ public class NPC extends Sprite {
 //		/*
 //		 * Movimiento en Y
 //		 */
-//		setY(getY() + velocity.y * delta);
+		setY(getY() + velocity.y * delta);
 //		if (velocity.y < 0) {
 //			// Bottom left
 //			collisionY = collisionLayer.getCell((int) (getX() / tileWidth), (int) (getY() / tileHeight)).getTile()
@@ -195,18 +202,49 @@ public class NPC extends Sprite {
 //			velocity.y = 0;
 //		}
 //
-//		/*
-//		 * Actualizar animacion
-//		 */
-//		animationTime += delta;
-//		if ((WPressed || APressed || SPressed || DPressed) && (!collisionX && !collisionY)
-//				&& (!(velocity.x == 0) || !(velocity.y == 0))) {
-//			setRegion(
-//					velocity.x < 0 ? izquierda.getKeyFrame(animationTime)
-//							: velocity.x > 0 ? derecha.getKeyFrame(animationTime)
-//									: velocity.y > 0 ? espalda.getKeyFrame(animationTime)
-//											: cara.getKeyFrame(animationTime));
-//		} else {
+		
+		boolean collisionPlayer = false;
+		 /*
+		  * Colision de NPC
+		  */
+			int anchura = 32;
+			int altura = 32;
+			
+			collisionPlayer |= ((player.getX() + anchura / 1.5) > getX())
+					&& ((player.getX() - anchura / 1.5) < getX())
+					&& ((player.getY() + altura / 1.5) > getY())
+					&& ((player.getY() - altura / 0.9) < getY());
+					
+			if (collisionPlayer) {
+				setX(oldX);
+				setY(oldY);
+				velocity.x = 0;
+				velocity.y = 0;
+				// TODO empezar combate
+			}
+		/*
+		 * Actualizar animacion
+		 */
+		animationTime += delta;
+		if (!collisionPlayer
+				&& (!(velocity.x == 0) || !(velocity.y == 0))) {
+			setRegion(
+					velocity.x < 0 ? izquierda.getKeyFrame(animationTime)
+							: velocity.x > 0 ? derecha.getKeyFrame(animationTime)
+									: velocity.y > 0 ? espalda.getKeyFrame(animationTime)
+											: cara.getKeyFrame(animationTime));
+		} else {
+			
+			if(direccionVision.equals("cara")){
+				setRegion(cara.getKeyFrame(0));
+			} else if(direccionVision.equals("espalda")){
+				setRegion(espalda.getKeyFrame(0));
+			} else if(direccionVision.equals("izquierda")){
+				setRegion(izquierda.getKeyFrame(0));
+			} else if(direccionVision.equals("derecha")){
+				setRegion(derecha.getKeyFrame(1));
+			}	
+		}
 //			switch (lastPressed) {
 //			case 1: // A
 //				setRegion(izquierda.getKeyFrame(0));
@@ -297,6 +335,20 @@ public class NPC extends Sprite {
 
 		}
 	}
+	
+
+	public void moverAPersonaje(Player player) {
+		if(direccionVision.equals("cara")){
+			velocity.y = -speed;
+		} else if(direccionVision.equals("espalda")){
+			velocity.y = speed;
+		} else if(direccionVision.equals("izquierda")){
+			velocity.x = -speed;
+		} else if(direccionVision.equals("derecha")){
+			velocity.x = speed;
+		}		
+	}
+
 
 	public boolean getSpacePressed() {
 		return SpacePressed;
@@ -348,6 +400,30 @@ public class NPC extends Sprite {
 
 	public void setTransLayer(MapLayer transLayer) {
 		this.transLayer = transLayer;
+	}
+
+	public int getDistanciaVision() {
+		return distanciaVision;
+	}
+
+	public void setDistanciaVision(int distanciaVision) {
+		this.distanciaVision = distanciaVision;
+	}
+
+	public String getDireccionVision() {
+		return direccionVision;
+	}
+
+	public void setDireccionVision(String direccionVision) {
+		this.direccionVision = direccionVision;
+	}
+
+	public Player getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
 	}
 
 }

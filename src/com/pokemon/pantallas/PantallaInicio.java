@@ -17,8 +17,9 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.pokemon.PokemonAdaByron;
+import com.pokemon.utilidades.ArchivoGuardado;
 
-public class PantallaInicio implements Screen, InputProcessor {
+public class PantallaInicio extends Pantalla {
 
 	PokemonAdaByron game;
 
@@ -42,8 +43,10 @@ public class PantallaInicio implements Screen, InputProcessor {
 	private int musicState = 0;
 
 	private boolean letras = true;
-
-	public PantallaInicio() {
+	
+	public PantallaInicio(ArchivoGuardado ctx) {
+		this.setCtx(ctx);
+		
 		/*
 		 * Configuracion musica
 		 */
@@ -119,7 +122,7 @@ public class PantallaInicio implements Screen, InputProcessor {
 
 	private void changeToMainMenu() {
 		music.stop();
-		((Game) Gdx.app.getApplicationListener()).setScreen(new Menu());
+		((Game) Gdx.app.getApplicationListener()).setScreen(new Menu(getCtx()));
 	}
 
 	@Override

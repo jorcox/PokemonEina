@@ -24,6 +24,7 @@ import com.pokemon.mochila.Pokeball;
 import com.pokemon.mochila.Superball;
 import com.pokemon.pantallas.CombateP;
 import com.pokemon.pantallas.Play;
+import com.pokemon.utilidades.ArchivoGuardado;
 
 public class Player extends Sprite {
 
@@ -52,14 +53,13 @@ public class Player extends Sprite {
 
 	public boolean SpacePressed = false;
 
-	public Mochila mochila;
 	private int p;
 	
 	ArrayList<NPC> npcs;
 
 	private int lastPressed; // A=1, W=2, S=3, D=4
-
-	public Player(TextureAtlas playerAtlas, TiledMapTileLayer collisionLayer, MapLayer objectLayer, MapLayer transLayer,
+	
+	public Player(ArchivoGuardado ctx, TextureAtlas playerAtlas, TiledMapTileLayer collisionLayer, MapLayer objectLayer, MapLayer transLayer,
 			ArrayList<NPC> npcs, Dialogo dialogo, Play play) {
 		super(new Animation(1 / 10f, playerAtlas.findRegions("cara")).getKeyFrame(0));
 		cara = new Animation(1 / 10f, playerAtlas.findRegions("cara"));
@@ -78,22 +78,7 @@ public class Player extends Sprite {
 		this.play = play;
 		this.npcs = npcs;
 
-		mochila = new Mochila();
 		p = 0;
-
-		// Objetos de prueba metidos a pelo
-		mochila.add(new Pocion());
-		mochila.add(new Antidoto());
-		mochila.add(new Antidoto());
-		mochila.add(new Antidoto());
-		mochila.add(new Pocion());
-		mochila.add(new Pocion());
-		mochila.add(new Antidoto());
-		mochila.add(new Pocion());
-		mochila.add(new Pokeball());
-		mochila.add(new Superball());
-		mochila.add(new Pokeball());
-		
 	}
 
 	@Override
@@ -145,16 +130,6 @@ public class Player extends Sprite {
 			if (!collisionX)
 				collisionX |= collisionLayer.getCell((int) (getX() / tileWidth), (int) (getY() / tileHeight)).getTile()
 						.getProperties().containsKey("blocked");
-//			/* Objetos */
-//			if (!collisionX) {
-//				for (MapObject object : objectLayer.getObjects()) {
-//					TextureMapObject texture = (TextureMapObject) object;
-//					collisionX = ((texture.getX() + texture.getTextureRegion().getRegionWidth() / 2.5) > getX())
-//							&& ((texture.getX() - texture.getTextureRegion().getRegionWidth() / 2.5) < getX())
-//							&& ((texture.getY() + texture.getTextureRegion().getRegionHeight() / 2.5) > getY())
-//							&& ((texture.getY() - texture.getTextureRegion().getRegionHeight() / 2.5) < getY());
-//				}
-//			}
 		} else if (velocity.x > 0) {
 			// Top right
 			// collisionX = collisionLayer
@@ -173,17 +148,6 @@ public class Player extends Sprite {
 				collisionX |= collisionLayer
 						.getCell((int) ((getX() + getWidth()) / tileWidth), (int) (getY() / tileHeight)).getTile()
 						.getProperties().containsKey("blocked");			
-//			/* Objetos */
-//			if (!collisionX) {
-//				for (MapObject object : objectLayer.getObjects()) {
-//					TextureMapObject texture = (TextureMapObject) object;
-//					collisionX = ((texture.getX() + texture.getTextureRegion().getRegionWidth() / 2.5) < getX())
-//							&& ((texture.getX() - texture.getTextureRegion().getRegionWidth() / 2.5) < getX())
-//							&& ((texture.getY() + texture.getTextureRegion().getRegionHeight() / 2.5) > getY())
-//							&& ((texture.getY() - texture.getTextureRegion().getRegionHeight() / 2.5) < getY());
-//				}
-//			}
-
 		}
 		/*
 		 * Reaccion a colision en X
@@ -200,7 +164,7 @@ public class Player extends Sprite {
 				/* Dispara evento si estan muy cerca jugador y objeto */
 				if (play.distance(t) < 50) {
 					((Game) Gdx.app.getApplicationListener())
-							.setScreen(new Play(Integer.parseInt((String) t.getProperties().get("x")),
+							.setScreen(new Play(play.getCtx(), Integer.parseInt((String) t.getProperties().get("x")),
 									Integer.parseInt((String) t.getProperties().get("y")), getLastPressed(),
 									t.getProperties().get("mapa") + ".tmx"));
 					break;
@@ -266,9 +230,9 @@ public class Player extends Sprite {
 					&& ((texture.getY() - texture.getTextureRegion().getRegionHeight() / 2) < getY());
 		}
 		
-		 /*
-		  * Colision de NPC
-		  */
+	 /*
+	  * Colision de NPC
+	  */
 		int anchura = 32;
 		int altura = 32;
 		for (NPC npc : npcs) {
@@ -276,14 +240,25 @@ public class Player extends Sprite {
 					&& ((npc.getX() - anchura / 1.5) < getX())
 					&& ((npc.getY() + altura / 1.5) > getY())
 					&& ((npc.getY() - altura / 0.9) < getY());
-		}
-		
+		}		
 		if (collisionObj || collisionNpc) {
 			setX(oldX);
 			setY(oldY);
 			velocity.x = 0;
 			velocity.y = 0;
 		}
+		
+		/* Interacción entrenadores */
+		for (NPC npc : npcs) {
+			if(visible(npc)){
+				velocity.x = 0;
+				velocity.y = 0;
+				play.pauseListener();
+				npc.moverAPersonaje(this);
+				//play.resumeListener();
+			}
+		}
+		
 
 		/*
 		 * Actualizar animacion
@@ -314,6 +289,39 @@ public class Player extends Sprite {
 		}
 	}
 
+	private boolean visible(NPC npc) {
+		String dir = npc.getDireccionVision();
+		int dis = npc.getDistanciaVision();
+		float npcX = npc.getX();
+		float npcY = npc.getY();
+		float minX = 0, maxX = 0, minY = 0, maxY = 0;
+		if(dir.equals("cara")){
+			minX = npcX - 1;
+			maxX = npcX + 1;
+			minY = npcY - (32*dis);
+			maxY = npcY;			
+		} else if(dir.equals("espalda")){
+			minX = npcX - 1;
+			maxX = npcX + 1;
+			minY = npcY;
+			maxY = npcY  + (32*dis);			
+		} else if(dir.equals("izquierda")){
+			minX = npcX - (32*dis);
+			maxX = npcX;
+			minY = npcY - 1 ;
+			maxY = npcY + 1;			
+		} else if(dir.equals("derecha")){
+			minX = npcX;
+			maxX = npcX + (32*dis);
+			minY = npcY - 1;
+			maxY = npcY + 1;		
+		}
+		return (maxX > getX())
+				&& (minX < getX())
+				&& (maxY > getY())
+				&& (minY < getY());
+		}
+
 	/**
 	 * Si el jugador esta en casilla de combate, elige aleatoriamente si
 	 * le aparece un pokemon salvaje con una probabilidad del 20%.
@@ -326,8 +334,8 @@ public class Player extends Sprite {
 						.getTile().getProperties().containsKey("combat")) {
 			double combatOdds = new Random().nextDouble();
 			if (combatOdds < 0.02) {
-				((Game) Gdx.app.getApplicationListener()).setScreen(new CombateP(
-						this, play.jugador, 1,play));
+				((Game) Gdx.app.getApplicationListener()).setScreen(new CombateP(play.getCtx(), 
+						this, play.jugador, 1, play));
 			}
 		}
 	}

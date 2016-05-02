@@ -20,7 +20,7 @@ import com.pokemon.utilidades.ArchivoGuardado;
 
 import pokemon.Pokemon;
 
-public class MenuPlay implements Screen, InputProcessor {
+public class MenuPlay extends Pantalla {
 
 	PokemonAdaByron game;
 
@@ -42,18 +42,17 @@ public class MenuPlay implements Screen, InputProcessor {
 	private boolean archivoGuardado = ArchivoGuardado.existe;
 
 	private int seleccion = 1;
-	private Mochila mochila;
 	private List<Pokemon> listaPokemon;
 
-	public MenuPlay(float x, float y, int lastPressed, String map,
-			Mochila mochila, List<Pokemon> listaPokemon) {
+	public MenuPlay(ArchivoGuardado ctx, float x, float y, int lastPressed, String map,
+			List<Pokemon> listaPokemon) {
 		ArchivoGuardado.musica = null;
 		this.x = x;
 		this.y = y;
 		this.lastPressed = lastPressed;
 		this.map = map;
-		this.mochila = mochila;
 		this.listaPokemon = listaPokemon;
+		this.setCtx(ctx);
 	}
 
 	@Override
@@ -120,8 +119,7 @@ public class MenuPlay implements Screen, InputProcessor {
 	}
 
 	@Override
-	public void show() {
-
+	public void show() {		
 		Gdx.input.setInputProcessor(this);
 		bg = new Sprite(new Texture("res/imgs/background.png"));
 		button = new Texture("res/imgs/panel.png");
@@ -196,7 +194,7 @@ public class MenuPlay implements Screen, InputProcessor {
 			Gdx.app.exit();
 			break;
 		case Keys.SPACE:
-			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(x, y,
+			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(getCtx(), x, y,
 					lastPressed, map));
 			break;
 		}
@@ -210,15 +208,14 @@ public class MenuPlay implements Screen, InputProcessor {
 					.setScreen(new MenuPokemon(listaPokemon, this, false));
 			break;
 		case 2:
-			((Game) Gdx.app.getApplicationListener())
-					.setScreen(new MenuMochila(mochila, this));
+			((Game) Gdx.app.getApplicationListener()).setScreen(new MenuMochila(getCtx(), this));
 			break;
 		case 3:
-			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(x, y,
+			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(getCtx(), x, y,
 					lastPressed, map));
 			break;
 		case 4:
-			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(x, y,
+			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(getCtx(), x, y,
 					lastPressed, map));
 			break;
 		default:
