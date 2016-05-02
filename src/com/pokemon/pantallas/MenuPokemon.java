@@ -19,7 +19,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 
 import pokemon.Pokemon;
 
-public class MenuPokemon implements Screen, InputProcessor {
+public class MenuPokemon extends Pantalla {
 
 	private Screen screen;
 	private List<Pokemon> listaPokemon;

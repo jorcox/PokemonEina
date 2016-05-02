@@ -13,12 +13,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pokemon.mochila.Mochila;
 import com.pokemon.utilidades.ArchivoGuardado;
 
-public class MenuMochila implements Screen, InputProcessor {
+public class MenuMochila extends Pantalla {
 
 	private static final int MAX_ITEMS = 6;	/* Items que caben a la vez en pantalla */
 	private static final int NUM_SECCIONES = 3; /* Secciones de la mochila */
 	
-	private Screen screen;
+	private Pantalla screen;
 	private int first;	/* Indice del primer elemento de la lista en mostrarse */
 	private int pointer;	/* Indice del seleccionado de los MAX_ITEMS que caben */
 	private int seccion;
@@ -28,10 +28,9 @@ public class MenuMochila implements Screen, InputProcessor {
 	BitmapFont font = new BitmapFont(
 			Gdx.files.internal("res/fuentes/pokemon.fnt"),
 			Gdx.files.internal("res/fuentes/pokemon.png"), false);
-	private ArchivoGuardado ctx;
 	
-	public MenuMochila(ArchivoGuardado ctx, Screen screen) {
-		this.ctx = ctx;
+	public MenuMochila(ArchivoGuardado ctx, Pantalla screen) {
+		this.setCtx(ctx);
 		this.screen = screen;
 		
 		/* Empieza mostrando primera seccion (objeto) marcando primer objeto */
@@ -42,7 +41,7 @@ public class MenuMochila implements Screen, InputProcessor {
 	}
 
 	@Override
-	public void show() {
+	public void show() {		
 		Gdx.input.setInputProcessor(this);
 		tFondoObj = new Texture("res/imgs/mochila/bag_objetos.png");
 		tFondoBalls = new Texture("res/imgs/mochila/bag_pokeball.png");
@@ -78,7 +77,7 @@ public class MenuMochila implements Screen, InputProcessor {
 	}
 
 	private void drawSelection() {
-		if (ctx.mochila.size(seccion) > 0) {
+		if (getCtx().mochila.size(seccion) > 0) {
 			batch.draw(tSelected, 280, Gdx.graphics.getHeight() - (80+50*pointer));
 		} else {
 			font.draw(batch, "No hay items", 300, Gdx.graphics.getHeight() - 200);
@@ -91,14 +90,14 @@ public class MenuMochila implements Screen, InputProcessor {
 	 */
 	private void drawItems() {
 		/* MaxItems es el maximo de objetos a renderizar */
-		int maxItems = (ctx.mochila.size(seccion) < MAX_ITEMS) ? 
-				ctx.mochila.size(seccion) : MAX_ITEMS;
+		int maxItems = (getCtx().mochila.size(seccion) < MAX_ITEMS) ? 
+				getCtx().mochila.size(seccion) : MAX_ITEMS;
 		font.setColor(Color.BLACK);
 		
 		/* Dibuja el texto de cada objeto que quepa */
 		int pos = 50;
 		for (int i=first; i<first + maxItems; i++) {
-			font.draw(batch, ctx.mochila.get(seccion, i).getNombre(),
+			font.draw(batch, getCtx().mochila.get(seccion, i).getNombre(),
 					300, Gdx.graphics.getHeight() - pos);
 			pos += 50;
 		}
@@ -137,16 +136,17 @@ public class MenuMochila implements Screen, InputProcessor {
 		switch (keycode) {
 		case Keys.SPACE:
 			/* Vuelve al menu */
+			screen.setCtx(this.getCtx());
 			((Game) Gdx.app.getApplicationListener()).setScreen(screen);
 			break;
 		case Keys.ENTER:
 			break;
 		case Keys.DOWN:
 			/* Desciende en la lista de la mochila */
-			if (pointer < MAX_ITEMS -1 && pointer < ctx.mochila.size(seccion) -1) {
+			if (pointer < MAX_ITEMS -1 && pointer < getCtx().mochila.size(seccion) -1) {
 				/* Baja el puntero si quedan posiciones por bajar */
 				pointer++;
-			} else if ((first+MAX_ITEMS-1) < ctx.mochila.size(seccion) -1) {
+			} else if ((first+MAX_ITEMS-1) < getCtx().mochila.size(seccion) -1) {
 				/* Mueve la lista abajo si el puntero esta ya abajo */
 				first++;
 			}
