@@ -7,7 +7,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.Vector2;
 import com.pokemon.PokemonAdaByron;
+import com.pokemon.entities.Player;
+import com.pokemon.mochila.Antidoto;
 import com.pokemon.mochila.Mochila;
+import com.pokemon.mochila.Pocion;
+import com.pokemon.mochila.Pokeball;
+import com.pokemon.mochila.Superball;
 
 /**
  * Contiene los datos de la partida del jugador
@@ -59,11 +64,6 @@ public class ArchivoGuardado {
 	 */
 	public Mochila mochila;
 	
-	/*
-	 * Pantalla de retorno
-	 */
-	public static Screen pantallaRetorno;
-
 	public static void cargar() {
 		comprobarExistencia();
 	}
@@ -91,6 +91,13 @@ public class ArchivoGuardado {
 	
 	public ArchivoGuardado() {
 		mochila = new Mochila();
+		
+		// Objetos de prueba metidos a pelo
+		mochila.add(new Pocion());
+		mochila.add(new Antidoto());
+		mochila.add(new Pokeball());
+		mochila.add(new Superball());
+		mochila.add(new Pokeball());
 	}
 
 }

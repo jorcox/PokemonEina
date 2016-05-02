@@ -31,7 +31,7 @@ import db.BaseDatos;
 import entrenadores.Entrenador;
 import entrenadores.Jugador;
 
-public class Enfrentamiento implements Screen, InputProcessor {
+public class Enfrentamiento extends Pantalla {
 
 	protected int fase;
 	protected int vida = 100;
@@ -70,10 +70,9 @@ public class Enfrentamiento implements Screen, InputProcessor {
 			bgOp, bgOpTrans, boton, luchar, mochilaS, pokemonOp, huir, dedo,
 			cajaLuchar, tipo1, tipo2, tipo3, tipo4, cajaPkmn,
 			cajaPkmnpokemonEnemigo, entrenador, protagonista;
-	private ArchivoGuardado ctx;
 
 	public Enfrentamiento(ArchivoGuardado ctx, Player player, Jugador jugador, Screen screen) {
-		this.ctx = ctx;
+		this.setCtx(ctx);
 		dialogo = new Dialogo("es", "ES");
 		this.jugador = jugador;
 		this.player = player;
@@ -576,7 +575,7 @@ public class Enfrentamiento implements Screen, InputProcessor {
 			break;
 		case 2: // mochila
 			((Game) Gdx.app.getApplicationListener())
-					.setScreen(new MenuMochila(ctx, this));
+					.setScreen(new MenuMochila(getCtx(), this));
 			break;
 		case 3: // pokemon
 			((Game) Gdx.app.getApplicationListener())

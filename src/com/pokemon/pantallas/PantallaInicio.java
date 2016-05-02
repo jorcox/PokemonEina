@@ -19,7 +19,7 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.pokemon.PokemonAdaByron;
 import com.pokemon.utilidades.ArchivoGuardado;
 
-public class PantallaInicio implements Screen, InputProcessor {
+public class PantallaInicio extends Pantalla {
 
 	PokemonAdaByron game;
 
@@ -44,10 +44,8 @@ public class PantallaInicio implements Screen, InputProcessor {
 
 	private boolean letras = true;
 	
-	private ArchivoGuardado ctx;
-
 	public PantallaInicio(ArchivoGuardado ctx) {
-		this.ctx = ctx;
+		this.setCtx(ctx);
 		
 		/*
 		 * Configuracion musica
@@ -124,7 +122,7 @@ public class PantallaInicio implements Screen, InputProcessor {
 
 	private void changeToMainMenu() {
 		music.stop();
-		((Game) Gdx.app.getApplicationListener()).setScreen(new Menu(ctx));
+		((Game) Gdx.app.getApplicationListener()).setScreen(new Menu(getCtx()));
 	}
 
 	@Override

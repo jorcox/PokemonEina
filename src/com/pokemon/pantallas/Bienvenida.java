@@ -21,7 +21,7 @@ import com.pokemon.dialogo.Dialogo;
 import com.pokemon.utilidades.ArchivoGuardado;
 import com.pokemon.utilidades.Importador;
 
-public class Bienvenida implements Screen, InputProcessor {
+public class Bienvenida extends Pantalla {
 
 	PokemonAdaByron game;
 
@@ -52,11 +52,9 @@ public class Bienvenida implements Screen, InputProcessor {
 	private boolean optionsVisible = false;
 	
 	private Dialogo dialogo;
-	
-	private ArchivoGuardado ctx;
 
 	public Bienvenida(ArchivoGuardado ctx, PokemonAdaByron game) {
-		this.ctx = ctx;
+		this.setCtx(ctx);
 		
 		dialogo = new Dialogo("es", "ES");
 		//super("es", "ES");
@@ -178,7 +176,7 @@ public class Bienvenida implements Screen, InputProcessor {
 				} else {
 					m.stop();
 					((Game) Gdx.app.getApplicationListener())
-							.setScreen(new Play(ctx, 60,60,3,"Tranvia_n.tmx"));
+							.setScreen(new Play(getCtx(), 60,60,3,"Tranvia_n.tmx"));
 				}
 				break;
 			case (Keys.UP):

@@ -42,7 +42,7 @@ import com.pokemon.utilidades.ArchivoGuardado;
 import db.BaseDatos;
 import entrenadores.Jugador;
 
-public class Play implements Screen, InputProcessor {
+public class Play extends Pantalla {
 
 	public TiledMap map;
 	private TextureMapObjectRenderer renderer;
@@ -68,7 +68,6 @@ public class Play implements Screen, InputProcessor {
 	private Stage stage;
 	private ArrayList<NPC> npcs = new ArrayList<>();
 	private boolean dialogando;
-	private ArchivoGuardado ctx;
 
 	public Play(ArchivoGuardado ctx, float x, float y, int lastPressed, String mapa) {
 		dialogo = new Dialogo("es", "ES");
@@ -77,7 +76,7 @@ public class Play implements Screen, InputProcessor {
 		this.lastPressed = lastPressed;
 		this.map_ = mapa;
 		dialogando = false;
-		this.ctx = ctx;
+		this.setCtx(ctx);
 
 		Gdx.input.setInputProcessor(this);
 
@@ -126,7 +125,7 @@ public class Play implements Screen, InputProcessor {
 		}
 
 		/* Player */
-		player = new Player(ctx, playerAtlas, (TiledMapTileLayer) map.getLayers()
+		player = new Player(getCtx(), playerAtlas, (TiledMapTileLayer) map.getLayers()
 				.get("Entorno"), map.getLayers().get("Objetos"), map
 				.getLayers().get("Trans"), npcs, dialogo, this);
 		player.setPosition(x, y);
@@ -171,7 +170,7 @@ public class Play implements Screen, InputProcessor {
 		player.draw(renderer.getBatch());
 		if (player.getSpacePressed()) {
 			// Show menu
-			openMenuPlay();
+			//openMenuPlay();
 		}
 		/* NPC */
 		for (NPC npc : npcs) {
@@ -191,7 +190,7 @@ public class Play implements Screen, InputProcessor {
 	}
 
 	public void openMenuPlay() {
-		((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPlay(ctx, player
+		((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPlay(getCtx(), player
 				.getX(), player.getY(), player.getLastPressed(), map_, jugador.getEquipo()));
 	}
 
@@ -284,7 +283,9 @@ public class Play implements Screen, InputProcessor {
 			player.DPressed = true;
 			break;
 		case Keys.SPACE:
-			player.SpacePressed = true;
+			//player.SpacePressed = true;
+			((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPlay(getCtx(), player
+					.getX(), player.getY(), player.getLastPressed(), map_, jugador.getEquipo()));
 			break;
 		case Keys.ENTER:
 			if (dialogando) {
@@ -343,11 +344,11 @@ public class Play implements Screen, InputProcessor {
 			break;
 		case Keys.C:
 			((Game) Gdx.app.getApplicationListener()).setScreen(new CombateP(
-					ctx, player, jugador, 1, this));
+					getCtx(), player, jugador, 1, this));
 			break;
 		case Keys.V:
 			((Game) Gdx.app.getApplicationListener())
-					.setScreen(new CombateEntrenador(ctx, player, jugador,
+					.setScreen(new CombateEntrenador(getCtx(), player, jugador,
 							"reverte", this));
 			break;
 		}
@@ -387,9 +388,9 @@ public class Play implements Screen, InputProcessor {
 
 			/* Introduce en mochila */
 			if (value.equals("Poción")) {
-				ctx.mochila.add(new Pocion());
+				getCtx().mochila.add(new Pocion());
 			} else if (value.equals("Antídoto")) {
-				ctx.mochila.add(new Antidoto());
+				getCtx().mochila.add(new Antidoto());
 			}
 
 			/* Asi no se puede volver a coger ese item */
