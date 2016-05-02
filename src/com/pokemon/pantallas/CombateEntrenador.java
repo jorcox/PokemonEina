@@ -29,8 +29,8 @@ public class CombateEntrenador extends Enfrentamiento {
 
 	TextureRegion[] spritesEntrenador;
 
-	public CombateEntrenador(ArchivoGuardado ctx, Player player, Jugador jugador,
-			String idEntrenador, Screen screen) {
+	public CombateEntrenador(ArchivoGuardado ctx, Player player,
+			Jugador jugador, String idEntrenador, Screen screen) {
 		super(ctx, player, jugador, screen);
 		this.fase = 0;
 		this.idEntrenador = idEntrenador;
@@ -177,6 +177,8 @@ public class CombateEntrenador extends Enfrentamiento {
 			dibujarVidas();
 			dibujarPokeballs();
 		}
+		if (fase > 2)
+			dibujarExp();
 		batch.end();
 	}
 
@@ -296,6 +298,9 @@ public class CombateEntrenador extends Enfrentamiento {
 					if (pkmn.getPs() <= 0 || pkmnpokemonEnemigo.getPs() <= 0) {
 						fase = 9;
 						dialogo.procesarDialogo("pokemon_muerto");
+						if(pkmnpokemonEnemigo.getPs() <= 0){
+							updateExperience(true);
+						}
 					} else {
 						fase = 3;
 						seleccionAtaque = 1;

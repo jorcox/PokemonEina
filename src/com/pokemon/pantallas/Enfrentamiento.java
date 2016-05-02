@@ -1,16 +1,16 @@
 package com.pokemon.pantallas;
 
+import habilidad.Habilidad;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import habilidad.Habilidad;
 import pokemon.Pokemon;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenManager;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -22,7 +22,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.pokemon.dialogo.Dialogo;
 import com.pokemon.entities.Player;
-import com.pokemon.mochila.Mochila;
+import com.pokemon.experience.Experiencia;
 import com.pokemon.tween.SpriteAccessor;
 import com.pokemon.utilidades.ArchivoGuardado;
 
@@ -65,13 +65,14 @@ public class Enfrentamiento extends Pantalla {
 
 	SpriteBatch batch;
 	Texture tipos, barraVida;
-	TextureRegion[] regionesTipo, regionesTipoSel, barrasVida;
+	TextureRegion[] regionesTipo, regionesTipoSel, barrasVida, barraExp;
 	protected Sprite bg, base, baseEnemy, message, pokemonEnemigo, pokemon,
 			bgOp, bgOpTrans, boton, luchar, mochilaS, pokemonOp, huir, dedo,
 			cajaLuchar, tipo1, tipo2, tipo3, tipo4, cajaPkmn,
-			cajaPkmnpokemonEnemigo, entrenador, protagonista;
+			cajaPkmnpokemonEnemigo, entrenador, protagonista, expBar;
 
-	public Enfrentamiento(ArchivoGuardado ctx, Player player, Jugador jugador, Screen screen) {
+	public Enfrentamiento(ArchivoGuardado ctx, Player player, Jugador jugador,
+			Screen screen) {
 		this.setCtx(ctx);
 		dialogo = new Dialogo("es", "ES");
 		this.jugador = jugador;
@@ -181,10 +182,12 @@ public class Enfrentamiento extends Pantalla {
 		cajaPkmn = new Sprite(new Texture("res/imgs/batallas/cajaPkmn.png"));
 		cajaPkmnpokemonEnemigo = new Sprite(new Texture(
 				"res/imgs/batallas/cajaPkmnEnemigo.png"));
+		expBar = new Sprite(new Texture("res/imgs/batallas/expbar.png"));
 		font.setColor(Color.BLACK);
 		fontC.setColor(Color.BLACK);
 		regionesTipos();
 		regionesTiposSel();
+		getExp();
 	}
 
 	@Override
@@ -582,8 +585,7 @@ public class Enfrentamiento extends Pantalla {
 					.setScreen(new MenuPokemon(jugador.getEquipo(), this, true));
 			break;
 		case 4: // huir
-			((Game) Gdx.app.getApplicationListener())
-			.setScreen(screen);
+			((Game) Gdx.app.getApplicationListener()).setScreen(screen);
 			break;
 		default:
 			break;
@@ -593,6 +595,40 @@ public class Enfrentamiento extends Pantalla {
 	public void setIPokemon(int i) {
 		pkmn = jugador.getPokemon(i);
 		iPokemon = i;
+	}
+
+	public void getExp() {
+		barraExp = new TextureRegion[2];
+		barraExp[0] = new TextureRegion(expBar, 31, 0, 225, 32);
+	}
+
+	public void dibujarExp() {
+		double exp=pkmn.getExperiencia();
+		if(exp>experienceToLevel(pkmn
+				.getNivel() + 1)){
+			exp=experienceToLevel(pkmn
+					.getNivel() + 1);
+		}
+		batch.draw(
+				barraExp[0],
+				470,
+				166,
+				(int) (230 *  exp/ (double) experienceToLevel(pkmn
+						.getNivel() + 1)), 10);
+	}
+
+	public int gainExperience(boolean trainer, int level) {
+		return Experiencia.gainExperience(trainer, level);
+	}
+
+	public int experienceToLevel(int level) {
+		return Experiencia.experienceToLevel(level);
+	}
+
+	public void updateExperience(boolean trainer) {
+		int exp=gainExperience(trainer, pkmnpokemonEnemigo.getNivel());
+		pkmn.setExperiencia(pkmn.getExperiencia()
+				+ exp);
 	}
 
 }
