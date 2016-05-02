@@ -10,7 +10,7 @@ package com.pokemon.experience;
  */
 public class Experiencia {
 
-	private static double factor = 4 / 5;
+	private static double factor = 4 / 5.0;
 
 	/**
 	 * Return the experience points that you earn after a fight

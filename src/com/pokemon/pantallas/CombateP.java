@@ -18,7 +18,8 @@ public class CombateP extends Enfrentamiento {
 
 	private boolean show = true;
 
-	public CombateP(ArchivoGuardado ctx,Player player, Jugador jugador, int fase, Screen screen) {
+	public CombateP(ArchivoGuardado ctx, Player player, Jugador jugador,
+			int fase, Screen screen) {
 		super(ctx, player, jugador, screen);
 		this.fase = fase;
 		dialogo.procesarDialogo("salvaje");
@@ -134,6 +135,13 @@ public class CombateP extends Enfrentamiento {
 			dibujarCajasVida();
 			dibujarVidas();
 		}
+		if(fase==12){
+			pokemon.draw(batch);
+			dibujarCajasVida();
+			dibujarVidas();
+		}
+		if (fase > 2)
+			dibujarExp();
 		batch.end();
 	}
 
@@ -212,6 +220,9 @@ public class CombateP extends Enfrentamiento {
 					if (pkmn.getPs() <= 0 || pkmnpokemonEnemigo.getPs() <= 0) {
 						fase = 9;
 						dialogo.procesarDialogo("pokemon_muerto");
+						if(pkmnpokemonEnemigo.getPs() <= 0){
+							updateExperience(false);
+						}
 					} else {
 						fraseAtaque();
 					}
