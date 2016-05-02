@@ -13,22 +13,23 @@ import com.pokemon.pantallas.CombateP;
 import entrenadores.Entrenador;
 
 public class PokemonAdaByron extends Game {
-	
+
 	/*
 	 * Log
 	 */
-	public static final String LOG = "Pokemon Ada Byron"; 
-	
+	public static final String LOG = "Pokemon Ada Byron";
+
 	public int WIDTH = 1000;
-	
+
 	public int HEIGHT = 700;
-	
+
 	private SpriteBatch batch;
 	private Texture img;
 
 	@Override
 	public void create() {
 		ArchivoGuardado ctx = new ArchivoGuardado();
+
 		//setScreen(new Salvaje(280,280,3));
 		//setScreen(new Play(1200, 2600, 3, "Bosque.tmx"));
 		//setScreen(new Play(1200, 1800, 3, "Tranvia_n.tmx"));
