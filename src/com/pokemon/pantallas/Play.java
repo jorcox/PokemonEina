@@ -38,6 +38,7 @@ import com.pokemon.dialogo.Dialogo;
 import com.pokemon.entities.NPC;
 import com.pokemon.entities.Player;
 import com.pokemon.mochila.Antidoto;
+import com.pokemon.mochila.MO;
 import com.pokemon.mochila.Pocion;
 import com.pokemon.render.TextureMapObjectRenderer;
 import com.pokemon.tween.SpriteAccessor;
@@ -445,10 +446,16 @@ public class Play extends Pantalla {
 			dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
 
 			/* Introduce en mochila */
-			if (value.equals("Pociï¿½n")) {
+			if (value.equals("Poción")) {
 				getCtx().mochila.add(new Pocion());
-			} else if (value.equals("Antï¿½doto")) {
+			} else if (value.equals("Antídoto")) {
 				getCtx().mochila.add(new Antidoto());
+			} else if (value.equals("Corte")) {
+				getCtx().mochila.add(new MO("Corte"));
+			} else if (value.equals("Fuerza")) {
+				getCtx().mochila.add(new MO("Fuerza"));
+			} else if (value.equals("Surf")) {
+				getCtx().mochila.add(new MO("Surf"));
 			}
 
 			/* Asi no se puede volver a coger ese item */
