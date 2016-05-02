@@ -253,7 +253,9 @@ public class Player extends Sprite {
 			if(visible(npc)){
 				velocity.x = 0;
 				velocity.y = 0;
+				play.pauseListener();
 				npc.moverAPersonaje(this);
+				//play.resumeListener();
 			}
 		}
 		
@@ -294,25 +296,25 @@ public class Player extends Sprite {
 		float npcY = npc.getY();
 		float minX = 0, maxX = 0, minY = 0, maxY = 0;
 		if(dir.equals("cara")){
-			minX = npcX - 5;
-			maxX = npcX + 5;
+			minX = npcX - 1;
+			maxX = npcX + 1;
 			minY = npcY - (32*dis);
 			maxY = npcY;			
 		} else if(dir.equals("espalda")){
-			minX = npcX - 5;
-			maxX = npcX + 5;
+			minX = npcX - 1;
+			maxX = npcX + 1;
 			minY = npcY;
 			maxY = npcY  + (32*dis);			
 		} else if(dir.equals("izquierda")){
 			minX = npcX - (32*dis);
 			maxX = npcX;
-			minY = npcY - 5 ;
-			maxY = npcY + 5;			
+			minY = npcY - 1 ;
+			maxY = npcY + 1;			
 		} else if(dir.equals("derecha")){
 			minX = npcX;
 			maxX = npcX + (32*dis);
-			minY = npcY - 5 ;
-			maxY = npcY + 5;		
+			minY = npcY - 1;
+			maxY = npcY + 1;		
 		}
 		return (maxX > getX())
 				&& (minX < getX())
