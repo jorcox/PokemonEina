@@ -13,31 +13,31 @@ import com.pokemon.pantallas.CombateP;
 import entrenadores.Entrenador;
 
 public class PokemonAdaByron extends Game {
-	
+
 	/*
 	 * Log
 	 */
-	public static final String LOG = "Pokemon Ada Byron"; 
-	
+	public static final String LOG = "Pokemon Ada Byron";
+
 	public int WIDTH = 1000;
-	
+
 	public int HEIGHT = 700;
-	
+
 	private SpriteBatch batch;
 	private Texture img;
 
 	@Override
 	public void create() {
 		ArchivoGuardado ctx = new ArchivoGuardado();
-		//setScreen(new Salvaje(280,280,3));
-		//setScreen(new Play(1200, 2600, 3, "Bosque.tmx"));
-		//setScreen(new Play(1200, 1800, 3, "Tranvia_n.tmx"));
-		setScreen(new Play(ctx, 600, 800, 3, "Hall.tmx"));
-		//setScreen(new Bienvenida(ctx, this));
-		//setScreen(new Play(1200, 500, 3, "Prueba.tmx"));
-		//setScreen(new Play(2800, 2000, 3, "Cueva.tmx"));
-		//setScreen(new Play(970, 3000, 3, "Lab1.tmx"));
-		//setScreen(new Play(ctx, 700, 2400, 3, "Pasillo.tmx"));
+		// setScreen(new Salvaje(280,280,3));
+		setScreen(new Play(ctx, 1200, 2600, 3, "Bosque.tmx"));
+		// setScreen(new Play(1200, 1800, 3, "Tranvia_n.tmx"));
+		// setScreen(new Play(ctx, 600, 800, 3, "Hall.tmx"));
+		// setScreen(new Bienvenida(ctx, this));
+		// setScreen(new Play(1200, 500, 3, "Prueba.tmx"));
+		// setScreen(new Play(2800, 2000, 3, "Cueva.tmx"));
+		// setScreen(new Play(970, 3000, 3, "Lab1.tmx"));
+		// setScreen(new Play(ctx, 700, 2400, 3, "Pasillo.tmx"));
 	}
 
 	@Override
