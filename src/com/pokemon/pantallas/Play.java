@@ -352,28 +352,53 @@ public class Play extends Pantalla {
 				if (dialogando) {
 					/* Esta en pleno dialogo, Enter lo va avanzando */
 					optionsVisible = true;
-	
+
 					if (!dialogo.isWriting()) {
 						String l1 = dialogo.siguienteLinea();
 						String l2 = dialogo.siguienteLinea();
-	
+
 						if (l1 != null) {
 							if (l2 == null) {
 								l2 = "";
-	
 							}
+
+							if (l1.contains("${NOMBRE}")) {
+								l1 = l1.replace("${NOMBRE}",
+										ArchivoGuardado.nombreJugador);
+							} else if (l2.contains("${NOMBRE}")) {
+								l2 = l2.replace("${NOMBRE}",
+										ArchivoGuardado.nombreJugador);
+							} else if (l1.contains("${CREACION_NOMBRE}")
+									|| l2.contains("${CREACION_NOMBRE}")) {
+								l1 = l1.replace("${CREACION_NOMBRE}", "");
+								l2 = l2.replace("${CREACION_NOMBRE}", "");
+								ArchivoGuardado.nombreJugador = "Sara";
+							}
+
+							/* Escribe letra a letra el dialogo */
+							dialogo.setLineas(l1, l2);
+
+							/*
+							 * if (script[counter].contains("(OPTION)")) {
+							 * script[counter] = script[counter].replace(
+							 * "(OPTION)", ""); optionsVisible = true; }
+							 */
+						} else {
+							dialogo.limpiar();
+							optionsVisible = false;
+							dialogando = false;
 						}
-					} else {
-						/* Busca interactuar con algo */
-						for (MapObject o : map.getLayers().get("Objetos").getObjects()) {
-							TextureMapObject t = (TextureMapObject) o;
-							Gdx.app.log("cartel", "distancia " + distance(t));
-	
-							/* Dispara evento si estan muy cerca jugador y objeto */
-							if (distance(t) < 50) {
-								interact(t);
-								break;
-							}
+					}
+				} else {
+					/* Busca interactuar con algo */
+					for (MapObject o : map.getLayers().get("Objetos").getObjects()) {
+						TextureMapObject t = (TextureMapObject) o;
+						Gdx.app.log("cartel", "distancia " + distance(t));
+
+						/* Dispara evento si estan muy cerca jugador y objeto */
+						if (distance(t) < 50) {
+							interact(t);
+							break;
 						}
 					}
 				}
