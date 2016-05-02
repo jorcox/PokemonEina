@@ -1,6 +1,9 @@
 package com.pokemon.pantallas;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 import pokemon.Pokemon;
 import aurelienribon.tweenengine.Tween;
@@ -24,6 +27,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -68,6 +72,9 @@ public class Play implements Screen, InputProcessor {
 	private Stage stage;
 	private ArrayList<NPC> npcs = new ArrayList<>();
 	private boolean dialogando;
+	
+	/* Para pausar el listener de teclas */
+	private boolean listener = true;
 
 	public Play(float x, float y, int lastPressed, String mapa) {
 		dialogo = new Dialogo("es", "ES");
@@ -142,13 +149,6 @@ public class Play implements Screen, InputProcessor {
 		box.setX(box.getX() + 160);
 
 		font.setColor(Color.BLACK);
-
-		/* Mostrar objetos */
-		renderer.getBatch().begin();
-		for (MapObject o : map.getLayers().get("Objetos").getObjects()) {
-			renderer.renderObject(o);
-		}
-		renderer.getBatch().end();
 	}
 
 	@Override
@@ -164,18 +164,39 @@ public class Play implements Screen, InputProcessor {
 		renderer.setView(camera);
 		renderer.render();
 
+		/* Begin */
 		renderer.getBatch().begin();
-		/* Player */
-		player.draw(renderer.getBatch());
+		
+		ArrayList<?> render = ordenar(player, npcs, map.getLayers().get("Objetos").getObjects());
+		for (Object object : render) {
+			if(object instanceof Player){
+				((Player) object).draw(renderer.getBatch());
+			} else if(object instanceof NPC){
+				((NPC) object).draw(renderer.getBatch());
+			} else {
+				renderer.renderObject((MapObject) object); 
+			}
+		}
+		
+//		/* Player */
+//		player.draw(renderer.getBatch());
+//
+//		/* NPC */
+//		for (NPC npc : npcs) {
+//			npc.draw(renderer.getBatch());
+//		}
+//		/* Mostrar objetos */
+//		for (MapObject o : map.getLayers().get("Objetos").getObjects()) {
+//			renderer.renderObject(o);
+//		}		
+		/* End */
+		renderer.getBatch().end();
+		
+		/* Menu */
 		if (player.getSpacePressed()) {
 			// Show menu
 			openMenuPlay();
 		}
-		/* NPC */
-		for (NPC npc : npcs) {
-			npc.draw(renderer.getBatch());
-		}
-		renderer.getBatch().end();
 
 		if (optionsVisible) {
 			batch.begin();
@@ -188,11 +209,55 @@ public class Play implements Screen, InputProcessor {
 
 	}
 
+	private ArrayList<Object> ordenar(Player player, ArrayList<NPC> npcs, MapObjects objects) {
+		ArrayList<Object> componentes =  new ArrayList<>();
+		componentes.add(player);
+		componentes.addAll(npcs);
+		for (MapObject object : objects) {
+			componentes.add(object);
+		}
+		Collections.sort(componentes, new CustomComparator());
+		
+		return componentes;
+	}
+	
+	public class CustomComparator implements Comparator<Object> {
+		@Override
+		public int compare(Object com1, Object com2) {
+			float Y1 = 0.0f;
+			float Y2 = 0.0f;
+			if(com1 instanceof Player){
+				Y1 = ((Player) com1).getY();
+			} else if(com1 instanceof NPC){
+				Y1 = ((NPC) com1).getY();
+			} else {
+				Y1 = ((TextureMapObject) com1).getY();
+			}
+			if(com2 instanceof Player){
+				Y2 = ((Player) com2).getY();
+			} else if(com2 instanceof NPC){
+				Y2 = ((NPC) com2).getY();
+			} else {
+				Y2 = ((TextureMapObject) com2).getY();
+			}
+			return (int)((Y2-Y1));
+		}
+	}
+
 	public void openMenuPlay() {
 		((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPlay(player
 				.getX(), player.getY(), player.getLastPressed(), map_,
 				player.mochila, jugador.getEquipo()));
 	}
+	
+	public void pauseListener(){
+		listener = false;
+	}
+	
+	public void resumeListener(){
+		listener = true;
+	}
+	
 
 	@Override
 	public void resize(int width, int height) {
@@ -239,118 +304,119 @@ public class Play implements Screen, InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		//player.checkCombat();
-		switch (keycode) {
-		case Keys.W:
-			player.velocity.y = player.speed;
-			player.velocity.x = 0;
-			player.animationTime = 0;
-			player.setLastPressed(2);
-			if (lastPressed == 0) {
-				lastPressed = 2;
-			}
-			player.WPressed = true;
-			break;
-		case Keys.A:
-			player.velocity.x = -player.speed;
-			player.velocity.y = 0;
-			player.animationTime = 0;
-			player.setLastPressed(1);
-			if (lastPressed == 0) {
-				lastPressed = 1;
-			}
-			player.APressed = true;
-			break;
-		case Keys.S:
-			player.velocity.y = -player.speed;
-
-			player.velocity.x = 0;
-			player.animationTime = 0;
-			player.setLastPressed(3);
-			if (lastPressed == 0) {
-				lastPressed = 3;
-			}
-			player.SPressed = true;
-			break;
-		case Keys.D:
-			player.velocity.x = player.speed;
-			player.velocity.y = 0;
-			player.animationTime = 0;
-			player.setLastPressed(4);
-			if (lastPressed == 0) {
-				lastPressed = 4;
-			}
-			player.DPressed = true;
-			break;
-		case Keys.SPACE:
-			player.SpacePressed = true;
-			break;
-		case Keys.ENTER:
-			if (dialogando) {
-				/* Esta en pleno dialogo, Enter lo va avanzando */
-				optionsVisible = true;
-
-				if (!dialogo.isWriting()) {
-					String l1 = dialogo.siguienteLinea();
-					String l2 = dialogo.siguienteLinea();
-
-					if (l1 != null) {
-						if (l2 == null) {
-							l2 = "";
+		if(listener){
+			//player.checkCombat();
+			switch (keycode) {
+			case Keys.W:
+				player.velocity.y = player.speed;
+				player.velocity.x = 0;
+				player.animationTime = 0;
+				player.setLastPressed(2);
+				if (lastPressed == 0) {
+					lastPressed = 2;
+				}
+				player.WPressed = true;
+				break;
+			case Keys.A:
+				player.velocity.x = -player.speed;
+				player.velocity.y = 0;
+				player.animationTime = 0;
+				player.setLastPressed(1);
+				if (lastPressed == 0) {
+					lastPressed = 1;
+				}
+				player.APressed = true;
+				break;
+			case Keys.S:
+				player.velocity.y = -player.speed;
+	
+				player.velocity.x = 0;
+				player.animationTime = 0;
+				player.setLastPressed(3);
+				if (lastPressed == 0) {
+					lastPressed = 3;
+				}
+				player.SPressed = true;
+				break;
+			case Keys.D:
+				player.velocity.x = player.speed;
+				player.velocity.y = 0;
+				player.animationTime = 0;
+				player.setLastPressed(4);
+				if (lastPressed == 0) {
+					lastPressed = 4;
+				}
+				player.DPressed = true;
+				break;
+			case Keys.SPACE:
+				player.SpacePressed = true;
+				break;
+			case Keys.ENTER:
+				if (dialogando) {
+					/* Esta en pleno dialogo, Enter lo va avanzando */
+					optionsVisible = true;
+	
+					if (!dialogo.isWriting()) {
+						String l1 = dialogo.siguienteLinea();
+						String l2 = dialogo.siguienteLinea();
+	
+						if (l1 != null) {
+							if (l2 == null) {
+								l2 = "";
+							}
+	
+							if (l1.contains("${NOMBRE}")) {
+								l1 = l1.replace("${NOMBRE}",
+										ArchivoGuardado.nombreJugador);
+							} else if (l2.contains("${NOMBRE}")) {
+								l2 = l2.replace("${NOMBRE}",
+										ArchivoGuardado.nombreJugador);
+							} else if (l1.contains("${CREACION_NOMBRE}")
+									|| l2.contains("${CREACION_NOMBRE}")) {
+								l1 = l1.replace("${CREACION_NOMBRE}", "");
+								l2 = l2.replace("${CREACION_NOMBRE}", "");
+								ArchivoGuardado.nombreJugador = "Sara";
+							}
+	
+							/* Escribe letra a letra el dialogo */
+							dialogo.setLineas(l1, l2);
+	
+							/*
+							 * if (script[counter].contains("(OPTION)")) {
+							 * script[counter] = script[counter].replace(
+							 * "(OPTION)", ""); optionsVisible = true; }
+							 */
+						} else {
+							dialogo.limpiar();
+							optionsVisible = false;
+							dialogando = false;
 						}
-
-						if (l1.contains("${NOMBRE}")) {
-							l1 = l1.replace("${NOMBRE}",
-									ArchivoGuardado.nombreJugador);
-						} else if (l2.contains("${NOMBRE}")) {
-							l2 = l2.replace("${NOMBRE}",
-									ArchivoGuardado.nombreJugador);
-						} else if (l1.contains("${CREACION_NOMBRE}")
-								|| l2.contains("${CREACION_NOMBRE}")) {
-							l1 = l1.replace("${CREACION_NOMBRE}", "");
-							l2 = l2.replace("${CREACION_NOMBRE}", "");
-							ArchivoGuardado.nombreJugador = "Sara";
+					}
+				} else {
+					/* Busca interactuar con algo */
+					for (MapObject o : map.getLayers().get("Objetos").getObjects()) {
+						TextureMapObject t = (TextureMapObject) o;
+						Gdx.app.log("cartel", "distancia " + distance(t));
+	
+						/* Dispara evento si estan muy cerca jugador y objeto */
+						if (distance(t) < 50) {
+							interact(t);
+							break;
 						}
-
-						/* Escribe letra a letra el dialogo */
-						dialogo.setLineas(l1, l2);
-
-						/*
-						 * if (script[counter].contains("(OPTION)")) {
-						 * script[counter] = script[counter].replace(
-						 * "(OPTION)", ""); optionsVisible = true; }
-						 */
-					} else {
-						dialogo.limpiar();
-						optionsVisible = false;
-						dialogando = false;
 					}
 				}
-			} else {
-				/* Busca interactuar con algo */
-				for (MapObject o : map.getLayers().get("Objetos").getObjects()) {
-					TextureMapObject t = (TextureMapObject) o;
-					Gdx.app.log("cartel", "distancia " + distance(t));
-
-					/* Dispara evento si estan muy cerca jugador y objeto */
-					if (distance(t) < 50) {
-						interact(t);
-						break;
-					}
-				}
+				break;
+			case Keys.C:
+				((Game) Gdx.app.getApplicationListener()).setScreen(new CombateP(
+						player, jugador, 1, this));
+				break;
+			case Keys.V:
+				((Game) Gdx.app.getApplicationListener())
+						.setScreen(new CombateEntrenador(player, jugador,
+								"reverte", this));
+				break;
 			}
-			break;
-		case Keys.C:
-			((Game) Gdx.app.getApplicationListener()).setScreen(new CombateP(
-					player, jugador, 1, this));
-			break;
-		case Keys.V:
-			((Game) Gdx.app.getApplicationListener())
-					.setScreen(new CombateEntrenador(player, jugador,
-							"reverte", this));
-			break;
 		}
-
 		return false;
 	}
 
@@ -412,78 +478,80 @@ public class Play implements Screen, InputProcessor {
 
 	@Override
 	public boolean keyUp(int keycode) {
-		switch (keycode) {
-		case Keys.W:
-			if (player.SPressed) {
-				player.velocity.x = 0;
-				player.velocity.y = -player.speed;
-			} else if (player.APressed) {
-				player.velocity.y = 0;
-				player.velocity.x = -player.speed;
-			} else if (player.DPressed) {
-				player.velocity.y = 0;
-				player.velocity.x = player.speed;
-			} else {
-				player.velocity.y = 0;
+		if(listener){
+			switch (keycode) {
+			case Keys.W:
+				if (player.SPressed) {
+					player.velocity.x = 0;
+					player.velocity.y = -player.speed;
+				} else if (player.APressed) {
+					player.velocity.y = 0;
+					player.velocity.x = -player.speed;
+				} else if (player.DPressed) {
+					player.velocity.y = 0;
+					player.velocity.x = player.speed;
+				} else {
+					player.velocity.y = 0;
+				}
+				player.animationTime = 0;
+				lastPressed = 2;
+				player.WPressed = false;
+				break;
+			case Keys.A:
+				if (player.DPressed) {
+					player.velocity.y = 0;
+					player.velocity.x = player.speed;
+				} else if (player.WPressed) {
+					player.velocity.x = 0;
+					player.velocity.y = player.speed;
+				} else if (player.SPressed) {
+					player.velocity.x = 0;
+					player.velocity.y = -player.speed;
+				} else {
+					player.velocity.x = 0;
+				}
+				player.animationTime = 0;
+				lastPressed = 1;
+				player.APressed = false;
+				break;
+			case Keys.S:
+				if (player.WPressed) {
+					player.velocity.x = 0;
+					player.velocity.y = player.speed;
+				} else if (player.APressed) {
+					player.velocity.y = 0;
+					player.velocity.x = -player.speed;
+				} else if (player.DPressed) {
+					player.velocity.y = 0;
+					player.velocity.x = player.speed;
+				} else {
+					player.velocity.y = 0;
+				}
+				player.animationTime = 0;
+				lastPressed = 3;
+				player.SPressed = false;
+				break;
+			case Keys.D:
+				if (player.APressed) {
+					player.velocity.y = 0;
+					player.velocity.x = -player.speed;
+				} else if (player.WPressed) {
+					player.velocity.x = 0;
+					player.velocity.y = player.speed;
+				} else if (player.SPressed) {
+					player.velocity.x = 0;
+					player.velocity.y = -player.speed;
+				} else {
+					player.velocity.x = 0;
+				}
+				player.animationTime = 0;
+				lastPressed = 4;
+				player.DPressed = false;
+				break;
+			case Keys.SPACE:
+				player.SpacePressed = false;
+				break;
 			}
-			player.animationTime = 0;
-			lastPressed = 2;
-			player.WPressed = false;
-			break;
-		case Keys.A:
-			if (player.DPressed) {
-				player.velocity.y = 0;
-				player.velocity.x = player.speed;
-			} else if (player.WPressed) {
-				player.velocity.x = 0;
-				player.velocity.y = player.speed;
-			} else if (player.SPressed) {
-				player.velocity.x = 0;
-				player.velocity.y = -player.speed;
-			} else {
-				player.velocity.x = 0;
-			}
-			player.animationTime = 0;
-			lastPressed = 1;
-			player.APressed = false;
-			break;
-		case Keys.S:
-			if (player.WPressed) {
-				player.velocity.x = 0;
-				player.velocity.y = player.speed;
-			} else if (player.APressed) {
-				player.velocity.y = 0;
-				player.velocity.x = -player.speed;
-			} else if (player.DPressed) {
-				player.velocity.y = 0;
-				player.velocity.x = player.speed;
-			} else {
-				player.velocity.y = 0;
-			}
-			player.animationTime = 0;
-			lastPressed = 3;
-			player.SPressed = false;
-			break;
-		case Keys.D:
-			if (player.APressed) {
-				player.velocity.y = 0;
-				player.velocity.x = -player.speed;
-			} else if (player.WPressed) {
-				player.velocity.x = 0;
-				player.velocity.y = player.speed;
-			} else if (player.SPressed) {
-				player.velocity.x = 0;
-				player.velocity.y = -player.speed;
-			} else {
-				player.velocity.x = 0;
-			}
-			player.animationTime = 0;
-			lastPressed = 4;
-			player.DPressed = false;
-			break;
-		case Keys.SPACE:
-			player.SpacePressed = false;
-			break;
 		}
 		return false;
 	}
