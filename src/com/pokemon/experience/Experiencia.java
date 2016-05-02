@@ -19,13 +19,13 @@ public class Experiencia {
 	 * @param level
 	 * @return
 	 */
-	public static double gainExperience(boolean trainer, int level) {
+	public static int gainExperience(boolean trainer, int level) {
 		double factor = 1.0;
 		if (trainer) {
 			factor = 1.5;
 		}
 		double baseExperience = baseExperience(level);
-		return factor * baseExperience * level;
+		return (int) (factor * baseExperience * level);
 	}
 
 	/**
@@ -34,8 +34,8 @@ public class Experiencia {
 	 * @param level
 	 * @return
 	 */
-	public static double experienceToLevel(int level) {
-		return factor * Math.pow(level, 3);
+	public static int experienceToLevel(int level) {
+		return (int)(factor * Math.pow(level, 3));
 	}
 
 	/**
@@ -44,8 +44,8 @@ public class Experiencia {
 	 * @param level
 	 * @return
 	 */
-	public static double baseExperience(int level) {
-		double acc = 0;
+	public static int baseExperience(int level) {
+		int acc = 0;
 		for (int i = 1; i <= level; i++) {
 			acc += experienceToLevel(i);
 		}
