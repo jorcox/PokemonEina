@@ -17,7 +17,7 @@ public class IntroducirDatos {
 
 	public void introducirPokemon() {
 		try {
-			db.update("INSERT INTO pokemon(nivel,nombre,tipo,ps,ataque,defensa,ataque_esp,defensa_esp,velocidad,mov1,mov2,mov3,mov4,experiencia,estado,entrenador)"
+			/*db.update("INSERT INTO pokemon(nivel,nombre,tipo,ps,ataque,defensa,ataque_esp,defensa_esp,velocidad,mov1,mov2,mov3,mov4,experiencia,estado,entrenador)"
 					+ " VALUES(100, 'Pikachu','ELECTRIC', 100, 100, 100, 100, 100, 100, 100,25,53,400,0, 0,0)");
 			db.update("INSERT INTO pokemon(nivel,nombre,tipo,ps,ataque,defensa,ataque_esp,defensa_esp,velocidad,mov1,mov2,mov3,mov4,experiencia,estado,entrenador)"
 					+ " VALUES(100, 'Charizard','FIRE', 100, 100, 100, 100, 100, 100, 100,25,53,400,0, 0,0)");
@@ -28,7 +28,9 @@ public class IntroducirDatos {
 			db.update("INSERT INTO pokemon(nivel,nombre,tipo,ps,ataque,defensa,ataque_esp,defensa_esp,velocidad,mov1,mov2,mov3,mov4,experiencia,estado,entrenador)"
 					+ " VALUES(100, 'Caterpie','BUG', 100, 100, 100, 100, 100, 100, 100,25,53,400,0, 0,2)");
 			db.update("INSERT INTO pokemon(nivel,nombre,tipo,ps,ataque,defensa,ataque_esp,defensa_esp,velocidad,mov1,mov2,mov3,mov4,experiencia,estado,entrenador)"
-					+ " VALUES(100, 'Blastoise','ELECTRIC', 100, 100, 100, 100, 100, 100, 100,25,53,400,0, 0,2)");
+					+ " VALUES(100, 'Blastoise','ELECTRIC', 100, 100, 100, 100, 100, 100, 100,25,53,400,0, 0,2)");*/
+			db.update("INSERT INTO pokemon(nivel,nombre,tipo,ps,ataque,defensa,ataque_esp,defensa_esp,velocidad,mov1,mov2,mov3,mov4,experiencia,estado,entrenador)"
+					+ " VALUES(100, 'Mewtwo','PSYCHIC', 100, 100, 100, 100, 100, 100, 134,449,240,173,0, 0,2)");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
