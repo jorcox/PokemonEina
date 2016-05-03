@@ -211,8 +211,7 @@ public class MenuPlay extends Pantalla {
 			((Game) Gdx.app.getApplicationListener()).setScreen(new MenuMochila(getCtx(), this));
 			break;
 		case 3:
-			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(getCtx(), x, y,
-					lastPressed, map));
+			((Game) Gdx.app.getApplicationListener()).setScreen(new OpcionesTeclas(getCtx(), this));
 			break;
 		case 4:
 			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(getCtx(), x, y,
