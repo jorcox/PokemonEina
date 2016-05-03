@@ -51,6 +51,7 @@ public class Enfrentamiento extends Pantalla {
 	protected Combate combate;
 	protected Entrenador en;
 	protected boolean orden;
+	protected boolean acierto=true;
 	protected float trans = 1;
 	protected int intervalo = 4;
 	protected int veces = 8;
@@ -470,8 +471,9 @@ public class Enfrentamiento extends Pantalla {
 
 			if (!dialogo.isWriting()) {
 				actualPsS = pkmnpokemonEnemigo.getPs();
-				if (combate.ejecutar(pkmn, pkmnpokemonEnemigo,
-						pkmn.getHabilidad(seleccionAtaque))) {
+				acierto=combate.ejecutar(pkmn, pkmnpokemonEnemigo,
+						pkmn.getHabilidad(seleccionAtaque));
+				if (acierto) {
 					fase++;
 				} else {
 					// Ataque fallido
@@ -480,18 +482,17 @@ public class Enfrentamiento extends Pantalla {
 							"¡" + jugador.getEquipo().get(iPokemon).getNombre()
 									+ " falló! Vaya mierdas...", "" };
 					dialogo.setFrases(frase);
-					String l1 = dialogo.siguienteLinea();
-					String l2 = dialogo.siguienteLinea();
-					dialogo.setLineas(l1, l2);
+					
 				}
 			}
 		} else {
 			int seleccionEnemigo = combate.decidir(pkmnpokemonEnemigo);
 
 			if (!dialogo.isWriting()) {
+				acierto=combate.ejecutar(pkmnpokemonEnemigo, pkmn,
+						pkmnpokemonEnemigo.getHabilidad(seleccionEnemigo));
 				actualPs = pkmn.getPs();
-				if (combate.ejecutar(pkmnpokemonEnemigo, pkmn,
-						pkmnpokemonEnemigo.getHabilidad(seleccionEnemigo))) {
+				if (acierto) {
 					fase++;
 				} else {
 					fase = 11;
@@ -499,9 +500,7 @@ public class Enfrentamiento extends Pantalla {
 							"¡" + pkmnpokemonEnemigo.getNombre()
 									+ " falló! Vaya mierdas...", "" };
 					dialogo.setFrases(frase);
-					String l1 = dialogo.siguienteLinea();
-					String l2 = dialogo.siguienteLinea();
-					dialogo.setLineas(l1, l2);
+					
 				}
 			}
 		}
@@ -512,6 +511,13 @@ public class Enfrentamiento extends Pantalla {
 		String[] frase = {
 				"¡" + pokemon.getNombre() + " uso "
 						+ pokemon.getHabilidad(id).getNombre() + "!", "" };
+		return frase;
+	}
+	
+	public String[] frasesExperiencia(boolean trainer) {
+		String[] frase = {
+				"¡" + pkmn.getNombre() + " ganó "
+						+ gainExperience(trainer,pkmnpokemonEnemigo.getNivel()) + " puntos de EXP.!", "" };
 		return frase;
 	}
 

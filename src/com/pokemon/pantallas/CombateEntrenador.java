@@ -92,8 +92,8 @@ public class CombateEntrenador extends Enfrentamiento {
 		if (fase > 2) {
 			baseEnemy.setPosition(350, 300);
 			base.setPosition(-70, 120);
-			pokemonEnemigo.setSize(tamanoPokemon, tamanoPokemon);
-			pokemon.setSize(tamanoPokemon, tamanoPokemon);
+			pokemonEnemigo.setSize(185, 185);
+			pokemon.setSize(185, 185);
 			pokemonEnemigo.setPosition(400, 350);
 			pokemon.setPosition(50, 99);
 			pokemonEnemigo.draw(batch);
@@ -130,6 +130,7 @@ public class CombateEntrenador extends Enfrentamiento {
 			 * Dialogo Ataque
 			 */
 			pokemon.setAlpha(1);
+			pokemonEnemigo.setAlpha(1);
 			pokemon.draw(batch);
 			dibujarCajasVida();
 			dibujarVidas();
@@ -144,11 +145,15 @@ public class CombateEntrenador extends Enfrentamiento {
 			dibujarVidas();
 			dibujarPokeballs();
 			if ((orden && fase == 6) || (!orden && fase == 8)) {
-				ataqueRecibido(true);
+				pokemonEnemigo.setAlpha(1);
+				if (acierto)
+					ataqueRecibido(true);
 				animacionVida(true);
 				dibujarVida(true);
 			} else {
-				ataqueRecibido(false);
+				pokemon.setAlpha(1);
+				if (acierto)
+					ataqueRecibido(false);
 				animacionVida(false);
 				dibujarVida(false);
 			}
@@ -176,6 +181,14 @@ public class CombateEntrenador extends Enfrentamiento {
 			dibujarCajasVida();
 			dibujarVidas();
 			dibujarPokeballs();
+		}
+		if (fase == 12) {
+			pokemon.draw(batch);
+			dibujarCajasVida();
+			dibujarVidas();
+		}
+		if (fase == 13) {
+			aparicionPokemonEnemigo(pokemonEnemigo);
 		}
 		if (fase > 2)
 			dibujarExp();
@@ -296,7 +309,7 @@ public class CombateEntrenador extends Enfrentamiento {
 					if (pkmn.getPs() <= 0 || pkmnpokemonEnemigo.getPs() <= 0) {
 						fase = 9;
 						dialogo.procesarDialogo("pokemon_muerto");
-						if(pkmnpokemonEnemigo.getPs() <= 0){
+						if (pkmnpokemonEnemigo.getPs() <= 0) {
 							updateExperience(true);
 						}
 					} else {
@@ -307,38 +320,86 @@ public class CombateEntrenador extends Enfrentamiento {
 				} else if (fase == 9) {
 					String l1 = dialogo.siguienteLinea();
 					String l2 = dialogo.siguienteLinea();
-					if (!entrenadorE.vivo()) {
-						fase = 12;
-						dialogo.procesarDialogo("combate_ganado");
-					}
-					if (!jugador.vivo()) {
-						fase = 12;
-						dialogo.procesarDialogo("combate_perdido");
-					}
+
 					if (l1 == null) {
-						((Game) Gdx.app.getApplicationListener())
-								.setScreen(new MenuPokemon(getCtx(), jugador.getEquipo(),
-										this, true));
+						if (!entrenadorE.vivo()) {
+							fase = 12;
+							dialogo.procesarDialogo("combate_ganado");
+						} else if (!jugador.vivo()) {
+							fase = 12;
+							dialogo.procesarDialogo("combate_perdido");
+						} else if (!pkmnpokemonEnemigo.vivo()) {
+							/*
+							 * Enemigo saca siguiente pokemon
+							 */
+
+							iPokemonEnemigo++;
+							tamanoPokemon = 1;
+							pkmnpokemonEnemigo = entrenadorE
+									.getPokemon(iPokemonEnemigo);
+							pokemonEnemigo = new Sprite(new Texture(
+									"res/imgs/pokemon/"
+											+ pkmnpokemonEnemigo.getNombre()
+													.toLowerCase() + ".png"));
+							String[] frase = { "¡ENTRENADOR "
+									+ idEntrenador.toUpperCase()
+									+ " utiliza a "
+									+ entrenadorE.getPokemon(iPokemonEnemigo)
+											.getNombre() + "!" };
+							fase = 13;
+							dialogo.setFrases(frase);
+							l1 = dialogo.siguienteLinea();
+							l2 = dialogo.siguienteLinea();
+							dialogo.setLineas(l1, l2);
+						} else {
+							((Game) Gdx.app.getApplicationListener())
+									.setScreen(new MenuPokemon(getCtx(),
+											jugador.getEquipo(), this, true));
+						}
 					} else {
-						if (l1.contains("${POKEMON}")) {
+						if (l1.contains("debilitado")) {
 							if (pkmn.getPs() <= 0) {
 								l1 = l1.replace("${POKEMON}", pkmn.getNombre());
 							} else {
 								l1 = l1.replace("${POKEMON}",
 										pkmnpokemonEnemigo.getNombre());
 							}
+						} else if (l1.contains("${EXP}")) {
+							l1 = l1.replace(
+									"${EXP}",
+									gainExperience(false,
+											pkmnpokemonEnemigo.getNivel())
+											+ "");
+							l1 = l1.replace("${POKEMON}", pkmn.getNombre());
 						}
+						if (pkmnpokemonEnemigo.vivo() && l1.contains("puntos")) {
 
-						dialogo.setLineas(l1, l2);
+						} else {
+							dialogo.setLineas(l1, l2);
+						}
 					}
 
 				} else if (fase == 10) {
-					fase = 7;
-					dialogo.limpiar();
+					String l1 = dialogo.siguienteLinea();
+					String l2 = dialogo.siguienteLinea();
+
+					if (l1 == null) {
+						fase = 6;
+						dialogo.limpiar();
+					} else {
+						dialogo.setLineas(l1, l2);
+					}
 
 				} else if (fase == 11) {
-					fase = 3;
-					dialogo.limpiar();
+					String l1 = dialogo.siguienteLinea();
+					String l2 = dialogo.siguienteLinea();
+
+					if (l1 == null) {
+						fase = 3;
+						dialogo.limpiar();
+					} else {
+						dialogo.setLineas(l1, l2);
+					}
 				} else if (fase == 12) {
 					String l1, l2;
 					l1 = dialogo.siguienteLinea();
@@ -353,6 +414,14 @@ public class CombateEntrenador extends Enfrentamiento {
 						((Game) Gdx.app.getApplicationListener())
 								.setScreen(screen);
 					}
+				} else if (fase == 13) {
+					/*
+					 * String l1 = dialogo.siguienteLinea(); String l2 =
+					 * dialogo.siguienteLinea(); if (l1 != null) {
+					 * dialogo.setLineas(l1, l2); } else { fase = 3; }
+					 */
+					fase = 3;
+					dialogo.limpiar();
 				}
 			} else if (keycode == getCtx().getTeclaLeft()) {
 				if (fase == 3) {
@@ -472,9 +541,9 @@ public class CombateEntrenador extends Enfrentamiento {
 		ArrayList<Pokemon> lPoke = new ArrayList<Pokemon>();
 		try {
 			db = new BaseDatos("pokemon_base");
-			pkmnpokemonEnemigo = db.getPokemon(2);
+			pkmnpokemonEnemigo = db.getPokemon(3);
 			lPoke.add(pkmnpokemonEnemigo);
-			// lPoke.add(db.getPokemon(3));
+			lPoke.add(db.getPokemon(2));
 			db.shutdown();
 		} catch (Exception e) {
 			e.printStackTrace();
