@@ -1,6 +1,8 @@
 package com.pokemon.utilidades;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -66,12 +68,11 @@ public class ArchivoGuardado {
 	 */
 	public Mochila mochila;
 	
-	private int teclaUp;
-	private int teclaDown;
-	private int teclaLeft;
-	private int teclaRight;
-	private int teclaA;
-	private int teclaB;
+	/* 
+	 * Vector de tecla asignada a cada accion.
+	 * 0: UP. 1: DOWN. 2: LEFT. 3: RIGHT. 4: A. 5: B.
+	 */
+	private List<Integer> teclas;
 	
 	public static void cargar() {
 		comprobarExistencia();
@@ -86,7 +87,6 @@ public class ArchivoGuardado {
 			try {
 				Importador.impt();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else {
@@ -100,6 +100,7 @@ public class ArchivoGuardado {
 	
 	public ArchivoGuardado() {
 		mochila = new Mochila();
+		teclas = new ArrayList<>(6);
 		setDefaultKeys();
 		
 		// Objetos de prueba metidos a pelo
@@ -112,60 +113,80 @@ public class ArchivoGuardado {
 	}
 	
 	private void setDefaultKeys() {
-		teclaUp = Keys.UP;
-		teclaDown = Keys.DOWN;
-		teclaLeft = Keys.LEFT;
-		teclaRight = Keys.RIGHT;
-		teclaA = Keys.ENTER;
-		teclaB = Keys.SPACE;
+		teclas.add(Keys.UP);
+		teclas.add(Keys.DOWN);
+		teclas.add(Keys.LEFT);
+		teclas.add(Keys.RIGHT);
+		teclas.add(Keys.ENTER);
+		teclas.add(Keys.SPACE);
 	}
 	
 	public int getTeclaUp() {
-		return teclaUp;
+		return teclas.get(Tecla.UP.ordinal());
 	}
 
 	public void setTeclaUp(int teclaUp) {
-		this.teclaUp = teclaUp;
+		setAndSwap(teclaUp, Tecla.UP.ordinal());
 	}
 
 	public int getTeclaDown() {
-		return teclaDown;
+		return teclas.get(Tecla.DOWN.ordinal());
 	}
 
 	public void setTeclaDown(int teclaDown) {
-		this.teclaDown = teclaDown;
+		setAndSwap(teclaDown, Tecla.DOWN.ordinal());
 	}
 
 	public int getTeclaLeft() {
-		return teclaLeft;
+		return teclas.get(Tecla.LEFT.ordinal());
 	}
 
 	public void setTeclaLeft(int teclaLeft) {
-		this.teclaLeft = teclaLeft;
+		setAndSwap(teclaLeft, Tecla.LEFT.ordinal());
 	}
 
 	public int getTeclaRight() {
-		return teclaRight;
+		return teclas.get(Tecla.RIGHT.ordinal());
 	}
 
 	public void setTeclaRight(int teclaRight) {
-		this.teclaRight = teclaRight;
+		setAndSwap(teclaRight, Tecla.RIGHT.ordinal());
 	}
 
 	public int getTeclaA() {
-		return teclaA;
+		return teclas.get(Tecla.A.ordinal());
 	}
 
 	public void setTeclaA(int teclaA) {
-		this.teclaA = teclaA;
+		setAndSwap(teclaA, Tecla.A.ordinal());
 	}
 
 	public int getTeclaB() {
-		return teclaB;
+		return teclas.get(Tecla.B.ordinal());
 	}
 
 	public void setTeclaB(int teclaB) {
-		this.teclaB = teclaB;
+		setAndSwap(teclaB, Tecla.B.ordinal());
 	}
+	
+	/**
+	 * Antes de asignar una tecla, comprueba si no se ha asignado ya.
+	 * En ese caso, se intercambian las teclas en conflicto.
+	 * @param value tecla a asignar.
+	 * @param pos accion (posicion de vector teclas) asignada.
+	 */
+	private void setAndSwap(int value, int pos) {
+		if (teclas.contains(value)) {
+			/* Swap es necesario, esa tecla ya esta asociada */
+			int index = teclas.indexOf(value);
+			int aux = teclas.get(pos);
+			teclas.set(index, aux);
+		}
+		/* Asigna la tecla a la accion indicada */
+		teclas.set(pos, value);
+	}
+	
+	/* En teclas se almacenan en este orden */
+	public enum Tecla { UP, DOWN, LEFT, RIGHT, A, B }
 
 }
