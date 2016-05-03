@@ -218,9 +218,7 @@ public class CombateEntrenador extends Enfrentamiento {
 	@Override
 	public boolean keyDown(int keycode) {
 		if (!dialogo.isWriting()) {
-			switch (keycode) {
-			case (Keys.ENTER):
-
+			if (keycode == getCtx().getTeclaA()) {
 				if (fase == 0 || fase == 1 || fase == 2) {
 					/*
 					 * Dialogo de comienzo del combate
@@ -319,7 +317,7 @@ public class CombateEntrenador extends Enfrentamiento {
 					}
 					if (l1 == null) {
 						((Game) Gdx.app.getApplicationListener())
-								.setScreen(new MenuPokemon(jugador.getEquipo(),
+								.setScreen(new MenuPokemon(getCtx(), jugador.getEquipo(),
 										this, true));
 					} else {
 						if (l1.contains("${POKEMON}")) {
@@ -356,8 +354,7 @@ public class CombateEntrenador extends Enfrentamiento {
 								.setScreen(screen);
 					}
 				}
-				break;
-			case Keys.LEFT:
+			} else if (keycode == getCtx().getTeclaLeft()) {
 				if (fase == 3) {
 					if (seleccion != 1) {
 						seleccion -= 1;
@@ -367,9 +364,7 @@ public class CombateEntrenador extends Enfrentamiento {
 						seleccionAtaque -= 1;
 					}
 				}
-
-				break;
-			case Keys.RIGHT:
+			} else if (keycode == getCtx().getTeclaRight()) {
 				if (fase == 3) {
 					if (seleccion != 4) {
 						seleccion += 1;
@@ -379,30 +374,24 @@ public class CombateEntrenador extends Enfrentamiento {
 						seleccionAtaque += 1;
 					}
 				}
-				break;
-			case Keys.UP:
+			} else if (keycode == getCtx().getTeclaUp()) {
 				if (fase == 4) {
 					if (seleccionAtaque != 1 && seleccionAtaque != 2) {
 						seleccionAtaque -= 2;
 					}
 				}
-				break;
-			case Keys.DOWN:
+			} else if (keycode == getCtx().getTeclaDown()) {
 				if (fase == 4) {
 					if (seleccionAtaque != 3 && seleccionAtaque != 4) {
 						seleccionAtaque += 2;
 					}
 				}
-				break;
-			case Keys.ESCAPE:
+			} else if (keycode == Keys.ESCAPE) {
 				if (fase == 4) {
 					fase = 3;
 				}
-				break;
 			}
-
 		}
-
 		return false;
 	}
 

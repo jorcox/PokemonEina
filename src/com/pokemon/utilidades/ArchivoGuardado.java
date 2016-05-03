@@ -3,6 +3,7 @@ package com.pokemon.utilidades;
 import java.io.File;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.Vector2;
@@ -65,6 +66,13 @@ public class ArchivoGuardado {
 	 */
 	public Mochila mochila;
 	
+	private int teclaUp;
+	private int teclaDown;
+	private int teclaLeft;
+	private int teclaRight;
+	private int teclaA;
+	private int teclaB;
+	
 	public static void cargar() {
 		comprobarExistencia();
 	}
@@ -92,6 +100,7 @@ public class ArchivoGuardado {
 	
 	public ArchivoGuardado() {
 		mochila = new Mochila();
+		setDefaultKeys();
 		
 		// Objetos de prueba metidos a pelo
 		mochila.add(new Pocion());
@@ -100,6 +109,63 @@ public class ArchivoGuardado {
 		mochila.add(new Superball());
 		mochila.add(new Pokeball());
 		//mochila.add(new MO("Surf"));
+	}
+	
+	private void setDefaultKeys() {
+		teclaUp = Keys.UP;
+		teclaDown = Keys.DOWN;
+		teclaLeft = Keys.LEFT;
+		teclaRight = Keys.RIGHT;
+		teclaA = Keys.ENTER;
+		teclaB = Keys.SPACE;
+	}
+	
+	public int getTeclaUp() {
+		return teclaUp;
+	}
+
+	public void setTeclaUp(int teclaUp) {
+		this.teclaUp = teclaUp;
+	}
+
+	public int getTeclaDown() {
+		return teclaDown;
+	}
+
+	public void setTeclaDown(int teclaDown) {
+		this.teclaDown = teclaDown;
+	}
+
+	public int getTeclaLeft() {
+		return teclaLeft;
+	}
+
+	public void setTeclaLeft(int teclaLeft) {
+		this.teclaLeft = teclaLeft;
+	}
+
+	public int getTeclaRight() {
+		return teclaRight;
+	}
+
+	public void setTeclaRight(int teclaRight) {
+		this.teclaRight = teclaRight;
+	}
+
+	public int getTeclaA() {
+		return teclaA;
+	}
+
+	public void setTeclaA(int teclaA) {
+		this.teclaA = teclaA;
+	}
+
+	public int getTeclaB() {
+		return teclaB;
+	}
+
+	public void setTeclaB(int teclaB) {
+		this.teclaB = teclaB;
 	}
 
 }

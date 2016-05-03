@@ -133,15 +133,13 @@ public class MenuMochila extends Pantalla {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		switch (keycode) {
-		case Keys.SPACE:
+		if (keycode == getCtx().getTeclaB()) {
 			/* Vuelve al menu */
 			screen.setCtx(this.getCtx());
 			((Game) Gdx.app.getApplicationListener()).setScreen(screen);
-			break;
-		case Keys.ENTER:
-			break;
-		case Keys.DOWN:
+		} else if (keycode == getCtx().getTeclaA()) {
+			
+		} else if (keycode == getCtx().getTeclaDown()) {
 			/* Desciende en la lista de la mochila */
 			if (pointer < MAX_ITEMS -1 && pointer < getCtx().mochila.size(seccion) -1) {
 				/* Baja el puntero si quedan posiciones por bajar */
@@ -150,8 +148,7 @@ public class MenuMochila extends Pantalla {
 				/* Mueve la lista abajo si el puntero esta ya abajo */
 				first++;
 			}
-			break;
-		case Keys.UP:
+		} else if (keycode == getCtx().getTeclaUp()) {
 			/* Asciende en la lista de la mochila */
 			if (pointer > 0) {
 				/* Si el puntero no esta arriba, se sube */
@@ -160,14 +157,12 @@ public class MenuMochila extends Pantalla {
 				/* Si el puntero ya esta arriba, se sube la lista */
 				first--;
 			}
-			break;
-		case Keys.RIGHT:
+		} else if (keycode == getCtx().getTeclaRight()) {
 			/* Pasa a la siguiente lista de la mochila */
 			seccion = (seccion + 1) % NUM_SECCIONES;
 			first = 0;
 			pointer = 0;
-			break;
-		case Keys.LEFT:
+		} else if (keycode == getCtx().getTeclaLeft()) {
 			/* Pasa a la anterior lista de la mochila */
 			seccion = (seccion - 1) % NUM_SECCIONES;
 			if (seccion < 0) {
@@ -175,7 +170,6 @@ public class MenuMochila extends Pantalla {
 			}
 			first = 0;
 			pointer = 0;
-			break;
 		}
 		return false;
 	}
