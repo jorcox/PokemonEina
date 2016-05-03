@@ -1,5 +1,6 @@
 package com.pokemon.pantallas;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
@@ -143,7 +144,19 @@ public class OpcionesTeclas extends Pantalla {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		// TODO Auto-generated method stub
+		if (keycode == getCtx().getTeclaDown()) {
+			if (posicion < 5) {
+				posicion++;
+			}
+		} else if (keycode == getCtx().getTeclaUp()) {
+			if (posicion > 0) {
+				posicion--;
+			}
+		} else if (keycode == getCtx().getTeclaB()) {
+			/* Vuelve a la pantalla anterior */
+			screen.setCtx(this.getCtx());
+			((Game) Gdx.app.getApplicationListener()).setScreen(screen);
+		}
 		return false;
 	}
 
