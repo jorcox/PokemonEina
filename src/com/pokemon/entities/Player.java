@@ -18,6 +18,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.pokemon.dialogo.Dialogo;
 import com.pokemon.mochila.Antidoto;
+import com.pokemon.mochila.MO;
 import com.pokemon.mochila.Mochila;
 import com.pokemon.mochila.Pocion;
 import com.pokemon.mochila.Pokeball;
@@ -109,6 +110,7 @@ public class Player extends Sprite {
 		float oldX = getX(), oldY = getY(), tileWidth = collisionLayer.getTileWidth(),
 				tileHeight = collisionLayer.getTileHeight();
 		boolean collisionX = false, collisionY = false, collisionObj = false, collisionNpc = false;
+		boolean puedeNadar = play.getCtx().mochila.tieneSurf();
 		
 		/*
 		 * Movimiento en X
@@ -121,15 +123,22 @@ public class Player extends Sprite {
 			// (int) ((getY() + getHeight()) / tileHeight))
 			// .getTile().getProperties().containsKey("blocked");
 			// Middle left
-			if (!collisionX)
+			if (!collisionX) {
 				collisionX |= collisionLayer
 						.getCell((int) (getX() / tileWidth), (int) ((getY() + getHeight() / 2) / tileHeight)).getTile()
 						.getProperties().containsKey("blocked");
+				collisionX |= (collisionLayer
+						.getCell((int) (getX() / tileWidth), (int) ((getY() + getHeight() / 2) / tileHeight)).getTile()
+						.getProperties().containsKey("water") && !puedeNadar);
+			}
 
 			// Bottom left
-			if (!collisionX)
+			if (!collisionX) {
 				collisionX |= collisionLayer.getCell((int) (getX() / tileWidth), (int) (getY() / tileHeight)).getTile()
 						.getProperties().containsKey("blocked");
+				collisionX |= (collisionLayer.getCell((int) (getX() / tileWidth), (int) (getY() / tileHeight)).getTile()
+						.getProperties().containsKey("water") && !puedeNadar);
+			}
 		} else if (velocity.x > 0) {
 			// Top right
 			// collisionX = collisionLayer
@@ -137,17 +146,28 @@ public class Player extends Sprite {
 			// ((getY() + getHeight()) / tileHeight))
 			// .getTile().getProperties().containsKey("blocked");
 			// Middle right
-			if (!collisionX)
+			if (!collisionX) {
 				collisionX |= collisionLayer
 						.getCell((int) ((getX() + getWidth()) / tileWidth),
 								(int) ((getY() + getHeight() / 2) / tileHeight))
 						.getTile().getProperties().containsKey("blocked");
+				collisionX |= (collisionLayer
+						.getCell((int) ((getX() + getWidth()) / tileWidth),
+								(int) ((getY() + getHeight() / 2) / tileHeight))
+						.getTile().getProperties().containsKey("water") && 
+						!puedeNadar);
+			}
 
 			// Bottom right
-			if (!collisionX)
+			if (!collisionX) {
 				collisionX |= collisionLayer
 						.getCell((int) ((getX() + getWidth()) / tileWidth), (int) (getY() / tileHeight)).getTile()
-						.getProperties().containsKey("blocked");			
+						.getProperties().containsKey("blocked");		
+				collisionX |= (collisionLayer
+						.getCell((int) ((getX() + getWidth()) / tileWidth), (int) (getY() / tileHeight)).getTile()
+						.getProperties().containsKey("water") && 
+						!puedeNadar);
+			}
 		}
 		/*
 		 * Reaccion a colision en X
@@ -180,17 +200,27 @@ public class Player extends Sprite {
 			// Bottom left
 			collisionY = collisionLayer.getCell((int) (getX() / tileWidth), (int) (getY() / tileHeight)).getTile()
 					.getProperties().containsKey("blocked");
+			collisionY |= (collisionLayer.getCell((int) (getX() / tileWidth), (int) (getY() / tileHeight)).getTile()
+					.getProperties().containsKey("water") && !puedeNadar);
 			// Bottom middle
-			if (!collisionY)
+			if (!collisionY) {
 				collisionY |= collisionLayer
 						.getCell((int) ((getX() + getWidth() / 2) / tileWidth), (int) ((getY()) / tileHeight)).getTile()
 						.getProperties().containsKey("blocked");
+				collisionY |= (collisionLayer
+						.getCell((int) ((getX() + getWidth() / 2) / tileWidth), (int) ((getY()) / tileHeight)).getTile()
+						.getProperties().containsKey("water") && !puedeNadar);
+			}
 
 			// Bottom right
-			if (!collisionY)
+			if (!collisionY) {
 				collisionY |= collisionLayer
 						.getCell((int) ((getX() + getWidth()) / tileWidth), (int) (getY() / tileHeight)).getTile()
 						.getProperties().containsKey("blocked");
+				collisionY |= (collisionLayer
+						.getCell((int) ((getX() + getWidth()) / tileWidth), (int) (getY() / tileHeight)).getTile()
+						.getProperties().containsKey("water") && !puedeNadar);
+			}
 
 		} else if (velocity.y > 0) {
 			// Top left
@@ -198,11 +228,16 @@ public class Player extends Sprite {
 			// (int) ((getY() + getHeight()) / tileHeight))
 			// .getTile().getProperties().containsKey("blocked");
 			// Top middle
-			if (!collisionY)
+			if (!collisionY) {
 				collisionY |= collisionLayer
 						.getCell((int) ((getX() + getWidth() / 2) / tileWidth),
 								(int) ((getY() + getHeight() / 2) / tileHeight))
 						.getTile().getProperties().containsKey("blocked");
+				collisionY |= (collisionLayer
+						.getCell((int) ((getX() + getWidth() / 2) / tileWidth),
+								(int) ((getY() + getHeight() / 2) / tileHeight))
+						.getTile().getProperties().containsKey("water") && !puedeNadar);
+			}
 
 			// Top right
 			// if (!collisionY)

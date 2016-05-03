@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.pokemon.PokemonAdaByron;
 import com.pokemon.entities.Player;
 import com.pokemon.mochila.Antidoto;
+import com.pokemon.mochila.MO;
 import com.pokemon.mochila.Mochila;
 import com.pokemon.mochila.Pocion;
 import com.pokemon.mochila.Pokeball;
@@ -98,6 +99,7 @@ public class ArchivoGuardado {
 		mochila.add(new Pokeball());
 		mochila.add(new Superball());
 		mochila.add(new Pokeball());
+		//mochila.add(new MO("Surf"));
 	}
 
 }
