@@ -8,10 +8,17 @@ public class Mochila {
 	private ArrayList<Ball> balls;
 	private ArrayList<MO> mos;
 	
+	private boolean tieneCorte;
+	private boolean tieneFuerza;
+	private boolean tieneSurf;
+	
 	public Mochila() {
 		objetos = new ArrayList<>();
 		balls = new ArrayList<>();
 		mos = new ArrayList<>();
+		tieneCorte = false;
+		tieneFuerza = false;
+		tieneSurf = false;
 	}
 	
 	public void add(Objeto obj) {
@@ -24,6 +31,13 @@ public class Mochila {
 	
 	public void add(MO mo) {
 		mos.add(mo);
+		if (mo.getNombre().equals("Corte")) {
+			tieneCorte = true;
+		} else if (mo.getNombre().equals("Fuerza")) {
+			tieneFuerza = true;
+		} else if (mo.getNombre().equals("Surf")) {
+			tieneSurf = true;
+		}
 	}
 	
 	/**
@@ -89,5 +103,16 @@ public class Mochila {
 		this.mos = mos;
 	}
 	
+	public boolean tieneCorte() {
+		return tieneCorte;
+	}
+	
+	public boolean tieneFuerza() {
+		return tieneFuerza;
+	}
+	
+	public boolean tieneSurf() {
+		return tieneSurf;
+	}
 	
 }
