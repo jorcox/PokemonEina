@@ -1,6 +1,7 @@
 package com.pokemon.pantallas;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -99,7 +100,14 @@ public class OpcionesTeclas extends Pantalla {
 		font.draw(batch, "Mover Derecha", 75, 220);
 		font.draw(batch, "Boton A", 75, 145);
 		font.draw(batch, "Boton B", 75, 70);
-				
+		
+		font.draw(batch, Keys.toString(getCtx().getTeclaUp()), 525, 445);
+		font.draw(batch, Keys.toString(getCtx().getTeclaDown()), 525, 370);
+		font.draw(batch, Keys.toString(getCtx().getTeclaLeft()), 525, 295);
+		font.draw(batch, Keys.toString(getCtx().getTeclaRight()), 525, 220);
+		font.draw(batch, Keys.toString(getCtx().getTeclaA()), 525, 145);
+		font.draw(batch, Keys.toString(getCtx().getTeclaB()), 525, 70);
+		
 		batch.end();
 	}
 
