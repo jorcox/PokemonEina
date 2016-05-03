@@ -107,12 +107,14 @@ public class CombateP extends Enfrentamiento {
 			dibujarVidas();
 			if ((orden && fase == 6) || (!orden && fase == 8)) {
 				pokemonEnemigo.setAlpha(1);
-				if(acierto)ataqueRecibido(true);
+				if (acierto)
+					ataqueRecibido(true);
 				animacionVida(true);
 				dibujarVida(true);
 			} else {
 				pokemon.setAlpha(1);
-				if(acierto)ataqueRecibido(false);
+				if (acierto)
+					ataqueRecibido(false);
 				animacionVida(false);
 				dibujarVida(false);
 			}
@@ -171,8 +173,7 @@ public class CombateP extends Enfrentamiento {
 	@Override
 	public boolean keyDown(int keycode) {
 		if (!dialogo.isWriting()) {
-			switch (keycode) {
-			case (Keys.ENTER):
+			if (keycode == getCtx().getTeclaA()) {
 
 				if (fase == 1 || fase == 2) {
 					/*
@@ -255,7 +256,7 @@ public class CombateP extends Enfrentamiento {
 							dialogo.procesarDialogo("combate_perdido");
 						} else {
 							((Game) Gdx.app.getApplicationListener())
-									.setScreen(new MenuPokemon(jugador
+									.setScreen(new MenuPokemon(getCtx(),jugador
 											.getEquipo(), this, true));
 						}
 					} else {
@@ -310,9 +311,8 @@ public class CombateP extends Enfrentamiento {
 						((Game) Gdx.app.getApplicationListener())
 								.setScreen(screen);
 					}
-				} 
-				break;
-			case Keys.LEFT:
+				}
+			} else if (keycode == getCtx().getTeclaLeft()) {
 				if (fase == 3) {
 					if (seleccion != 1) {
 						seleccion -= 1;
@@ -323,8 +323,7 @@ public class CombateP extends Enfrentamiento {
 					}
 				}
 
-				break;
-			case Keys.RIGHT:
+			} else if (keycode == getCtx().getTeclaRight()) {
 				if (fase == 3) {
 					if (seleccion != 4) {
 						seleccion += 1;
@@ -334,28 +333,23 @@ public class CombateP extends Enfrentamiento {
 						seleccionAtaque += 1;
 					}
 				}
-				break;
-			case Keys.UP:
+			} else if (keycode == getCtx().getTeclaUp()) {
 				if (fase == 4) {
 					if (seleccionAtaque != 1 && seleccionAtaque != 2) {
 						seleccionAtaque -= 2;
 					}
 				}
-				break;
-			case Keys.DOWN:
+			} else if (keycode == getCtx().getTeclaDown()) {
 				if (fase == 4) {
 					if (seleccionAtaque != 3 && seleccionAtaque != 4) {
 						seleccionAtaque += 2;
 					}
 				}
-				break;
-			case Keys.ESCAPE:
+			} else if (keycode == Keys.ESCAPE) {
 				if (fase == 4) {
 					fase = 3;
 				}
-				break;
 			}
-
 		}
 
 		return false;

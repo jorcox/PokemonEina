@@ -588,7 +588,7 @@ public class Enfrentamiento extends Pantalla {
 			break;
 		case 3: // pokemon
 			((Game) Gdx.app.getApplicationListener())
-					.setScreen(new MenuPokemon(jugador.getEquipo(), this, true));
+					.setScreen(new MenuPokemon(getCtx(), jugador.getEquipo(), this, true));
 			break;
 		case 4: // huir
 			((Game) Gdx.app.getApplicationListener()).setScreen(screen);

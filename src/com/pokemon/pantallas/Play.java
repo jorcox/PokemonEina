@@ -1,19 +1,15 @@
 package com.pokemon.pantallas;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
 import pokemon.Pokemon;
-import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenManager;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -32,7 +28,6 @@ import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.pokemon.dialogo.Dialogo;
 import com.pokemon.entities.NPC;
@@ -41,7 +36,6 @@ import com.pokemon.mochila.Antidoto;
 import com.pokemon.mochila.MO;
 import com.pokemon.mochila.Pocion;
 import com.pokemon.render.TextureMapObjectRenderer;
-import com.pokemon.tween.SpriteAccessor;
 import com.pokemon.utilidades.ArchivoGuardado;
 
 import db.BaseDatos;
@@ -302,8 +296,7 @@ public class Play extends Pantalla {
 	public boolean keyDown(int keycode) {
 		if(listener){
 			// player.checkCombat();
-			switch (keycode) {
-			case Keys.W:
+			if (keycode == getCtx().getTeclaUp()) {
 				player.velocity.y = player.speed;
 				player.velocity.x = 0;
 				player.animationTime = 0;
@@ -312,8 +305,7 @@ public class Play extends Pantalla {
 					lastPressed = 2;
 				}
 				player.WPressed = true;
-				break;
-			case Keys.A:
+			} else if (keycode == getCtx().getTeclaLeft()) {
 				player.velocity.x = -player.speed;
 				player.velocity.y = 0;
 				player.animationTime = 0;
@@ -322,8 +314,7 @@ public class Play extends Pantalla {
 					lastPressed = 1;
 				}
 				player.APressed = true;
-				break;
-			case Keys.S:
+			} else if (keycode == getCtx().getTeclaDown()) {
 				player.velocity.y = -player.speed;
 	
 				player.velocity.x = 0;
@@ -333,8 +324,7 @@ public class Play extends Pantalla {
 					lastPressed = 3;
 				}
 				player.SPressed = true;
-				break;
-			case Keys.D:
+			} else if (keycode == getCtx().getTeclaRight()) {
 				player.velocity.x = player.speed;
 				player.velocity.y = 0;
 				player.animationTime = 0;
@@ -343,13 +333,11 @@ public class Play extends Pantalla {
 					lastPressed = 4;
 				}
 				player.DPressed = true;
-				break;
-			case Keys.SPACE:
+			} else if (keycode == getCtx().getTeclaB()) {
 				// player.SpacePressed = true;
 				((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPlay(getCtx(), player.getX(), player.getY(),
 						player.getLastPressed(), map_, jugador.getEquipo()));
-				break;
-			case Keys.ENTER:
+			} else if (keycode == getCtx().getTeclaA()) {
 				if (dialogando) {
 					/* Esta en pleno dialogo, Enter lo va avanzando */
 					optionsVisible = true;
@@ -403,15 +391,11 @@ public class Play extends Pantalla {
 						}
 					}
 				}
-				break;
-			case Keys.C:
+			} else if (keycode == Keys.C) {
 				((Game) Gdx.app.getApplicationListener()).setScreen(new CombateP(getCtx(), player, jugador, 1, this));
-				break;
-			case Keys.V:
+			} else if (keycode == Keys.V) {
 				((Game) Gdx.app.getApplicationListener())
 						.setScreen(new CombateEntrenador(getCtx(), player, jugador, "reverte", this));
-				break;
-	
 			}
 		}
 		return false;
@@ -480,8 +464,7 @@ public class Play extends Pantalla {
 	@Override
 	public boolean keyUp(int keycode) {
 		if (listener) {
-			switch (keycode) {
-			case Keys.W:
+			if (keycode == getCtx().getTeclaUp()) {
 				if (player.SPressed) {
 					player.velocity.x = 0;
 					player.velocity.y = -player.speed;
@@ -497,8 +480,7 @@ public class Play extends Pantalla {
 				player.animationTime = 0;
 				lastPressed = 2;
 				player.WPressed = false;
-				break;
-			case Keys.A:
+			} else if (keycode == getCtx().getTeclaLeft()) {
 				if (player.DPressed) {
 					player.velocity.y = 0;
 					player.velocity.x = player.speed;
@@ -514,8 +496,7 @@ public class Play extends Pantalla {
 				player.animationTime = 0;
 				lastPressed = 1;
 				player.APressed = false;
-				break;
-			case Keys.S:
+			} else if (keycode == getCtx().getTeclaDown()) {
 				if (player.WPressed) {
 					player.velocity.x = 0;
 					player.velocity.y = player.speed;
@@ -531,8 +512,7 @@ public class Play extends Pantalla {
 				player.animationTime = 0;
 				lastPressed = 3;
 				player.SPressed = false;
-				break;
-			case Keys.D:
+			} else if (keycode == getCtx().getTeclaRight()) {
 				if (player.APressed) {
 					player.velocity.y = 0;
 					player.velocity.x = -player.speed;
@@ -548,10 +528,8 @@ public class Play extends Pantalla {
 				player.animationTime = 0;
 				lastPressed = 4;
 				player.DPressed = false;
-				break;
-			case Keys.SPACE:
+			} else if (keycode == getCtx().getTeclaB()) {
 				player.SpacePressed = false;
-				break;
 			}
 		}
 		return false;
@@ -566,11 +544,11 @@ public class Play extends Pantalla {
 		ArrayList<Pokemon> arrayP = new ArrayList<Pokemon>();
 		try {
 			BaseDatos db = new BaseDatos("pokemon_base");
-			arrayP.add(db.getPokemon(0));
+			arrayP.add(db.getPokemon(6));
 			arrayP.add(db.getPokemon(1));
 			arrayP.add(db.getPokemon(2));
 			arrayP.add(db.getPokemon(3));
-			arrayP.add(db.getPokemon(4));
+			arrayP.add(db.getPokemon(0));
 			arrayP.add(db.getPokemon(5));
 			jugador.setEquipo(arrayP);
 			db.shutdown();

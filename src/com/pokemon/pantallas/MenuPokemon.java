@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.pokemon.utilidades.ArchivoGuardado;
 
 import pokemon.Pokemon;
 
@@ -37,8 +38,9 @@ public class MenuPokemon extends Pantalla {
 
 	private int selection = 0;
 
-	public MenuPokemon(List<Pokemon> listaPokemon, Screen screen,
+	public MenuPokemon(ArchivoGuardado ctx, List<Pokemon> listaPokemon, Screen screen,
 			boolean combate) {
+		this.setCtx(ctx);
 		this.screen = screen;
 		this.listaPokemon = listaPokemon;
 		this.combate = combate;
@@ -233,35 +235,27 @@ public class MenuPokemon extends Pantalla {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		switch (keycode) {
-		case Keys.SPACE:
+		if (keycode == getCtx().getTeclaB()) {
 			/* Vuelve al menu */
 			((Game) Gdx.app.getApplicationListener()).setScreen(screen);
-			break;
-		case Keys.ENTER:
+		} else if (keycode == getCtx().getTeclaA()) {
 			action(selection);
-			break;
-		case Keys.DOWN:
+		} else if (keycode == getCtx().getTeclaDown()) {
 			if (selection != 4 && selection != 5) {
 				selection = selection + 2;
 			}
-			break;
-		case Keys.UP:
+		} else if (keycode == getCtx().getTeclaUp()) {
 			if (selection != 0 && selection != 1) {
 				selection = selection - 2;
 			}
-			break;
-		case Keys.RIGHT:
+		} else if (keycode == getCtx().getTeclaRight()) {
 			if (selection != 1 && selection != 3 && selection != 5) {
 				selection = selection + 1;
 			}
-			break;
-		case Keys.LEFT:
+		} else if (keycode == getCtx().getTeclaLeft()) {
 			if (selection != 0 && selection != 2 && selection != 4) {
 				selection = selection - 1;
 			}
-			break;
-
 		}
 		return false;
 	}
