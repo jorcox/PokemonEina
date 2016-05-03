@@ -184,7 +184,6 @@ public class OpcionesTeclas extends Pantalla {
 				}
 			}
 		}
-		
 		return false;
 	}
 

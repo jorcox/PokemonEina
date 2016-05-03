@@ -72,6 +72,7 @@ public class ArchivoGuardado {
 	private int teclaRight;
 	private int teclaA;
 	private int teclaB;
+	private int[] teclas;
 	
 	public static void cargar() {
 		comprobarExistencia();
@@ -100,6 +101,7 @@ public class ArchivoGuardado {
 	
 	public ArchivoGuardado() {
 		mochila = new Mochila();
+		teclas = new int[6];
 		setDefaultKeys();
 		
 		// Objetos de prueba metidos a pelo
