@@ -2,6 +2,7 @@ package com.pokemon.pantallas;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,6 +14,7 @@ public class OpcionesTeclas extends Pantalla {
 
 	private Pantalla screen;
 	private int posicion;
+	private boolean cambiando;
 	
 	private SpriteBatch batch;
 	private Texture tFondo, tOpcion, tOpcionSel;
@@ -25,6 +27,7 @@ public class OpcionesTeclas extends Pantalla {
 		this.setCtx(ctx);
 		this.screen = screen;
 		posicion = 0;
+		cambiando = false;
 	}
 	
 	@Override
@@ -144,19 +147,44 @@ public class OpcionesTeclas extends Pantalla {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		if (keycode == getCtx().getTeclaDown()) {
-			if (posicion < 5) {
-				posicion++;
+		if (!cambiando) {
+			if (keycode == getCtx().getTeclaDown()) {
+				/* Baja el cursor */
+				if (posicion < 5) {
+					posicion++;
+				}
+			} else if (keycode == getCtx().getTeclaUp()) {
+				/* Sube el cursor */ 
+				if (posicion > 0) {
+					posicion--;
+				}
+			} else if (keycode == getCtx().getTeclaB()) {
+				/* Vuelve a la pantalla anterior */
+				screen.setCtx(this.getCtx());
+				((Game) Gdx.app.getApplicationListener()).setScreen(screen);
+			} else if (keycode == Keys.CONTROL_LEFT) {
+				cambiando = true;
 			}
-		} else if (keycode == getCtx().getTeclaUp()) {
-			if (posicion > 0) {
-				posicion--;
+		} else {
+			if (keycode == Keys.CONTROL_LEFT) {
+				cambiando = false;
+			} else {
+				if (posicion == 0) {
+					getCtx().setTeclaUp(keycode);
+				} else if (posicion == 1) {
+					getCtx().setTeclaDown(keycode);
+				} else if (posicion == 2) {
+					getCtx().setTeclaLeft(keycode);
+				} else if (posicion == 3) {
+					getCtx().setTeclaRight(keycode);
+				} else if (posicion == 4) {
+					getCtx().setTeclaA(keycode);
+				} else if (posicion == 5) {
+					getCtx().setTeclaB(keycode);
+				}
 			}
-		} else if (keycode == getCtx().getTeclaB()) {
-			/* Vuelve a la pantalla anterior */
-			screen.setCtx(this.getCtx());
-			((Game) Gdx.app.getApplicationListener()).setScreen(screen);
 		}
+		
 		return false;
 	}
 

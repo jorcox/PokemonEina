@@ -166,37 +166,29 @@ public class MenuPlay extends Pantalla {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		switch (keycode) {
-		case (Keys.UP):
+		if (keycode == getCtx().getTeclaUp()) {
 			if (seleccion != 1 && seleccion != 3) {
 				seleccion -= 1;
 			}
-			break;
-		case (Keys.DOWN):
+		} else if (keycode == getCtx().getTeclaDown()) {
 			if (seleccion != 2 && seleccion != 4) {
 				seleccion += 1;
 			}
-			break;
-		case Keys.LEFT:
+		} else if (keycode == getCtx().getTeclaLeft()) {
 			if (seleccion != 1 && seleccion != 2) {
 				seleccion -= 2;
 			}
-			break;
-		case Keys.RIGHT:
+		} else if (keycode == getCtx().getTeclaRight()) {
 			if (seleccion != 3 && seleccion != 4) {
 				seleccion += 2;
 			}
-			break;
-		case (Keys.ENTER):
+		} else if (keycode == getCtx().getTeclaA()) {
 			hacerAccion(seleccion);
-			break;
-		case (Keys.ESCAPE):
+		} else if (keycode == Keys.ESCAPE) {
 			Gdx.app.exit();
-			break;
-		case Keys.SPACE:
+		} else if (keycode == getCtx().getTeclaB()) {
 			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(getCtx(), x, y,
 					lastPressed, map));
-			break;
 		}
 		return true;
 	}
@@ -205,7 +197,7 @@ public class MenuPlay extends Pantalla {
 		switch (seleccion) {
 		case 1:
 			((Game) Gdx.app.getApplicationListener())
-					.setScreen(new MenuPokemon(listaPokemon, this, false));
+					.setScreen(new MenuPokemon(getCtx(), listaPokemon, this, false));
 			break;
 		case 2:
 			((Game) Gdx.app.getApplicationListener()).setScreen(new MenuMochila(getCtx(), this));

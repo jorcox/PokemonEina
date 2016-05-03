@@ -294,7 +294,6 @@ public class Player extends Sprite {
 			}
 		}
 		
-
 		/*
 		 * Actualizar animacion
 		 */
