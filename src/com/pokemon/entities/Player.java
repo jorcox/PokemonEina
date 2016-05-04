@@ -239,6 +239,10 @@ public class Player extends Sprite {
 						.getCell((int) ((getX() + getWidth() / 2) / tileWidth),
 								(int) ((getY() + getHeight() / 2) / tileHeight))
 						.getTile().getProperties().containsKey("water") && !puedeNadar);
+				collisionY |= collisionLayer
+						.getCell((int) ((getX() + getWidth() / 2) / tileWidth),
+								(int) ((getY() + getHeight() / 2) / tileHeight))
+						.getTile().getProperties().containsKey("abajo");
 			}
 
 			// Top right
