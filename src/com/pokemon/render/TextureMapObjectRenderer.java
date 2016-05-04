@@ -12,16 +12,16 @@ public class TextureMapObjectRenderer extends OrthogonalTiledMapRenderer {
 		super(map);
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	@Override
 	public void renderObject(MapObject object) {
 		if (object instanceof TextureMapObject) {
 			TextureMapObject texture = (TextureMapObject) object;
+			if (texture.getProperties().containsKey("mostrar")
+					&& texture.getProperties().get("mostrar").equals("false")) {
+				return;
+			}
 			batch.draw(texture.getTextureRegion(), texture.getX(), texture.getY());
-			//Gdx.app.log("Cartel", " "+texture.getX() + " " + texture.getY() + " " + texture.getOriginX() + 
-			//		" " + texture.getOriginY() + " " + texture.getScaleX() + " " + texture.getScaleY());
-
 		}
 	}
-	
 }
