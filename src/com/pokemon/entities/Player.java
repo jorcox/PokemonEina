@@ -53,6 +53,8 @@ public class Player extends Sprite {
 	public boolean DPressed = false;
 
 	public boolean SpacePressed = false;
+	
+	public boolean EnterPressed = false;
 
 	private int p;
 	
@@ -262,11 +264,22 @@ public class Player extends Sprite {
 		  * Colision de objetos
 		  */
 		for (MapObject object : objectLayer.getObjects()) {
+			boolean currentCollision = false;
 			TextureMapObject texture = (TextureMapObject) object;
-			collisionObj |= ((texture.getX() + texture.getTextureRegion().getRegionWidth() / 2) > getX())
-					&& ((texture.getX() - texture.getTextureRegion().getRegionWidth() / 2) < getX())
-					&& ((texture.getY() + texture.getTextureRegion().getRegionHeight() / 1.5) > getY())
-					&& ((texture.getY() - texture.getTextureRegion().getRegionHeight() / 2) < getY());
+			if(texture.getProperties().get("mostrar").equals("true")){				
+				currentCollision |= ((texture.getX() + texture.getTextureRegion().getRegionWidth() / 1.5) > getX())
+						&& ((texture.getX() - texture.getTextureRegion().getRegionWidth() / 1.5) < getX())
+						&& ((texture.getY() + texture.getTextureRegion().getRegionHeight() / 1.5) > getY())
+						&& ((texture.getY() - texture.getTextureRegion().getRegionHeight() / 2) < getY());
+			}
+			/* Fuerza/Romper */
+			
+			// TODO Comprobar Fuerza/Romper del personaje
+			if(currentCollision && texture.getProperties().containsKey("rompible") && texture.getProperties().get("rompible").equals("true")){
+				texture.getProperties().put("mostrar", "false");
+			}
+			/* Actualiza el flag global de colision */
+			collisionObj |= currentCollision;
 		}
 		
 	 /*

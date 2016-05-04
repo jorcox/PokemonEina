@@ -166,6 +166,7 @@ public class Play extends Pantalla {
 			} else if (object instanceof NPC) {
 				((NPC) object).draw(renderer.getBatch());
 			} else {
+				MapObject obj = (MapObject) object;
 				renderer.renderObject((MapObject) object);
 			}
 		}
@@ -430,9 +431,9 @@ public class Play extends Pantalla {
 			dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
 
 			/* Introduce en mochila */
-			if (value.equals("Poción")) {
+			if (value.equals("Pociï¿½n")) {
 				getCtx().mochila.add(new Pocion());
-			} else if (value.equals("Antídoto")) {
+			} else if (value.equals("Antï¿½doto")) {
 				getCtx().mochila.add(new Antidoto());
 			} else if (value.equals("Corte")) {
 				getCtx().mochila.add(new MO("Corte"));
