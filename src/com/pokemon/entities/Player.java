@@ -53,17 +53,17 @@ public class Player extends Sprite {
 	public boolean DPressed = false;
 
 	public boolean SpacePressed = false;
-	
+
 	public boolean EnterPressed = false;
 
 	private int p;
-	
+
 	ArrayList<NPC> npcs;
 
 	private int lastPressed; // A=1, W=2, S=3, D=4
-	
-	public Player(ArchivoGuardado ctx, TextureAtlas playerAtlas, TiledMapTileLayer collisionLayer, MapLayer objectLayer, MapLayer transLayer,
-			ArrayList<NPC> npcs, Dialogo dialogo, Play play) {
+
+	public Player(ArchivoGuardado ctx, TextureAtlas playerAtlas, TiledMapTileLayer collisionLayer, MapLayer objectLayer,
+			MapLayer transLayer, ArrayList<NPC> npcs, Dialogo dialogo, Play play) {
 		super(new Animation(1 / 10f, playerAtlas.findRegions("cara")).getKeyFrame(0));
 		cara = new Animation(1 / 10f, playerAtlas.findRegions("cara"));
 		derecha = new Animation(1 / 10f, playerAtlas.findRegions("derecha"));
@@ -113,7 +113,7 @@ public class Player extends Sprite {
 				tileHeight = collisionLayer.getTileHeight();
 		boolean collisionX = false, collisionY = false, collisionObj = false, collisionNpc = false;
 		boolean puedeNadar = play.getCtx().mochila.tieneSurf();
-		
+
 		/*
 		 * Movimiento en X
 		 */
@@ -156,19 +156,17 @@ public class Player extends Sprite {
 				collisionX |= (collisionLayer
 						.getCell((int) ((getX() + getWidth()) / tileWidth),
 								(int) ((getY() + getHeight() / 2) / tileHeight))
-						.getTile().getProperties().containsKey("water") && 
-						!puedeNadar);
+						.getTile().getProperties().containsKey("water") && !puedeNadar);
 			}
 
 			// Bottom right
 			if (!collisionX) {
 				collisionX |= collisionLayer
 						.getCell((int) ((getX() + getWidth()) / tileWidth), (int) (getY() / tileHeight)).getTile()
-						.getProperties().containsKey("blocked");		
+						.getProperties().containsKey("blocked");
 				collisionX |= (collisionLayer
 						.getCell((int) ((getX() + getWidth()) / tileWidth), (int) (getY() / tileHeight)).getTile()
-						.getProperties().containsKey("water") && 
-						!puedeNadar);
+						.getProperties().containsKey("water") && !puedeNadar);
 			}
 		}
 		/*
@@ -178,7 +176,7 @@ public class Player extends Sprite {
 			setX(oldX);
 			velocity.x = 0;
 		}
-		
+
 		if (collisionX || collisionY) {
 			for (MapObject o : transLayer.getObjects()) {
 				TextureMapObject t = (TextureMapObject) o;
@@ -259,58 +257,63 @@ public class Player extends Sprite {
 			setY(oldY);
 			velocity.y = 0;
 		}
-		
-		 /*
-		  * Colision de objetos
-		  */
+
+		/*
+		 * Colision de objetos
+		 */
 		for (MapObject object : objectLayer.getObjects()) {
 			boolean currentCollision = false;
 			TextureMapObject texture = (TextureMapObject) object;
-			if(texture.getProperties().get("mostrar").equals("true")){				
-				currentCollision |= ((texture.getX() + texture.getTextureRegion().getRegionWidth() / 1.5) > getX())
-						&& ((texture.getX() - texture.getTextureRegion().getRegionWidth() / 1.5) < getX())
-						&& ((texture.getY() + texture.getTextureRegion().getRegionHeight() / 1.5) > getY())
-						&& ((texture.getY() - texture.getTextureRegion().getRegionHeight() / 2) < getY());
+			if (texture.getProperties().containsKey("mostrar")) {
+				if (texture.getProperties().get("mostrar").equals("true")) {
+
+					currentCollision |= ((texture.getX() + texture.getTextureRegion().getRegionWidth() / 1.5) > getX())
+							&& ((texture.getX() - texture.getTextureRegion().getRegionWidth() / 1.5) < getX())
+							&& ((texture.getY() + texture.getTextureRegion().getRegionHeight() / 1.5) > getY())
+							&& ((texture.getY() - texture.getTextureRegion().getRegionHeight() / 2) < getY());
+				}
+			} else {
+				System.err.println("Tu objeto que esta en X:" + texture.getX() + " Y:" + texture.getY()
+						+ " no tiene puesto el atributo mostrar (ponlo con valor true en el TiledMap)");
 			}
 			/* Fuerza/Romper */
-			
+
 			// TODO Comprobar Fuerza/Romper del personaje
-			if(currentCollision && texture.getProperties().containsKey("rompible") && texture.getProperties().get("rompible").equals("true")){
+			if (currentCollision && texture.getProperties().containsKey("rompible")
+					&& texture.getProperties().get("rompible").equals("true")) {
 				texture.getProperties().put("mostrar", "false");
 			}
 			/* Actualiza el flag global de colision */
 			collisionObj |= currentCollision;
 		}
-		
-	 /*
-	  * Colision de NPC
-	  */
+
+		/*
+		 * Colision de NPC
+		 */
 		int anchura = 32;
 		int altura = 32;
 		for (NPC npc : npcs) {
-			collisionNpc |= ((npc.getX() + anchura / 1.5) > getX())
-					&& ((npc.getX() - anchura / 1.5) < getX())
-					&& ((npc.getY() + altura / 1.5) > getY())
-					&& ((npc.getY() - altura / 0.9) < getY());
-		}		
+			collisionNpc |= ((npc.getX() + anchura / 1.5) > getX()) && ((npc.getX() - anchura / 1.5) < getX())
+					&& ((npc.getY() + altura / 1.5) > getY()) && ((npc.getY() - altura / 0.9) < getY());
+		}
 		if (collisionObj || collisionNpc) {
 			setX(oldX);
 			setY(oldY);
 			velocity.x = 0;
 			velocity.y = 0;
 		}
-		
+
 		/* Interacción entrenadores */
 		for (NPC npc : npcs) {
-			if(visible(npc)){
+			if (visible(npc)) {
 				velocity.x = 0;
 				velocity.y = 0;
 				play.pauseListener();
 				npc.moverAPersonaje(this);
-				//play.resumeListener();
+				// play.resumeListener();
 			}
 		}
-		
+
 		/*
 		 * Actualizar animacion
 		 */
@@ -346,51 +349,49 @@ public class Player extends Sprite {
 		float npcX = npc.getX();
 		float npcY = npc.getY();
 		float minX = 0, maxX = 0, minY = 0, maxY = 0;
-		if(dir.equals("cara")){
+		if (dir.equals("cara")) {
 			minX = npcX - 1;
 			maxX = npcX + 1;
-			minY = npcY - (32*dis);
-			maxY = npcY;			
-		} else if(dir.equals("espalda")){
+			minY = npcY - (32 * dis);
+			maxY = npcY;
+		} else if (dir.equals("espalda")) {
 			minX = npcX - 1;
 			maxX = npcX + 1;
 			minY = npcY;
-			maxY = npcY  + (32*dis);			
-		} else if(dir.equals("izquierda")){
-			minX = npcX - (32*dis);
+			maxY = npcY + (32 * dis);
+		} else if (dir.equals("izquierda")) {
+			minX = npcX - (32 * dis);
 			maxX = npcX;
-			minY = npcY - 1 ;
-			maxY = npcY + 1;			
-		} else if(dir.equals("derecha")){
-			minX = npcX;
-			maxX = npcX + (32*dis);
 			minY = npcY - 1;
-			maxY = npcY + 1;		
+			maxY = npcY + 1;
+		} else if (dir.equals("derecha")) {
+			minX = npcX;
+			maxX = npcX + (32 * dis);
+			minY = npcY - 1;
+			maxY = npcY + 1;
 		}
-		return (maxX > getX())
-				&& (minX < getX())
-				&& (maxY > getY())
-				&& (minY < getY());
-		}
+		return (maxX > getX()) && (minX < getX()) && (maxY > getY()) && (minY < getY());
+	}
 
 	/**
-	 * Si el jugador esta en casilla de combate, elige aleatoriamente si
-	 * le aparece un pokemon salvaje con una probabilidad del 20%.
+	 * Si el jugador esta en casilla de combate, elige aleatoriamente si le
+	 * aparece un pokemon salvaje con una probabilidad del 20%.
 	 * 
 	 * Por ahora solo comprueba al cambiar de tecla de moverse (arreglar).
 	 */
 	public void checkCombat() {
-		if (collisionLayer.getCell((int) ((getX() + getWidth()) / collisionLayer.getTileWidth()), 
+		if (collisionLayer
+				.getCell((int) ((getX() + getWidth()) / collisionLayer.getTileWidth()),
 						(int) ((getY() + getHeight()) / collisionLayer.getTileHeight()))
-						.getTile().getProperties().containsKey("combat")) {
+				.getTile().getProperties().containsKey("combat")) {
 			double combatOdds = new Random().nextDouble();
 			if (combatOdds < 0.02) {
-				((Game) Gdx.app.getApplicationListener()).setScreen(new CombateP(play.getCtx(), 
-						this, play.jugador, 1, play));
+				((Game) Gdx.app.getApplicationListener())
+						.setScreen(new CombateP(play.getCtx(), this, play.jugador, 1, play));
 			}
 		}
 	}
-	
+
 	public boolean getSpacePressed() {
 		return SpacePressed;
 	}
