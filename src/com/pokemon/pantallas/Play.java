@@ -105,7 +105,7 @@ public class Play extends Pantalla {
 
 		camera = new OrthographicCamera();
 
-		playerAtlas = new TextureAtlas("res/imgs/protagonista.pack");
+		playerAtlas = new TextureAtlas("res/imgs/entrenadoresWorld/protagonista.pack");
 
 		/* Carga de NPCs */
 		MapLayer npcLayer = map.getLayers().get("Personajes");
@@ -117,7 +117,7 @@ public class Play extends Pantalla {
 																		// Espalda
 			int disVista = Integer.parseInt((String) t.getProperties().get("dis"));
 			TextureAtlas personajePack = new TextureAtlas(
-					"res/imgs/" + (String) t.getProperties().get("pack") + ".pack");
+					"res/imgs/entrenadoresWorld/" + (String) t.getProperties().get("pack") + ".pack");
 			NPC npc = new NPC(personajePack, new Animation(1 / 10f, playerAtlas.findRegions(dirVista)), dirVista,
 					disVista, this);
 			npc.setPosition(t.getX(), t.getY());
