@@ -327,7 +327,10 @@ public class CombateEntrenador extends Enfrentamiento {
 					String l2 = dialogo.siguienteLinea();
 
 					if (l1 == null) {
-						if (pkmn.getExperiencia() > experienceToLevel(pkmn
+						if (!jugador.vivo()) {
+							fase = 12;
+							dialogo.procesarDialogo("combate_perdido");
+						} else if (pkmn.getExperiencia() > experienceToLevel(pkmn
 								.getNivel() + 1)) {
 							/*
 							 * Subir nivel
@@ -337,9 +340,6 @@ public class CombateEntrenador extends Enfrentamiento {
 						} else if (!entrenadorE.vivo()) {
 							fase = 12;
 							dialogo.procesarDialogo("combate_ganado");
-						} else if (!jugador.vivo()) {
-							fase = 12;
-							dialogo.procesarDialogo("combate_perdido");
 						} else if (!pkmnpokemonEnemigo.vivo()) {
 							/*
 							 * Enemigo saca siguiente pokemon
@@ -421,7 +421,7 @@ public class CombateEntrenador extends Enfrentamiento {
 				} else if (fase == 14) {
 					/*
 					 * Subir nivel
-					 */ 
+					 */
 					String l1 = dialogo.siguienteLinea();
 					String l2 = dialogo.siguienteLinea();
 					if (subir) {

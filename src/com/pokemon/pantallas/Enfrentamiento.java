@@ -53,10 +53,14 @@ public class Enfrentamiento extends Pantalla {
 	protected boolean orden;
 	protected boolean acierto = true;
 	protected boolean subir = false;
+	protected boolean aprender_cuatro=true;
+	protected boolean olvidar=true;
+	protected Habilidad hab;
 	protected float trans = 1;
 	protected int intervalo = 4;
 	protected int veces = 8;
 	protected int seleccion = 1;
+	protected boolean seleccionAprender = true;
 	protected int seleccionAtaque = 1;
 	protected Dialogo dialogo;
 	protected Jugador jugador;
@@ -71,7 +75,7 @@ public class Enfrentamiento extends Pantalla {
 	protected Sprite bg, base, baseEnemy, message, pokemonEnemigo, pokemon,
 			bgOp, bgOpTrans, boton, luchar, mochilaS, pokemonOp, huir, dedo,
 			cajaLuchar, tipo1, tipo2, tipo3, tipo4, cajaPkmn,
-			cajaPkmnpokemonEnemigo, entrenador, protagonista, expBar, level;
+			cajaPkmnpokemonEnemigo, entrenador, protagonista, expBar, level,aprender,cajaAprender;
 
 	public Enfrentamiento(ArchivoGuardado ctx, Player player, Jugador jugador,
 			Screen screen) {
@@ -186,6 +190,8 @@ public class Enfrentamiento extends Pantalla {
 				"res/imgs/batallas/cajaPkmnEnemigo.png"));
 		expBar = new Sprite(new Texture("res/imgs/batallas/expbar.png"));
 		level = new Sprite(new Texture("res/imgs/batallas/level.png"));
+		cajaAprender = new Sprite(new Texture("res/imgs/batallas/cajaAprender.png"));
+		aprender = new Sprite(new Texture("res/imgs/batallas/aprender.png"));
 		font.setColor(Color.BLACK);
 		fontC.setColor(Color.BLACK);
 		regionesTipos();
@@ -604,6 +610,26 @@ public class Enfrentamiento extends Pantalla {
 		}
 	}
 
+	public void elegirOlvidar() {
+		Habilidad [] habilidades = pkmn.getHabilidades();
+		switch (seleccionAtaque) {
+		case 1: // luchar
+			habilidades[0]=hab;
+			break;
+		case 2: // mochila
+			habilidades[1]=hab;
+			break;
+		case 3: // pokemon
+			habilidades[2]=hab;
+			break;
+		case 4: // huir
+			habilidades[3]=hab;
+			break;
+		default:
+			break;
+		}
+	}
+	
 	public void setIPokemon(int i) {
 		pkmn = jugador.getPokemon(i);
 		iPokemon = i;
@@ -657,7 +683,19 @@ public class Enfrentamiento extends Pantalla {
 		font.draw(batch, pkmn.getAtaqueEsp() + "", 600, 205);
 		font.draw(batch, pkmn.getDefensaEsp() + "", 600, 240);
 		font.draw(batch, pkmn.getVelocidad() + "", 600, 275);
-		
+
 	}
 
+	public Habilidad getHabilidadBD() {
+		Habilidad habilidad = null;
+		try {
+			db = new BaseDatos("pokemon_base");
+			habilidad = db.getHabilidadPokemon(db.getIdPoke(pkmn.getNombre()),
+					pkmn.getNivel());
+		} catch (Exception e) {
+			return habilidad;
+		}
+		return habilidad;
+	}
+	
 }
