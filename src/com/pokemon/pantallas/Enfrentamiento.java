@@ -51,7 +51,8 @@ public class Enfrentamiento extends Pantalla {
 	protected Combate combate;
 	protected Entrenador en;
 	protected boolean orden;
-	protected boolean acierto=true;
+	protected boolean acierto = true;
+	protected boolean subir = false;
 	protected float trans = 1;
 	protected int intervalo = 4;
 	protected int veces = 8;
@@ -70,7 +71,7 @@ public class Enfrentamiento extends Pantalla {
 	protected Sprite bg, base, baseEnemy, message, pokemonEnemigo, pokemon,
 			bgOp, bgOpTrans, boton, luchar, mochilaS, pokemonOp, huir, dedo,
 			cajaLuchar, tipo1, tipo2, tipo3, tipo4, cajaPkmn,
-			cajaPkmnpokemonEnemigo, entrenador, protagonista, expBar;
+			cajaPkmnpokemonEnemigo, entrenador, protagonista, expBar, level;
 
 	public Enfrentamiento(ArchivoGuardado ctx, Player player, Jugador jugador,
 			Screen screen) {
@@ -184,6 +185,7 @@ public class Enfrentamiento extends Pantalla {
 		cajaPkmnpokemonEnemigo = new Sprite(new Texture(
 				"res/imgs/batallas/cajaPkmnEnemigo.png"));
 		expBar = new Sprite(new Texture("res/imgs/batallas/expbar.png"));
+		level = new Sprite(new Texture("res/imgs/batallas/level.png"));
 		font.setColor(Color.BLACK);
 		fontC.setColor(Color.BLACK);
 		regionesTipos();
@@ -471,7 +473,7 @@ public class Enfrentamiento extends Pantalla {
 
 			if (!dialogo.isWriting()) {
 				actualPsS = pkmnpokemonEnemigo.getPs();
-				acierto=combate.ejecutar(pkmn, pkmnpokemonEnemigo,
+				acierto = combate.ejecutar(pkmn, pkmnpokemonEnemigo,
 						pkmn.getHabilidad(seleccionAtaque));
 				if (acierto) {
 					fase++;
@@ -482,14 +484,14 @@ public class Enfrentamiento extends Pantalla {
 							"¡" + jugador.getEquipo().get(iPokemon).getNombre()
 									+ " falló! Vaya mierdas...", "" };
 					dialogo.setFrases(frase);
-					
+
 				}
 			}
 		} else {
 			int seleccionEnemigo = combate.decidir(pkmnpokemonEnemigo);
 
 			if (!dialogo.isWriting()) {
-				acierto=combate.ejecutar(pkmnpokemonEnemigo, pkmn,
+				acierto = combate.ejecutar(pkmnpokemonEnemigo, pkmn,
 						pkmnpokemonEnemigo.getHabilidad(seleccionEnemigo));
 				actualPs = pkmn.getPs();
 				if (acierto) {
@@ -500,7 +502,7 @@ public class Enfrentamiento extends Pantalla {
 							"¡" + pkmnpokemonEnemigo.getNombre()
 									+ " falló! Vaya mierdas...", "" };
 					dialogo.setFrases(frase);
-					
+
 				}
 			}
 		}
@@ -513,11 +515,14 @@ public class Enfrentamiento extends Pantalla {
 						+ pokemon.getHabilidad(id).getNombre() + "!", "" };
 		return frase;
 	}
-	
+
 	public String[] frasesExperiencia(boolean trainer) {
 		String[] frase = {
-				"¡" + pkmn.getNombre() + " ganó "
-						+ gainExperience(trainer,pkmnpokemonEnemigo.getNivel()) + " puntos de EXP.!", "" };
+				"¡"
+						+ pkmn.getNombre()
+						+ " ganó "
+						+ gainExperience(trainer, pkmnpokemonEnemigo.getNivel())
+						+ " puntos de EXP.!", "" };
 		return frase;
 	}
 
@@ -588,7 +593,8 @@ public class Enfrentamiento extends Pantalla {
 			break;
 		case 3: // pokemon
 			((Game) Gdx.app.getApplicationListener())
-					.setScreen(new MenuPokemon(getCtx(), jugador.getEquipo(), this, true));
+					.setScreen(new MenuPokemon(getCtx(), jugador.getEquipo(),
+							this, true));
 			break;
 		case 4: // huir
 			((Game) Gdx.app.getApplicationListener()).setScreen(screen);
@@ -609,18 +615,16 @@ public class Enfrentamiento extends Pantalla {
 	}
 
 	public void dibujarExp() {
-		double exp=pkmn.getExperiencia();
-		if(exp>experienceToLevel(pkmn
-				.getNivel() + 1)){
-			exp=experienceToLevel(pkmn
-					.getNivel() + 1);
+		double exp = pkmn.getExperiencia();
+		if (exp > experienceToLevel(pkmn.getNivel() + 1)) {
+			exp = experienceToLevel(pkmn.getNivel() + 1);
 		}
 		batch.draw(
 				barraExp[0],
 				470,
 				166,
-				(int) (230 *  exp/ (double) experienceToLevel(pkmn
-						.getNivel() + 1)), 10);
+				(int) (230 * exp / (double) experienceToLevel(pkmn.getNivel() + 1)),
+				10);
 	}
 
 	public int gainExperience(boolean trainer, int level) {
@@ -632,9 +636,28 @@ public class Enfrentamiento extends Pantalla {
 	}
 
 	public void updateExperience(boolean trainer) {
-		int exp=gainExperience(trainer, pkmnpokemonEnemigo.getNivel());
-		pkmn.setExperiencia(pkmn.getExperiencia()
-				+ exp);
+		int exp = gainExperience(trainer, pkmnpokemonEnemigo.getNivel());
+		pkmn.setExperiencia(pkmn.getExperiencia() + exp);
+	}
+
+	public void subirNivel() {
+		level.setSize(250, 225);
+		level.setPosition(430, 70);
+		level.draw(batch);
+		font.draw(batch, "PS Máx.", 440, 100);
+		font.draw(batch, "Ataque", 440, 135);
+		font.draw(batch, "Defensa", 440, 170);
+		font.draw(batch, "At. Esp.", 440, 205);
+		font.draw(batch, "Def. Esp.", 440, 240);
+		font.draw(batch, "Velocidad", 440, 275);
+
+		font.draw(batch, pkmn.getPsMax() + "", 600, 100);
+		font.draw(batch, pkmn.getAtaque() + "", 600, 135);
+		font.draw(batch, pkmn.getDefensa() + "", 600, 170);
+		font.draw(batch, pkmn.getAtaqueEsp() + "", 600, 205);
+		font.draw(batch, pkmn.getDefensaEsp() + "", 600, 240);
+		font.draw(batch, pkmn.getVelocidad() + "", 600, 275);
+		
 	}
 
 }

@@ -25,7 +25,7 @@ public class Bienvenida extends Pantalla {
 
 	PokemonAdaByron game;
 
-	private int counter = 0;
+	private int counter = 0; 
 
 	private Sprite optionBox;
 
