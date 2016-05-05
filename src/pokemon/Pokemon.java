@@ -1,5 +1,7 @@
 package pokemon;
 
+import java.util.Random;
+
 import habilidad.Habilidad;
 import logica.Tipo;
 
@@ -157,6 +159,35 @@ public class Pokemon {
 		this.entrenador = entrenador;
 	}
 	
+	public void subirNivel(){
+		nivel++;
+		Random r=new Random();
+		
+		int hab;
+		for(int i=0;i<9;i++){
+			hab=r.nextInt(6);
+			switch(hab){
+			case 0:
+				ataque++;
+				break;
+			case 1:
+				defensa++;
+				break;
+			case 2:
+				ataqueEsp++;
+				break;
+			case 3:
+				defensaEsp++;
+				break;
+			case 4:
+				velocidad++;
+				break;
+			case 5:
+				psMax++;
+				break;
+			}
+		}
+	}
 	
 	
 }
