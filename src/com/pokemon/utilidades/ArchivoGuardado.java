@@ -109,7 +109,7 @@ public class ArchivoGuardado {
 		mochila.add(new Pokeball());
 		mochila.add(new Superball());
 		mochila.add(new Pokeball());
-		//mochila.add(new MO("Surf"));
+		mochila.add(new MO("Surf"));
 	}
 	
 	private void setDefaultKeys() {
