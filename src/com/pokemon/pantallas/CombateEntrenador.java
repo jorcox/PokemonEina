@@ -421,7 +421,7 @@ public class CombateEntrenador extends Enfrentamiento {
 				} else if (fase == 14) {
 					/*
 					 * Subir nivel
-					 */
+					 */ 
 					String l1 = dialogo.siguienteLinea();
 					String l2 = dialogo.siguienteLinea();
 					if (subir) {
