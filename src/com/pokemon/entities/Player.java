@@ -177,21 +177,6 @@ public class Player extends Sprite {
 			velocity.x = 0;
 		}
 
-		if (collisionX || collisionY) {
-			for (MapObject o : transLayer.getObjects()) {
-				TextureMapObject t = (TextureMapObject) o;
-
-				/* Dispara evento si estan muy cerca jugador y objeto */
-				if (play.distance(t) < 50) {
-					((Game) Gdx.app.getApplicationListener())
-							.setScreen(new Play(play.getCtx(), Integer.parseInt((String) t.getProperties().get("x")),
-									Integer.parseInt((String) t.getProperties().get("y")), getLastPressed(),
-									t.getProperties().get("mapa") + ".tmx"));
-					break;
-				}
-			}
-		}
-
 		/*
 		 * Movimiento en Y
 		 */
@@ -256,6 +241,22 @@ public class Player extends Sprite {
 		if (collisionY) {
 			setY(oldY);
 			velocity.y = 0;
+		}
+		
+		/* Transicion de mapa */
+		if (collisionX || collisionY) {
+			for (MapObject o : transLayer.getObjects()) {
+				TextureMapObject t = (TextureMapObject) o;
+
+				/* Transicion solo si estan muy cerca jugador y casilla */
+				if (play.distance(t) < 50) {
+					((Game) Gdx.app.getApplicationListener())
+							.setScreen(new Play(play.getCtx(), Integer.parseInt((String) t.getProperties().get("x")),
+									Integer.parseInt((String) t.getProperties().get("y")), getLastPressed(),
+									t.getProperties().get("mapa") + ".tmx"));
+					break;
+				}
+			}
 		}
 
 		/*
