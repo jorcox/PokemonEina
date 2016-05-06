@@ -160,13 +160,13 @@ public class BaseDatos {
 
 	public static void main(String[] args) {
 		IntroducirDatos pb = new IntroducirDatos();
-		//pb.crearPokemon();
+		// pb.crearPokemon();
 		pb.introducirPokemon();
 		// LeerDatos pb=new LeerDatos();
 		// pb.introducirPokemon();
 		// pb.introducirMovimientos();
 
-		//query("SELECT * FROM movimientos");
+		// query("SELECT * FROM movimientos");
 		// pb.introducirMovPorNivel();
 		// pb.query("SELECT * FROM movs_nivel");
 		// pb.introducirEvolucion();
@@ -280,6 +280,75 @@ public class BaseDatos {
 		} else {
 			return null;
 		}
+	}
+
+	public Habilidad getHabilidadNombre(String nombre) {
+		Habilidad habilidad = new Habilidad();
+		Statement st;
+		try {
+			st = conn.createStatement();
+			ResultSet rs = st
+					.executeQuery("SELECT * FROM movimientos where nombre='"
+							+ nombre+"'");
+			rs.next();
+			habilidad = new Habilidad();
+			habilidad.setNombre(rs.getString("nombre"));
+			habilidad.setPoder(rs.getInt("poder"));
+			habilidad.setTipo(habilidad.getTipo(rs.getString("tipo_mov")));
+			habilidad
+					.setCategoria(habilidad.getCategoria(rs.getString("tipo")));
+			habilidad.setPrecision(rs.getInt("precision"));
+			habilidad.setPp(rs.getInt("pp"));
+			habilidad.setDescripcion(rs.getString("descripcion"));
+
+			rs.close();
+		} catch (SQLException e) {
+			habilidad = null;
+		}
+		return habilidad;
+	}
+
+	public Habilidad getHabilidadPokemon(int id_poke, int nivel) {
+		Habilidad habilidad = null;
+		if (id_poke > 0) {
+			Statement st;
+			try {
+				st = conn.createStatement();
+				ResultSet rs = st
+						.executeQuery("SELECT * FROM movs_nivel where id_poke="
+								+ id_poke + " and nivel = " + nivel);
+
+				rs.next();
+				habilidad = getHabilidadNombre(rs.getString("nombre"));
+
+				rs.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			}
+			return habilidad;
+		} else {
+			return null;
+		}
+	}
+
+	public int getIdPoke(String nombre) {
+		Statement st;
+		int id_poke=0;
+		try {
+			st = conn.createStatement();
+			ResultSet rs = st
+					.executeQuery("SELECT * FROM pokemon_tipo where nombre='"
+							+ nombre+"'" );
+
+			rs.next();
+			id_poke=rs.getInt("id");
+			rs.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return id_poke;
 	}
 
 	public Tipo getTipo(String tipo) {
