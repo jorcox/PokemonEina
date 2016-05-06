@@ -56,6 +56,7 @@ public class Enfrentamiento extends Pantalla {
 	protected boolean aprender_cuatro=true;
 	protected boolean olvidar=true;
 	protected Habilidad hab;
+	protected Habilidad vieja;
 	protected float trans = 1;
 	protected int intervalo = 4;
 	protected int veces = 8;

@@ -169,8 +169,9 @@ public class Pokemon {
 		return contador;
 	}
 	
-	public void subirNivel(){
+	public void subirNivel(int exp ,int win ){
 		nivel++;
+		experiencia=exp-win;
 		Random r=new Random();
 		
 		int hab;

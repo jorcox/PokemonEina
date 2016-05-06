@@ -300,13 +300,15 @@ public class CombateP extends Enfrentamiento {
 										pkmnpokemonEnemigo.getNombre());
 							}
 						} else if (l1.contains("${EXP}")) {
-							l1 = l1.replace(
-									"${EXP}",
-									gainExperience(false,
-											pkmnpokemonEnemigo.getNivel())
-											+ "");
-							l1 = l1.replace("${POKEMON}", pkmn.getNombre());
-							updateExperience(false);
+							if (pkmn.vivo()) {
+								l1 = l1.replace(
+										"${EXP}",
+										gainExperience(false,
+												pkmnpokemonEnemigo.getNivel())
+												+ "");
+								l1 = l1.replace("${POKEMON}", pkmn.getNombre());
+								updateExperience(false);
+							}
 						}
 						if (pkmnpokemonEnemigo.vivo() && l1.contains("puntos")) {
 
@@ -318,17 +320,23 @@ public class CombateP extends Enfrentamiento {
 				} else if (fase == 10) {
 					String l1 = dialogo.siguienteLinea();
 					String l2 = dialogo.siguienteLinea();
-					dialogo.setLineas(l1, l2);
+
 					if (l1 == null) {
 						fase = 6;
+						dialogo.limpiar();
+					} else {
+						dialogo.setLineas(l1, l2);
 					}
 
 				} else if (fase == 11) {
 					String l1 = dialogo.siguienteLinea();
 					String l2 = dialogo.siguienteLinea();
-					dialogo.setLineas(l1, l2);
+
 					if (l1 == null) {
 						fase = 3;
+						dialogo.limpiar();
+					} else {
+						dialogo.setLineas(l1, l2);
 					}
 				} else if (fase == 12) {
 					String l1, l2;
@@ -351,6 +359,7 @@ public class CombateP extends Enfrentamiento {
 					String l1 = dialogo.siguienteLinea();
 					String l2 = dialogo.siguienteLinea();
 					if (subir) {
+						subir = false;
 						hab = getHabilidadBD();
 						if (hab != null) {
 							fase = 14;
@@ -364,7 +373,8 @@ public class CombateP extends Enfrentamiento {
 						}
 
 					} else if (l1 == null) {
-						pkmn.subirNivel();
+						pkmn.subirNivel(pkmn.getExperiencia(),
+								experienceToLevel(pkmn.getNivel() + 1));
 						subir = true;
 					} else {
 						l1 = l1.replace("${POKEMON}", pkmn.getNombre());
@@ -397,7 +407,7 @@ public class CombateP extends Enfrentamiento {
 						l2 = dialogo.siguienteLinea();
 						if (l1 != null) {
 							l1 = l1.replace("${POKEMON}", pkmn.getNombre());
-							l2 = l2.replace("${HABILIDAD}", hab.getNombre());
+							l1 = l1.replace("${MOVIMIENTO}", hab.getNombre());
 							dialogo.setLineas(l1, l2);
 						} else {
 							fase = 12;
@@ -439,16 +449,14 @@ public class CombateP extends Enfrentamiento {
 
 				} else if (fase == 16) {
 					if (olvidar) {
+						vieja = habilidades[seleccionAtaque - 1];
 						elegirOlvidar();
 						olvidar = false;
 					} else {
 						String l1 = dialogo.siguienteLinea();
 						String l2 = dialogo.siguienteLinea();
 						l1 = l1.replace("${POKEMON}", pkmn.getNombre());
-						l1 = l1.replace("${VIEJO}",
-								""
-										+ pkmn.getHabilidad(seleccionAtaque)
-												.getNombre());
+						l1 = l1.replace("${VIEJO}", "" + vieja.getNombre());
 						l2 = l2.replace("${NUEVO}", hab.getNombre());
 						dialogo.setLineas(l1, l2);
 						if (!pkmnpokemonEnemigo.vivo()) {
@@ -466,7 +474,8 @@ public class CombateP extends Enfrentamiento {
 						seleccion -= 1;
 					}
 				} else if (fase == 4 || fase == 16) {
-					if (seleccionAtaque != 1 && seleccionAtaque != 3) {
+					if (seleccionAtaque != 1 && seleccionAtaque != 3
+							&& pkmn.getHabilidad(seleccionAtaque - 1) != null) {
 						seleccionAtaque -= 1;
 					}
 				}
@@ -477,13 +486,15 @@ public class CombateP extends Enfrentamiento {
 						seleccion += 1;
 					}
 				} else if (fase == 4 || fase == 16) {
-					if (seleccionAtaque != 2 && seleccionAtaque != 4) {
+					if (seleccionAtaque != 2 && seleccionAtaque != 4
+							&& pkmn.getHabilidad(seleccionAtaque + 1) != null) {
 						seleccionAtaque += 1;
 					}
 				}
 			} else if (keycode == getCtx().getTeclaUp()) {
 				if (fase == 4 || fase == 16) {
-					if (seleccionAtaque != 1 && seleccionAtaque != 2) {
+					if (seleccionAtaque != 1 && seleccionAtaque != 2
+							&& pkmn.getHabilidad(seleccionAtaque - 2) != null) {
 						seleccionAtaque -= 2;
 					}
 				} else if (fase == 15) {
@@ -493,7 +504,8 @@ public class CombateP extends Enfrentamiento {
 				}
 			} else if (keycode == getCtx().getTeclaDown()) {
 				if (fase == 4 || fase == 16) {
-					if (seleccionAtaque != 3 && seleccionAtaque != 4) {
+					if (seleccionAtaque != 3 && seleccionAtaque != 4
+							&& pkmn.getHabilidad(seleccionAtaque + 2) != null) {
 						seleccionAtaque += 2;
 					}
 				} else if (fase == 15) {
