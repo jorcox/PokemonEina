@@ -212,6 +212,35 @@ public class BaseDatos {
 		 */
 	} // main()
 
+	public Pokemon getPokemonTipo(int id) {
+		Pokemon poke = new Pokemon();
+		Statement st;
+		try {
+			st = conn.createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM pokemon_tipo where id="
+					+ id);
+			rs.next();
+			System.out.println();
+			poke.setNombre(rs.getString("nombre"));
+			poke.setPs(rs.getInt("ps"));
+			poke.setPsMax(rs.getInt("ps"));
+			poke.setAtaque(rs.getInt("ataque"));
+			poke.setAtaqueEsp(rs.getInt("ataque_esp"));
+			poke.setDefensa(rs.getInt("defensa"));
+			poke.setDefensaEsp(rs.getInt("defensa_esp"));
+			poke.setVelocidad(rs.getInt("velocidad"));
+			poke.setEvasion(100);
+			poke.setPrecision(100);
+			poke.setId(id);
+			rs.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return poke;
+	}
+
+	
 	public Pokemon getPokemon(int id) {
 		Pokemon poke = new Pokemon();
 		Habilidad[] habilidades = new Habilidad[4];
