@@ -200,5 +200,13 @@ public class Pokemon {
 		}
 	}
 	
-	
+	public void evolucionar(String nombre){
+		this.nombre=nombre;
+		ataque=ataque+30;
+		defensa=defensa+30;
+		ataqueEsp=ataqueEsp+30;
+		defensaEsp=defensaEsp+30;
+		velocidad=velocidad+30;
+		psMax=psMax+30;
+	}
 }

@@ -46,7 +46,7 @@ public class Enfrentamiento extends Pantalla {
 	protected int xPokemon = 100;
 	protected int xPokemonEnemigo = 450;
 	protected Habilidad[] habilidades;
-	FreeTypeFontGenerator generator;
+	
 	protected TweenManager tweenManager;
 	protected Combate combate;
 	protected Entrenador en;
@@ -66,6 +66,7 @@ public class Enfrentamiento extends Pantalla {
 	protected Dialogo dialogo;
 	protected Jugador jugador;
 	protected Player player;
+	FreeTypeFontGenerator generator;
 	BitmapFont font, fontC;
 	BaseDatos db;
 	protected Screen screen;

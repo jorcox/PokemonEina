@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pokemon.pantallas.Bienvenida;
+import com.pokemon.pantallas.Evolucion;
 import com.pokemon.pantallas.Menu;
 import com.pokemon.pantallas.PantallaInicio;
 import com.pokemon.pantallas.Play;
@@ -42,7 +43,8 @@ public class PokemonAdaByron extends Game {
 		//setScreen(new Play(ctx, 500, 2500, 3, "Hardware.tmx"));
 		//setScreen(new Play(ctx, 150, 150, 3, "GimMena.tmx"));
 		//setScreen(new Play(ctx, 300, 2800, 3, "Aulas.tmx"));
-		setScreen(new Play(ctx, 1000, 2800, 3, "Redes.tmx"));
+		//setScreen(new Play(ctx, 1000, 2800, 3, "Redes.tmx"));
+		setScreen(new Evolucion(ctx, null,null,0));
 	}
 
 	@Override
