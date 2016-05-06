@@ -97,7 +97,7 @@ public class Evolucion extends Pantalla {
 				+ ".png"));
 		pokemon.setSize(120, 120);
 		pokemon.setPosition(280, 250);
-		try {
+		try { 
 			bd = new BaseDatos("pokemon_base");
 			pkmnEvolucion = bd
 					.getPokemonTipo(bd.getIdPoke(pkmn.getNombre()) + 1);
