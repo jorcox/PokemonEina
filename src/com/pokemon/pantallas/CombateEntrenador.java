@@ -200,6 +200,26 @@ public class CombateEntrenador extends Enfrentamiento {
 		if (fase == 14) {
 			subirNivel();
 		}
+		if (fase == 16) {
+			if (!aprender_cuatro) {
+				int yAp = 155;
+				if (!seleccionAprender)
+					yAp = 120;
+				cajaAprender.setSize(100, 90);
+				cajaAprender.setPosition(500, 120);
+				cajaAprender.draw(batch);
+				aprender.setPosition(610, yAp);
+				aprender.setSize(50, 50);
+				aprender.draw(batch);
+				font.draw(batch, "Si", 530, 190);
+				font.draw(batch, "No", 530, 150);
+			}
+		}
+		if (fase == 17) {
+			if (olvidar) {
+				updateSeleccionAtaque();
+			}
+		}
 		batch.end();
 	}
 
@@ -327,7 +347,10 @@ public class CombateEntrenador extends Enfrentamiento {
 					String l2 = dialogo.siguienteLinea();
 
 					if (l1 == null) {
-						if (pkmn.getExperiencia() > experienceToLevel(pkmn
+						if (!jugador.vivo()) {
+							fase = 12;
+							dialogo.procesarDialogo("combate_perdido");
+						} else if (pkmn.getExperiencia() > experienceToLevel(pkmn
 								.getNivel() + 1)) {
 							/*
 							 * Subir nivel
@@ -337,9 +360,6 @@ public class CombateEntrenador extends Enfrentamiento {
 						} else if (!entrenadorE.vivo()) {
 							fase = 12;
 							dialogo.procesarDialogo("combate_ganado");
-						} else if (!jugador.vivo()) {
-							fase = 12;
-							dialogo.procesarDialogo("combate_perdido");
 						} else if (!pkmnpokemonEnemigo.vivo()) {
 							/*
 							 * Enemigo saca siguiente pokemon
@@ -360,13 +380,15 @@ public class CombateEntrenador extends Enfrentamiento {
 										pkmnpokemonEnemigo.getNombre());
 							}
 						} else if (l1.contains("${EXP}")) {
-							l1 = l1.replace(
-									"${EXP}",
-									gainExperience(false,
-											pkmnpokemonEnemigo.getNivel())
-											+ "");
-							l1 = l1.replace("${POKEMON}", pkmn.getNombre());
-							updateExperience(true);
+							if (pkmn.vivo()) {
+								l1 = l1.replace(
+										"${EXP}",
+										gainExperience(true,
+												pkmnpokemonEnemigo.getNivel())
+												+ "");
+								l1 = l1.replace("${POKEMON}", pkmn.getNombre());
+								updateExperience(true);
+							}
 						}
 						if (pkmnpokemonEnemigo.vivo() && l1.contains("puntos")) {
 
@@ -411,21 +433,21 @@ public class CombateEntrenador extends Enfrentamiento {
 								.setScreen(screen);
 					}
 				} else if (fase == 13) {
-					/*
-					 * String l1 = dialogo.siguienteLinea(); String l2 =
-					 * dialogo.siguienteLinea(); if (l1 != null) {
-					 * dialogo.setLineas(l1, l2); } else { fase = 3; }
-					 */
 					fase = 3;
 					dialogo.limpiar();
 				} else if (fase == 14) {
 					/*
 					 * Subir nivel
-					 */ 
+					 */
 					String l1 = dialogo.siguienteLinea();
 					String l2 = dialogo.siguienteLinea();
 					if (subir) {
-						if (!entrenadorE.vivo()) {
+						subir = false;
+						hab = getHabilidadBD();
+						if (hab != null) {
+							fase = 15;
+							dialogo.procesarDialogo("aprender_movimiento");
+						} else if (!entrenadorE.vivo()) {
 							fase = 12;
 							dialogo.procesarDialogo("combate_ganado");
 						} else if (!jugador.vivo()) {
@@ -436,21 +458,119 @@ public class CombateEntrenador extends Enfrentamiento {
 						}
 
 					} else if (l1 == null) {
-						pkmn.subirNivel();
+						pkmn.subirNivel(pkmn.getExperiencia(),
+								experienceToLevel(pkmn.getNivel() + 1));
 						subir = true;
 					} else {
 						l1 = l1.replace("${POKEMON}", pkmn.getNombre());
 						l2 = l2.replace("${NIVEL}", "" + (pkmn.getNivel() + 1));
 						dialogo.setLineas(l1, l2);
 					}
+				} else if (fase == 15) {
+					String l1 = dialogo.siguienteLinea();
+					String l2 = dialogo.siguienteLinea();
+					if (dialogo.getId().equals("aprender_movimiento")) {
+						if (l1 != null) {
+							l1 = l1.replace("${POKEMON}", pkmn.getNombre());
+							l2 = l2.replace("${HABILIDAD}", hab.getNombre());
+							dialogo.setLineas(l1, l2);
+						} else if (pkmn.numHabilidades() < 4) {
+							dialogo.procesarDialogo("aprendido");
+						} else {
+							fase = 16;
+							dialogo.procesarDialogo("aprender_cuatro");
+							l1 = dialogo.siguienteLinea();
+							l2 = dialogo.siguienteLinea();
+							l1 = l1.replace("${POKEMON}", pkmn.getNombre());
+							l2 = l2.replace("${HABILIDAD}", hab.getNombre());
+							dialogo.setLineas(l1, l2);
+						}
+					}
+					if (dialogo.getId().equals("aprendido")) {
+						l1 = dialogo.siguienteLinea();
+						l2 = dialogo.siguienteLinea();
+						if (l1 != null) {
+							l1 = l1.replace("${POKEMON}", pkmn.getNombre());
+							l1 = l1.replace("${MOVIMIENTO}", hab.getNombre());
+							dialogo.setLineas(l1, l2);
+						} else {
+							if (!jugador.vivo()) {
+								fase = 12;
+								dialogo.procesarDialogo("combate_perdido");
+							} else if (!pkmnpokemonEnemigo.vivo()) {
+								nuevoPokemonEnemigo();
+							}
+						}
+					}
+				} else if (fase == 16) {
+					if (dialogo.getId().equals("aprender_cuatro")
+							&& aprender_cuatro) {
+						String l1 = dialogo.siguienteLinea();
+						String l2 = dialogo.siguienteLinea();
+						if (l1 != null) {
+							dialogo.setLineas(l1, l2);
+						} else {
+							aprender_cuatro = false;
+						}
+					} else {
+						if (seleccionAprender) {
+							dialogo.procesarDialogo("aprender_olvidar");
+							fase = 17;
+							dialogo.limpiar();
+						} else {
+							dialogo.procesarDialogo("no_aprender");
+							String l1 = dialogo.siguienteLinea();
+							String l2 = dialogo.siguienteLinea();
+							l1 = l1.replace("${POKEMON}", pkmn.getNombre());
+							l1 = l1.replace("${MOVIMIENTO}", hab.getNombre());
+							dialogo.setLineas(l1, l2);
+							if (!entrenadorE.vivo()) {
+								fase = 12;
+								dialogo.procesarDialogo("combate_ganado");
+							} else if (!jugador.vivo()) {
+								fase = 12;
+								dialogo.procesarDialogo("combate_perdido");
+							} else if (!pkmnpokemonEnemigo.vivo()) {
+								nuevoPokemonEnemigo();
+							}
+
+						}
+					}
+
+				} else if (fase == 17) {
+					if (olvidar) {
+						vieja = habilidades[seleccionAtaque - 1];
+						elegirOlvidar();
+						olvidar = false;
+					} else {
+						String l1 = dialogo.siguienteLinea();
+						String l2 = dialogo.siguienteLinea();
+						l1 = l1.replace("${POKEMON}", pkmn.getNombre());
+						l1 = l1.replace("${VIEJO}", "" + vieja.getNombre());
+						l2 = l2.replace("${NUEVO}", hab.getNombre());
+						dialogo.setLineas(l1, l2);
+						if (!entrenadorE.vivo()) {
+							fase = 12;
+							dialogo.procesarDialogo("combate_ganado");
+						} else if (!jugador.vivo()) {
+							fase = 12;
+							dialogo.procesarDialogo("combate_perdido");
+						} else if (!pkmnpokemonEnemigo.vivo()) {
+							fase = 18;
+						}
+					}
+				} else if (fase == 18) {
+					nuevoPokemonEnemigo();
 				}
+
 			} else if (keycode == getCtx().getTeclaLeft()) {
 				if (fase == 3) {
 					if (seleccion != 1) {
 						seleccion -= 1;
 					}
-				} else if (fase == 4) {
-					if (seleccionAtaque != 1 && seleccionAtaque != 3) {
+				} else if (fase == 4 || fase == 17) {
+					if (seleccionAtaque != 1 && seleccionAtaque != 3
+							&& pkmn.getHabilidad(seleccionAtaque - 1) != null) {
 						seleccionAtaque -= 1;
 					}
 				}
@@ -459,20 +579,23 @@ public class CombateEntrenador extends Enfrentamiento {
 					if (seleccion != 4) {
 						seleccion += 1;
 					}
-				} else if (fase == 4) {
-					if (seleccionAtaque != 2 && seleccionAtaque != 4) {
+				} else if (fase == 4 || fase == 17) {
+					if (seleccionAtaque != 2 && seleccionAtaque != 4
+							&& pkmn.getHabilidad(seleccionAtaque + 1) != null) {
 						seleccionAtaque += 1;
 					}
 				}
 			} else if (keycode == getCtx().getTeclaUp()) {
-				if (fase == 4) {
-					if (seleccionAtaque != 1 && seleccionAtaque != 2) {
+				if (fase == 4 || fase == 17) {
+					if (seleccionAtaque != 1 && seleccionAtaque != 2
+							&& pkmn.getHabilidad(seleccionAtaque - 2) != null) {
 						seleccionAtaque -= 2;
 					}
 				}
 			} else if (keycode == getCtx().getTeclaDown()) {
-				if (fase == 4) {
-					if (seleccionAtaque != 3 && seleccionAtaque != 4) {
+				if (fase == 4 || fase == 17) {
+					if (seleccionAtaque != 3 && seleccionAtaque != 4
+							&& pkmn.getHabilidad(seleccionAtaque + 2) != null) {
 						seleccionAtaque += 2;
 					}
 				}

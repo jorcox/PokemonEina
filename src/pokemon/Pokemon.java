@@ -159,8 +159,19 @@ public class Pokemon {
 		this.entrenador = entrenador;
 	}
 	
-	public void subirNivel(){
+	public int numHabilidades(){
+		int contador=0;
+		for(int i=0;i<4;i++){
+			if(habilidades[i]!=null){
+				contador++;
+			}
+		}
+		return contador;
+	}
+	
+	public void subirNivel(int exp ,int win ){
 		nivel++;
+		experiencia=exp-win;
 		Random r=new Random();
 		
 		int hab;
