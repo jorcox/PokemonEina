@@ -10,7 +10,7 @@ public class Antidoto extends Objeto {
 
 	@Override
 	public void use(Pokemon pokemon) {
-		
+		pokemon.setEstado(0);
 	}
 	
 	

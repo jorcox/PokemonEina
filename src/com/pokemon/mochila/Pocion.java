@@ -10,7 +10,11 @@ public class Pocion extends Objeto {
 
 	@Override
 	public void use(Pokemon pokemon) {
-		pokemon.setPs(pokemon.getPs() + 20);
+		int ps=pokemon.getPs()+20;
+		if(ps>pokemon.getPsMax()){
+			ps=pokemon.getPsMax();
+		}
+		pokemon.setPs(ps);
 	}
 
 }

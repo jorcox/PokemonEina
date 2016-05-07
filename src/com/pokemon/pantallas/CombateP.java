@@ -9,7 +9,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.pokemon.entities.Player;
+import com.pokemon.mochila.Ball;
 import com.pokemon.tween.SpriteAccessor;
 import com.pokemon.utilidades.ArchivoGuardado;
 
@@ -18,6 +21,8 @@ import entrenadores.Jugador;
 public class CombateP extends Enfrentamiento {
 
 	private boolean show = true;
+	private boolean atrapado = false;
+	private Sprite ball;
 
 	public CombateP(ArchivoGuardado ctx, Player player, Jugador jugador,
 			int fase, Screen screen) {
@@ -176,6 +181,9 @@ public class CombateP extends Enfrentamiento {
 				updateSeleccionAtaque();
 			}
 		}
+		if (fase == 20) {
+			ball.draw(batch);
+		}
 		batch.end();
 	}
 
@@ -240,7 +248,7 @@ public class CombateP extends Enfrentamiento {
 						dialogo.setLineas(l1, l2);
 					}
 				} else if (fase == 3) {
-					elegirOpcion();
+					elegirOpcion(false);
 				} else if (fase == 4) {
 					/*
 					 * Primer ataque
@@ -467,7 +475,34 @@ public class CombateP extends Enfrentamiento {
 							dialogo.procesarDialogo("combate_perdido");
 						}
 					}
+				} else if (fase == 20) {
+					atrapado = Ball.atrapar();
+					if (atrapado) {
+						String[] frases = { "¡Genial!",
+								"¡Has capturado a ${POKEMON}!" };
+						dialogo.setFrases(frases);
+					} else {
+						String[] frases = { "¡Lástima!",
+								"¡${POKEMON} se ha escapado!" };
+						dialogo.setFrases(frases);
+
+					}
+					fase = 21;
+				} else if (fase == 21) {
+					String l1 = dialogo.siguienteLinea();
+					String l2 = dialogo.siguienteLinea();
+					dialogo.setLineas(l1, l2);
+					if (l1 == null) {
+						if (atrapado) {
+							jugador.getEquipo().add(pkmnpokemonEnemigo);
+							((Game) Gdx.app.getApplicationListener())
+									.setScreen(screen);
+						} else {
+							fase = 3;
+						}
+					}
 				}
+
 			} else if (keycode == getCtx().getTeclaLeft()) {
 				if (fase == 3) {
 					if (seleccion != 1) {
@@ -595,4 +630,7 @@ public class CombateP extends Enfrentamiento {
 
 	}
 
+	public void setBall(String nombre) {
+		ball = new Sprite(new Texture("res/imgs/batallas/" + nombre + ".png"));
+	}
 }

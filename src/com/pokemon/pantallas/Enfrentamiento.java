@@ -46,15 +46,15 @@ public class Enfrentamiento extends Pantalla {
 	protected int xPokemon = 100;
 	protected int xPokemonEnemigo = 450;
 	protected Habilidad[] habilidades;
-	
+
 	protected TweenManager tweenManager;
 	protected Combate combate;
 	protected Entrenador en;
 	protected boolean orden;
 	protected boolean acierto = true;
 	protected boolean subir = false;
-	protected boolean aprender_cuatro=true;
-	protected boolean olvidar=true;
+	protected boolean aprender_cuatro = true;
+	protected boolean olvidar = true;
 	protected Habilidad hab;
 	protected Habilidad vieja;
 	protected float trans = 1;
@@ -77,7 +77,8 @@ public class Enfrentamiento extends Pantalla {
 	protected Sprite bg, base, baseEnemy, message, pokemonEnemigo, pokemon,
 			bgOp, bgOpTrans, boton, luchar, mochilaS, pokemonOp, huir, dedo,
 			cajaLuchar, tipo1, tipo2, tipo3, tipo4, cajaPkmn,
-			cajaPkmnpokemonEnemigo, entrenador, protagonista, expBar, level,aprender,cajaAprender;
+			cajaPkmnpokemonEnemigo, entrenador, protagonista, expBar, level,
+			aprender, cajaAprender;
 
 	public Enfrentamiento(ArchivoGuardado ctx, Player player, Jugador jugador,
 			Screen screen) {
@@ -192,7 +193,8 @@ public class Enfrentamiento extends Pantalla {
 				"res/imgs/batallas/cajaPkmnEnemigo.png"));
 		expBar = new Sprite(new Texture("res/imgs/batallas/expbar.png"));
 		level = new Sprite(new Texture("res/imgs/batallas/level.png"));
-		cajaAprender = new Sprite(new Texture("res/imgs/batallas/cajaAprender.png"));
+		cajaAprender = new Sprite(new Texture(
+				"res/imgs/batallas/cajaAprender.png"));
 		aprender = new Sprite(new Texture("res/imgs/batallas/aprender.png"));
 		font.setColor(Color.BLACK);
 		fontC.setColor(Color.BLACK);
@@ -590,7 +592,7 @@ public class Enfrentamiento extends Pantalla {
 		}
 	}
 
-	public void elegirOpcion() {
+	public void elegirOpcion(boolean trainer) {
 		switch (seleccion) {
 		case 1: // luchar
 			fase = 4;
@@ -605,7 +607,10 @@ public class Enfrentamiento extends Pantalla {
 							this, true));
 			break;
 		case 4: // huir
-			((Game) Gdx.app.getApplicationListener()).setScreen(screen);
+			if (!trainer) {
+				((Game) Gdx.app.getApplicationListener()).setScreen(screen);
+			} 
+
 			break;
 		default:
 			break;
@@ -613,25 +618,25 @@ public class Enfrentamiento extends Pantalla {
 	}
 
 	public void elegirOlvidar() {
-		Habilidad [] habilidades = pkmn.getHabilidades();
+		Habilidad[] habilidades = pkmn.getHabilidades();
 		switch (seleccionAtaque) {
 		case 1: // luchar
-			habilidades[0]=hab;
+			habilidades[0] = hab;
 			break;
 		case 2: // mochila
-			habilidades[1]=hab;
+			habilidades[1] = hab;
 			break;
 		case 3: // pokemon
-			habilidades[2]=hab;
+			habilidades[2] = hab;
 			break;
 		case 4: // huir
-			habilidades[3]=hab;
+			habilidades[3] = hab;
 			break;
 		default:
 			break;
 		}
 	}
-	
+
 	public void setIPokemon(int i) {
 		pkmn = jugador.getPokemon(i);
 		iPokemon = i;
@@ -699,5 +704,5 @@ public class Enfrentamiento extends Pantalla {
 		}
 		return habilidad;
 	}
-	
+
 }
