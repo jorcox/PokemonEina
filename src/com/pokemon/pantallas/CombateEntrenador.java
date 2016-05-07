@@ -312,7 +312,7 @@ public class CombateEntrenador extends Enfrentamiento {
 						dialogo.setLineas(l1, l2);
 					}
 				} else if (fase == 3) {
-					elegirOpcion();
+					elegirOpcion(true);
 				} else if (fase == 4) {
 					/*
 					 * Primer ataque
