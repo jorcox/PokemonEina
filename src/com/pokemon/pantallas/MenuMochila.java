@@ -212,6 +212,7 @@ public class MenuMochila extends Pantalla {
 						dialogo.setLineas(l1, l2);
 						Pokemon pokemon = e.jugador.getPokemon(e.iPokemon);
 						getCtx().mochila.get(seccion, pointer).use(pokemon);
+						
 					} else if(ok){
 						if (getCtx().mochila.get(seccion, pointer) instanceof Ball) {
 							if (screen instanceof CombateP) {
@@ -225,6 +226,13 @@ public class MenuMochila extends Pantalla {
 											.setScreen(p);
 								}
 							}
+						}
+						else if(screen instanceof Enfrentamiento){
+							Enfrentamiento e=(Enfrentamiento)screen;
+							e.fase=6;
+							e.veces=0;
+							e.cambio=false;
+							((Game) Gdx.app.getApplicationListener()).setScreen(e);
 						}
 						usar = false;
 						dialogo.limpiar();

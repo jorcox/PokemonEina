@@ -55,6 +55,7 @@ public class Enfrentamiento extends Pantalla {
 	protected boolean subir = false;
 	protected boolean aprender_cuatro = true;
 	protected boolean olvidar = true;
+	protected boolean cambio = true;
 	protected Habilidad hab;
 	protected Habilidad vieja;
 	protected float trans = 1;
@@ -460,7 +461,7 @@ public class Enfrentamiento extends Pantalla {
 	}
 
 	public void fraseAtaque() {
-		if ((orden && fase == 4) || (!orden && fase == 6)) {
+		if (((orden && fase == 4) || (!orden && fase == 6)) && cambio) {
 			dialogo.setFrases(frasesAtaque(pkmn, seleccionAtaque));
 			String l1 = dialogo.siguienteLinea();
 			String l2 = dialogo.siguienteLinea();
@@ -479,7 +480,7 @@ public class Enfrentamiento extends Pantalla {
 	}
 
 	public void combate() {
-		if ((orden && fase == 5) || (!orden && fase == 7)) {
+		if (((orden && fase == 5) || (!orden && fase == 7))&& cambio) {
 
 			if (!dialogo.isWriting()) {
 				actualPsS = pkmnpokemonEnemigo.getPs();
