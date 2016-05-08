@@ -38,8 +38,8 @@ public class MenuPokemon extends Pantalla {
 
 	private int selection = 0;
 
-	public MenuPokemon(ArchivoGuardado ctx, List<Pokemon> listaPokemon, Screen screen,
-			boolean combate) {
+	public MenuPokemon(ArchivoGuardado ctx, List<Pokemon> listaPokemon,
+			Screen screen, boolean combate) {
 		this.setCtx(ctx);
 		this.screen = screen;
 		this.listaPokemon = listaPokemon;
@@ -308,8 +308,14 @@ public class MenuPokemon extends Pantalla {
 			if (listaPokemon.get(i).vivo()) {
 				Enfrentamiento e = (Enfrentamiento) screen;
 				if (i != e.iPokemon) {
-					e.fase = 1;
-					e.dialogo.procesarDialogo("adelante");
+					if (e.fase == 9) {
+						e.fase = 1;
+						e.dialogo.procesarDialogo("adelante");
+					} else if (e.fase == 3) {
+						e.fase = 6;
+						e.veces = 0;
+						e.cambio = false;
+					}
 					e.setIPokemon(i);
 					((Game) Gdx.app.getApplicationListener()).setScreen(e);
 				}

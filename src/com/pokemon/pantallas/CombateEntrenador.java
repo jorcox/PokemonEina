@@ -61,7 +61,7 @@ public class CombateEntrenador extends Enfrentamiento {
 		message.setSize(720, 120);
 
 		font.draw(batch, dialogo.getLinea1(), 50, 85);
-		font.draw(batch, dialogo.getLinea2(), 50, 35);
+		font.draw(batch, dialogo.getLinea2(), 50, 45);
 		if (fase == 0) {
 
 			entrenador.draw(batch);
@@ -332,6 +332,7 @@ public class CombateEntrenador extends Enfrentamiento {
 					}
 				} else if (fase == 7) {
 					combate();
+					cambio = true;
 				} else if (fase == 8) {
 					veces = 8;
 					if (pkmn.getPs() <= 0 || pkmnpokemonEnemigo.getPs() <= 0) {
