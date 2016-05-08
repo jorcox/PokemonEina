@@ -53,7 +53,6 @@ public class CombateP extends Enfrentamiento {
 		base.setPosition(-70, 120);
 		baseEnemy.setPosition(350, 300);
 		pokemonEnemigo.setPosition(400, 350);
-
 		/*
 		 * Aparacion de pokemon pokemonEnemigo
 		 */
