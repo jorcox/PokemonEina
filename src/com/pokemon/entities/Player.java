@@ -57,6 +57,14 @@ public class Player extends Sprite {
 	public boolean EnterPressed = false;
 
 	private int p;
+	
+	private boolean esperando = false;
+	
+	public boolean colisionNPC = false;
+	
+	private NPC npcInteractuando;
+	
+	public boolean terminado = false;
 
 	ArrayList<NPC> npcs;
 
@@ -92,20 +100,6 @@ public class Player extends Sprite {
 	}
 
 	public void update(float delta) {
-		/*
-		 * Nosotros no necesitamos la gravedad
-		 */
-		// velocity.y -= gravity * delta;
-
-		/*
-		 * Limite de velocidad
-		 */
-		// if (velocity.y > speed) {
-		// velocity.y = speed;
-		// } else if (velocity.y < speed) {
-		// velocity.y = -speed;
-		// }
-
 		/*
 		 * Guardar la posicion anterior
 		 */
@@ -267,7 +261,6 @@ public class Player extends Sprite {
 			TextureMapObject texture = (TextureMapObject) object;
 			if (texture.getProperties().containsKey("mostrar")) {
 				if (texture.getProperties().get("mostrar").equals("true")) {
-
 					currentCollision |= ((texture.getX() + texture.getTextureRegion().getRegionWidth() / 1.5) > getX())
 							&& ((texture.getX() - texture.getTextureRegion().getRegionWidth() / 1.5) < getX())
 							&& ((texture.getY() + texture.getTextureRegion().getRegionHeight() / 1.5) > getY())
@@ -306,12 +299,27 @@ public class Player extends Sprite {
 
 		/* Interacción entrenadores */
 		for (NPC npc : npcs) {
-			if (visible(npc)) {
+			if (visible(npc) && npc.isActivo()) {
+				npcInteractuando = npc;
+				npc.setActivo(false);
 				velocity.x = 0;
 				velocity.y = 0;
 				play.pauseListener();
 				npc.moverAPersonaje(this);
-				// play.resumeListener();
+				esperando = true;				
+			}
+		}
+		
+		/* Esperando la llegada de entrenador a personaje*/
+		if(esperando){
+			if(colisionNPC){
+				// TODO Combate o Conversacion	
+				
+				if(terminado){
+					play.resumeListener();
+					esperando = false;
+					colisionNPC = false;	
+				}			
 			}
 		}
 

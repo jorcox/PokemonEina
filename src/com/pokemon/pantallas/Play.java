@@ -97,6 +97,7 @@ public class Play extends Pantalla {
 		tweenManager = new TweenManager();
 		// map = loader.load("res/mapas/Tranvia_n.tmx");
 		map = loader.load("res/mapas/" + map_);
+
 		// map = loader.load("res/mapas/Cueva.tmx");
 		// map = loader.load("res/mapas/Hall.tmx");
 		// map = loader.load("res/mapas/Bosque.tmx");
@@ -295,7 +296,7 @@ public class Play extends Pantalla {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		if(listener){
+		if (listener) {
 			// player.checkCombat();
 			if (keycode == getCtx().getTeclaUp()) {
 				player.velocity.y = player.speed;
@@ -317,7 +318,7 @@ public class Play extends Pantalla {
 				player.APressed = true;
 			} else if (keycode == getCtx().getTeclaDown()) {
 				player.velocity.y = -player.speed;
-	
+
 				player.velocity.x = 0;
 				player.animationTime = 0;
 				player.setLastPressed(3);
@@ -353,13 +354,10 @@ public class Play extends Pantalla {
 							}
 
 							if (l1.contains("${NOMBRE}")) {
-								l1 = l1.replace("${NOMBRE}",
-										ArchivoGuardado.nombreJugador);
+								l1 = l1.replace("${NOMBRE}", ArchivoGuardado.nombreJugador);
 							} else if (l2.contains("${NOMBRE}")) {
-								l2 = l2.replace("${NOMBRE}",
-										ArchivoGuardado.nombreJugador);
-							} else if (l1.contains("${CREACION_NOMBRE}")
-									|| l2.contains("${CREACION_NOMBRE}")) {
+								l2 = l2.replace("${NOMBRE}", ArchivoGuardado.nombreJugador);
+							} else if (l1.contains("${CREACION_NOMBRE}") || l2.contains("${CREACION_NOMBRE}")) {
 								l1 = l1.replace("${CREACION_NOMBRE}", "");
 								l2 = l2.replace("${CREACION_NOMBRE}", "");
 								ArchivoGuardado.nombreJugador = "Sara";
@@ -446,6 +444,29 @@ public class Play extends Pantalla {
 			/* Asi no se puede volver a coger ese item */
 			obj.getProperties().put("used", "true");
 		}
+	}
+
+	/**
+	 * Gestiona las interacciones entre el jugador y el objeto obj, que puede
+	 * ser un cartel, pokeball, etc.
+	 * 
+	 * @param obj
+	 *            el objeto declarado en la capa de objetos.
+	 */
+	private void interactNPC(NPC npc) {
+		optionsVisible = true;
+		dialogando = true;
+
+		/* Iniciar dialogo */
+		dialogo.procesarDialogo("cartel_" + npc.getDialogo());
+		dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
+		
+		/* Combate(si hay) */
+		if(npc.hayCombate()){
+			
+		}
+		
+
 	}
 
 	/**
