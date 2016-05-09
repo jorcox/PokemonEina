@@ -9,7 +9,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.pokemon.entities.Player;
+import com.pokemon.mochila.Ball;
 import com.pokemon.tween.SpriteAccessor;
 import com.pokemon.utilidades.ArchivoGuardado;
 
@@ -18,6 +21,9 @@ import entrenadores.Jugador;
 public class CombateP extends Enfrentamiento {
 
 	private boolean show = true;
+	private boolean atrapado = false;
+	private int xBall = 120, yBall = 120, animacionBall = 60;
+	private Sprite ball;
 
 	public CombateP(ArchivoGuardado ctx, Player player, Jugador jugador,
 			int fase, Screen screen) {
@@ -43,11 +49,10 @@ public class CombateP extends Enfrentamiento {
 		pokemonEnemigo.draw(batch);
 		pokemonEnemigo.setSize(120, 120);
 		font.draw(batch, dialogo.getLinea1(), 50, 85);
-		font.draw(batch, dialogo.getLinea2(), 50, 35);
+		font.draw(batch, dialogo.getLinea2(), 50, 45);
 		base.setPosition(-70, 120);
 		baseEnemy.setPosition(350, 300);
 		pokemonEnemigo.setPosition(400, 350);
-
 		/*
 		 * Aparacion de pokemon pokemonEnemigo
 		 */
@@ -176,6 +181,9 @@ public class CombateP extends Enfrentamiento {
 				updateSeleccionAtaque();
 			}
 		}
+		if (fase == 20 || fase == 21) {
+			lanzamientoBall();
+		}
 		batch.end();
 	}
 
@@ -240,7 +248,7 @@ public class CombateP extends Enfrentamiento {
 						dialogo.setLineas(l1, l2);
 					}
 				} else if (fase == 3) {
-					elegirOpcion();
+					elegirOpcion(false);
 				} else if (fase == 4) {
 					/*
 					 * Primer ataque
@@ -258,6 +266,7 @@ public class CombateP extends Enfrentamiento {
 					}
 				} else if (fase == 7) {
 					combate();
+					cambio = true;
 				} else if (fase == 8) {
 					veces = 8;
 					if (pkmn.getPs() <= 0 || pkmnpokemonEnemigo.getPs() <= 0) {
@@ -467,7 +476,42 @@ public class CombateP extends Enfrentamiento {
 							dialogo.procesarDialogo("combate_perdido");
 						}
 					}
+				} else if (fase == 20) {
+					atrapado = Ball.atrapar(pkmnpokemonEnemigo);
+					if (atrapado) {
+						String[] frases = { "...", "...", "...", "...",
+								"¡Genial!", "¡Has capturado a ${POKEMON}!" };
+						dialogo.setFrases(frases);
+					} else {
+						String[] frases = { "...", "...", "...", "...",
+								"¡Lástima!", "¡${POKEMON} se ha escapado!" };
+						dialogo.setFrases(frases);
+
+					}
+					fase = 21;
+
+				} else if (fase == 21) {
+					String l1 = dialogo.siguienteLinea();
+					String l2 = dialogo.siguienteLinea();
+					if (l2 != null) {
+						l2 = l2.replace("${POKEMON}",
+								pkmnpokemonEnemigo.getNombre());
+					}
+					dialogo.setLineas(l1, l2);
+					if (l1 == null) {
+						if (atrapado) {
+							jugador.getEquipo().add(pkmnpokemonEnemigo);
+							((Game) Gdx.app.getApplicationListener())
+									.setScreen(screen);
+						} else {
+							animacionBall = 60;
+							fase = 6;
+							veces = 0;
+							cambio = false;
+						}
+					}
 				}
+
 			} else if (keycode == getCtx().getTeclaLeft()) {
 				if (fase == 3) {
 					if (seleccion != 1) {
@@ -595,4 +639,18 @@ public class CombateP extends Enfrentamiento {
 
 	}
 
+	public void setBall(String nombre) {
+		ball = new Sprite(new Texture("res/imgs/batallas/" + nombre + ".png"));
+	}
+
+	public void lanzamientoBall() {
+		ball.setPosition(xBall, yBall);
+		// 470,400
+		ball.draw(batch);
+		if (animacionBall > 0) {
+			xBall = xBall + 6;
+			yBall = yBall + 5;
+			animacionBall--;
+		}
+	}
 }

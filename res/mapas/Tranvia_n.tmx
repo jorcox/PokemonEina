@@ -303,6 +303,7 @@
   <object id="50" gid="4024" x="1983" y="2047" width="32" height="32">
    <properties>
     <property name="activo" value="true"/>
+    <property name="dialogo" value="jamarro_tranvia"/>
     <property name="dir" value="derecha"/>
     <property name="dis" value="4"/>
     <property name="pack" value="jamarro"/>

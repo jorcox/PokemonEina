@@ -42,9 +42,9 @@
   </object>
   <object id="6" gid="10942" x="1216" y="735" width="32" height="32">
    <properties>
-    <property name="mapa" value="Fondo"/>
-    <property name="x" value="500"/>
-    <property name="y" value="3000"/>
+    <property name="mapa" value="Terraza"/>
+    <property name="x" value="350"/>
+    <property name="y" value="2900"/>
    </properties>
   </object>
  </objectgroup>

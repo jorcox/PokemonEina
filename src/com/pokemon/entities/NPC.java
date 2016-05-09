@@ -45,8 +45,10 @@ public class NPC extends Sprite {
 	private Player player;
 
 	private boolean activo;
+	
+	private String dialogoCode;
 
-	public NPC(TextureAtlas playerAtlas, Animation face, String dir, int disVista, Play play) {
+	public NPC(TextureAtlas playerAtlas, Animation face, String dir, int disVista, Play play, String dialogoCode) {
 		super(face.getKeyFrame(0));
 		cara = new Animation(1 / 10f, playerAtlas.findRegions("cara"));
 		derecha = new Animation(1 / 10f, playerAtlas.findRegions("derecha"));
@@ -64,7 +66,7 @@ public class NPC extends Sprite {
 		this.play = play;
 		this.distanciaVision = disVista;
 		this.direccionVision = dir;
-		this.player = player;
+		this.dialogoCode = dialogoCode;
 		activo = true;
 		mochila = new Mochila();
 	}
@@ -270,6 +272,10 @@ public class NPC extends Sprite {
 
 	public void setActivo(boolean activo) {
 		this.activo = activo;
+	}
+
+	public String getDialogo() {
+		return dialogoCode;
 	}
 
 }
