@@ -1,8 +1,11 @@
 package com.pokemon.mochila;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Mochila {
+public class Mochila implements Serializable {
+	
+	private static final long serialVersionUID = 3828754512223630068L;
 	
 	private ArrayList<Objeto> objetos;
 	private ArrayList<Ball> balls;

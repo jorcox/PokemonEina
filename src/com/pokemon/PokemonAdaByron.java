@@ -1,17 +1,11 @@
 package com.pokemon;
 
+import java.io.FileNotFoundException;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.pokemon.pantallas.Bienvenida;
-import com.pokemon.pantallas.Evolucion;
-import com.pokemon.pantallas.Menu;
-import com.pokemon.pantallas.PantallaInicio;
+import com.badlogic.gdx.Gdx;
 import com.pokemon.pantallas.Play;
 import com.pokemon.utilidades.ArchivoGuardado;
-import com.pokemon.pantallas.CombateP;
-
-import entrenadores.Entrenador;
+import com.pokemon.utilidades.Importador;
 
 public class PokemonAdaByron extends Game {
 
@@ -24,12 +18,17 @@ public class PokemonAdaByron extends Game {
 
 	public int HEIGHT = 700;
 
-	private SpriteBatch batch;
-	private Texture img;
-
 	@Override
 	public void create() {
-		ArchivoGuardado ctx = new ArchivoGuardado();
+		ArchivoGuardado ctx;
+		try {
+			ctx = Importador.importar();
+		} catch(FileNotFoundException e) {
+			ctx = new ArchivoGuardado();
+		} catch (Exception e) {
+			Gdx.app.log("Context", "Save file could not be retrieved");
+			ctx = new ArchivoGuardado();
+		}
 
 		//setScreen(new Salvaje(280,280,3));
 		//setScreen(new Play(1200, 2600, 3, "Bosque.tmx"));

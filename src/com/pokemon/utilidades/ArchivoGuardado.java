@@ -1,16 +1,13 @@
 package com.pokemon.utilidades;
 
-import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.Vector2;
-import com.pokemon.PokemonAdaByron;
-import com.pokemon.entities.Player;
+import com.pokemon.dialogo.Dialogo;
 import com.pokemon.mochila.Antidoto;
 import com.pokemon.mochila.MO;
 import com.pokemon.mochila.Mochila;
@@ -21,7 +18,9 @@ import com.pokemon.mochila.Superball;
 /**
  * Contiene los datos de la partida del jugador
  */
-public class ArchivoGuardado {
+public class ArchivoGuardado implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	/*
 	 * Coordenadas del jugador en 2D
@@ -42,11 +41,6 @@ public class ArchivoGuardado {
 	 * Mapa en el que estaba el jugador
 	 */
 	public static String mapaActual;
-
-	/*
-	 * Indica si el archivo existia antes de jugar
-	 */
-	public static Boolean existe = false;
 
 	/*
 	 * Genero del jugador
@@ -74,34 +68,15 @@ public class ArchivoGuardado {
 	 */
 	private List<Integer> teclas;
 	
-	public static void cargar() {
-		comprobarExistencia();
-	}
-
-	private static void comprobarExistencia() {
-		File f = new File(System.getenv("APPDATA")
-				+ "//.pokemonAdaByron/jugador.sav");
-		if (f.exists()) {
-			// Gdx.app.log(ChromeGame.LOG, "Exists");
-			existe = true;
-			try {
-				Importador.impt();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else {
-			Gdx.app.log(PokemonAdaByron.LOG, "No existe archivo de guardafo");
-			File carpeta = new File(System.getenv("APPDATA")
-					+ "//.pokemonAdaByron");
-			carpeta.mkdir();
-			existe = false;
-		}
-	}
+	public Dialogo dialogo;
+	
+	public static boolean existe = true;
 	
 	public ArchivoGuardado() {
 		mochila = new Mochila();
 		teclas = new ArrayList<>(6);
 		setDefaultKeys();
+		dialogo = new Dialogo("es", "ES");
 		
 		// Objetos de prueba metidos a pelo
 		mochila.add(new Pocion());

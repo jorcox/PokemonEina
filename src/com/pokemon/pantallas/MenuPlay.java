@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pokemon.PokemonAdaByron;
 import com.pokemon.mochila.Mochila;
 import com.pokemon.utilidades.ArchivoGuardado;
+import com.pokemon.utilidades.Guardador;
 
 import pokemon.Pokemon;
 
@@ -27,6 +28,8 @@ public class MenuPlay extends Pantalla {
 	private float x, y;
 	private int lastPressed;
 	private String map;
+	
+	private boolean writing = false;
 
 	Texture t, button, selButton, p, pSel, b, bSel, o, oSel, s, sSel;
 
@@ -38,9 +41,7 @@ public class MenuPlay extends Pantalla {
 
 	Sprite bg, regButton, regButton2, regButton3, regButton4, poke, bag, opt,
 			save;
-
-	private boolean archivoGuardado = ArchivoGuardado.existe;
-
+	
 	private int seleccion = 1;
 	private List<Pokemon> listaPokemon;
 
@@ -206,11 +207,38 @@ public class MenuPlay extends Pantalla {
 			((Game) Gdx.app.getApplicationListener()).setScreen(new OpcionesTeclas(getCtx(), this));
 			break;
 		case 4:
-			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(getCtx(), x, y,
-					lastPressed, map));
+			if (!writing) {
+				guardar();
+			} else {
+				getCtx().dialogo.limpiar();
+				writing = false;
+			}
 			break;
 		default:
 			break;
+		}
+	}
+	
+	/**
+	 * Guarda el objeto ArchivoGuardado en un fichero binario.
+	 */
+	private void guardar() {
+		boolean saved = Guardador.guardar(getCtx());
+		writing = true;
+		if (saved) {
+			getCtx().dialogo.procesarDialogo("guardado_1");
+		} else {
+			getCtx().dialogo.procesarDialogo("guardado_2");
+		}
+		
+		String l1 = getCtx().dialogo.siguienteLinea();
+		String l2 = getCtx().dialogo.siguienteLinea();
+
+		if (l1 != null) {
+			if (l2 == null) {
+				l2 = "";
+			}
+			getCtx().dialogo.setLineas(l1, l2);
 		}
 	}
 
