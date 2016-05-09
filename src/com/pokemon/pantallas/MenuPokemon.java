@@ -371,7 +371,7 @@ public class MenuPokemon extends Pantalla {
 	}
 
 	private void dialogoCambiar() {
-		if (cambiar) {
+		if (cambiar) { 
 			cajaDialogo.draw(batch);
 			cajaDialogo.setSize(720, 120);
 			if (!pokemonCambiar) {
