@@ -581,7 +581,7 @@ public class Play extends Pantalla {
 			arrayP.add(db.getPokemon(2));
 			arrayP.add(db.getPokemon(3));
 			arrayP.add(db.getPokemon(0));
-			//arrayP.add(db.getPokemon(5));
+			arrayP.add(db.getPokemon(5));
 			jugador.setEquipo(arrayP);
 			db.shutdown();
 		} catch (Exception e) {
