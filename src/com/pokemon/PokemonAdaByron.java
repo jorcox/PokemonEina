@@ -31,7 +31,7 @@ public class PokemonAdaByron extends Game {
 		}
 
 		//setScreen(new Salvaje(280,280,3));
-		//setScreen(new Play(1200, 2600, 3, "Bosque.tmx"));
+		//setScreen(new Play(ctx,1200, 2600, 3, "Bosque.tmx"));
 		setScreen(new Play(ctx, 1850, 400, 3, "Tranvia_n.tmx"));
 		//setScreen(new Play(ctx, 600, 800, 3, "Hall.tmx"));
 		//setScreen(new Bienvenida(ctx, this));

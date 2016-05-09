@@ -46,6 +46,8 @@ public class NPC extends Sprite {
 
 	private boolean activo;
 	
+	private boolean dialogado = false;
+	
 	private String dialogoCode;
 
 	public NPC(TextureAtlas playerAtlas, Animation face, String dir, int disVista, Play play, String dialogoCode) {
@@ -99,7 +101,7 @@ public class NPC extends Sprite {
 		int altura = 32;
 
 		collisionPlayer |= ((player.getX() + anchura / 1.5) > getX()) && ((player.getX() - anchura / 1.5) < getX())
-				&& ((player.getY() + altura / 1.5) > getY()) && ((player.getY() - altura / 0.9) < getY());
+				&& ((player.getY() + altura / 1.5) > getY()) && ((player.getY() - altura / 1.5) < getY());
 
 		if (collisionPlayer) {
 			setX(oldX);
@@ -276,6 +278,19 @@ public class NPC extends Sprite {
 
 	public String getDialogo() {
 		return dialogoCode;
+	}
+
+	public boolean hayCombate() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isDialogado() {
+		return dialogado;
+	}
+
+	public void setDialogado(boolean b) {
+		dialogado = b;		
 	}
 
 }

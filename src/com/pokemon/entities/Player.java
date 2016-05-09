@@ -288,7 +288,7 @@ public class Player extends Sprite {
 		int altura = 32;
 		for (NPC npc : npcs) {
 			collisionNpc |= ((npc.getX() + anchura / 1.5) > getX()) && ((npc.getX() - anchura / 1.5) < getX())
-					&& ((npc.getY() + altura / 1.5) > getY()) && ((npc.getY() - altura / 0.9) < getY());
+					&& ((npc.getY() + altura / 1.5) > getY()) && ((npc.getY() - altura / 1.5) < getY());
 		}
 		if (collisionObj || collisionNpc) {
 			setX(oldX);
@@ -304,7 +304,7 @@ public class Player extends Sprite {
 				npc.setActivo(false);
 				velocity.x = 0;
 				velocity.y = 0;
-				play.pauseListener();
+				play.pauseMovimiento();
 				npc.moverAPersonaje(this);
 				esperando = true;				
 			}
@@ -314,12 +314,16 @@ public class Player extends Sprite {
 		if(esperando){
 			if(colisionNPC){
 				// TODO Combate o Conversacion	
-				
-				if(terminado){
-					play.resumeListener();
-					esperando = false;
-					colisionNPC = false;	
-				}			
+				if(!npcInteractuando.isDialogado()){
+					play.interactNPC(npcInteractuando);
+					npcInteractuando.setDialogado(true);
+				} else {
+					if(!play.isDialogando()){
+						play.resumeMovimiento();
+						esperando = false;
+						colisionNPC = false;	
+					}	
+				}		
 			}
 		}
 

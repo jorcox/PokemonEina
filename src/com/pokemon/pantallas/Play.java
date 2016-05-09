@@ -69,13 +69,16 @@ public class Play extends Pantalla {
 
 	/* Para pausar el listener de teclas */
 	private boolean listener = true;
+	/* Para pausar el movimiento sin renunciar al INTRO */
+	private boolean movimiento = true;
+	
 
 	public Play(ArchivoGuardado ctx, float x, float y, int lastPressed, String mapa) {
 		this.x = x;
 		this.y = y;
 		this.lastPressed = lastPressed;
 		this.map_ = mapa;
-		dialogando = false;
+		setDialogando(false);
 		this.setCtx(ctx);
 
 		Gdx.input.setInputProcessor(this);
@@ -249,6 +252,14 @@ public class Play extends Pantalla {
 	public void resumeListener() {
 		listener = true;
 	}
+	
+	public void pauseMovimiento() {
+		movimiento = false;
+	}
+
+	public void resumeMovimiento() {
+		movimiento = true;
+	}
 
 	@Override
 	public void resize(int width, int height) {
@@ -297,7 +308,7 @@ public class Play extends Pantalla {
 	public boolean keyDown(int keycode) {
 		if (listener) {
 			// player.checkCombat();
-			if (keycode == getCtx().getTeclaUp()) {
+			if (movimiento && keycode == getCtx().getTeclaUp()) {
 				player.velocity.y = player.speed;
 				player.velocity.x = 0;
 				player.animationTime = 0;
@@ -306,7 +317,7 @@ public class Play extends Pantalla {
 					lastPressed = 2;
 				}
 				player.WPressed = true;
-			} else if (keycode == getCtx().getTeclaLeft()) {
+			} else if (movimiento && keycode == getCtx().getTeclaLeft()) {
 				player.velocity.x = -player.speed;
 				player.velocity.y = 0;
 				player.animationTime = 0;
@@ -315,7 +326,7 @@ public class Play extends Pantalla {
 					lastPressed = 1;
 				}
 				player.APressed = true;
-			} else if (keycode == getCtx().getTeclaDown()) {
+			} else if (movimiento && keycode == getCtx().getTeclaDown()) {
 				player.velocity.y = -player.speed;
 
 				player.velocity.x = 0;
@@ -325,7 +336,7 @@ public class Play extends Pantalla {
 					lastPressed = 3;
 				}
 				player.SPressed = true;
-			} else if (keycode == getCtx().getTeclaRight()) {
+			} else if (movimiento && keycode == getCtx().getTeclaRight()) {
 				player.velocity.x = player.speed;
 				player.velocity.y = 0;
 				player.animationTime = 0;
@@ -339,7 +350,7 @@ public class Play extends Pantalla {
 				((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPlay(getCtx(), player.getX(), player.getY(),
 						player.getLastPressed(), map_, jugador.getEquipo()));
 			} else if (keycode == getCtx().getTeclaA()) {
-				if (dialogando) {
+				if (isDialogando()) {
 					/* Esta en pleno dialogo, Enter lo va avanzando */
 					optionsVisible = true;
 
@@ -373,7 +384,7 @@ public class Play extends Pantalla {
 						} else {
 							getCtx().dialogo.limpiar();
 							optionsVisible = false;
-							dialogando = false;
+							setDialogando(false);
 						}
 					}
 				} else {
@@ -409,7 +420,7 @@ public class Play extends Pantalla {
 	private void interact(TextureMapObject obj) {
 		if (obj.getProperties().containsKey("cartel")) {
 			optionsVisible = true;
-			dialogando = true;
+			setDialogando(true);
 
 			/* Leer cartel */
 			String value = (String) obj.getProperties().get("cartel");
@@ -420,7 +431,7 @@ public class Play extends Pantalla {
 			obj.setScaleX(0);
 			obj.setScaleY(0);
 			optionsVisible = true;
-			dialogando = true;
+			setDialogando(true);
 
 			/* Leer objeto recogido */
 			String value = (String) obj.getProperties().get("item");
@@ -452,12 +463,12 @@ public class Play extends Pantalla {
 	 * @param obj
 	 *            el objeto declarado en la capa de objetos.
 	 */
-	private void interactNPC(NPC npc) {
+	public void interactNPC(NPC npc) {
 		optionsVisible = true;
-		dialogando = true;
+		setDialogando(true);
 
 		/* Iniciar dialogo */
-		getCtx().dialogo.procesarDialogo("cartel_" + npc.getDialogo());
+		getCtx().dialogo.procesarDialogo(npc.getDialogo());
 		getCtx().dialogo.setLineas(getCtx().dialogo.siguienteLinea(), getCtx().dialogo.siguienteLinea());
 		
 		/* Combate(si hay) */
@@ -612,6 +623,14 @@ public class Play extends Pantalla {
 	public boolean scrolled(int amount) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	public boolean isDialogando() {
+		return dialogando;
+	}
+
+	public void setDialogando(boolean dialogando) {
+		this.dialogando = dialogando;
 	}
 
 }
