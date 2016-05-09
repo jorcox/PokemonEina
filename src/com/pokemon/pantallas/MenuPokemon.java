@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.pokemon.dialogo.Dialogo;
 import com.pokemon.utilidades.ArchivoGuardado;
 
 import pokemon.Pokemon;
@@ -25,30 +26,33 @@ public class MenuPokemon extends Pantalla {
 
 	private Screen screen;
 	private List<Pokemon> listaPokemon;
+	private Dialogo dialogo;
 	private boolean combate;
+	private boolean cambiar = false, si_no = true, pokemonCambiar = false;
+	private int iCambiar = -1;
 	private SpriteBatch batch;
-	private Texture tFondo, tMainVivo, tMainVivoSel, tMainMuerto,
-			tMainMuertoSel, tVivo, tVivoSel, tMuerto, tMuertoSel, tHpVivo,
-			tHpMuerto;
+	private Sprite dedo, cajaUsar, cajaDialogo;
+	private Texture tFondo, tMainVivo, tMainVivoSel, tMainMuerto, tMainMuertoSel, tVivo, tVivoSel, tMuerto, tMuertoSel,
+			tHpVivo, tHpMuerto;
 	private TextureRegion[] barrasVida;
 	Texture barraVida;
 	ArrayList<Sprite> spPokemon = new ArrayList<Sprite>();
 	FreeTypeFontGenerator generator;
-	BitmapFont font;
+	BitmapFont font, fontCambiar;
 
 	private int selection = 0;
 
-	public MenuPokemon(ArchivoGuardado ctx, List<Pokemon> listaPokemon,
-			Screen screen, boolean combate) {
+	public MenuPokemon(ArchivoGuardado ctx, List<Pokemon> listaPokemon, Screen screen, boolean combate) {
 		this.setCtx(ctx);
 		this.screen = screen;
 		this.listaPokemon = listaPokemon;
 		this.combate = combate;
-		generator = new FreeTypeFontGenerator(
-				Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 30;
 		font = generator.generateFont(parameter);
+		fontCambiar = generator.generateFont(parameter);
+		dialogo = new Dialogo("es", "ES");
 	}
 
 	@Override
@@ -58,23 +62,23 @@ public class MenuPokemon extends Pantalla {
 		batch = new SpriteBatch();
 		tFondo = new Texture("res/imgs/listaPokemon/fondo.png");
 		tMainVivo = new Texture("res/imgs/listaPokemon/partyPanelRound.png");
-		tMainVivoSel = new Texture(
-				"res/imgs/listaPokemon/partyPanelRoundSel.png");
-		tMainMuerto = new Texture(
-				"res/imgs/listaPokemon/partyPanelRoundFnt.png");
-		tMainMuertoSel = new Texture(
-				"res/imgs/listaPokemon/partyPanelRoundSelFnt.png");
+		tMainVivoSel = new Texture("res/imgs/listaPokemon/partyPanelRoundSel.png");
+		tMainMuerto = new Texture("res/imgs/listaPokemon/partyPanelRoundFnt.png");
+		tMainMuertoSel = new Texture("res/imgs/listaPokemon/partyPanelRoundSelFnt.png");
 		tVivo = new Texture("res/imgs/listaPokemon/partyPanelRect.png");
 		tVivoSel = new Texture("res/imgs/listaPokemon/partyPanelRectSel.png");
 		tMuerto = new Texture("res/imgs/listaPokemon/partyPanelRectFnt.png");
-		tMuertoSel = new Texture(
-				"res/imgs/listaPokemon/partyPanelRectSelFnt.png");
+		tMuertoSel = new Texture("res/imgs/listaPokemon/partyPanelRectSelFnt.png");
 		tHpVivo = new Texture("res/imgs/listaPokemon/partyHP.png");
 		tHpMuerto = new Texture("res/imgs/listaPokemon/partyHPfnt.png");
 		barraVida = new Texture("res/imgs/batallas/hpbars.png");
+		cajaUsar = new Sprite(new Texture("res/imgs/batallas/cajaAprender.png"));
+		dedo = new Sprite(new Texture("res/imgs/batallas/aprender.png"));
+		cajaDialogo = new Sprite(new Texture("res/imgs/batallas/battleMessage.png"));
 		texturesPokemon();
 		getBarraVida();
 		font.setColor(Color.WHITE);
+		fontCambiar.setColor(Color.BLACK);
 	}
 
 	@Override
@@ -83,8 +87,8 @@ public class MenuPokemon extends Pantalla {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		batch.begin();
-		batch.draw(tFondo, 0, 0, Gdx.graphics.getWidth(),
-				Gdx.graphics.getHeight());
+
+		batch.draw(tFondo, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		if (listaPokemon.size() > 0) {
 			/* El primer slot de pokemon es distinto (fondo redondo) */
 			drawMainPokemon();
@@ -93,13 +97,14 @@ public class MenuPokemon extends Pantalla {
 			/* Pinta el resto de slots de pokemon */
 			drawPokemon(i);
 		}
+		dialogoCambiar();
 		batch.end();
 	}
 
 	private void texturesPokemon() {
 		for (int i = 0; i < listaPokemon.size(); i++) {
-			spPokemon.add(new Sprite(new Texture("res/imgs/pokemon/"
-					+ listaPokemon.get(i).getNombre().toLowerCase() + ".png")));
+			spPokemon.add(new Sprite(
+					new Texture("res/imgs/pokemon/" + listaPokemon.get(i).getNombre().toLowerCase() + ".png")));
 		}
 	}
 
@@ -107,28 +112,22 @@ public class MenuPokemon extends Pantalla {
 		Pokemon pokemon = listaPokemon.get(0);
 		if (pokemon.vivo()) {
 			if (selection != 0) {
-				batch.draw(tMainVivo, 3, 400, Gdx.graphics.getWidth() / 2,
-						Gdx.graphics.getHeight() / (float) 3.5);
+				batch.draw(tMainVivo, 3, 400, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / (float) 3.5);
 			} else {
-				batch.draw(tMainVivoSel, 3, 400, Gdx.graphics.getWidth() / 2,
-						Gdx.graphics.getHeight() / (float) 3.5);
+				batch.draw(tMainVivoSel, 3, 400, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / (float) 3.5);
 			}
 			batch.draw(tHpVivo, 120, 450, 180, tHpVivo.getHeight());
 
 		} else {
 
 			if (selection != 0) {
-				batch.draw(tMainMuerto, 3, 400, Gdx.graphics.getWidth() / 2,
-						Gdx.graphics.getHeight() / (float) 3.5);
+				batch.draw(tMainMuerto, 3, 400, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / (float) 3.5);
 			} else {
-				batch.draw(tMainMuertoSel, 3, 400, Gdx.graphics.getWidth() / 2,
-						Gdx.graphics.getHeight() / (float) 3.5);
+				batch.draw(tMainMuertoSel, 3, 400, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / (float) 3.5);
 			}
 			batch.draw(tHpVivo, 120, 450, 180, tHpVivo.getHeight());
 		}
-		batch.draw(barrasVida[0], 158, 453,
-				(int) (132 * (pokemon.getPs() / (double) pokemon.getPsMax())),
-				9);
+		batch.draw(barrasVida[0], 158, 453, (int) (132 * (pokemon.getPs() / (double) pokemon.getPsMax())), 9);
 		font.draw(batch, pokemon.getNombre().toUpperCase(), 160, 500);
 		font.draw(batch, pokemon.getPs() + "/" + pokemon.getPsMax(), 190, 440);
 		font.draw(batch, "Nvº " + pokemon.getNivel(), 60, 440);
@@ -171,37 +170,29 @@ public class MenuPokemon extends Pantalla {
 		Pokemon pokemon = listaPokemon.get(i);
 		if (pokemon.vivo()) {
 			if (selection != i) {
-				batch.draw(tVivo, x, y, Gdx.graphics.getWidth() / 2,
-						Gdx.graphics.getHeight() / (float) 4);
+				batch.draw(tVivo, x, y, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / (float) 4);
 			} else {
-				batch.draw(tVivoSel, x, y, Gdx.graphics.getWidth() / 2,
-						Gdx.graphics.getHeight() / (float) 4);
+				batch.draw(tVivoSel, x, y, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / (float) 4);
 			}
 			batch.draw(tHpVivo, xHp, yHp);
 			font.draw(batch, pokemon.getNombre().toUpperCase(), xName, yName);
-			font.draw(batch, pokemon.getPs() + "/" + pokemon.getPsMax(), xPs,
-					yPs);
+			font.draw(batch, pokemon.getPs() + "/" + pokemon.getPsMax(), xPs, yPs);
 			font.draw(batch, "Nvº " + pokemon.getNivel(), xNv, yNv);
 			batch.draw(spPokemon.get(i), xPok, yPok, 60, 60);
 		} else {
 			if (selection != i) {
-				batch.draw(tMuerto, x, y, Gdx.graphics.getWidth() / 2,
-						Gdx.graphics.getHeight() / (float) 4);
+				batch.draw(tMuerto, x, y, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / (float) 4);
 			} else {
-				batch.draw(tMuertoSel, x, y, Gdx.graphics.getWidth() / 2,
-						Gdx.graphics.getHeight() / (float) 4);
+				batch.draw(tMuertoSel, x, y, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / (float) 4);
 			}
 
 			batch.draw(tHpMuerto, xHp, yHp);
 			font.draw(batch, pokemon.getNombre().toUpperCase(), xName, yName);
-			font.draw(batch, pokemon.getPs() + "/" + pokemon.getPsMax(), xPs,
-					yPs);
+			font.draw(batch, pokemon.getPs() + "/" + pokemon.getPsMax(), xPs, yPs);
 			font.draw(batch, "Nvº " + pokemon.getNivel(), xNv, yNv);
 			batch.draw(spPokemon.get(i), xPok, yPok, 60, 60);
 		}
-		batch.draw(barrasVida[0], xVida, yVida,
-				(int) (100 * (pokemon.getPs() / (double) pokemon.getPsMax())),
-				9);
+		batch.draw(barrasVida[0], xVida, yVida, (int) (100 * (pokemon.getPs() / (double) pokemon.getPsMax())), 9);
 
 	}
 
@@ -235,26 +226,40 @@ public class MenuPokemon extends Pantalla {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		if (keycode == getCtx().getTeclaB()) {
-			/* Vuelve al menu */
-			((Game) Gdx.app.getApplicationListener()).setScreen(screen);
-		} else if (keycode == getCtx().getTeclaA()) {
-			action(selection);
-		} else if (keycode == getCtx().getTeclaDown()) {
-			if (selection != 4 && selection != 5) {
-				selection = selection + 2;
-			}
-		} else if (keycode == getCtx().getTeclaUp()) {
-			if (selection != 0 && selection != 1) {
-				selection = selection - 2;
-			}
-		} else if (keycode == getCtx().getTeclaRight()) {
-			if (selection != 1 && selection != 3 && selection != 5) {
-				selection = selection + 1;
-			}
-		} else if (keycode == getCtx().getTeclaLeft()) {
-			if (selection != 0 && selection != 2 && selection != 4) {
-				selection = selection - 1;
+		if (!dialogo.isWriting()) {
+			if (!cambiar || pokemonCambiar) {
+				if (keycode == getCtx().getTeclaB()) {
+					/* Vuelve al menu */
+					((Game) Gdx.app.getApplicationListener()).setScreen(screen);
+				} else if (keycode == getCtx().getTeclaA()) {
+					action(selection);
+				} else if (keycode == getCtx().getTeclaDown()) {
+					if (selection != 4 && selection != 5 && !(listaPokemon.size() - selection < 3)) {
+						selection = selection + 2;
+					}
+				} else if (keycode == getCtx().getTeclaUp()) {
+					if (selection != 0 && selection != 1) {
+						selection = selection - 2;
+					}
+				} else if (keycode == getCtx().getTeclaRight()) {
+					if (selection != 1 && selection != 3 && selection != 5 && !(listaPokemon.size() - selection < 2)) {
+						selection = selection + 1;
+					}
+				} else if (keycode == getCtx().getTeclaLeft()) {
+					if (selection != 0 && selection != 2 && selection != 4) {
+						selection = selection - 1;
+					}
+				}
+			} else {
+				if (keycode == getCtx().getTeclaDown()) {
+					if (si_no)
+						si_no = false;
+				} else if (keycode == getCtx().getTeclaUp()) {
+					if (!si_no)
+						si_no = true;
+				} else if (keycode == getCtx().getTeclaA()) {
+					action(selection);
+				}
 			}
 		}
 		return false;
@@ -320,6 +325,41 @@ public class MenuPokemon extends Pantalla {
 					((Game) Gdx.app.getApplicationListener()).setScreen(e);
 				}
 			}
+		} else if (pokemonCambiar) {
+			// Intercambiar pokemon
+			Pokemon aux = listaPokemon.get(selection);
+			listaPokemon.set(selection, listaPokemon.get(iCambiar));
+			listaPokemon.set(iCambiar, aux);
+			Sprite auxS = spPokemon.get(selection);
+			spPokemon.set(selection, spPokemon.get(iCambiar));
+			spPokemon.set(iCambiar, auxS);
+			pokemonCambiar = false;
+			cambiar = false;
+			dialogo.limpiar();
+			iCambiar = -1;
+		} else if (cambiar) {
+			if (si_no) {
+				pokemonCambiar = true;
+				iCambiar = selection;
+				String[] frases = { "Elige el pokemon a cambiar", "" };
+				dialogo.setFrases(frases);
+				String l1 = dialogo.siguienteLinea();
+				String l2 = dialogo.siguienteLinea();
+				dialogo.setLineas(l1, l2);
+			} else {
+				cambiar = false;
+				si_no = true;
+
+			}
+			dialogo.limpiar();
+		} else {
+			cambiar = true;
+
+			String[] frases = { "¿Quieres cambiar este pokemon de posición en la mochila?", "" };
+			dialogo.setFrases(frases);
+			String l1 = dialogo.siguienteLinea();
+			String l2 = dialogo.siguienteLinea();
+			dialogo.setLineas(l1, l2);
 		}
 	}
 
@@ -328,6 +368,28 @@ public class MenuPokemon extends Pantalla {
 		barrasVida[0] = new TextureRegion(barraVida, 0, 0, 180, 18);
 		barrasVida[1] = new TextureRegion(barraVida, 0, 20, 180, 18);
 		barrasVida[2] = new TextureRegion(barraVida, 0, 36, 180, 18);
+	}
+
+	private void dialogoCambiar() {
+		if (cambiar) {
+			cajaDialogo.draw(batch);
+			cajaDialogo.setSize(720, 120);
+			if (!pokemonCambiar) {
+				int yAp = 155;
+				if (!si_no)
+					yAp = 120;
+				cajaUsar.setSize(100, 90);
+				cajaUsar.setPosition(500, 120);
+				cajaUsar.draw(batch);
+				dedo.setPosition(610, yAp);
+				dedo.setSize(50, 50);
+				dedo.draw(batch);
+				fontCambiar.draw(batch, "Si", 530, 190);
+				fontCambiar.draw(batch, "No", 530, 150);
+			}
+		}
+		fontCambiar.draw(batch, dialogo.getLinea1(), 50, 85);
+		fontCambiar.draw(batch, dialogo.getLinea2(), 50, 45);
 	}
 
 }
