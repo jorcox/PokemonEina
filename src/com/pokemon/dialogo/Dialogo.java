@@ -1,5 +1,6 @@
 package com.pokemon.dialogo;
 
+import java.io.Serializable;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -27,12 +28,13 @@ import com.badlogic.gdx.utils.Timer.Task;
  *         Dialogos_es_ES.properties, donde <es> es el idioma y <ES> es el pais.
  *
  */
-public class Dialogo {
+public class Dialogo implements Serializable {
 
+	private static final long serialVersionUID = 7029393477725778068L;
+	
 	private String idioma;
 	private String pais;
 	private Locale locale;
-	private ResourceBundle bundle;
 	protected int indiceActual;
 	private int indicePalabra;
 	protected String lineaUno = "";
@@ -47,7 +49,6 @@ public class Dialogo {
 		this.pais = pais;
 		
 		locale = new Locale(idioma, pais);
-		bundle = ResourceBundle.getBundle("Dialogos", locale);
 		len = 0;
 	}
 
@@ -85,8 +86,9 @@ public class Dialogo {
 	 * @return el dialogo cuya clave es id.
 	 */
 	public void procesarDialogo(String id) {
+		ResourceBundle bundle = ResourceBundle.getBundle("Dialogos", locale);
 		this.id=id;
-		int i = contarFrases(id);
+		int i = contarFrases(bundle, id);
 		String[] dialogo = new String[i];
 		for (int j = 0; j < i; j++) {
 			dialogo[j] = bundle.getString(id + "_" + (j+1));
@@ -134,7 +136,7 @@ public class Dialogo {
 		return salida;
 	}
 
-	private int contarFrases(String id) {
+	private int contarFrases(ResourceBundle bundle, String id) {
 		int i = 1;
 		try {
 			while (true) {
