@@ -49,7 +49,6 @@ public class Play extends Pantalla {
 	private float x, y;
 	private int lastPressed;
 	private String map_;
-	private Dialogo dialogo;
 	private SpriteBatch batch;
 	private BitmapFont font;
 	private FreeTypeFontGenerator generator;
@@ -70,14 +69,16 @@ public class Play extends Pantalla {
 
 	/* Para pausar el listener de teclas */
 	private boolean listener = true;
+	/* Para pausar el movimiento sin renunciar al INTRO */
+	private boolean movimiento = true;
+	
 
 	public Play(ArchivoGuardado ctx, float x, float y, int lastPressed, String mapa) {
-		dialogo = new Dialogo("es", "ES");
 		this.x = x;
 		this.y = y;
 		this.lastPressed = lastPressed;
 		this.map_ = mapa;
-		dialogando = false;
+		setDialogando(false);
 		this.setCtx(ctx);
 
 		Gdx.input.setInputProcessor(this);
@@ -97,6 +98,7 @@ public class Play extends Pantalla {
 		tweenManager = new TweenManager();
 		// map = loader.load("res/mapas/Tranvia_n.tmx");
 		map = loader.load("res/mapas/" + map_);
+
 		// map = loader.load("res/mapas/Cueva.tmx");
 		// map = loader.load("res/mapas/Hall.tmx");
 		// map = loader.load("res/mapas/Bosque.tmx");
@@ -116,17 +118,18 @@ public class Play extends Pantalla {
 																		// Izquierda
 																		// Espalda
 			int disVista = Integer.parseInt((String) t.getProperties().get("dis"));
+			String dialogoCode = (String) t.getProperties().get("dialogo"); 
 			TextureAtlas personajePack = new TextureAtlas(
 					"res/imgs/entrenadoresWorld/" + (String) t.getProperties().get("pack") + ".pack");
 			NPC npc = new NPC(personajePack, new Animation(1 / 10f, playerAtlas.findRegions(dirVista)), dirVista,
-					disVista, this);
+					disVista, this, dialogoCode);
 			npc.setPosition(t.getX(), t.getY());
 			npcs.add(npc);
 		}
 
 		/* Player */
 		player = new Player(getCtx(), playerAtlas, (TiledMapTileLayer) map.getLayers().get("Entorno"),
-				map.getLayers().get("Objetos"), map.getLayers().get("Trans"), npcs, dialogo, this);
+				map.getLayers().get("Objetos"), map.getLayers().get("Trans"), npcs, getCtx().dialogo, this);
 		player.setPosition(x, y);
 		player.setLastPressed(lastPressed);
 		equipoPokemon();
@@ -195,8 +198,8 @@ public class Play extends Pantalla {
 			batch.begin();
 			box.draw(batch);
 			font.setColor(Color.BLACK);
-			font.draw(batch, dialogo.getLinea1(), 50, 125);
-			font.draw(batch, dialogo.getLinea2(), 50, 75);
+			font.draw(batch, getCtx().dialogo.getLinea1(), 50, 125);
+			font.draw(batch, getCtx().dialogo.getLinea2(), 50, 75);
 			batch.end();
 		}
 
@@ -249,6 +252,14 @@ public class Play extends Pantalla {
 	public void resumeListener() {
 		listener = true;
 	}
+	
+	public void pauseMovimiento() {
+		movimiento = false;
+	}
+
+	public void resumeMovimiento() {
+		movimiento = true;
+	}
 
 	@Override
 	public void resize(int width, int height) {
@@ -295,9 +306,9 @@ public class Play extends Pantalla {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		if(listener){
+		if (listener) {
 			// player.checkCombat();
-			if (keycode == getCtx().getTeclaUp()) {
+			if (movimiento && keycode == getCtx().getTeclaUp()) {
 				player.velocity.y = player.speed;
 				player.velocity.x = 0;
 				player.animationTime = 0;
@@ -306,7 +317,7 @@ public class Play extends Pantalla {
 					lastPressed = 2;
 				}
 				player.WPressed = true;
-			} else if (keycode == getCtx().getTeclaLeft()) {
+			} else if (movimiento && keycode == getCtx().getTeclaLeft()) {
 				player.velocity.x = -player.speed;
 				player.velocity.y = 0;
 				player.animationTime = 0;
@@ -315,9 +326,9 @@ public class Play extends Pantalla {
 					lastPressed = 1;
 				}
 				player.APressed = true;
-			} else if (keycode == getCtx().getTeclaDown()) {
+			} else if (movimiento && keycode == getCtx().getTeclaDown()) {
 				player.velocity.y = -player.speed;
-	
+
 				player.velocity.x = 0;
 				player.animationTime = 0;
 				player.setLastPressed(3);
@@ -325,7 +336,7 @@ public class Play extends Pantalla {
 					lastPressed = 3;
 				}
 				player.SPressed = true;
-			} else if (keycode == getCtx().getTeclaRight()) {
+			} else if (movimiento && keycode == getCtx().getTeclaRight()) {
 				player.velocity.x = player.speed;
 				player.velocity.y = 0;
 				player.animationTime = 0;
@@ -339,13 +350,13 @@ public class Play extends Pantalla {
 				((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPlay(getCtx(), player.getX(), player.getY(),
 						player.getLastPressed(), map_, jugador.getEquipo()));
 			} else if (keycode == getCtx().getTeclaA()) {
-				if (dialogando) {
+				if (isDialogando()) {
 					/* Esta en pleno dialogo, Enter lo va avanzando */
 					optionsVisible = true;
 
-					if (!dialogo.isWriting()) {
-						String l1 = dialogo.siguienteLinea();
-						String l2 = dialogo.siguienteLinea();
+					if (!getCtx().dialogo.isWriting()) {
+						String l1 = getCtx().dialogo.siguienteLinea();
+						String l2 = getCtx().dialogo.siguienteLinea();
 
 						if (l1 != null) {
 							if (l2 == null) {
@@ -353,20 +364,17 @@ public class Play extends Pantalla {
 							}
 
 							if (l1.contains("${NOMBRE}")) {
-								l1 = l1.replace("${NOMBRE}",
-										ArchivoGuardado.nombreJugador);
+								l1 = l1.replace("${NOMBRE}", ArchivoGuardado.nombreJugador);
 							} else if (l2.contains("${NOMBRE}")) {
-								l2 = l2.replace("${NOMBRE}",
-										ArchivoGuardado.nombreJugador);
-							} else if (l1.contains("${CREACION_NOMBRE}")
-									|| l2.contains("${CREACION_NOMBRE}")) {
+								l2 = l2.replace("${NOMBRE}", ArchivoGuardado.nombreJugador);
+							} else if (l1.contains("${CREACION_NOMBRE}") || l2.contains("${CREACION_NOMBRE}")) {
 								l1 = l1.replace("${CREACION_NOMBRE}", "");
 								l2 = l2.replace("${CREACION_NOMBRE}", "");
 								ArchivoGuardado.nombreJugador = "Sara";
 							}
 
 							/* Escribe letra a letra el dialogo */
-							dialogo.setLineas(l1, l2);
+							getCtx().dialogo.setLineas(l1, l2);
 
 							/*
 							 * if (script[counter].contains("(OPTION)")) {
@@ -374,9 +382,9 @@ public class Play extends Pantalla {
 							 * "(OPTION)", ""); optionsVisible = true; }
 							 */
 						} else {
-							dialogo.limpiar();
+							getCtx().dialogo.limpiar();
 							optionsVisible = false;
-							dialogando = false;
+							setDialogando(false);
 						}
 					}
 				} else {
@@ -412,23 +420,23 @@ public class Play extends Pantalla {
 	private void interact(TextureMapObject obj) {
 		if (obj.getProperties().containsKey("cartel")) {
 			optionsVisible = true;
-			dialogando = true;
+			setDialogando(true);
 
 			/* Leer cartel */
 			String value = (String) obj.getProperties().get("cartel");
-			dialogo.procesarDialogo("cartel_" + value);
-			dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
+			getCtx().dialogo.procesarDialogo("cartel_" + value);
+			getCtx().dialogo.setLineas(getCtx().dialogo.siguienteLinea(), getCtx().dialogo.siguienteLinea());
 		} else if (obj.getProperties().containsKey("item") && obj.getProperties().containsKey("used")
 				&& obj.getProperties().get("used").equals("false")) {
 			obj.setScaleX(0);
 			obj.setScaleY(0);
 			optionsVisible = true;
-			dialogando = true;
+			setDialogando(true);
 
 			/* Leer objeto recogido */
 			String value = (String) obj.getProperties().get("item");
-			dialogo.procesarDialogo("item_" + value);
-			dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
+			getCtx().dialogo.procesarDialogo("item_" + value);
+			getCtx().dialogo.setLineas(getCtx().dialogo.siguienteLinea(), getCtx().dialogo.siguienteLinea());
 
 			/* Introduce en mochila */
 			if (value.equals("Poci�n")) {
@@ -446,6 +454,29 @@ public class Play extends Pantalla {
 			/* Asi no se puede volver a coger ese item */
 			obj.getProperties().put("used", "true");
 		}
+	}
+
+	/**
+	 * Gestiona las interacciones entre el jugador y el objeto obj, que puede
+	 * ser un cartel, pokeball, etc.
+	 * 
+	 * @param obj
+	 *            el objeto declarado en la capa de objetos.
+	 */
+	public void interactNPC(NPC npc) {
+		optionsVisible = true;
+		setDialogando(true);
+
+		/* Iniciar dialogo */
+		getCtx().dialogo.procesarDialogo(npc.getDialogo());
+		getCtx().dialogo.setLineas(getCtx().dialogo.siguienteLinea(), getCtx().dialogo.siguienteLinea());
+		
+		/* Combate(si hay) */
+		if(npc.hayCombate()){
+			
+		}
+		
+
 	}
 
 	/**
@@ -592,6 +623,14 @@ public class Play extends Pantalla {
 	public boolean scrolled(int amount) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	public boolean isDialogando() {
+		return dialogando;
+	}
+
+	public void setDialogando(boolean dialogando) {
+		this.dialogando = dialogando;
 	}
 
 }
