@@ -27,6 +27,8 @@ public class MenuPlay extends Pantalla {
 	private float x, y;
 	private int lastPressed;
 	private String map;
+	
+	private boolean writing = false;
 
 	Texture t, button, selButton, p, pSel, b, bSel, o, oSel, s, sSel;
 
@@ -206,11 +208,31 @@ public class MenuPlay extends Pantalla {
 			((Game) Gdx.app.getApplicationListener()).setScreen(new OpcionesTeclas(getCtx(), this));
 			break;
 		case 4:
-			((Game) Gdx.app.getApplicationListener()).setScreen(new Play(getCtx(), x, y,
-					lastPressed, map));
+			if (!writing) {
+				guardar();
+			} else {
+				getCtx().dialogo.limpiar();
+				writing = false;
+			}
 			break;
 		default:
 			break;
+		}
+	}
+	
+	/**
+	 * Guarda el objeto ArchivoGuardado en un fichero binario.
+	 */
+	private void guardar() {
+		writing = true;
+		String l1 = getCtx().dialogo.siguienteLinea();
+		String l2 = getCtx().dialogo.siguienteLinea();
+
+		if (l1 != null) {
+			if (l2 == null) {
+				l2 = "";
+			}
+			getCtx().dialogo.setLineas(l1, l2);
 		}
 	}
 

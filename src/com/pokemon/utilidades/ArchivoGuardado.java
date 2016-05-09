@@ -10,6 +10,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.Vector2;
 import com.pokemon.PokemonAdaByron;
+import com.pokemon.dialogo.Dialogo;
 import com.pokemon.entities.Player;
 import com.pokemon.mochila.Antidoto;
 import com.pokemon.mochila.MO;
@@ -74,6 +75,8 @@ public class ArchivoGuardado {
 	 */
 	private List<Integer> teclas;
 	
+	public Dialogo dialogo;
+	
 	public static void cargar() {
 		comprobarExistencia();
 	}
@@ -102,6 +105,7 @@ public class ArchivoGuardado {
 		mochila = new Mochila();
 		teclas = new ArrayList<>(6);
 		setDefaultKeys();
+		dialogo = new Dialogo("es", "ES");
 		
 		// Objetos de prueba metidos a pelo
 		mochila.add(new Pocion());

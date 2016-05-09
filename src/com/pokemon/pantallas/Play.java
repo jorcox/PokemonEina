@@ -49,7 +49,6 @@ public class Play extends Pantalla {
 	private float x, y;
 	private int lastPressed;
 	private String map_;
-	private Dialogo dialogo;
 	private SpriteBatch batch;
 	private BitmapFont font;
 	private FreeTypeFontGenerator generator;
@@ -72,7 +71,6 @@ public class Play extends Pantalla {
 	private boolean listener = true;
 
 	public Play(ArchivoGuardado ctx, float x, float y, int lastPressed, String mapa) {
-		dialogo = new Dialogo("es", "ES");
 		this.x = x;
 		this.y = y;
 		this.lastPressed = lastPressed;
@@ -126,7 +124,7 @@ public class Play extends Pantalla {
 
 		/* Player */
 		player = new Player(getCtx(), playerAtlas, (TiledMapTileLayer) map.getLayers().get("Entorno"),
-				map.getLayers().get("Objetos"), map.getLayers().get("Trans"), npcs, dialogo, this);
+				map.getLayers().get("Objetos"), map.getLayers().get("Trans"), npcs, getCtx().dialogo, this);
 		player.setPosition(x, y);
 		player.setLastPressed(lastPressed);
 		equipoPokemon();
@@ -195,8 +193,8 @@ public class Play extends Pantalla {
 			batch.begin();
 			box.draw(batch);
 			font.setColor(Color.BLACK);
-			font.draw(batch, dialogo.getLinea1(), 50, 125);
-			font.draw(batch, dialogo.getLinea2(), 50, 75);
+			font.draw(batch, getCtx().dialogo.getLinea1(), 50, 125);
+			font.draw(batch, getCtx().dialogo.getLinea2(), 50, 75);
 			batch.end();
 		}
 
@@ -343,9 +341,9 @@ public class Play extends Pantalla {
 					/* Esta en pleno dialogo, Enter lo va avanzando */
 					optionsVisible = true;
 
-					if (!dialogo.isWriting()) {
-						String l1 = dialogo.siguienteLinea();
-						String l2 = dialogo.siguienteLinea();
+					if (!getCtx().dialogo.isWriting()) {
+						String l1 = getCtx().dialogo.siguienteLinea();
+						String l2 = getCtx().dialogo.siguienteLinea();
 
 						if (l1 != null) {
 							if (l2 == null) {
@@ -366,7 +364,7 @@ public class Play extends Pantalla {
 							}
 
 							/* Escribe letra a letra el dialogo */
-							dialogo.setLineas(l1, l2);
+							getCtx().dialogo.setLineas(l1, l2);
 
 							/*
 							 * if (script[counter].contains("(OPTION)")) {
@@ -374,7 +372,7 @@ public class Play extends Pantalla {
 							 * "(OPTION)", ""); optionsVisible = true; }
 							 */
 						} else {
-							dialogo.limpiar();
+							getCtx().dialogo.limpiar();
 							optionsVisible = false;
 							dialogando = false;
 						}
@@ -416,8 +414,8 @@ public class Play extends Pantalla {
 
 			/* Leer cartel */
 			String value = (String) obj.getProperties().get("cartel");
-			dialogo.procesarDialogo("cartel_" + value);
-			dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
+			getCtx().dialogo.procesarDialogo("cartel_" + value);
+			getCtx().dialogo.setLineas(getCtx().dialogo.siguienteLinea(), getCtx().dialogo.siguienteLinea());
 		} else if (obj.getProperties().containsKey("item") && obj.getProperties().containsKey("used")
 				&& obj.getProperties().get("used").equals("false")) {
 			obj.setScaleX(0);
@@ -427,8 +425,8 @@ public class Play extends Pantalla {
 
 			/* Leer objeto recogido */
 			String value = (String) obj.getProperties().get("item");
-			dialogo.procesarDialogo("item_" + value);
-			dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
+			getCtx().dialogo.procesarDialogo("item_" + value);
+			getCtx().dialogo.setLineas(getCtx().dialogo.siguienteLinea(), getCtx().dialogo.siguienteLinea());
 
 			/* Introduce en mochila */
 			if (value.equals("Poci�n")) {
