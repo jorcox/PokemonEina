@@ -202,7 +202,6 @@ public class Play extends Pantalla {
 			font.draw(batch, getCtx().dialogo.getLinea2(), 50, 75);
 			batch.end();
 		}
-
 	}
 
 	private ArrayList<Object> ordenar(Player player, ArrayList<NPC> npcs, MapObjects objects) {
