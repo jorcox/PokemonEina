@@ -1,13 +1,11 @@
 package com.pokemon.entities;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
@@ -34,28 +32,25 @@ public class NPC extends Sprite {
 	private Dialogo dialogo;
 	private Play play;
 
-	private boolean APressed = false;
-
-	private boolean WPressed = false;
-
-	private boolean SPressed = false;
-
-	private boolean DPressed = false;
-
 	private boolean SpacePressed = false;
-	
+
 	private int lastPressed; // A=1, W=2, S=3, D=4
 
 	private Mochila mochila;
-	
-	private int distanciaVision;
-	
-	private String direccionVision;
-	
-	private Player player;
-	
 
-	public NPC(TextureAtlas playerAtlas, Animation face, String dir, int disVista, Play play) {
+	private int distanciaVision;
+
+	private String direccionVision;
+
+	private Player player;
+
+	private boolean activo;
+	
+	private boolean dialogado = false;
+	
+	private String dialogoCode;
+
+	public NPC(TextureAtlas playerAtlas, Animation face, String dir, int disVista, Play play, String dialogoCode) {
 		super(face.getKeyFrame(0));
 		cara = new Animation(1 / 10f, playerAtlas.findRegions("cara"));
 		derecha = new Animation(1 / 10f, playerAtlas.findRegions("derecha"));
@@ -73,7 +68,8 @@ public class NPC extends Sprite {
 		this.play = play;
 		this.distanciaVision = disVista;
 		this.direccionVision = dir;
-		this.player = player;
+		this.dialogoCode = dialogoCode;
+		activo = true;
 		mochila = new Mochila();
 	}
 
@@ -85,209 +81,57 @@ public class NPC extends Sprite {
 
 	public void update(float delta) {
 		/*
-		 * Nosotros no necesitamos la gravedad
-		 */
-		// velocity.y -= gravity * delta;
-
-		/*
-		 * Limite de velocidad
-		 */
-		// if (velocity.y > speed) {
-		// velocity.y = speed;
-		// } else if (velocity.y < speed) {
-		// velocity.y = -speed;
-		// }
-
-		/*
 		 * Guardar la posicion anterior
 		 */
 		float oldX = getX(), oldY = getY();
-		//tileWidth = collisionLayer.getTileWidth(),
-		//		tileHeight = collisionLayer.getTileHeight();
-		//boolean collisionX = false, collisionY = false;
-
 		/*
 		 * Movimiento en X
 		 */
 		setX(getX() + velocity.x * delta);
-
-//		if (velocity.x < 0) {
-//			// Top left
-//			// collisionX = collisionLayer.getCell((int) (getX() / tileWidth),
-//			// (int) ((getY() + getHeight()) / tileHeight))
-//			// .getTile().getProperties().containsKey("blocked");
-//			// Middle left
-//			if (!collisionX)
-//				collisionX |= collisionLayer
-//						.getCell((int) (getX() / tileWidth), (int) ((getY() + getHeight() / 2) / tileHeight)).getTile()
-//						.getProperties().containsKey("blocked");
-//
-//			// Bottom left
-//			if (!collisionX)
-//				collisionX |= collisionLayer.getCell((int) (getX() / tileWidth), (int) (getY() / tileHeight)).getTile()
-//						.getProperties().containsKey("blocked");
-//
-//		} else if (velocity.x > 0) {
-//			// Top right
-//			// collisionX = collisionLayer
-//			// .getCell((int) ((getX() + getWidth()) / tileWidth), (int)
-//			// ((getY() + getHeight()) / tileHeight))
-//			// .getTile().getProperties().containsKey("blocked");
-//			// Middle right
-//			if (!collisionX)
-//				collisionX |= collisionLayer
-//						.getCell((int) ((getX() + getWidth()) / tileWidth),
-//								(int) ((getY() + getHeight() / 2) / tileHeight))
-//						.getTile().getProperties().containsKey("blocked");
-//
-//			// Bottom right
-//			if (!collisionX)
-//				collisionX |= collisionLayer
-//						.getCell((int) ((getX() + getWidth()) / tileWidth), (int) (getY() / tileHeight)).getTile()
-//						.getProperties().containsKey("blocked");
-//
-//		}
-//		/*
-//		 * Reaccion a colision en X
-//		 */
-//		if (collisionX) {
-//			setX(oldX);
-//			velocity.x = 0;
-//		}
-//
-//		/*
-//		 * Movimiento en Y
-//		 */
+		/*
+		 * Movimiento en Y
+		 */
 		setY(getY() + velocity.y * delta);
-//		if (velocity.y < 0) {
-//			// Bottom left
-//			collisionY = collisionLayer.getCell((int) (getX() / tileWidth), (int) (getY() / tileHeight)).getTile()
-//					.getProperties().containsKey("blocked");
-//			// Bottom middle
-//			if (!collisionY)
-//				collisionY |= collisionLayer
-//						.getCell((int) ((getX() + getWidth() / 2) / tileWidth), (int) ((getY()) / tileHeight)).getTile()
-//						.getProperties().containsKey("blocked");
-//
-//			// Bottom right
-//			if (!collisionY)
-//				collisionY |= collisionLayer
-//						.getCell((int) ((getX() + getWidth()) / tileWidth), (int) (getY() / tileHeight)).getTile()
-//						.getProperties().containsKey("blocked");
-//
-//		} else if (velocity.y > 0) {
-//			// Top left
-//			// collisionY = collisionLayer.getCell((int) (getX() / tileWidth),
-//			// (int) ((getY() + getHeight()) / tileHeight))
-//			// .getTile().getProperties().containsKey("blocked");
-//			// Top middle
-//			if (!collisionY)
-//				collisionY |= collisionLayer
-//						.getCell((int) ((getX() + getWidth() / 2) / tileWidth),
-//								(int) ((getY() + getHeight() / 2) / tileHeight))
-//						.getTile().getProperties().containsKey("blocked");
-//
-//			// Top right
-//			// if (!collisionY)
-//			// collisionY |= collisionLayer
-//			// .getCell((int) ((getX() + getWidth()) / tileWidth), (int)
-//			// ((getY() + getHeight()) / tileHeight))
-//			// .getTile().getProperties().containsKey("blocked");
-//		}
-//		/*
-//		 * Reacción al colisionar en Y
-//		 */
-//		if (collisionY) {
-//			setY(oldY);
-//			velocity.y = 0;
-//		}
-//
-		
+
+		/*
+		 * Colision de NPC
+		 */
 		boolean collisionPlayer = false;
-		 /*
-		  * Colision de NPC
-		  */
-			int anchura = 32;
-			int altura = 32;
-			
-			collisionPlayer |= ((player.getX() + anchura / 1.5) > getX())
-					&& ((player.getX() - anchura / 1.5) < getX())
-					&& ((player.getY() + altura / 1.5) > getY())
-					&& ((player.getY() - altura / 0.9) < getY());
-					
-			if (collisionPlayer) {
-				setX(oldX);
-				setY(oldY);
-				velocity.x = 0;
-				velocity.y = 0;
-				// TODO empezar combate
-			}
+		int anchura = 32;
+		int altura = 32;
+
+		collisionPlayer |= ((player.getX() + anchura / 1.5) > getX()) && ((player.getX() - anchura / 1.5) < getX())
+				&& ((player.getY() + altura / 1.5) > getY()) && ((player.getY() - altura / 1.5) < getY());
+
+		if (collisionPlayer) {
+			setX(oldX);
+			setY(oldY);
+			velocity.x = 0;
+			velocity.y = 0;
+			player.colisionNPC = true;
+		}
 		/*
 		 * Actualizar animacion
 		 */
 		animationTime += delta;
-		if (!collisionPlayer
-				&& (!(velocity.x == 0) || !(velocity.y == 0))) {
+		if (!collisionPlayer && (!(velocity.x == 0) || !(velocity.y == 0))) {
 			setRegion(
 					velocity.x < 0 ? izquierda.getKeyFrame(animationTime)
 							: velocity.x > 0 ? derecha.getKeyFrame(animationTime)
 									: velocity.y > 0 ? espalda.getKeyFrame(animationTime)
 											: cara.getKeyFrame(animationTime));
 		} else {
-			
-			if(direccionVision.equals("cara")){
+			if (direccionVision.equals("cara")) {
 				setRegion(cara.getKeyFrame(0));
-			} else if(direccionVision.equals("espalda")){
+			} else if (direccionVision.equals("espalda")) {
 				setRegion(espalda.getKeyFrame(0));
-			} else if(direccionVision.equals("izquierda")){
+			} else if (direccionVision.equals("izquierda")) {
 				setRegion(izquierda.getKeyFrame(0));
-			} else if(direccionVision.equals("derecha")){
+			} else if (direccionVision.equals("derecha")) {
 				setRegion(derecha.getKeyFrame(1));
-			}	
+			}
 		}
-//			switch (lastPressed) {
-//			case 1: // A
-//				setRegion(izquierda.getKeyFrame(0));
-//				break;
-//			case 2: // W
-//				setRegion(espalda.getKeyFrame(0));
-//				break;
-//			case 3: // S
-//				setRegion(cara.getKeyFrame(0));
-//				break;
-//			case 4: // D
-//				setRegion(derecha.getKeyFrame(1));
-//				break;
-//			}
-//		}
-//
-//		/* Eventos con objetos */
-//		if (collisionX || collisionY) {
-//			for (MapObject o : objectLayer.getObjects()) {
-//				TextureMapObject t = (TextureMapObject) o;
-//				Gdx.app.log("cartel", "distancia " + distance(t));
-//
-//				/* Dispara evento si estan muy cerca jugador y objeto */
-//				if (distance(t) < 50) {
-//					interact(t);
-//					break;
-//				}
-//			}
-//			for (MapObject o : transLayer.getObjects()) {
-//				TextureMapObject t = (TextureMapObject) o;
-//
-//				/* Dispara evento si estan muy cerca jugador y objeto */
-//				if (distance(t) < 50) {
-//					((Game) Gdx.app.getApplicationListener())
-//							.setScreen(new Play(Integer.parseInt((String) t.getProperties().get("x")),
-//									Integer.parseInt((String) t.getProperties().get("y")), getLastPressed(),
-//									t.getProperties().get("mapa") + ".tmx"));
-//					break;
-//				}
-//			}
-//		}
-
-	}
+		}
 
 	/**
 	 * Calcula la distancia entre el jugador y el objeto de texturas t.
@@ -335,20 +179,18 @@ public class NPC extends Sprite {
 
 		}
 	}
-	
 
 	public void moverAPersonaje(Player player) {
-		if(direccionVision.equals("cara")){
+		if (direccionVision.equals("cara")) {
 			velocity.y = -speed;
-		} else if(direccionVision.equals("espalda")){
+		} else if (direccionVision.equals("espalda")) {
 			velocity.y = speed;
-		} else if(direccionVision.equals("izquierda")){
+		} else if (direccionVision.equals("izquierda")) {
 			velocity.x = -speed;
-		} else if(direccionVision.equals("derecha")){
+		} else if (direccionVision.equals("derecha")) {
 			velocity.x = speed;
-		}		
+		}
 	}
-
 
 	public boolean getSpacePressed() {
 		return SpacePressed;
@@ -424,6 +266,31 @@ public class NPC extends Sprite {
 
 	public void setPlayer(Player player) {
 		this.player = player;
+	}
+
+	public boolean isActivo() {
+		return activo;
+	}
+
+	public void setActivo(boolean activo) {
+		this.activo = activo;
+	}
+
+	public String getDialogo() {
+		return dialogoCode;
+	}
+
+	public boolean hayCombate() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isDialogado() {
+		return dialogado;
+	}
+
+	public void setDialogado(boolean b) {
+		dialogado = b;		
 	}
 
 }
