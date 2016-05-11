@@ -23,9 +23,13 @@ import com.pokemon.mochila.Mochila;
 import com.pokemon.mochila.Pocion;
 import com.pokemon.mochila.Pokeball;
 import com.pokemon.mochila.Superball;
+import com.pokemon.pantallas.CombateEntrenador;
 import com.pokemon.pantallas.CombateP;
+import com.pokemon.pantallas.MenuPlay;
 import com.pokemon.pantallas.Play;
 import com.pokemon.utilidades.ArchivoGuardado;
+
+import entrenadores.Jugador;
 
 public class Player extends Sprite {
 
@@ -69,6 +73,8 @@ public class Player extends Sprite {
 	ArrayList<NPC> npcs;
 
 	private int lastPressed; // A=1, W=2, S=3, D=4
+	
+	public Jugador jugador;
 
 	public Player(ArchivoGuardado ctx, TextureAtlas playerAtlas, TiledMapTileLayer collisionLayer, MapLayer objectLayer,
 			MapLayer transLayer, ArrayList<NPC> npcs, Dialogo dialogo, Play play) {
@@ -297,35 +303,7 @@ public class Player extends Sprite {
 			velocity.y = 0;
 		}
 
-		/* Interacción entrenadores */
-		for (NPC npc : npcs) {
-			if (visible(npc) && npc.isActivo()) {
-				npcInteractuando = npc;
-				npc.setActivo(false);
-				velocity.x = 0;
-				velocity.y = 0;
-				play.pauseMovimiento();
-				npc.moverAPersonaje(this);
-				esperando = true;				
-			}
-		}
-		
-		/* Esperando la llegada de entrenador a personaje*/
-		if(esperando){
-			if(colisionNPC){
-				// TODO Combate o Conversacion	
-				if(!npcInteractuando.isDialogado()){
-					play.interactNPC(npcInteractuando);
-					npcInteractuando.setDialogado(true);
-				} else {
-					if(!play.isDialogando()){
-						play.resumeMovimiento();
-						esperando = false;
-						colisionNPC = false;	
-					}	
-				}		
-			}
-		}
+		interaccionEntrenadores();
 
 		/*
 		 * Actualizar animacion
@@ -354,6 +332,47 @@ public class Player extends Sprite {
 				break;
 			}
 		}
+	}
+
+	private void interaccionEntrenadores() {
+		/* Interacción entrenadores */
+		for (NPC npc : npcs) {
+			if (visible(npc) && npc.isActivo()) {
+				npcInteractuando = npc;
+				npc.setActivo(false);
+				velocity.x = 0;
+				velocity.y = 0;
+				play.pauseMovimiento();
+				npc.moverAPersonaje(this);
+				esperando = true;				
+			}
+		}
+		
+		/* Esperando la llegada de entrenador a personaje*/
+		if(esperando){
+			if(colisionNPC){
+				// TODO Combate o Conversacion	
+				if(!npcInteractuando.isDialogado()){
+					play.interactNPC(npcInteractuando);
+					npcInteractuando.setDialogado(true);
+				} else {
+					/* Cuando deja de dialogar se procede a devolver la libertad al jugador */
+					if(!play.isDialogando()){
+						if(npcInteractuando.hayCombate()){
+							iniciarCombate();
+						}
+						play.resumeMovimiento();
+						esperando = false;
+						colisionNPC = false;	
+					}	
+				}		
+			}
+		}		
+	}
+
+	private void iniciarCombate() {
+		play.setJugador();
+		((Game) Gdx.app.getApplicationListener()).setScreen(new CombateEntrenador(play.getCtx(), this, play.jugador, "reverte", play));		
 	}
 
 	private boolean visible(NPC npc) {

@@ -26,8 +26,8 @@ public class CombateP extends Enfrentamiento {
 	private Sprite ball;
 
 	public CombateP(ArchivoGuardado ctx, Player player, Jugador jugador,
-			int fase, Screen screen) {
-		super(ctx, player, jugador, screen);
+			int fase, Pantalla pantalla) {
+		super(ctx, player, jugador, pantalla);
 		this.fase = fase;
 		dialogo.procesarDialogo("salvaje");
 		pkmn = jugador.getEquipo().get(iPokemon);
@@ -84,7 +84,7 @@ public class CombateP extends Enfrentamiento {
 			dibujarExp();
 		}
 		/*
-		 * Decisión de ataque
+		 * Decisiï¿½n de ataque
 		 */
 		if (fase == 4) {
 			pokemon.draw(batch);
@@ -110,7 +110,7 @@ public class CombateP extends Enfrentamiento {
 		}
 		if (fase == 6 || fase == 8) {
 			/*
-			 * Ataque, vida y comprobación
+			 * Ataque, vida y comprobaciï¿½n
 			 */
 			pokemon.draw(batch);
 			dibujarCajasVida();
@@ -359,7 +359,7 @@ public class CombateP extends Enfrentamiento {
 						dialogo.setLineas(l1, l2);
 					} else {
 						((Game) Gdx.app.getApplicationListener())
-								.setScreen(screen);
+								.setScreen(pantalla);
 					}
 				} else if (fase == 13) {
 					/*
@@ -480,11 +480,11 @@ public class CombateP extends Enfrentamiento {
 					atrapado = Ball.atrapar(pkmnpokemonEnemigo);
 					if (atrapado) {
 						String[] frases = { "...", "...", "...", "...",
-								"¡Genial!", "¡Has capturado a ${POKEMON}!" };
+								"ï¿½Genial!", "ï¿½Has capturado a ${POKEMON}!" };
 						dialogo.setFrases(frases);
 					} else {
 						String[] frases = { "...", "...", "...", "...",
-								"¡Lástima!", "¡${POKEMON} se ha escapado!" };
+								"ï¿½Lï¿½stima!", "ï¿½${POKEMON} se ha escapado!" };
 						dialogo.setFrases(frases);
 
 					}
@@ -502,7 +502,7 @@ public class CombateP extends Enfrentamiento {
 						if (atrapado) {
 							jugador.getEquipo().add(pkmnpokemonEnemigo);
 							((Game) Gdx.app.getApplicationListener())
-									.setScreen(screen);
+									.setScreen(pantalla);
 						} else {
 							animacionBall = 60;
 							fase = 6;

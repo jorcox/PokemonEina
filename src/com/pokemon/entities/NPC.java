@@ -49,8 +49,10 @@ public class NPC extends Sprite {
 	private boolean dialogado = false;
 	
 	private String dialogoCode;
+	
+	private boolean combate;
 
-	public NPC(TextureAtlas playerAtlas, Animation face, String dir, int disVista, Play play, String dialogoCode) {
+	public NPC(TextureAtlas playerAtlas, Animation face, String dir, int disVista, Play play, String dialogoCode, boolean combate) {
 		super(face.getKeyFrame(0));
 		cara = new Animation(1 / 10f, playerAtlas.findRegions("cara"));
 		derecha = new Animation(1 / 10f, playerAtlas.findRegions("derecha"));
@@ -69,6 +71,7 @@ public class NPC extends Sprite {
 		this.distanciaVision = disVista;
 		this.direccionVision = dir;
 		this.dialogoCode = dialogoCode;
+		this.combate = combate;
 		activo = true;
 		mochila = new Mochila();
 	}
@@ -281,8 +284,7 @@ public class NPC extends Sprite {
 	}
 
 	public boolean hayCombate() {
-		// TODO Auto-generated method stub
-		return false;
+		return combate;
 	}
 
 	public boolean isDialogado() {

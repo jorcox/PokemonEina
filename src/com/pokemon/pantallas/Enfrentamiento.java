@@ -70,7 +70,7 @@ public class Enfrentamiento extends Pantalla {
 	FreeTypeFontGenerator generator;
 	BitmapFont font, fontC;
 	BaseDatos db;
-	protected Screen screen;
+	protected Pantalla pantalla;
 
 	SpriteBatch batch;
 	Texture tipos, barraVida;
@@ -82,12 +82,12 @@ public class Enfrentamiento extends Pantalla {
 			aprender, cajaAprender;
 
 	public Enfrentamiento(ArchivoGuardado ctx, Player player, Jugador jugador,
-			Screen screen) {
+			Pantalla pantalla) {
 		this.setCtx(ctx);
 		dialogo = new Dialogo("es", "ES");
 		this.jugador = jugador;
 		this.player = player;
-		this.screen = screen;
+		this.pantalla = pantalla;
 		try {
 			db = new BaseDatos("pokemon_base");
 
@@ -492,8 +492,8 @@ public class Enfrentamiento extends Pantalla {
 					// Ataque fallido
 					fase = 10;
 					String[] frase = {
-							"¡" + jugador.getEquipo().get(iPokemon).getNombre()
-									+ " falló! Vaya mierdas...", "" };
+							"ï¿½" + jugador.getEquipo().get(iPokemon).getNombre()
+									+ " fallï¿½! Vaya mierdas...", "" };
 					dialogo.setFrases(frase);
 
 				}
@@ -510,8 +510,8 @@ public class Enfrentamiento extends Pantalla {
 				} else {
 					fase = 11;
 					String[] frase = {
-							"¡" + pkmnpokemonEnemigo.getNombre()
-									+ " falló! Vaya mierdas...", "" };
+							"ï¿½" + pkmnpokemonEnemigo.getNombre()
+									+ " fallï¿½! Vaya mierdas...", "" };
 					dialogo.setFrases(frase);
 
 				}
@@ -522,16 +522,16 @@ public class Enfrentamiento extends Pantalla {
 
 	public String[] frasesAtaque(Pokemon pokemon, int id) {
 		String[] frase = {
-				"¡" + pokemon.getNombre() + " uso "
+				"ï¿½" + pokemon.getNombre() + " uso "
 						+ pokemon.getHabilidad(id).getNombre() + "!", "" };
 		return frase;
 	}
 
 	public String[] frasesExperiencia(boolean trainer) {
 		String[] frase = {
-				"¡"
+				"ï¿½"
 						+ pkmn.getNombre()
-						+ " ganó "
+						+ " ganï¿½ "
 						+ gainExperience(trainer, pkmnpokemonEnemigo.getNivel())
 						+ " puntos de EXP.!", "" };
 		return frase;
@@ -609,7 +609,7 @@ public class Enfrentamiento extends Pantalla {
 			break;
 		case 4: // huir
 			if (!trainer) {
-				((Game) Gdx.app.getApplicationListener()).setScreen(screen);
+				((Game) Gdx.app.getApplicationListener()).setScreen(pantalla);
 			} 
 
 			break;
@@ -678,7 +678,7 @@ public class Enfrentamiento extends Pantalla {
 		level.setSize(250, 225);
 		level.setPosition(430, 70);
 		level.draw(batch);
-		font.draw(batch, "PS Máx.", 440, 100);
+		font.draw(batch, "PS Mï¿½x.", 440, 100);
 		font.draw(batch, "Ataque", 440, 135);
 		font.draw(batch, "Defensa", 440, 170);
 		font.draw(batch, "At. Esp.", 440, 205);

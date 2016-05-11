@@ -113,16 +113,14 @@ public class Play extends Pantalla {
 		MapLayer npcLayer = map.getLayers().get("Personajes");
 		for (MapObject o : npcLayer.getObjects()) {
 			TextureMapObject t = (TextureMapObject) o;
-			String dirVista = (String) t.getProperties().get("dir"); // Cara
-																		// Derecha
-																		// Izquierda
-																		// Espalda
+			String dirVista = (String) t.getProperties().get("dir");
+			boolean combate = Boolean.parseBoolean((String) t.getProperties().get("combate"));
 			int disVista = Integer.parseInt((String) t.getProperties().get("dis"));
 			String dialogoCode = (String) t.getProperties().get("dialogo"); 
 			TextureAtlas personajePack = new TextureAtlas(
 					"res/imgs/entrenadoresWorld/" + (String) t.getProperties().get("pack") + ".pack");
 			NPC npc = new NPC(personajePack, new Animation(1 / 10f, playerAtlas.findRegions(dirVista)), dirVista,
-					disVista, this, dialogoCode);
+					disVista, this, dialogoCode, combate);
 			npc.setPosition(t.getX(), t.getY());
 			npcs.add(npc);
 		}
