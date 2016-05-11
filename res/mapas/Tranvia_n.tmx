@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="80" tilewidth="32" tileheight="32" nextobjectid="53">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="80" tilewidth="32" tileheight="32" nextobjectid="54">
  <tileset firstgid="1" name="Outside" tilewidth="32" tileheight="32" tilecount="4016" columns="8">
   <image source="../Tilesets/Outside.png" trans="ffffff" width="256" height="16064"/>
  </tileset>
@@ -303,10 +303,21 @@
   <object id="50" gid="4024" x="1983" y="2047" width="32" height="32">
    <properties>
     <property name="activo" value="true"/>
-    <property name="dialogo" value="jamarro_tranvia"/>
+    <property name="combate" value="false"/>
+    <property name="dialogo" value="guardia_tranvia"/>
     <property name="dir" value="derecha"/>
     <property name="dis" value="4"/>
-    <property name="pack" value="jamarro"/>
+    <property name="pack" value="guardia"/>
+   </properties>
+  </object>
+  <object id="53" gid="4024" x="1984" y="1921" width="32" height="32">
+   <properties>
+    <property name="activo" value="true"/>
+    <property name="combate" value="true"/>
+    <property name="dialogo" value="alumno1_tranvia"/>
+    <property name="dir" value="derecha"/>
+    <property name="dis" value="10"/>
+    <property name="pack" value="alumno1"/>
    </properties>
   </object>
  </objectgroup>

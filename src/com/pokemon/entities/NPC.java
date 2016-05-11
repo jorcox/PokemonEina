@@ -1,5 +1,7 @@
 package com.pokemon.entities;
 
+import java.io.Serializable;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -15,7 +17,7 @@ import com.pokemon.mochila.Mochila;
 import com.pokemon.mochila.Pocion;
 import com.pokemon.pantallas.Play;
 
-public class NPC extends Sprite {
+public class NPC extends Sprite implements Serializable {
 
 	private Vector2 velocity = new Vector2();
 
@@ -25,10 +27,10 @@ public class NPC extends Sprite {
 
 	public float animationTime = 0;
 
-	private Animation cara, izquierda, derecha, espalda;
-	private TiledMapTileLayer collisionLayer;
-	private MapLayer objectLayer;
-	private MapLayer transLayer;
+	private transient Animation cara, izquierda, derecha, espalda;
+	private transient TiledMapTileLayer collisionLayer;
+	private transient MapLayer objectLayer;
+	private transient MapLayer transLayer;
 	private Dialogo dialogo;
 	private Play play;
 
@@ -49,8 +51,12 @@ public class NPC extends Sprite {
 	private boolean dialogado = false;
 	
 	private String dialogoCode;
-
-	public NPC(TextureAtlas playerAtlas, Animation face, String dir, int disVista, Play play, String dialogoCode) {
+	
+	private boolean combate;
+	
+	private float x, y;	
+	
+	public NPC(TextureAtlas playerAtlas, Animation face, String dir, int disVista, Play play, String dialogoCode, boolean combate) {
 		super(face.getKeyFrame(0));
 		cara = new Animation(1 / 10f, playerAtlas.findRegions("cara"));
 		derecha = new Animation(1 / 10f, playerAtlas.findRegions("derecha"));
@@ -69,6 +75,7 @@ public class NPC extends Sprite {
 		this.distanciaVision = disVista;
 		this.direccionVision = dir;
 		this.dialogoCode = dialogoCode;
+		this.combate = combate;
 		activo = true;
 		mochila = new Mochila();
 	}
@@ -83,15 +90,15 @@ public class NPC extends Sprite {
 		/*
 		 * Guardar la posicion anterior
 		 */
-		float oldX = getX(), oldY = getY();
+		float oldX = super.getX(), oldY = super.getY();
 		/*
 		 * Movimiento en X
 		 */
-		setX(getX() + velocity.x * delta);
+		setX(super.getX() + velocity.x * delta);
 		/*
 		 * Movimiento en Y
 		 */
-		setY(getY() + velocity.y * delta);
+		setY(super.getY() + velocity.y * delta);
 
 		/*
 		 * Colision de NPC
@@ -281,8 +288,7 @@ public class NPC extends Sprite {
 	}
 
 	public boolean hayCombate() {
-		// TODO Auto-generated method stub
-		return false;
+		return combate;
 	}
 
 	public boolean isDialogado() {
@@ -293,4 +299,37 @@ public class NPC extends Sprite {
 		dialogado = b;		
 	}
 
+	public String getDialogoCode() {
+		return dialogoCode;
+	}
+
+	public void setDialogoCode(String dialogoCode) {
+		this.dialogoCode = dialogoCode;
+	}
+	
+	public Animation getCara() {
+		return cara;
+	}
+
+	public void setCara(Animation cara) {
+		this.cara = cara;
+	}
+	
+	public void setX (float x) {		
+		super.setX(x);
+		this.x = x;
+	}
+
+	public void setY (float y) {		
+		super.setY(y);
+		this.y = y;
+	}
+	
+	public float getX () {	
+		return x;
+	}
+
+	public float getY () {	
+		return y;
+	}
 }

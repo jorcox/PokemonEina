@@ -43,17 +43,17 @@ import entrenadores.Jugador;
 
 public class Play extends Pantalla {
 
-	public TiledMap map;
-	private TextureMapObjectRenderer renderer;
-	private OrthographicCamera camera;
-	private SpriteBatch batch;
-	private BitmapFont font;
-	private FreeTypeFontGenerator generator;
-	private TweenManager tweenManager;
+	public transient TiledMap map;
+	private transient TextureMapObjectRenderer renderer;
+	private transient OrthographicCamera camera;
+	private transient SpriteBatch batch;
+	private transient BitmapFont font;
+	private transient FreeTypeFontGenerator generator;
+	private transient TweenManager tweenManager;
 
-	private TextureAtlas playerAtlas;
+	private transient TextureAtlas playerAtlas;
 
-	private Sprite box;
+	private transient Sprite box;
 	public boolean optionsVisible = false;
 
 	// private Player player = new Player(new Sprite(new
@@ -67,10 +67,14 @@ public class Play extends Pantalla {
 	private boolean listener = true;
 	/* Para pausar el movimiento sin renunciar al INTRO */
 	private boolean movimiento = true;
-	
+	/* Para saber si es la primera vez que se crea esta pantalla */
+	private boolean primeraVez = true;
+	/* String del mapa actual */
+	private String mapa;
+
 	public Play(ArchivoGuardado ctx) {
 		this.setCtx(ctx);
-		
+
 		Gdx.input.setInputProcessor(this);
 		setDialogando(false);
 
@@ -89,6 +93,8 @@ public class Play extends Pantalla {
 		ctx.lastPressed = lastPressed;
 		ctx.map = mapa;
 		this.setCtx(ctx);
+		
+		this.mapa = mapa;
 
 		Gdx.input.setInputProcessor(this);
 		setDialogando(false);
@@ -119,24 +125,49 @@ public class Play extends Pantalla {
 
 		playerAtlas = new TextureAtlas("res/imgs/entrenadoresWorld/protagonista.pack");
 
-		/* Carga de NPCs */
-		MapLayer npcLayer = map.getLayers().get("Personajes");
-		for (MapObject o : npcLayer.getObjects()) {
-			TextureMapObject t = (TextureMapObject) o;
-			String dirVista = (String) t.getProperties().get("dir"); // Cara
-																		// Derecha
-																		// Izquierda
-																		// Espalda
-			int disVista = Integer.parseInt((String) t.getProperties().get("dis"));
-			String dialogoCode = (String) t.getProperties().get("dialogo"); 
-			TextureAtlas personajePack = new TextureAtlas(
-					"res/imgs/entrenadoresWorld/" + (String) t.getProperties().get("pack") + ".pack");
-			NPC npc = new NPC(personajePack, new Animation(1 / 10f, playerAtlas.findRegions(dirVista)), dirVista,
-					disVista, this, dialogoCode);
-			npc.setPosition(t.getX(), t.getY());
-			npcs.add(npc);
+		if (primeraVez) {
+			/* Carga de NPCs */
+			MapLayer npcLayer = map.getLayers().get("Personajes");
+			for (MapObject o : npcLayer.getObjects()) {
+				TextureMapObject t = (TextureMapObject) o;
+				String dirVista = (String) t.getProperties().get("dir");
+				boolean combate = Boolean.parseBoolean((String) t.getProperties().get("combate"));
+				int disVista = Integer.parseInt((String) t.getProperties().get("dis"));
+				String dialogoCode = (String) t.getProperties().get("dialogo");
+				TextureAtlas personajePack = new TextureAtlas(
+						"res/imgs/entrenadoresWorld/" + (String) t.getProperties().get("pack") + ".pack");
+				NPC npc = new NPC(personajePack, new Animation(1 / 10f, playerAtlas.findRegions(dirVista)), dirVista,
+						disVista, this, dialogoCode, combate);
+				npc.setPosition(t.getX(), t.getY());
+				npcs.add(npc);
+			}
 		}
-
+		
+		if(npcs.get(0).getCara()==null) {
+			/* Carga de NPCs */
+			MapLayer npcLayer = map.getLayers().get("Personajes");
+			for (MapObject o : npcLayer.getObjects()) {
+				TextureMapObject t = (TextureMapObject) o;
+				String dirVista = (String) t.getProperties().get("dir");
+				boolean combate = Boolean.parseBoolean((String) t.getProperties().get("combate"));
+				int disVista = Integer.parseInt((String) t.getProperties().get("dis"));
+				String dialogoCode = (String) t.getProperties().get("dialogo");
+				TextureAtlas personajePack = new TextureAtlas(
+						"res/imgs/entrenadoresWorld/" + (String) t.getProperties().get("pack") + ".pack");
+				NPC npc = new NPC(personajePack, new Animation(1 / 10f, playerAtlas.findRegions(dirVista)), dirVista,
+						disVista, this, dialogoCode, combate);
+				for (NPC npcAlmacenado : npcs) {
+					if(npc.getDialogoCode().equals(npcAlmacenado.getDialogoCode())){
+						npcs.remove(npcs.indexOf(npcAlmacenado));
+						npc.setPosition(npcAlmacenado.getX(), npcAlmacenado.getY());
+						npc.setActivo(npcAlmacenado.isActivo());	
+						break;
+					}					
+				}				
+				npcs.add(npc);
+			}
+		}
+		
 		/* Player */
 		player = new Player(getCtx(), playerAtlas, (TiledMapTileLayer) map.getLayers().get("Entorno"),
 				map.getLayers().get("Objetos"), map.getLayers().get("Trans"), npcs, getCtx().dialogo, this);
@@ -155,6 +186,8 @@ public class Play extends Pantalla {
 		box.setX(box.getX() + 160);
 
 		font.setColor(Color.BLACK);
+		primeraVez = false;
+
 	}
 
 	@Override
@@ -251,7 +284,7 @@ public class Play extends Pantalla {
 
 	public void openMenuPlay() {
 		((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPlay(getCtx(), player.getX(), player.getY(),
-				player.getLastPressed(), getCtx().map, getCtx().jugador.getEquipo()));
+				player.getLastPressed(), getCtx().map, getCtx().jugador.getEquipo(),this));
 	}
 
 	public void pauseListener() {
@@ -261,7 +294,7 @@ public class Play extends Pantalla {
 	public void resumeListener() {
 		listener = true;
 	}
-	
+
 	public void pauseMovimiento() {
 		movimiento = false;
 	}
@@ -356,8 +389,9 @@ public class Play extends Pantalla {
 				player.DPressed = true;
 			} else if (keycode == getCtx().getTeclaB()) {
 				// player.SpacePressed = true;
+				getCtx().getMapas().put(getMapa(), this);
 				((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPlay(getCtx(), player.getX(), player.getY(),
-						player.getLastPressed(), getCtx().map,  getCtx().jugador.getEquipo()));
+						player.getLastPressed(), getCtx().map, getCtx().jugador.getEquipo(), this));
 			} else if (keycode == getCtx().getTeclaA()) {
 				if (isDialogando()) {
 					/* Esta en pleno dialogo, Enter lo va avanzando */
@@ -410,10 +444,11 @@ public class Play extends Pantalla {
 					}
 				}
 			} else if (keycode == Keys.C) {
-				((Game) Gdx.app.getApplicationListener()).setScreen(new CombateP(getCtx(), player,  getCtx().jugador, 1, this));
+				((Game) Gdx.app.getApplicationListener())
+						.setScreen(new CombateP(getCtx(), player, getCtx().jugador, 1, this));
 			} else if (keycode == Keys.V) {
 				((Game) Gdx.app.getApplicationListener())
-						.setScreen(new CombateEntrenador(getCtx(), player,  getCtx().jugador, "reverte", this));
+						.setScreen(new CombateEntrenador(getCtx(), player, getCtx().jugador, "reverte", this));
 			}
 		}
 		return false;
@@ -479,12 +514,11 @@ public class Play extends Pantalla {
 		/* Iniciar dialogo */
 		getCtx().dialogo.procesarDialogo(npc.getDialogo());
 		getCtx().dialogo.setLineas(getCtx().dialogo.siguienteLinea(), getCtx().dialogo.siguienteLinea());
-		
+
 		/* Combate(si hay) */
-		if(npc.hayCombate()){
-			
+		if (npc.hayCombate()) {
+
 		}
-		
 
 	}
 
@@ -639,6 +673,14 @@ public class Play extends Pantalla {
 
 	public void setDialogando(boolean dialogando) {
 		this.dialogando = dialogando;
+	}
+
+	public String getMapa() {
+		return mapa;
+	}
+
+	public void setMapa(String mapa) {
+		this.mapa = mapa;
 	}
 
 }

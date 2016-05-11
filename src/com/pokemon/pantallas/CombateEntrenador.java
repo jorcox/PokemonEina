@@ -30,8 +30,8 @@ public class CombateEntrenador extends Enfrentamiento {
 	TextureRegion[] spritesEntrenador;
 
 	public CombateEntrenador(ArchivoGuardado ctx, Player player,
-			Jugador jugador, String idEntrenador, Screen screen) {
-		super(ctx, player, jugador, screen);
+			Jugador jugador, String idEntrenador, Pantalla pantalla) {
+		super(ctx, player, jugador, pantalla);
 		this.fase = 0;
 		this.idEntrenador = idEntrenador;
 		pkmn = jugador.getPokemon(iPokemon);
@@ -113,7 +113,7 @@ public class CombateEntrenador extends Enfrentamiento {
 			dibujarExp();
 		}
 		/*
-		 * Decisión de ataque
+		 * Decisiï¿½n de ataque
 		 */
 		if (fase == 4) {
 			pokemon.draw(batch);
@@ -141,7 +141,7 @@ public class CombateEntrenador extends Enfrentamiento {
 		}
 		if (fase == 6 || fase == 8) {
 			/*
-			 * Ataque, vida y comprobación
+			 * Ataque, vida y comprobaciï¿½n
 			 */
 			pokemon.draw(batch);
 			dibujarCajasVida();
@@ -431,7 +431,7 @@ public class CombateEntrenador extends Enfrentamiento {
 						dialogo.setLineas(l1, l2);
 					} else {
 						((Game) Gdx.app.getApplicationListener())
-								.setScreen(screen);
+								.setScreen(pantalla);
 					}
 				} else if (fase == 13) {
 					fase = 3;
@@ -753,7 +753,7 @@ public class CombateEntrenador extends Enfrentamiento {
 		pkmnpokemonEnemigo = entrenadorE.getPokemon(iPokemonEnemigo);
 		pokemonEnemigo = new Sprite(new Texture("res/imgs/pokemon/"
 				+ pkmnpokemonEnemigo.getNombre().toLowerCase() + ".png"));
-		String[] frase = { "¡ENTRENADOR " + idEntrenador.toUpperCase()
+		String[] frase = { "ï¿½ENTRENADOR " + idEntrenador.toUpperCase()
 				+ " utiliza a "
 				+ entrenadorE.getPokemon(iPokemonEnemigo).getNombre() + "!" };
 		fase = 13;
