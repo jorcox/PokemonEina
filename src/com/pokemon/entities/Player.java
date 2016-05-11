@@ -2,6 +2,7 @@ package com.pokemon.entities;
 
 import pokemon.Pokemon;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -26,12 +27,13 @@ import com.pokemon.mochila.Superball;
 import com.pokemon.pantallas.CombateEntrenador;
 import com.pokemon.pantallas.CombateP;
 import com.pokemon.pantallas.MenuPlay;
+import com.pokemon.pantallas.Pantalla;
 import com.pokemon.pantallas.Play;
 import com.pokemon.utilidades.ArchivoGuardado;
 
 import entrenadores.Jugador;
 
-public class Player extends Sprite {
+public class Player extends Sprite implements Serializable{
 
 	public Vector2 velocity = new Vector2();
 
@@ -41,10 +43,10 @@ public class Player extends Sprite {
 
 	public float animationTime = 0;
 
-	private Animation cara, izquierda, derecha, espalda;
-	private TiledMapTileLayer collisionLayer;
-	private MapLayer objectLayer;
-	private MapLayer transLayer;
+	private transient Animation cara, izquierda, derecha, espalda;
+	private transient TiledMapTileLayer collisionLayer;
+	private transient MapLayer objectLayer;
+	private transient MapLayer transLayer;
 	private Dialogo dialogo;
 	private Play play;
 
@@ -61,20 +63,22 @@ public class Player extends Sprite {
 	public boolean EnterPressed = false;
 
 	private int p;
-	
+
 	private boolean esperando = false;
-	
+
 	public boolean colisionNPC = false;
-	
+
 	private NPC npcInteractuando;
-	
+
 	public boolean terminado = false;
 
 	ArrayList<NPC> npcs;
 
 	private int lastPressed; // A=1, W=2, S=3, D=4
-	
+
 	public Jugador jugador;
+	
+	private float x, y;
 
 	public Player(ArchivoGuardado ctx, TextureAtlas playerAtlas, TiledMapTileLayer collisionLayer, MapLayer objectLayer,
 			MapLayer transLayer, ArrayList<NPC> npcs, Dialogo dialogo, Play play) {
@@ -242,7 +246,7 @@ public class Player extends Sprite {
 			setY(oldY);
 			velocity.y = 0;
 		}
-		
+
 		/* Transicion de mapa */
 		if (collisionX || collisionY) {
 			for (MapObject o : transLayer.getObjects()) {
@@ -250,10 +254,16 @@ public class Player extends Sprite {
 
 				/* Transicion solo si estan muy cerca jugador y casilla */
 				if (play.distance(t) < 50) {
-					((Game) Gdx.app.getApplicationListener())
-							.setScreen(new Play(play.getCtx(), Integer.parseInt((String) t.getProperties().get("x")),
-									Integer.parseInt((String) t.getProperties().get("y")), getLastPressed(),
-									t.getProperties().get("mapa") + ".tmx"));
+					String mapa = (String) t.getProperties().get("mapa");
+					if (!play.getCtx().getMapas().containsKey(mapa)) {
+						Pantalla p = new Play(play.getCtx(), Integer.parseInt((String) t.getProperties().get("x")),
+								Integer.parseInt((String) t.getProperties().get("y")), getLastPressed(), mapa + ".tmx");
+						play.getCtx().getMapas().put(mapa, p);
+						((Game) Gdx.app.getApplicationListener()).setScreen(p);
+					} else {
+						play.getCtx().getMapas().put(play.getMapa(), play);
+						((Game) Gdx.app.getApplicationListener()).setScreen(play.getCtx().getMapas().get(mapa));
+					}
 					break;
 				}
 			}
@@ -306,8 +316,10 @@ public class Player extends Sprite {
 		interaccionEntrenadores();
 
 		/*
-		 * Actualizar animacion
+		 * Actualizar animacion y posicion en contexto
 		 */
+		play.getCtx().x = getX();
+		play.getCtx().y = getY();
 		animationTime += delta;
 		if ((WPressed || APressed || SPressed || DPressed) && (!collisionX && !collisionY)
 				&& (!(velocity.x == 0) || !(velocity.y == 0))) {
@@ -344,35 +356,39 @@ public class Player extends Sprite {
 				velocity.y = 0;
 				play.pauseMovimiento();
 				npc.moverAPersonaje(this);
-				esperando = true;				
+				esperando = true;
 			}
 		}
-		
-		/* Esperando la llegada de entrenador a personaje*/
-		if(esperando){
-			if(colisionNPC){
-				// TODO Combate o Conversacion	
-				if(!npcInteractuando.isDialogado()){
+
+		/* Esperando la llegada de entrenador a personaje */
+		if (esperando) {
+			if (colisionNPC) {
+				// TODO Combate o Conversacion
+				if (!npcInteractuando.isDialogado()) {
 					play.interactNPC(npcInteractuando);
 					npcInteractuando.setDialogado(true);
 				} else {
-					/* Cuando deja de dialogar se procede a devolver la libertad al jugador */
-					if(!play.isDialogando()){
-						if(npcInteractuando.hayCombate()){
+					/*
+					 * Cuando deja de dialogar se procede a devolver la libertad
+					 * al jugador
+					 */
+					if (!play.isDialogando()) {
+						if (npcInteractuando.hayCombate()) {
 							iniciarCombate();
 						}
 						play.resumeMovimiento();
 						esperando = false;
-						colisionNPC = false;	
-					}	
-				}		
+						colisionNPC = false;
+					}
+				}
 			}
-		}		
+		}
 	}
 
 	private void iniciarCombate() {
-		play.setJugador();
-		((Game) Gdx.app.getApplicationListener()).setScreen(new CombateEntrenador(play.getCtx(), this, play.jugador, "reverte", play));		
+		play.getCtx().getMapas().put(play.getMapa(), play);
+		((Game) Gdx.app.getApplicationListener())
+				.setScreen(new CombateEntrenador(play.getCtx(), this, play.getCtx().jugador, "reverte", play));
 	}
 
 	private boolean visible(NPC npc) {

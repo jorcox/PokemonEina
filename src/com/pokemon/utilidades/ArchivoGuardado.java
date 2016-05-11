@@ -2,6 +2,7 @@ package com.pokemon.utilidades;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.badlogic.gdx.Input.Keys;
@@ -15,6 +16,7 @@ import com.pokemon.mochila.Mochila;
 import com.pokemon.mochila.Pocion;
 import com.pokemon.mochila.Pokeball;
 import com.pokemon.mochila.Superball;
+import com.pokemon.pantallas.Pantalla;
 
 import entrenadores.Jugador;
 
@@ -70,6 +72,11 @@ public class ArchivoGuardado implements Serializable {
 	 * 0: UP. 1: DOWN. 2: LEFT. 3: RIGHT. 4: A. 5: B.
 	 */
 	private List<Integer> teclas;
+	
+	/* 
+	 * HashMap de mapas
+	 */
+	private HashMap<String, Pantalla> mapas = new HashMap<>();
 	
 	public Dialogo dialogo;
 	
@@ -157,6 +164,14 @@ public class ArchivoGuardado implements Serializable {
 		setAndSwap(teclaB, Tecla.B.ordinal());
 	}
 	
+	public HashMap<String, Pantalla> getMapas() {
+		return mapas;
+	}
+
+	public void setMapas(HashMap<String, Pantalla> mapas) {
+		this.mapas = mapas;
+	}
+
 	/**
 	 * Antes de asignar una tecla, comprueba si no se ha asignado ya.
 	 * En ese caso, se intercambian las teclas en conflicto.

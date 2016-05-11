@@ -1,8 +1,11 @@
 package com.pokemon;
 
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.pokemon.pantallas.Pantalla;
 import com.pokemon.pantallas.Play;
 import com.pokemon.utilidades.ArchivoGuardado;
 import com.pokemon.utilidades.Importador;
@@ -23,10 +26,15 @@ public class PokemonAdaByron extends Game {
 		ArchivoGuardado ctx;
 		try {
 			ctx = Importador.importar();
-			setScreen(new Play(ctx));
+			HashMap<String, Pantalla> hM = ctx.getMapas();
+			if(hM.containsKey(ctx.map)){
+				setScreen(hM.get(ctx.map));
+			}
+			//setScreen(new Play(ctx));
 		} catch(FileNotFoundException e) {
 			ctx = new ArchivoGuardado();
-			setScreen(new Play(ctx, 500, 200, 3, "Hendrix.tmx"));
+			//setScreen(new Play(ctx, 500, 200, 3, "Hendrix.tmx"));
+			setScreen(new Play(ctx, 1850, 400, 3, "Tranvia_n.tmx"));
 		} catch (Exception e) {
 			Gdx.app.log("Context", "Save file could not be retrieved");
 			ctx = new ArchivoGuardado();
