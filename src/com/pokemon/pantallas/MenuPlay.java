@@ -223,6 +223,12 @@ public class MenuPlay extends Pantalla {
 	 * Guarda el objeto ArchivoGuardado en un fichero binario.
 	 */
 	private void guardar() {
+		/* Actualiza posicion del jugador antes de guardar */
+		getCtx().x = x;
+		getCtx().y = y;
+		getCtx().lastPressed = lastPressed;
+		getCtx().map = map;
+		
 		boolean saved = Guardador.guardar(getCtx());
 		writing = true;
 		if (saved) {

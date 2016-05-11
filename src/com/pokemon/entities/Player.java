@@ -400,7 +400,7 @@ public class Player extends Sprite {
 			double combatOdds = new Random().nextDouble();
 			if (combatOdds < 0.02) {
 				((Game) Gdx.app.getApplicationListener())
-						.setScreen(new CombateP(play.getCtx(), this, play.jugador, 1, play));
+						.setScreen(new CombateP(play.getCtx(), this, play.getCtx().jugador, 1, play));
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 package entrenadores;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,10 +14,11 @@ import java.util.List;
  * acceso a su mochila.
  *
  */
-public class Jugador extends Entrenador {
+public class Jugador extends Entrenador implements Serializable {
+	
+	private static final long serialVersionUID = 3568306953866442225L;
 	
 	private List<Medalla> medallas;
-	/* TODO: implementar Mochila y asignarsela */
 	
 	/**
 	 * 
