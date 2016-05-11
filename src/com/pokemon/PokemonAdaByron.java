@@ -23,8 +23,10 @@ public class PokemonAdaByron extends Game {
 		ArchivoGuardado ctx;
 		try {
 			ctx = Importador.importar();
+			setScreen(new Play(ctx));
 		} catch(FileNotFoundException e) {
 			ctx = new ArchivoGuardado();
+			setScreen(new Play(ctx, 500, 200, 3, "Hendrix.tmx"));
 		} catch (Exception e) {
 			Gdx.app.log("Context", "Save file could not be retrieved");
 			ctx = new ArchivoGuardado();
@@ -32,7 +34,7 @@ public class PokemonAdaByron extends Game {
 
 		//setScreen(new Salvaje(280,280,3));
 		//setScreen(new Play(ctx,1200, 2600, 3, "Bosque.tmx"));
-		setScreen(new Play(ctx, 1850, 400, 3, "Tranvia_n.tmx"));
+		//setScreen(new Play(ctx, 1850, 400, 3, "Tranvia_n.tmx"));
 		//setScreen(new Play(ctx, 600, 800, 3, "Hall.tmx"));
 		//setScreen(new Bienvenida(ctx, this));
 		//setScreen(new Play(1200, 500, 3, "Prueba.tmx"));

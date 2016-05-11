@@ -8,12 +8,15 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.Vector2;
 import com.pokemon.dialogo.Dialogo;
+import com.pokemon.entities.Player;
 import com.pokemon.mochila.Antidoto;
 import com.pokemon.mochila.MO;
 import com.pokemon.mochila.Mochila;
 import com.pokemon.mochila.Pocion;
 import com.pokemon.mochila.Pokeball;
 import com.pokemon.mochila.Superball;
+
+import entrenadores.Jugador;
 
 /**
  * Contiene los datos de la partida del jugador
@@ -70,6 +73,14 @@ public class ArchivoGuardado implements Serializable {
 	
 	public Dialogo dialogo;
 	
+	public float x;
+	public float y;
+	public int lastPressed;
+	public String map;
+	
+	public Jugador jugador;
+	public Player player;
+	
 	public static boolean existe = true;
 	
 	public ArchivoGuardado() {
@@ -77,6 +88,8 @@ public class ArchivoGuardado implements Serializable {
 		teclas = new ArrayList<>(6);
 		setDefaultKeys();
 		dialogo = new Dialogo("es", "ES");
+		
+		jugador = new Jugador("Sara", false);
 		
 		// Objetos de prueba metidos a pelo
 		mochila.add(new Pocion());

@@ -46,9 +46,6 @@ public class Play extends Pantalla {
 	public TiledMap map;
 	private TextureMapObjectRenderer renderer;
 	private OrthographicCamera camera;
-	private float x, y;
-	private int lastPressed;
-	private String map_;
 	private SpriteBatch batch;
 	private BitmapFont font;
 	private FreeTypeFontGenerator generator;
@@ -62,7 +59,6 @@ public class Play extends Pantalla {
 	// private Player player = new Player(new Sprite(new
 	// Texture("assets/maps/tilesInterior.png")));
 	private Player player;
-	public Jugador jugador;
 	private Stage stage;
 	private ArrayList<NPC> npcs = new ArrayList<>();
 	private boolean dialogando;
@@ -72,16 +68,30 @@ public class Play extends Pantalla {
 	/* Para pausar el movimiento sin renunciar al INTRO */
 	private boolean movimiento = true;
 	
+	public Play(ArchivoGuardado ctx) {
+		this.setCtx(ctx);
+		
+		Gdx.input.setInputProcessor(this);
+		setDialogando(false);
+
+		/* Prepara fuente para escritura */
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
+		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.size = 35;
+		font = generator.generateFont(parameter);
+
+		setJugador();
+	}
 
 	public Play(ArchivoGuardado ctx, float x, float y, int lastPressed, String mapa) {
-		this.x = x;
-		this.y = y;
-		this.lastPressed = lastPressed;
-		this.map_ = mapa;
-		setDialogando(false);
+		ctx.x = x;
+		ctx.y = y;
+		ctx.lastPressed = lastPressed;
+		ctx.map = mapa;
 		this.setCtx(ctx);
 
 		Gdx.input.setInputProcessor(this);
+		setDialogando(false);
 
 		/* Prepara fuente para escritura */
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
@@ -97,7 +107,7 @@ public class Play extends Pantalla {
 		TmxMapLoader loader = new TmxMapLoader();
 		tweenManager = new TweenManager();
 		// map = loader.load("res/mapas/Tranvia_n.tmx");
-		map = loader.load("res/mapas/" + map_);
+		map = loader.load("res/mapas/" + getCtx().map);
 
 		// map = loader.load("res/mapas/Cueva.tmx");
 		// map = loader.load("res/mapas/Hall.tmx");
@@ -128,8 +138,8 @@ public class Play extends Pantalla {
 		/* Player */
 		player = new Player(getCtx(), playerAtlas, (TiledMapTileLayer) map.getLayers().get("Entorno"),
 				map.getLayers().get("Objetos"), map.getLayers().get("Trans"), npcs, getCtx().dialogo, this);
-		player.setPosition(x, y);
-		player.setLastPressed(lastPressed);
+		player.setPosition(getCtx().x, getCtx().y);
+		player.setLastPressed(getCtx().lastPressed);
 		equipoPokemon();
 
 		for (NPC npc : npcs) {
@@ -239,7 +249,7 @@ public class Play extends Pantalla {
 
 	public void openMenuPlay() {
 		((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPlay(getCtx(), player.getX(), player.getY(),
-				player.getLastPressed(), map_, jugador.getEquipo()));
+				player.getLastPressed(), getCtx().map, getCtx().jugador.getEquipo()));
 	}
 
 	public void pauseListener() {
@@ -310,8 +320,8 @@ public class Play extends Pantalla {
 				player.velocity.x = 0;
 				player.animationTime = 0;
 				player.setLastPressed(2);
-				if (lastPressed == 0) {
-					lastPressed = 2;
+				if (getCtx().lastPressed == 0) {
+					getCtx().lastPressed = 2;
 				}
 				player.WPressed = true;
 			} else if (movimiento && keycode == getCtx().getTeclaLeft()) {
@@ -319,8 +329,8 @@ public class Play extends Pantalla {
 				player.velocity.y = 0;
 				player.animationTime = 0;
 				player.setLastPressed(1);
-				if (lastPressed == 0) {
-					lastPressed = 1;
+				if (getCtx().lastPressed == 0) {
+					getCtx().lastPressed = 1;
 				}
 				player.APressed = true;
 			} else if (movimiento && keycode == getCtx().getTeclaDown()) {
@@ -329,8 +339,8 @@ public class Play extends Pantalla {
 				player.velocity.x = 0;
 				player.animationTime = 0;
 				player.setLastPressed(3);
-				if (lastPressed == 0) {
-					lastPressed = 3;
+				if (getCtx().lastPressed == 0) {
+					getCtx().lastPressed = 3;
 				}
 				player.SPressed = true;
 			} else if (movimiento && keycode == getCtx().getTeclaRight()) {
@@ -338,14 +348,14 @@ public class Play extends Pantalla {
 				player.velocity.y = 0;
 				player.animationTime = 0;
 				player.setLastPressed(4);
-				if (lastPressed == 0) {
-					lastPressed = 4;
+				if (getCtx().lastPressed == 0) {
+					getCtx().lastPressed = 4;
 				}
 				player.DPressed = true;
 			} else if (keycode == getCtx().getTeclaB()) {
 				// player.SpacePressed = true;
 				((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPlay(getCtx(), player.getX(), player.getY(),
-						player.getLastPressed(), map_, jugador.getEquipo()));
+						player.getLastPressed(), getCtx().map,  getCtx().jugador.getEquipo()));
 			} else if (keycode == getCtx().getTeclaA()) {
 				if (isDialogando()) {
 					/* Esta en pleno dialogo, Enter lo va avanzando */
@@ -398,10 +408,10 @@ public class Play extends Pantalla {
 					}
 				}
 			} else if (keycode == Keys.C) {
-				((Game) Gdx.app.getApplicationListener()).setScreen(new CombateP(getCtx(), player, jugador, 1, this));
+				((Game) Gdx.app.getApplicationListener()).setScreen(new CombateP(getCtx(), player,  getCtx().jugador, 1, this));
 			} else if (keycode == Keys.V) {
 				((Game) Gdx.app.getApplicationListener())
-						.setScreen(new CombateEntrenador(getCtx(), player, jugador, "reverte", this));
+						.setScreen(new CombateEntrenador(getCtx(), player,  getCtx().jugador, "reverte", this));
 			}
 		}
 		return false;
@@ -507,7 +517,7 @@ public class Play extends Pantalla {
 					player.velocity.y = 0;
 				}
 				player.animationTime = 0;
-				lastPressed = 2;
+				getCtx().lastPressed = 2;
 				player.WPressed = false;
 			} else if (keycode == getCtx().getTeclaLeft()) {
 				if (player.DPressed) {
@@ -523,7 +533,7 @@ public class Play extends Pantalla {
 					player.velocity.x = 0;
 				}
 				player.animationTime = 0;
-				lastPressed = 1;
+				getCtx().lastPressed = 1;
 				player.APressed = false;
 			} else if (keycode == getCtx().getTeclaDown()) {
 				if (player.WPressed) {
@@ -539,7 +549,7 @@ public class Play extends Pantalla {
 					player.velocity.y = 0;
 				}
 				player.animationTime = 0;
-				lastPressed = 3;
+				getCtx().lastPressed = 3;
 				player.SPressed = false;
 			} else if (keycode == getCtx().getTeclaRight()) {
 				if (player.APressed) {
@@ -555,7 +565,7 @@ public class Play extends Pantalla {
 					player.velocity.x = 0;
 				}
 				player.animationTime = 0;
-				lastPressed = 4;
+				getCtx().lastPressed = 4;
 				player.DPressed = false;
 			} else if (keycode == getCtx().getTeclaB()) {
 				player.SpacePressed = false;
@@ -565,7 +575,6 @@ public class Play extends Pantalla {
 	}
 
 	public void setJugador() {
-		jugador = new Jugador("Sara", false);
 		equipoPokemon();
 	}
 
@@ -579,7 +588,7 @@ public class Play extends Pantalla {
 			arrayP.add(db.getPokemon(3));
 			arrayP.add(db.getPokemon(0));
 			arrayP.add(db.getPokemon(5));
-			jugador.setEquipo(arrayP);
+			getCtx().jugador.setEquipo(arrayP);
 			db.shutdown();
 		} catch (Exception e) {
 			e.printStackTrace();
