@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import pokemon.Pokemon;
-import aurelienribon.tweenengine.TweenManager;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -29,7 +26,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.pokemon.dialogo.Dialogo;
 import com.pokemon.entities.NPC;
 import com.pokemon.entities.Player;
 import com.pokemon.mochila.Antidoto;
@@ -38,8 +34,9 @@ import com.pokemon.mochila.Pocion;
 import com.pokemon.render.TextureMapObjectRenderer;
 import com.pokemon.utilidades.ArchivoGuardado;
 
+import aurelienribon.tweenengine.TweenManager;
 import db.BaseDatos;
-import entrenadores.Jugador;
+import pokemon.Pokemon;
 
 public class Play extends Pantalla {
 
@@ -76,13 +73,10 @@ public class Play extends Pantalla {
 		this.setCtx(ctx);
 
 		Gdx.input.setInputProcessor(this);
+
 		setDialogando(false);
 
-		/* Prepara fuente para escritura */
-		generator = new FreeTypeFontGenerator(Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
-		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = 35;
-		font = generator.generateFont(parameter);
+		cargarFuente();
 
 		setJugador();
 	}
@@ -93,31 +87,24 @@ public class Play extends Pantalla {
 		ctx.lastPressed = lastPressed;
 		ctx.map = mapa;
 		this.setCtx(ctx);
-		
+
 		this.mapa = mapa;
 
 		Gdx.input.setInputProcessor(this);
 		setDialogando(false);
 
-		/* Prepara fuente para escritura */
-		generator = new FreeTypeFontGenerator(Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
-		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = 35;
-		font = generator.generateFont(parameter);
+		cargarFuente();
 
 		setJugador();
 	}
 
 	@Override
 	public void show() {
-		TmxMapLoader loader = new TmxMapLoader();
 		tweenManager = new TweenManager();
-		// map = loader.load("res/mapas/Tranvia_n.tmx");
-		map = loader.load("res/mapas/" + getCtx().map);
 
-		// map = loader.load("res/mapas/Cueva.tmx");
-		// map = loader.load("res/mapas/Hall.tmx");
-		// map = loader.load("res/mapas/Bosque.tmx");
+		TmxMapLoader loader = new TmxMapLoader();
+
+		map = loader.load("res/mapas/" + getCtx().map);
 
 		renderer = new TextureMapObjectRenderer(map);
 
@@ -142,9 +129,9 @@ public class Play extends Pantalla {
 				npcs.add(npc);
 			}
 		}
-		
-		if(npcs.get(0).getCara()==null) {
-			/* Carga de NPCs */
+
+		if (npcs.get(0).getCara() == null) {
+			/* Recarga de NPCs */
 			MapLayer npcLayer = map.getLayers().get("Personajes");
 			for (MapObject o : npcLayer.getObjects()) {
 				TextureMapObject t = (TextureMapObject) o;
@@ -157,17 +144,17 @@ public class Play extends Pantalla {
 				NPC npc = new NPC(personajePack, new Animation(1 / 10f, playerAtlas.findRegions(dirVista)), dirVista,
 						disVista, this, dialogoCode, combate);
 				for (NPC npcAlmacenado : npcs) {
-					if(npc.getDialogoCode().equals(npcAlmacenado.getDialogoCode())){
+					if (npc.getDialogoCode().equals(npcAlmacenado.getDialogoCode())) {
 						npcs.remove(npcs.indexOf(npcAlmacenado));
 						npc.setPosition(npcAlmacenado.getX(), npcAlmacenado.getY());
-						npc.setActivo(npcAlmacenado.isActivo());	
+						npc.setActivo(npcAlmacenado.isActivo());
 						break;
-					}					
-				}				
+					}
+				}
 				npcs.add(npc);
 			}
 		}
-		
+
 		/* Player */
 		player = new Player(getCtx(), playerAtlas, (TiledMapTileLayer) map.getLayers().get("Entorno"),
 				map.getLayers().get("Objetos"), map.getLayers().get("Trans"), npcs, getCtx().dialogo, this);
@@ -185,7 +172,11 @@ public class Play extends Pantalla {
 		box.setScale((float) 4.5, (float) 1.5);
 		box.setX(box.getX() + 160);
 
+		if (font == null)
+			cargarFuente();
+
 		font.setColor(Color.BLACK);
+
 		primeraVez = false;
 
 	}
@@ -217,17 +208,6 @@ public class Play extends Pantalla {
 			}
 		}
 
-		// /* Player */
-		// player.draw(renderer.getBatch());
-		//
-		// /* NPC */
-		// for (NPC npc : npcs) {
-		// npc.draw(renderer.getBatch());
-		// }
-		// /* Mostrar objetos */
-		// for (MapObject o : map.getLayers().get("Objetos").getObjects()) {
-		// renderer.renderObject(o);
-		// }
 		/* End */
 		renderer.getBatch().end();
 
@@ -240,11 +220,22 @@ public class Play extends Pantalla {
 		if (optionsVisible) {
 			batch.begin();
 			box.draw(batch);
+			if (font == null) {
+				cargarFuente();
+			}
 			font.setColor(Color.BLACK);
 			font.draw(batch, getCtx().dialogo.getLinea1(), 50, 125);
 			font.draw(batch, getCtx().dialogo.getLinea2(), 50, 75);
 			batch.end();
 		}
+	}
+
+	private void cargarFuente() {
+		/* Prepara fuente para escritura */
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
+		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.size = 35;
+		font = generator.generateFont(parameter);
 	}
 
 	private ArrayList<Object> ordenar(Player player, ArrayList<NPC> npcs, MapObjects objects) {
@@ -284,7 +275,7 @@ public class Play extends Pantalla {
 
 	public void openMenuPlay() {
 		((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPlay(getCtx(), player.getX(), player.getY(),
-				player.getLastPressed(), getCtx().map, getCtx().jugador.getEquipo(),this));
+				player.getLastPressed(), getCtx().map, getCtx().jugador.getEquipo(), this));
 	}
 
 	public void pauseListener() {
@@ -349,7 +340,7 @@ public class Play extends Pantalla {
 	@Override
 	public boolean keyDown(int keycode) {
 		if (listener) {
-			// player.checkCombat();
+			player.checkCombat();
 			if (movimiento && keycode == getCtx().getTeclaUp()) {
 				player.velocity.y = player.speed;
 				player.velocity.x = 0;
@@ -443,9 +434,6 @@ public class Play extends Pantalla {
 						}
 					}
 				}
-			} else if (keycode == Keys.C) {
-				((Game) Gdx.app.getApplicationListener())
-						.setScreen(new CombateP(getCtx(), player, getCtx().jugador, 1, this));
 			} else if (keycode == Keys.V) {
 				((Game) Gdx.app.getApplicationListener())
 						.setScreen(new CombateEntrenador(getCtx(), player, getCtx().jugador, "reverte", this));
