@@ -1,7 +1,9 @@
 package com.pokemon.pantallas;
 
 import habilidad.Habilidad;
+import pokemon.Pokemon;
 import aurelienribon.tweenengine.Tween;
+import core.Combate;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -25,11 +27,15 @@ public class CombateP extends Enfrentamiento {
 	private int xBall = 120, yBall = 120, animacionBall = 60;
 	private Sprite ball;
 
-	public CombateP(ArchivoGuardado ctx, Player player, Jugador jugador, int fase, Pantalla pantalla) {
+	public CombateP(ArchivoGuardado ctx, Player player, Jugador jugador, int fase, Pantalla pantalla, Pokemon pkmnpokemonEnemigo) {
 		super(ctx, player, jugador, pantalla);
+		actualPsS = pkmnpokemonEnemigo.getPs();
+		combate = new Combate(jugador, pkmnpokemonEnemigo);
+		orden = combate.getVelocidad(iPokemon);
 		this.fase = fase;
 		dialogo.procesarDialogo("salvaje");
 		pkmn = jugador.getEquipo().get(iPokemon);
+		this.pkmnpokemonEnemigo=pkmnpokemonEnemigo;
 	}
 
 	@Override

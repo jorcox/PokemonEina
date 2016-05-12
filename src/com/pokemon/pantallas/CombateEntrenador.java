@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import pokemon.Pokemon;
 import aurelienribon.tweenengine.Tween;
+import core.Combate;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -35,11 +36,10 @@ public class CombateEntrenador extends Enfrentamiento {
 		this.fase = 0;
 		this.idEntrenador = idEntrenador;
 		pkmn = jugador.getPokemon(iPokemon);
-		/*
-		 * Base de datos?
-		 */
 		setEntrenador();
-
+		actualPsS = pkmnpokemonEnemigo.getPs();
+		combate = new Combate(jugador, pkmnpokemonEnemigo);
+		orden = combate.getVelocidad(iPokemon);
 		dialogo.procesarDialogo("combate_entrenador");
 	}
 
@@ -734,7 +734,7 @@ public class CombateEntrenador extends Enfrentamiento {
 		pkmnpokemonEnemigo = entrenadorE.getPokemon(iPokemonEnemigo);
 		pokemonEnemigo = new Sprite(
 				new Texture("res/imgs/pokemon/" + pkmnpokemonEnemigo.getNombre().toLowerCase() + ".png"));
-		String[] frase = { "¡ENTRENADOR " + idEntrenador.toUpperCase() + " utiliza a "
+		String[] frase = { "ï¿½ENTRENADOR " + idEntrenador.toUpperCase() + " utiliza a "
 				+ entrenadorE.getPokemon(iPokemonEnemigo).getNombre() + "!" };
 		fase = 13;
 		orden = combate.getVelocidad(iPokemon);
