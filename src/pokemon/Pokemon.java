@@ -26,6 +26,31 @@ public class Pokemon {
 	private int id;
 	private int entrenador;
 	
+	public Pokemon (){
+		
+	}
+	
+	public Pokemon(Pokemon pokemon){
+		setNombre(pokemon.nombre);
+		setNivel(pokemon.nivel);
+		setTipo(pokemon.tipo);
+		setAtaque(pokemon.ataque);
+		setDefensa(pokemon.defensa);
+		setAtaqueEsp(pokemon.ataqueEsp);
+		setDefensaEsp(pokemon.defensaEsp);
+		setVelocidad(pokemon.velocidad);
+		setPrecision(pokemon.precision);
+		setEvasion(pokemon.evasion);
+		setIndiceCritico(pokemon.indiceCritico);
+		setHabilidades(pokemon.habilidades);
+		setPsMax(pokemon.psMax);
+		setPs(pokemon.ps);
+		setExperiencia(pokemon.experiencia);
+		setEstado(pokemon.estado);
+		setId(pokemon.id);
+		setEntrenador(pokemon.entrenador);
+	}
+	
 	public String getNombre() {
 		return nombre;
 	}

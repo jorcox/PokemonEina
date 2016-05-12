@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import pokemon.Pokemon;
 import aurelienribon.tweenengine.Tween;
+import core.Combate;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -29,17 +30,16 @@ public class CombateEntrenador extends Enfrentamiento {
 
 	TextureRegion[] spritesEntrenador;
 
-	public CombateEntrenador(ArchivoGuardado ctx, Player player,
-			Jugador jugador, String idEntrenador, Pantalla pantalla) {
+	public CombateEntrenador(ArchivoGuardado ctx, Player player, Jugador jugador, String idEntrenador,
+			Pantalla pantalla) {
 		super(ctx, player, jugador, pantalla);
 		this.fase = 0;
 		this.idEntrenador = idEntrenador;
 		pkmn = jugador.getPokemon(iPokemon);
-		/*
-		 * Base de datos?
-		 */
 		setEntrenador();
-
+		actualPsS = pkmnpokemonEnemigo.getPs();
+		combate = new Combate(jugador, pkmnpokemonEnemigo);
+		orden = combate.getVelocidad(iPokemon);
 		dialogo.procesarDialogo("combate_entrenador");
 	}
 
@@ -150,13 +150,13 @@ public class CombateEntrenador extends Enfrentamiento {
 			dibujarExp();
 			if ((orden && fase == 6) || (!orden && fase == 8)) {
 				pokemonEnemigo.setAlpha(1);
-				if (acierto)
+				if (acierto != -1)
 					ataqueRecibido(true);
 				animacionVida(true);
 				dibujarVida(true);
 			} else {
 				pokemon.setAlpha(1);
-				if (acierto)
+				if (acierto != -1)
 					ataqueRecibido(false);
 				animacionVida(false);
 				dibujarVida(false);
@@ -226,33 +226,22 @@ public class CombateEntrenador extends Enfrentamiento {
 	@Override
 	public void show() {
 		super.show();
-		entrenador = new Sprite(new Texture("res/imgs/entrenadores/"
-				+ idEntrenador + ".png"));
-		pokemonEnemigo = new Sprite(new Texture("res/imgs/pokemon/"
-				+ entrenadorE.getEquipo().get(iPokemonEnemigo).getNombre()
-				+ ".png"));
-		protagonista = new Sprite(
-				new Texture("res/imgs/entrenadores/prota.png"));
+		entrenador = new Sprite(new Texture("res/imgs/entrenadores/" + idEntrenador + ".png"));
+		pokemonEnemigo = new Sprite(
+				new Texture("res/imgs/pokemon/" + entrenadorE.getEquipo().get(iPokemonEnemigo).getNombre() + ".png"));
+		protagonista = new Sprite(new Texture("res/imgs/entrenadores/prota.png"));
 		protagonista.setSize(150, 240);
 		if (fase < 1) {
 			Tween.set(bg, SpriteAccessor.ALPHA).target(0).start(tweenManager);
 			Tween.to(bg, SpriteAccessor.ALPHA, 2).target(1).start(tweenManager);
-			Tween.set(base, SpriteAccessor.SLIDE).target(500, 120)
-					.start(tweenManager);
-			Tween.to(base, SpriteAccessor.SLIDE, 2).target(-70, 120)
-					.start(tweenManager);
-			Tween.set(protagonista, SpriteAccessor.SLIDE).target(500, 120)
-					.start(tweenManager);
-			Tween.to(protagonista, SpriteAccessor.SLIDE, 2).target(100, 120)
-					.start(tweenManager);
-			Tween.set(baseEnemy, SpriteAccessor.SLIDE).target(-250, 300)
-					.start(tweenManager);
-			Tween.to(baseEnemy, SpriteAccessor.SLIDE, 2).target(350, 300)
-					.start(tweenManager);
-			Tween.set(entrenador, SpriteAccessor.SLIDE).target(-250, 350)
-					.start(tweenManager);
-			Tween.to(entrenador, SpriteAccessor.SLIDE, 2).target(400, 350)
-					.start(tweenManager);
+			Tween.set(base, SpriteAccessor.SLIDE).target(500, 120).start(tweenManager);
+			Tween.to(base, SpriteAccessor.SLIDE, 2).target(-70, 120).start(tweenManager);
+			Tween.set(protagonista, SpriteAccessor.SLIDE).target(500, 120).start(tweenManager);
+			Tween.to(protagonista, SpriteAccessor.SLIDE, 2).target(100, 120).start(tweenManager);
+			Tween.set(baseEnemy, SpriteAccessor.SLIDE).target(-250, 300).start(tweenManager);
+			Tween.to(baseEnemy, SpriteAccessor.SLIDE, 2).target(350, 300).start(tweenManager);
+			Tween.set(entrenador, SpriteAccessor.SLIDE).target(-250, 350).start(tweenManager);
+			Tween.to(entrenador, SpriteAccessor.SLIDE, 2).target(400, 350).start(tweenManager);
 		}
 	}
 
@@ -271,27 +260,21 @@ public class CombateEntrenador extends Enfrentamiento {
 						if (l2 == null) {
 							l2 = "";
 						}
-						if (dialogo.getId().equals("combate_entrenador")
-								|| dialogo.getId().equals("adelante")) {
+						if (dialogo.getId().equals("combate_entrenador") || dialogo.getId().equals("adelante")) {
 							if (l1.contains("${ENTRENADOR}")) {
-								l1 = l1.replace("${ENTRENADOR}", "ENTRENADOR "
-										+ idEntrenador.toUpperCase());
+								l1 = l1.replace("${ENTRENADOR}", "ENTRENADOR " + idEntrenador.toUpperCase());
 							}
 							if (l2.contains("${ENTRENADOR}")) {
-								l2 = l2.replace("${ENTRENADOR}", "ENTRENADOR "
-										+ idEntrenador.toUpperCase());
+								l2 = l2.replace("${ENTRENADOR}", "ENTRENADOR " + idEntrenador.toUpperCase());
 							}
 							if (l1.contains("${POKEMONE}")) {
-								l1 = l1.replace("${POKEMONE}", entrenadorE
-										.getEquipo().get(iPokemonEnemigo)
-										.getNombre());
+								l1 = l1.replace("${POKEMONE}", pkmnpokemonEnemigo.getNombre());
 
 								fase++;
 								// dialogo.procesarDialogo("combate");
 							}
 							if (l1.contains("${POKEMON}")) {
-								l1 = l1.replace("${POKEMON}", jugador
-										.getEquipo().get(iPokemon).getNombre());
+								l1 = l1.replace("${POKEMON}", jugador.getEquipo().get(iPokemon).getNombre());
 								tamanoPokemon = 1;
 								fase++;
 								dialogo.procesarDialogo("combate");
@@ -301,8 +284,7 @@ public class CombateEntrenador extends Enfrentamiento {
 							}
 						} else if (dialogo.getId().equals("combate")) {
 							if (l1.contains("${POKEMON}")) {
-								l1 = l1.replace("${POKEMON}", jugador
-										.getEquipo().get(iPokemon).getNombre());
+								l1 = l1.replace("${POKEMON}", jugador.getEquipo().get(iPokemon).getNombre());
 
 							} else {
 								fase++;
@@ -321,10 +303,10 @@ public class CombateEntrenador extends Enfrentamiento {
 				} else if (fase == 5) {
 					combate();
 				} else if (fase == 6) {
+					jugador.getEquipo().set(iPokemon, pkmn);
+					entrenadorE.getEquipo().set(iPokemonEnemigo, pkmnpokemonEnemigo);
 					veces = 8;
-					if (jugador.getEquipo().get(iPokemon).getPs() <= 0
-							|| entrenadorE.getEquipo().get(iPokemonEnemigo)
-									.getPs() <= 0) {
+					if (pkmn.getPs() <= 0 || pkmnpokemonEnemigo.getPs() <= 0) {
 						fase = 9;
 						dialogo.procesarDialogo("pokemon_muerto");
 					} else {
@@ -334,6 +316,8 @@ public class CombateEntrenador extends Enfrentamiento {
 					combate();
 					cambio = true;
 				} else if (fase == 8) {
+					jugador.getEquipo().set(iPokemon, pkmn);
+					entrenadorE.getEquipo().set(iPokemonEnemigo, pkmnpokemonEnemigo);
 					veces = 8;
 					if (pkmn.getPs() <= 0 || pkmnpokemonEnemigo.getPs() <= 0) {
 						fase = 9;
@@ -351,8 +335,7 @@ public class CombateEntrenador extends Enfrentamiento {
 						if (!jugador.vivo()) {
 							fase = 12;
 							dialogo.procesarDialogo("combate_perdido");
-						} else if (pkmn.getExperiencia() > experienceToLevel(pkmn
-								.getNivel() + 1)) {
+						} else if (pkmn.getExperiencia() > experienceToLevel(pkmn.getNivel() + 1)) {
 							/*
 							 * Subir nivel
 							 */
@@ -369,24 +352,18 @@ public class CombateEntrenador extends Enfrentamiento {
 
 						} else {
 							((Game) Gdx.app.getApplicationListener())
-									.setScreen(new MenuPokemon(getCtx(),
-											jugador.getEquipo(), this, true));
+									.setScreen(new MenuPokemon(getCtx(), jugador.getEquipo(), this, true));
 						}
 					} else {
 						if (l1.contains("debilitado")) {
 							if (pkmn.getPs() <= 0) {
 								l1 = l1.replace("${POKEMON}", pkmn.getNombre());
 							} else {
-								l1 = l1.replace("${POKEMON}",
-										pkmnpokemonEnemigo.getNombre());
+								l1 = l1.replace("${POKEMON}", pkmnpokemonEnemigo.getNombre());
 							}
 						} else if (l1.contains("${EXP}")) {
 							if (pkmn.vivo()) {
-								l1 = l1.replace(
-										"${EXP}",
-										gainExperience(true,
-												pkmnpokemonEnemigo.getNivel())
-												+ "");
+								l1 = l1.replace("${EXP}", gainExperience(true, pkmnpokemonEnemigo.getNivel()) + "");
 								l1 = l1.replace("${POKEMON}", pkmn.getNombre());
 								updateExperience(true);
 							}
@@ -403,8 +380,14 @@ public class CombateEntrenador extends Enfrentamiento {
 					String l2 = dialogo.siguienteLinea();
 
 					if (l1 == null) {
-						fase = 6;
+						if (orden) {
+							fase = 6;
+						} else {
+							fase = 8;
+						}
 						dialogo.limpiar();
+						pkmnpokemonEnemigo = pkmnAux;
+
 					} else {
 						dialogo.setLineas(l1, l2);
 					}
@@ -414,8 +397,15 @@ public class CombateEntrenador extends Enfrentamiento {
 					String l2 = dialogo.siguienteLinea();
 
 					if (l1 == null) {
-						fase = 3;
+						if (orden) {
+							fase = 8;
+						} else {
+							fase = 6;
+
+						}
 						dialogo.limpiar();
+						pkmn = pkmnAux;
+
 					} else {
 						dialogo.setLineas(l1, l2);
 					}
@@ -430,8 +420,7 @@ public class CombateEntrenador extends Enfrentamiento {
 
 						dialogo.setLineas(l1, l2);
 					} else {
-						((Game) Gdx.app.getApplicationListener())
-								.setScreen(pantalla);
+						((Game) Gdx.app.getApplicationListener()).setScreen(pantalla);
 					}
 				} else if (fase == 13) {
 					fase = 3;
@@ -459,8 +448,7 @@ public class CombateEntrenador extends Enfrentamiento {
 						}
 
 					} else if (l1 == null) {
-						pkmn.subirNivel(pkmn.getExperiencia(),
-								experienceToLevel(pkmn.getNivel() + 1));
+						pkmn.subirNivel(pkmn.getExperiencia(), experienceToLevel(pkmn.getNivel() + 1));
 						subir = true;
 					} else {
 						l1 = l1.replace("${POKEMON}", pkmn.getNombre());
@@ -504,8 +492,7 @@ public class CombateEntrenador extends Enfrentamiento {
 						}
 					}
 				} else if (fase == 16) {
-					if (dialogo.getId().equals("aprender_cuatro")
-							&& aprender_cuatro) {
+					if (dialogo.getId().equals("aprender_cuatro") && aprender_cuatro) {
 						String l1 = dialogo.siguienteLinea();
 						String l2 = dialogo.siguienteLinea();
 						if (l1 != null) {
@@ -708,15 +695,12 @@ public class CombateEntrenador extends Enfrentamiento {
 		for (int i = 0; i < 6; i++) {
 			if (i < nPoke) {
 				if (jugador.getEquipo().get(i).vivo()) {
-					balls[i] = new Sprite(new Texture(
-							"res/imgs/batallas/ballnormal.png"));
+					balls[i] = new Sprite(new Texture("res/imgs/batallas/ballnormal.png"));
 				} else {
-					balls[i] = new Sprite(new Texture(
-							"res/imgs/batallas/ballfainted.png"));
+					balls[i] = new Sprite(new Texture("res/imgs/batallas/ballfainted.png"));
 				}
 			} else {
-				balls[i] = new Sprite(new Texture(
-						"res/imgs/batallas/ballempty.png"));
+				balls[i] = new Sprite(new Texture("res/imgs/batallas/ballempty.png"));
 
 			}
 			balls[i].setPosition(xP, 130);
@@ -724,15 +708,12 @@ public class CombateEntrenador extends Enfrentamiento {
 			xP = xP - 30;
 			if (i < nPokeEnemigo) {
 				if (entrenadorE.getEquipo().get(i).vivo()) {
-					ballsEnemigo[i] = new Sprite(new Texture(
-							"res/imgs/batallas/ballnormal.png"));
+					ballsEnemigo[i] = new Sprite(new Texture("res/imgs/batallas/ballnormal.png"));
 				} else {
-					ballsEnemigo[i] = new Sprite(new Texture(
-							"res/imgs/batallas/ballfainted.png"));
+					ballsEnemigo[i] = new Sprite(new Texture("res/imgs/batallas/ballfainted.png"));
 				}
 			} else {
-				ballsEnemigo[i] = new Sprite(new Texture(
-						"res/imgs/batallas/ballempty.png"));
+				ballsEnemigo[i] = new Sprite(new Texture("res/imgs/batallas/ballempty.png"));
 
 			}
 			ballsEnemigo[i].setPosition(xE, 370);
@@ -751,12 +732,12 @@ public class CombateEntrenador extends Enfrentamiento {
 		iPokemonEnemigo++;
 		tamanoPokemon = 1;
 		pkmnpokemonEnemigo = entrenadorE.getPokemon(iPokemonEnemigo);
-		pokemonEnemigo = new Sprite(new Texture("res/imgs/pokemon/"
-				+ pkmnpokemonEnemigo.getNombre().toLowerCase() + ".png"));
-		String[] frase = { "�ENTRENADOR " + idEntrenador.toUpperCase()
-				+ " utiliza a "
+		pokemonEnemigo = new Sprite(
+				new Texture("res/imgs/pokemon/" + pkmnpokemonEnemigo.getNombre().toLowerCase() + ".png"));
+		String[] frase = { "�ENTRENADOR " + idEntrenador.toUpperCase() + " utiliza a "
 				+ entrenadorE.getPokemon(iPokemonEnemigo).getNombre() + "!" };
 		fase = 13;
+		orden = combate.getVelocidad(iPokemon);
 		dialogo.setFrases(frase);
 		l1 = dialogo.siguienteLinea();
 		l2 = dialogo.siguienteLinea();

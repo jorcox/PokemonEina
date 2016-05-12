@@ -340,7 +340,7 @@ public class Play extends Pantalla {
 	@Override
 	public boolean keyDown(int keycode) {
 		if (listener) {
-			// player.checkCombat();
+			player.checkCombat();
 			if (movimiento && keycode == getCtx().getTeclaUp()) {
 				player.velocity.y = player.speed;
 				player.velocity.x = 0;
@@ -434,9 +434,6 @@ public class Play extends Pantalla {
 						}
 					}
 				}
-			} else if (keycode == Keys.C) {
-				((Game) Gdx.app.getApplicationListener())
-						.setScreen(new CombateP(getCtx(), player, getCtx().jugador, 1, this));
 			} else if (keycode == Keys.V) {
 				((Game) Gdx.app.getApplicationListener())
 						.setScreen(new CombateEntrenador(getCtx(), player, getCtx().jugador, "reverte", this));
