@@ -40,6 +40,7 @@ public class Enfrentamiento extends Pantalla {
 	protected int actualPsS;
 	protected Pokemon pkmn;
 	protected Pokemon pkmnpokemonEnemigo;
+	protected Pokemon pkmnAux;
 	protected int iPokemonEnemigo = 0;
 	protected int iPokemon = 0;
 	protected int tamanoPokemon = 1;
@@ -51,7 +52,7 @@ public class Enfrentamiento extends Pantalla {
 	protected Combate combate;
 	protected Entrenador en;
 	protected boolean orden;
-	protected boolean acierto = true;
+	protected int acierto = 0;
 	protected boolean subir = false;
 	protected boolean aprender_cuatro = true;
 	protected boolean olvidar = true;
@@ -75,14 +76,11 @@ public class Enfrentamiento extends Pantalla {
 	SpriteBatch batch;
 	Texture tipos, barraVida;
 	TextureRegion[] regionesTipo, regionesTipoSel, barrasVida, barraExp;
-	protected Sprite bg, base, baseEnemy, message, pokemonEnemigo, pokemon,
-			bgOp, bgOpTrans, boton, luchar, mochilaS, pokemonOp, huir, dedo,
-			cajaLuchar, tipo1, tipo2, tipo3, tipo4, cajaPkmn,
-			cajaPkmnpokemonEnemigo, entrenador, protagonista, expBar, level,
-			aprender, cajaAprender;
+	protected Sprite bg, base, baseEnemy, message, pokemonEnemigo, pokemon, bgOp, bgOpTrans, boton, luchar, mochilaS,
+			pokemonOp, huir, dedo, cajaLuchar, tipo1, tipo2, tipo3, tipo4, cajaPkmn, cajaPkmnpokemonEnemigo, entrenador,
+			protagonista, expBar, level, aprender, cajaAprender;
 
-	public Enfrentamiento(ArchivoGuardado ctx, Player player, Jugador jugador,
-			Pantalla pantalla) {
+	public Enfrentamiento(ArchivoGuardado ctx, Player player, Jugador jugador, Pantalla pantalla) {
 		this.setCtx(ctx);
 		dialogo = new Dialogo("es", "ES");
 		this.jugador = jugador;
@@ -101,8 +99,7 @@ public class Enfrentamiento extends Pantalla {
 		combate = new Combate(jugador, pkmnpokemonEnemigo);
 		orden = combate.getVelocidad(iPokemon);
 		Gdx.input.setInputProcessor(this);
-		generator = new FreeTypeFontGenerator(
-				Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 35;
 		FreeTypeFontParameter parameterC = new FreeTypeFontParameter();
@@ -168,10 +165,8 @@ public class Enfrentamiento extends Pantalla {
 		batch = new SpriteBatch();
 
 		bg = new Sprite(new Texture("res/imgs/batallas/battlebgForestEve.png"));
-		base = new Sprite(new Texture(
-				"res/imgs/batallas/playerbaseForestGrassEve.png"));
-		baseEnemy = new Sprite(new Texture(
-				"res/imgs/batallas/enemybaseFieldGrassEve.png"));
+		base = new Sprite(new Texture("res/imgs/batallas/playerbaseForestGrassEve.png"));
+		baseEnemy = new Sprite(new Texture("res/imgs/batallas/enemybaseFieldGrassEve.png"));
 		bgOp = new Sprite(new Texture("res/imgs/batallas/fondoOpciones.png"));
 		bgOpTrans = new Sprite(new Texture("res/imgs/batallas/bgOpTrans.png"));
 		dedo = new Sprite(new Texture("res/imgs/batallas/dedo.png"));
@@ -180,22 +175,18 @@ public class Enfrentamiento extends Pantalla {
 		pokemonOp = new Sprite(new Texture("res/imgs/batallas/pokemon.png"));
 		huir = new Sprite(new Texture("res/imgs/batallas/huir.png"));
 		message = new Sprite(new Texture("res/imgs/batallas/battleMessage.png"));
-		pokemonEnemigo = new Sprite(new Texture("res/imgs/pokemon/"
-				+ pkmnpokemonEnemigo.getNombre().toLowerCase() + ".png"));
-		pokemon = new Sprite(new Texture("res/imgs/pokemon/espalda/"
-				+ jugador.getEquipo().get(iPokemon).getNombre().toLowerCase()
-				+ ".png"));
-		cajaLuchar = new Sprite(
-				new Texture("res/imgs/batallas/battleFight.png"));
+		pokemonEnemigo = new Sprite(
+				new Texture("res/imgs/pokemon/" + pkmnpokemonEnemigo.getNombre().toLowerCase() + ".png"));
+		pokemon = new Sprite(new Texture(
+				"res/imgs/pokemon/espalda/" + jugador.getEquipo().get(iPokemon).getNombre().toLowerCase() + ".png"));
+		cajaLuchar = new Sprite(new Texture("res/imgs/batallas/battleFight.png"));
 		tipos = new Texture("res/imgs/batallas/battleFightButtons.png");
 		barraVida = new Texture("res/imgs/batallas/hpbars.png");
 		cajaPkmn = new Sprite(new Texture("res/imgs/batallas/cajaPkmn.png"));
-		cajaPkmnpokemonEnemigo = new Sprite(new Texture(
-				"res/imgs/batallas/cajaPkmnEnemigo.png"));
+		cajaPkmnpokemonEnemigo = new Sprite(new Texture("res/imgs/batallas/cajaPkmnEnemigo.png"));
 		expBar = new Sprite(new Texture("res/imgs/batallas/expbar.png"));
 		level = new Sprite(new Texture("res/imgs/batallas/level.png"));
-		cajaAprender = new Sprite(new Texture(
-				"res/imgs/batallas/cajaAprender.png"));
+		cajaAprender = new Sprite(new Texture("res/imgs/batallas/cajaAprender.png"));
 		aprender = new Sprite(new Texture("res/imgs/batallas/aprender.png"));
 		font.setColor(Color.BLACK);
 		fontC.setColor(Color.BLACK);
@@ -287,8 +278,7 @@ public class Enfrentamiento extends Pantalla {
 		regionesTipo = new TextureRegion[4];
 		for (int i = 0; i < habilidades.length; i++) {
 			if (habilidades[i] != null) {
-				regionesTipo[i] = new TextureRegion(tipos, 0,
-						46 * habilidades[i].getIndiceTextura(), 192, 47);
+				regionesTipo[i] = new TextureRegion(tipos, 0, 46 * habilidades[i].getIndiceTextura(), 192, 47);
 			} else {
 				regionesTipo[i] = null;
 			}
@@ -303,8 +293,7 @@ public class Enfrentamiento extends Pantalla {
 		regionesTipoSel = new TextureRegion[4];
 		for (int i = 0; i < habilidades.length; i++) {
 			if (habilidades[i] != null) {
-				regionesTipoSel[i] = new TextureRegion(tipos, 192,
-						46 * habilidades[i].getIndiceTextura(), 192, 47);
+				regionesTipoSel[i] = new TextureRegion(tipos, 192, 46 * habilidades[i].getIndiceTextura(), 192, 47);
 			} else {
 				regionesTipoSel[i] = null;
 			}
@@ -348,10 +337,8 @@ public class Enfrentamiento extends Pantalla {
 			break;
 
 		}
-		font.draw(batch, "PP " + habilidades[seleccionAtaque - 1].getPp(), 600,
-				85);
-		fontC.draw(batch, "TIPO/" + habilidades[seleccionAtaque - 1].getTipo(),
-				570, 50);
+		font.draw(batch, "PP " + habilidades[seleccionAtaque - 1].getPp(), 600, 85);
+		fontC.draw(batch, "TIPO/" + habilidades[seleccionAtaque - 1].getTipo(), 570, 50);
 
 	}
 
@@ -405,11 +392,10 @@ public class Enfrentamiento extends Pantalla {
 
 	public void dibujarVida(boolean who) {
 		if (who) {
-			batch.draw(barrasVida[0], 582, 202,
-					(int) (116 * (pkmn.getPs() / (double) pkmn.getPsMax())), 10);
+			batch.draw(barrasVida[0], 582, 202, (int) (116 * (pkmn.getPs() / (double) pkmn.getPsMax())), 10);
 		} else {
-			batch.draw(barrasVida[0], 111, 416, (int) (96 * (pkmnpokemonEnemigo
-					.getPs() / (double) pkmnpokemonEnemigo.getPsMax())), 10);
+			batch.draw(barrasVida[0], 111, 416,
+					(int) (96 * (pkmnpokemonEnemigo.getPs() / (double) pkmnpokemonEnemigo.getPsMax())), 10);
 		}
 	}
 
@@ -424,13 +410,10 @@ public class Enfrentamiento extends Pantalla {
 			pokemon.setAlpha(1);
 			double diff = (actualPsS - pkmnpokemonEnemigo.getPs()) / 100.0;
 			if (vidaS > 0) {
-				batch.draw(
-						barrasVida[0],
-						111,
-						416,
-						(int) (96 * ((pkmnpokemonEnemigo.getPs() / (double) pkmnpokemonEnemigo
-								.getPsMax()) + ((diff * vidaS) / (double) pkmnpokemonEnemigo
-								.getPsMax()))), 10);
+				batch.draw(barrasVida[0], 111, 416,
+						(int) (96 * ((pkmnpokemonEnemigo.getPs() / (double) pkmnpokemonEnemigo.getPsMax())
+								+ ((diff * vidaS) / (double) pkmnpokemonEnemigo.getPsMax()))),
+						10);
 				vidaS--;
 			} else {
 				dibujarVida(false);
@@ -440,12 +423,9 @@ public class Enfrentamiento extends Pantalla {
 			double diff = (actualPs - pkmn.getPs()) / 100.0;
 
 			if (vida > 0) {
-				batch.draw(
-						barrasVida[0],
-						582,
-						202,
-						(int) (116 * ((pkmn.getPs() / (double) pkmn.getPsMax()) + ((diff * vida) / (double) pkmn
-								.getPsMax()))), 10);
+				batch.draw(barrasVida[0], 582, 202, (int) (116
+						* ((pkmn.getPs() / (double) pkmn.getPsMax()) + ((diff * vida) / (double) pkmn.getPsMax()))),
+						10);
 				vida--;
 			} else {
 				dibujarVida(true);
@@ -480,40 +460,62 @@ public class Enfrentamiento extends Pantalla {
 	}
 
 	public void combate() {
-		if (((orden && fase == 5) || (!orden && fase == 7))&& cambio) {
+		if (((orden && fase == 5) || (!orden && fase == 7)) && cambio) {
 
 			if (!dialogo.isWriting()) {
 				actualPsS = pkmnpokemonEnemigo.getPs();
-				acierto = combate.ejecutar(pkmn, pkmnpokemonEnemigo,
-						pkmn.getHabilidad(seleccionAtaque));
-				if (acierto) {
+				pkmnAux=new Pokemon(pkmnpokemonEnemigo);
+				acierto = combate.ejecutar(pkmn, pkmnAux, pkmn.getHabilidad(seleccionAtaque));
+				if (acierto == 0) {
+					pkmnpokemonEnemigo=pkmnAux;
 					fase++;
 				} else {
-					// Ataque fallido
 					fase = 10;
-					String[] frase = {
-							"�" + jugador.getEquipo().get(iPokemon).getNombre()
-									+ " fall�! Vaya mierdas...", "" };
-					dialogo.setFrases(frase);
-
+					if (acierto == -1) {
+						// Ataque fallido
+						String[] frase = {
+								"¡" + jugador.getEquipo().get(iPokemon).getNombre() + " falló! Vaya mierdas...", "" };
+						dialogo.setFrases(frase);
+					} else if (acierto == 1) {
+						// Ataque no afecta
+						String[] frase = { "¡El ataque no afecta al enemigo! Espabila", "" };
+						dialogo.setFrases(frase);
+					} else if (acierto == 2) {
+						// Ataque no muy efectivo
+						String[] frase = { "¡El ataque no es muy efectivo!", "" };
+						dialogo.setFrases(frase);
+					} else if (acierto == 3) {
+						// Ataque muy efectivo
+						String[] frase = { "¡El ataque es mega efectivo pavo!", "" };
+						dialogo.setFrases(frase);
+					}
 				}
 			}
 		} else {
 			int seleccionEnemigo = combate.decidir(pkmnpokemonEnemigo);
 
 			if (!dialogo.isWriting()) {
-				acierto = combate.ejecutar(pkmnpokemonEnemigo, pkmn,
-						pkmnpokemonEnemigo.getHabilidad(seleccionEnemigo));
+				pkmnAux=new Pokemon(pkmn);
+				acierto = combate.ejecutar(pkmnpokemonEnemigo, pkmnAux, pkmnpokemonEnemigo.getHabilidad(seleccionEnemigo));
 				actualPs = pkmn.getPs();
-				if (acierto) {
+				if (acierto == 0) {
 					fase++;
+					pkmn=pkmnAux;
 				} else {
 					fase = 11;
-					String[] frase = {
-							"�" + pkmnpokemonEnemigo.getNombre()
-									+ " fall�! Vaya mierdas...", "" };
-					dialogo.setFrases(frase);
-
+					if (acierto == -1) {
+						String[] frase = { "¡" + pkmnpokemonEnemigo.getNombre() + " falló! Vaya mierdas...", "" };
+						dialogo.setFrases(frase);
+					} else if (acierto == 1) {
+						String[] frase = { "¡El ataque no afecta al enemigo! Espabila", "" };
+						dialogo.setFrases(frase);
+					} else if (acierto == 2) {
+						String[] frase = { "¡El ataque no es muy efectivo!", "" };
+						dialogo.setFrases(frase);
+					} else if (acierto == 3) {
+						String[] frase = { "¡El ataque es mega efectivo pavo!", "" };
+						dialogo.setFrases(frase);
+					}
 				}
 			}
 		}
@@ -521,19 +523,13 @@ public class Enfrentamiento extends Pantalla {
 	}
 
 	public String[] frasesAtaque(Pokemon pokemon, int id) {
-		String[] frase = {
-				"�" + pokemon.getNombre() + " uso "
-						+ pokemon.getHabilidad(id).getNombre() + "!", "" };
+		String[] frase = { "�" + pokemon.getNombre() + " uso " + pokemon.getHabilidad(id).getNombre() + "!", "" };
 		return frase;
 	}
 
 	public String[] frasesExperiencia(boolean trainer) {
-		String[] frase = {
-				"�"
-						+ pkmn.getNombre()
-						+ " gan� "
-						+ gainExperience(trainer, pkmnpokemonEnemigo.getNivel())
-						+ " puntos de EXP.!", "" };
+		String[] frase = { "�" + pkmn.getNombre() + " gan� " + gainExperience(trainer, pkmnpokemonEnemigo.getNivel())
+				+ " puntos de EXP.!", "" };
 		return frase;
 	}
 
@@ -599,18 +595,16 @@ public class Enfrentamiento extends Pantalla {
 			fase = 4;
 			break;
 		case 2: // mochila
-			((Game) Gdx.app.getApplicationListener())
-					.setScreen(new MenuMochila(getCtx(), this));
+			((Game) Gdx.app.getApplicationListener()).setScreen(new MenuMochila(getCtx(), this));
 			break;
 		case 3: // pokemon
 			((Game) Gdx.app.getApplicationListener())
-					.setScreen(new MenuPokemon(getCtx(), jugador.getEquipo(),
-							this, true));
+					.setScreen(new MenuPokemon(getCtx(), jugador.getEquipo(), this, true));
 			break;
 		case 4: // huir
 			if (!trainer) {
 				((Game) Gdx.app.getApplicationListener()).setScreen(pantalla);
-			} 
+			}
 
 			break;
 		default:
@@ -653,12 +647,7 @@ public class Enfrentamiento extends Pantalla {
 		if (exp > experienceToLevel(pkmn.getNivel() + 1)) {
 			exp = experienceToLevel(pkmn.getNivel() + 1);
 		}
-		batch.draw(
-				barraExp[0],
-				470,
-				166,
-				(int) (230 * exp / (double) experienceToLevel(pkmn.getNivel() + 1)),
-				10);
+		batch.draw(barraExp[0], 470, 166, (int) (230 * exp / (double) experienceToLevel(pkmn.getNivel() + 1)), 10);
 	}
 
 	public int gainExperience(boolean trainer, int level) {
@@ -698,8 +687,7 @@ public class Enfrentamiento extends Pantalla {
 		Habilidad habilidad = null;
 		try {
 			db = new BaseDatos("pokemon_base");
-			habilidad = db.getHabilidadPokemon(db.getIdPoke(pkmn.getNombre()),
-					pkmn.getNivel());
+			habilidad = db.getHabilidadPokemon(db.getIdPoke(pkmn.getNombre()), pkmn.getNivel());
 		} catch (Exception e) {
 			return habilidad;
 		}

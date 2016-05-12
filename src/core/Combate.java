@@ -60,11 +60,9 @@ public class Combate {
 				/* El pokemon mas veloz ataca antes que el otro */
 				if (aliado.getVelocidad() >= enemigo.getVelocidad()) {
 					ejecutar(aliado, enemigo, aliado.getHabilidad(ataqueAliado));
-					ejecutar(enemigo, aliado,
-							enemigo.getHabilidad(ataqueEnemigo));
+					ejecutar(enemigo, aliado, enemigo.getHabilidad(ataqueEnemigo));
 				} else {
-					ejecutar(enemigo, aliado,
-							enemigo.getHabilidad(ataqueEnemigo));
+					ejecutar(enemigo, aliado, enemigo.getHabilidad(ataqueEnemigo));
 					ejecutar(aliado, enemigo, aliado.getHabilidad(ataqueAliado));
 				}
 
@@ -119,7 +117,9 @@ public class Combate {
 	 * 
 	 * Realiza la accion de un pokemon haciendo una habilidad en combate. Su
 	 * resultado modifica los puntos de vida o el estado de los pokemon
-	 * implicados en el combate.
+	 * implicados en el combate. Devuelve -1 si ha fallado. 0 se si ha acertado.
+	 * 1 si no afecta la habilidad. 2 si no es muy efectivo. 3 si es muy
+	 * efectivo
 	 * 
 	 * @param p1
 	 *            el pokemon atacante.
@@ -128,9 +128,9 @@ public class Combate {
 	 * @param habilidad
 	 *            la habilidad que p1 realiza sobre p2.
 	 */
-	public boolean ejecutar(Pokemon p1, Pokemon p2, Habilidad habilidad) {
+	public int ejecutar(Pokemon p1, Pokemon p2, Habilidad habilidad) {
 		printAtaque(p1, habilidad);
-
+		int opt = 0;
 		/* Decide si acierta o no */
 		boolean acierto = CalculosCombate.calcularAcierto(p1, p2, habilidad);
 		if (acierto) {
@@ -143,12 +143,16 @@ public class Combate {
 				printCritico();
 				dano *= 2;
 			}
-			printEfectividad(habilidad, p2);
+			opt = printEfectividad(habilidad, p2);
 			p2.restarPs(dano);
 		} else {
 			printFallo();
 		}
-		return acierto;
+		if (acierto) {
+			return opt;
+		} else {
+			return -1;
+		}
 	}
 
 	public Entrenador getEntrenador() {
@@ -171,10 +175,8 @@ public class Combate {
 
 	private void printInicioCombate() {
 		Pokemon p1 = entrenador.getEquipo().get(0);
-		System.out.println("Un " + pokemon.getNombre()
-				+ " salvaje quiere luchar!");
-		System.out
-				.println(entrenador.getNombre() + " saco a " + p1.getNombre());
+		System.out.println("Un " + pokemon.getNombre() + " salvaje quiere luchar!");
+		System.out.println(entrenador.getNombre() + " saco a " + p1.getNombre());
 	}
 
 	private void printPregunta() {
@@ -201,8 +203,7 @@ public class Combate {
 	}
 
 	private void printEnemigoDerrotado() {
-		System.out.println("El " + pokemon.getNombre()
-				+ "enemigo ha sido derrotado!");
+		System.out.println("El " + pokemon.getNombre() + "enemigo ha sido derrotado!");
 	}
 
 	private void printVictoria() {
@@ -210,8 +211,7 @@ public class Combate {
 	}
 
 	private void printDerrota() {
-		System.out.println("A " + entrenador.getNombre()
-				+ " no le quedan mas pokemon! " + entrenador.getNombre()
+		System.out.println("A " + entrenador.getNombre() + " no le quedan mas pokemon! " + entrenador.getNombre()
 				+ " ha sido debilitado!");
 	}
 
@@ -227,15 +227,20 @@ public class Combate {
 		System.out.println("Un golpe critico!");
 	}
 
-	private void printEfectividad(Habilidad h, Pokemon p) {
+	private int printEfectividad(Habilidad h, Pokemon p) {
 		double factor = MatrizEfectividad.getEfectividad(h, p);
+		int ret = 0;
 		if (factor == 0) {
 			System.out.println("No afecto a " + p.getNombre() + "...");
+			ret = 1;
 		} else if (factor <= 0.5) {
 			System.out.println("No es muy efectivo...");
+			ret = 2;
 		} else if (factor >= 2) {
 			System.out.println("Es muy efectivo!");
+			ret = 3;
 		}
+		return ret;
 	}
 
 	public void combatir(int ataqueAliado) {
@@ -252,8 +257,8 @@ public class Combate {
 			ejecutar(aliado, enemigo, aliado.getHabilidad(ataqueAliado));
 		}
 	}
-	
-	public boolean getVelocidad(int i){
+
+	public boolean getVelocidad(int i) {
 		Pokemon aliado = entrenador.getEquipo().get(i);
 		Pokemon enemigo = this.pokemon;
 		/* El pokemon mas veloz ataca antes que el otro */
