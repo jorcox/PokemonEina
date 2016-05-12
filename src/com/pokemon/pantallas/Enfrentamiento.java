@@ -86,18 +86,6 @@ public class Enfrentamiento extends Pantalla {
 		this.jugador = jugador;
 		this.player = player;
 		this.pantalla = pantalla;
-		try {
-			db = new BaseDatos("pokemon_base");
-
-			pkmnpokemonEnemigo = db.getPokemon(3);
-			db.shutdown();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		List<Pokemon> lPoke = new ArrayList<Pokemon>();
-		actualPsS = pkmnpokemonEnemigo.getPs();
-		combate = new Combate(jugador, pkmnpokemonEnemigo);
-		orden = combate.getVelocidad(iPokemon);
 		Gdx.input.setInputProcessor(this);
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -523,12 +511,12 @@ public class Enfrentamiento extends Pantalla {
 	}
 
 	public String[] frasesAtaque(Pokemon pokemon, int id) {
-		String[] frase = { "�" + pokemon.getNombre() + " uso " + pokemon.getHabilidad(id).getNombre() + "!", "" };
+		String[] frase = { "¡" + pokemon.getNombre() + " uso " + pokemon.getHabilidad(id).getNombre() + "!", "" };
 		return frase;
 	}
 
 	public String[] frasesExperiencia(boolean trainer) {
-		String[] frase = { "�" + pkmn.getNombre() + " gan� " + gainExperience(trainer, pkmnpokemonEnemigo.getNivel())
+		String[] frase = { "¡" + pkmn.getNombre() + " gan� " + gainExperience(trainer, pkmnpokemonEnemigo.getNivel())
 				+ " puntos de EXP.!", "" };
 		return frase;
 	}
@@ -667,7 +655,7 @@ public class Enfrentamiento extends Pantalla {
 		level.setSize(250, 225);
 		level.setPosition(430, 70);
 		level.draw(batch);
-		font.draw(batch, "PS M�x.", 440, 100);
+		font.draw(batch, "PS Máx.", 440, 100);
 		font.draw(batch, "Ataque", 440, 135);
 		font.draw(batch, "Defensa", 440, 170);
 		font.draw(batch, "At. Esp.", 440, 205);

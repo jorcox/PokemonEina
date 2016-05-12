@@ -1,5 +1,6 @@
 package com.pokemon.entities;
 
+import pokemon.AparicionPokemon;
 import pokemon.Pokemon;
 
 import java.io.Serializable;
@@ -33,7 +34,7 @@ import com.pokemon.utilidades.ArchivoGuardado;
 
 import entrenadores.Jugador;
 
-public class Player extends Sprite implements Serializable{
+public class Player extends Sprite implements Serializable {
 
 	public Vector2 velocity = new Vector2();
 
@@ -77,7 +78,7 @@ public class Player extends Sprite implements Serializable{
 	private int lastPressed; // A=1, W=2, S=3, D=4
 
 	public Jugador jugador;
-	
+
 	private float x, y;
 
 	public Player(ArchivoGuardado ctx, TextureAtlas playerAtlas, TiledMapTileLayer collisionLayer, MapLayer objectLayer,
@@ -323,11 +324,9 @@ public class Player extends Sprite implements Serializable{
 		animationTime += delta;
 		if ((WPressed || APressed || SPressed || DPressed) && (!collisionX && !collisionY)
 				&& (!(velocity.x == 0) || !(velocity.y == 0))) {
-			setRegion(
-					velocity.x < 0 ? izquierda.getKeyFrame(animationTime)
-							: velocity.x > 0 ? derecha.getKeyFrame(animationTime)
-									: velocity.y > 0 ? espalda.getKeyFrame(animationTime)
-											: cara.getKeyFrame(animationTime));
+			setRegion(velocity.x < 0 ? izquierda.getKeyFrame(animationTime)
+					: velocity.x > 0 ? derecha.getKeyFrame(animationTime)
+							: velocity.y > 0 ? espalda.getKeyFrame(animationTime) : cara.getKeyFrame(animationTime));
 		} else {
 			switch (lastPressed) {
 			case 1: // A
@@ -433,9 +432,13 @@ public class Player extends Sprite implements Serializable{
 						(int) ((getY() + getHeight()) / collisionLayer.getTileHeight()))
 				.getTile().getProperties().containsKey("combat")) {
 			double combatOdds = new Random().nextDouble();
-			if (combatOdds < 0.02) {
+			if (combatOdds < 0.08) {
+				AparicionPokemon ap = new AparicionPokemon();
+				Pokemon[] pkmns = ap.setPokemonSalvaje(play.getMapa());
+				Pokemon p = pkmns[new Random().nextInt(pkmns.length)];
+				ap.shutdown();
 				((Game) Gdx.app.getApplicationListener())
-						.setScreen(new CombateP(play.getCtx(), this, play.getCtx().jugador, 1, play));
+						.setScreen(new CombateP(play.getCtx(), this, play.getCtx().jugador, 1, play, p));
 			}
 		}
 	}
