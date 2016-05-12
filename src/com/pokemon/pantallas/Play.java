@@ -130,7 +130,7 @@ public class Play extends Pantalla {
 			}
 		}
 
-		if (npcs.get(0).getCara() == null) {
+		if (!npcs.isEmpty() && npcs.get(0).getCara() == null) {
 			/* Recarga de NPCs */
 			MapLayer npcLayer = map.getLayers().get("Personajes");
 			for (MapObject o : npcLayer.getObjects()) {
