@@ -28,6 +28,7 @@ import com.pokemon.mochila.Superball;
 import com.pokemon.pantallas.CombateEntrenador;
 import com.pokemon.pantallas.CombateP;
 import com.pokemon.pantallas.MenuPlay;
+import com.pokemon.pantallas.ObjetoMapa;
 import com.pokemon.pantallas.Pantalla;
 import com.pokemon.pantallas.Play;
 import com.pokemon.utilidades.ArchivoGuardado;
@@ -252,18 +253,21 @@ public class Player extends Sprite implements Serializable {
 		if (collisionX || collisionY) {
 			for (MapObject o : transLayer.getObjects()) {
 				TextureMapObject t = (TextureMapObject) o;
-
 				/* Transicion solo si estan muy cerca jugador y casilla */
-				if (play.distance(t) < 50) {
+				if (play.distance(o) < 50) {
 					String mapa = (String) t.getProperties().get("mapa");
-					if (!play.getCtx().getMapas().containsKey(mapa)) {
+					if (!play.getCtx().getMapas().containsKey(mapa + ".tmx")) {
+						play.getCtx().getMapas().put(play.getMapa(), play);
 						Pantalla p = new Play(play.getCtx(), Integer.parseInt((String) t.getProperties().get("x")),
 								Integer.parseInt((String) t.getProperties().get("y")), getLastPressed(), mapa + ".tmx");
-						play.getCtx().getMapas().put(mapa, p);
+						play.getCtx().getMapas().put(mapa + ".tmx" , p);
 						((Game) Gdx.app.getApplicationListener()).setScreen(p);
 					} else {
 						play.getCtx().getMapas().put(play.getMapa(), play);
-						((Game) Gdx.app.getApplicationListener()).setScreen(play.getCtx().getMapas().get(mapa));
+						play.getCtx().x = Integer.parseInt((String) t.getProperties().get("x"));
+						play.getCtx().y = Integer.parseInt((String) t.getProperties().get("y"));
+						play.getCtx().lastPressed = getLastPressed();
+						((Game) Gdx.app.getApplicationListener()).setScreen(play.getCtx().getMapas().get(mapa + ".tmx"));
 					}
 					break;
 				}
@@ -273,11 +277,11 @@ public class Player extends Sprite implements Serializable {
 		/*
 		 * Colision de objetos
 		 */
-		for (MapObject object : objectLayer.getObjects()) {
+		for (ObjetoMapa object : play.getObjetos()) {
 			boolean currentCollision = false;
-			TextureMapObject texture = (TextureMapObject) object;
-			if (texture.getProperties().containsKey("mostrar")) {
-				if (texture.getProperties().get("mostrar").equals("true")) {
+			TextureMapObject texture = (TextureMapObject) object.getObj();
+			if (object.getProperties().containsKey("mostrar")) {
+				if (object.getProperties().get("mostrar").equals("true")) {
 					currentCollision |= ((texture.getX() + texture.getTextureRegion().getRegionWidth() / 1.5) > getX())
 							&& ((texture.getX() - texture.getTextureRegion().getRegionWidth() / 1.5) < getX())
 							&& ((texture.getY() + texture.getTextureRegion().getRegionHeight() / 1.5) > getY())
@@ -292,6 +296,7 @@ public class Player extends Sprite implements Serializable {
 			// TODO Comprobar Fuerza/Romper del personaje
 			if (currentCollision && texture.getProperties().containsKey("rompible")
 					&& texture.getProperties().get("rompible").equals("true")) {
+				object.getProperties().put("mostrar", "false");
 				texture.getProperties().put("mostrar", "false");
 			}
 			/* Actualiza el flag global de colision */
