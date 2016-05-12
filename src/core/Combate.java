@@ -110,7 +110,11 @@ public class Combate {
 	public int decidir(Pokemon enemigo) {
 		Random random = new Random();
 		int l = enemigo.getHabilidades().length;
-		return random.nextInt(l) + 1;
+		int ataque=random.nextInt(l);
+		while(enemigo.getHabilidad(ataque)==null){
+			ataque=random.nextInt(l);
+		}
+		return ataque + 1;
 	}
 
 	/**
