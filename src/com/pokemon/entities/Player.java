@@ -80,6 +80,8 @@ public class Player extends Sprite implements Serializable {
 
 	public Jugador jugador;
 
+	private boolean nadando = false;
+	
 	private float x, y;
 
 	public Player(ArchivoGuardado ctx, TextureAtlas playerAtlas, TiledMapTileLayer collisionLayer, MapLayer objectLayer,
@@ -248,6 +250,7 @@ public class Player extends Sprite implements Serializable {
 			setY(oldY);
 			velocity.y = 0;
 		}
+		
 
 		/* Transicion de mapa */
 		if (collisionX || collisionY) {
@@ -319,6 +322,36 @@ public class Player extends Sprite implements Serializable {
 			velocity.y = 0;
 		}
 
+		if (collisionLayer
+						.getCell((int) ((getX()) / tileWidth), (int) (getY() / tileHeight)).getTile()
+						.getProperties().containsKey("water") && !nadando) {
+			nadando = true;
+			TextureAtlas playerAtlas =
+					new TextureAtlas("res/imgs/entrenadoresWorld/boy_surf_offset.pack");
+			cara = new Animation(1 / 10f, playerAtlas.findRegions("cara"));
+			derecha = new Animation(1 / 10f, playerAtlas.findRegions("derecha"));
+			izquierda = new Animation(1 / 10f, playerAtlas.findRegions("izquierda"));
+			espalda = new Animation(1 / 10f, playerAtlas.findRegions("espalda"));
+			cara.setPlayMode(Animation.PlayMode.LOOP);
+			derecha.setPlayMode(Animation.PlayMode.LOOP);
+			izquierda.setPlayMode(Animation.PlayMode.LOOP);
+			espalda.setPlayMode(Animation.PlayMode.LOOP);
+		} else if (!collisionLayer
+						.getCell((int) ((getX()) / tileWidth), (int) (getY() / tileHeight)).getTile()
+						.getProperties().containsKey("water") && nadando) {
+			nadando = false;
+			TextureAtlas playerAtlas =
+					new TextureAtlas("res/imgs/entrenadoresWorld/protagonista.pack");
+			cara = new Animation(1 / 10f, playerAtlas.findRegions("cara"));
+			derecha = new Animation(1 / 10f, playerAtlas.findRegions("derecha"));
+			izquierda = new Animation(1 / 10f, playerAtlas.findRegions("izquierda"));
+			espalda = new Animation(1 / 10f, playerAtlas.findRegions("espalda"));
+			cara.setPlayMode(Animation.PlayMode.LOOP);
+			derecha.setPlayMode(Animation.PlayMode.LOOP);
+			izquierda.setPlayMode(Animation.PlayMode.LOOP);
+			espalda.setPlayMode(Animation.PlayMode.LOOP);
+		}
+		
 		interaccionEntrenadores();
 
 		/*
