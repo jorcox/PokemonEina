@@ -372,7 +372,7 @@ INSERT INTO MOVIMIENTOS VALUES(315,'SPIKECANNON','Clavo Ca\u00f1\u00f3n',20,'NOR
 INSERT INTO MOVIMIENTOS VALUES(316,'COMETPUNCH','Pu\u00f1o Cometa',18,'NORMAL','Physical',85,15,'Pega de dos a cinco veces seguidas.')
 INSERT INTO MOVIMIENTOS VALUES(317,'FURYSWIPES','Golpes Furia',18,'NORMAL','Physical',80,15,'Ara\u00f1a r\u00e1pidamente de dos a cinco veces.')
 INSERT INTO MOVIMIENTOS VALUES(318,'BARRAGE','Presa',15,'NORMAL','Physical',85,20,'Arroja esferas al objetivo entre dos y cinco veces seguidas.')
-INSERT INTO MOVIMIENTOS VALUES(319,'BIND','Atadura',15,'NORMAL','Physical',85,20,'Ata y oprime de cuatro a cinco turnos.')
+INSERT INTO MOVIMIENTOS VALUES(319,'BIND','Atadurad',15,'NORMAL','Physical',85,20,'Ata y oprime de cuatro a cinco turnos.')
 INSERT INTO MOVIMIENTOS VALUES(320,'DOUBLESLAP','Doblebofet\u00f3n',15,'NORMAL','Physical',85,10,'"Abofetea de dos a cinco veces seguidas."')
 INSERT INTO MOVIMIENTOS VALUES(321,'FURYATTACK','Ataque Furia',15,'NORMAL','Physical',85,20,'Cornea al objetivo de dos a cinco veces.')
 INSERT INTO MOVIMIENTOS VALUES(322,'WRAP','Repetici\u00f3n',15,'NORMAL','Physical',90,20,'Oprime al objetivo de cuatro a cinco turnos con ramas o con su cuerpo.')
