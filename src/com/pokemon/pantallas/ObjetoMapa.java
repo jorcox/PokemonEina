@@ -12,7 +12,7 @@ public class ObjetoMapa implements Serializable {
 	
 	private HashMap<String, Object> properties = new HashMap<>();
 	
-	private MapObject obj;
+	private transient MapObject obj;
 
 	public ObjetoMapa(MapObject o) {
 		obj = o;
