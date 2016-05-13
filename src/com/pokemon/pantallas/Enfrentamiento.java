@@ -65,6 +65,7 @@ public class Enfrentamiento extends Pantalla {
 	protected int seleccion = 1;
 	protected boolean seleccionAprender = true;
 	protected int seleccionAtaque = 1;
+	protected int seleccionEnemigo=0;
 	protected Dialogo dialogo;
 	protected Jugador jugador;
 	protected Player player;
@@ -80,8 +81,9 @@ public class Enfrentamiento extends Pantalla {
 			pokemonOp, huir, dedo, cajaLuchar, tipo1, tipo2, tipo3, tipo4, cajaPkmn, cajaPkmnpokemonEnemigo, entrenador,
 			protagonista, expBar, level, aprender, cajaAprender;
 
-	public Enfrentamiento(ArchivoGuardado ctx, Player player, Jugador jugador, Pantalla pantalla) {
+	public Enfrentamiento(ArchivoGuardado ctx, Player player, Pantalla pantalla) {
 		this.setCtx(ctx);
+		jugador=getCtx().jugador;
 		dialogo = new Dialogo("es", "ES");
 		this.jugador = jugador;
 		this.player = player;
@@ -436,7 +438,6 @@ public class Enfrentamiento extends Pantalla {
 			dialogo.setLineas(l1, l2);
 			fase++;
 		} else {
-			int seleccionEnemigo = combate.decidir(pkmnpokemonEnemigo);
 
 			dialogo.setFrases(frasesAtaque(pkmnpokemonEnemigo, seleccionEnemigo));
 			String l1 = dialogo.siguienteLinea();
@@ -480,7 +481,7 @@ public class Enfrentamiento extends Pantalla {
 				}
 			}
 		} else {
-			int seleccionEnemigo = combate.decidir(pkmnpokemonEnemigo);
+			
 
 			if (!dialogo.isWriting()) {
 				pkmnAux=new Pokemon(pkmn);

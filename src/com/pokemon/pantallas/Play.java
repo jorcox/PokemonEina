@@ -463,7 +463,7 @@ public class Play extends Pantalla {
 				}
 			} else if (keycode == Keys.V) {
 				((Game) Gdx.app.getApplicationListener())
-						.setScreen(new CombateEntrenador(getCtx(), player, getCtx().jugador, "reverte", this));
+						.setScreen(new CombateEntrenador(getCtx(), player, "reverte", this));
 			}
 		}
 		return false;
@@ -650,7 +650,7 @@ public class Play extends Pantalla {
 			arrayP.add(db.getPokemon(2));
 			arrayP.add(db.getPokemon(3));
 			arrayP.add(db.getPokemon(0));
-			arrayP.add(db.getPokemon(5));
+			//arrayP.add(db.getPokemon(5));
 			getCtx().jugador.setEquipo(arrayP);
 			db.shutdown();
 		} catch (Exception e) {

@@ -27,15 +27,15 @@ public class CombateP extends Enfrentamiento {
 	private int xBall = 120, yBall = 120, animacionBall = 60;
 	private Sprite ball;
 
-	public CombateP(ArchivoGuardado ctx, Player player, Jugador jugador, int fase, Pantalla pantalla, Pokemon pkmnpokemonEnemigo) {
-		super(ctx, player, jugador, pantalla);
+	public CombateP(ArchivoGuardado ctx, Player player, int fase, Pantalla pantalla, Pokemon pkmnpokemonEnemigo) {
+		super(ctx, player, pantalla);
 		actualPsS = pkmnpokemonEnemigo.getPs();
 		combate = new Combate(jugador, pkmnpokemonEnemigo);
 		orden = combate.getVelocidad(iPokemon);
 		this.fase = fase;
 		dialogo.procesarDialogo("salvaje");
 		pkmn = jugador.getEquipo().get(iPokemon);
-		this.pkmnpokemonEnemigo=pkmnpokemonEnemigo;
+		this.pkmnpokemonEnemigo = pkmnpokemonEnemigo;
 	}
 
 	@Override
@@ -246,6 +246,7 @@ public class CombateP extends Enfrentamiento {
 					}
 				} else if (fase == 3) {
 					elegirOpcion(false);
+					seleccionEnemigo = combate.decidir(pkmnpokemonEnemigo);
 				} else if (fase == 4) {
 					/*
 					 * Primer ataque
@@ -477,12 +478,10 @@ public class CombateP extends Enfrentamiento {
 				} else if (fase == 20) {
 					atrapado = Ball.atrapar(pkmnpokemonEnemigo);
 					if (atrapado) {
-						String[] frases = { "...", "...", "...", "...", "�Genial!",
-								"�Has capturado a ${POKEMON}!" };
+						String[] frases = { "...", "...", "...", "...", "�Genial!", "�Has capturado a ${POKEMON}!" };
 						dialogo.setFrases(frases);
 					} else {
-						String[] frases = { "...", "...", "...", "...", "�L�stima!",
-								"�${POKEMON} se ha escapado!" };
+						String[] frases = { "...", "...", "...", "...", "�L�stima!", "�${POKEMON} se ha escapado!" };
 						dialogo.setFrases(frases);
 
 					}
@@ -498,9 +497,13 @@ public class CombateP extends Enfrentamiento {
 					if (l1 == null) {
 						if (atrapado) {
 							jugador.getEquipo().add(pkmnpokemonEnemigo);
+							Jugador aux=Jugador.nuevoJugador(jugador);
 							((Game) Gdx.app.getApplicationListener()).setScreen(pantalla);
+							pantalla.getCtx().jugador=aux;
 						} else {
 							animacionBall = 60;
+							xBall = 120;
+							yBall = 120;
 							fase = 6;
 							veces = 0;
 							cambio = false;
