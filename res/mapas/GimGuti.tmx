@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="8">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="16">
  <tileset firstgid="1" name="Caves" tilewidth="32" tileheight="32" tilecount="1592" columns="8">
   <image source="../Tilesets/Caves.png" trans="00aa00" width="256" height="6368"/>
  </tileset>
@@ -19,6 +19,9 @@
     <property name="blocked" value="true"/>
    </properties>
   </tile>
+ </tileset>
+ <tileset firstgid="7811" name="CustomTiles" tilewidth="32" tileheight="32" tilecount="10" columns="10">
+  <image source="../Tilesets/CustomTiles.png" trans="00aa00" width="320" height="32"/>
  </tileset>
  <objectgroup name="Trans" visible="0">
   <object id="2" gid="7806" x="321" y="1505" width="32" height="32">
@@ -466,19 +469,6 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="Objetos">
-  <object id="6" gid="2729" x="323" y="1279" width="32" height="32">
-   <properties>
-    <property name="cartel" value="gimguti1"/>
-   </properties>
-  </object>
-  <object id="7" gid="2725" x="480" y="863" width="32" height="32">
-   <properties>
-    <property name="item" value="Corte"/>
-    <property name="used" value="false"/>
-   </properties>
-  </object>
- </objectgroup>
  <layer name="Entorno" width="100" height="100" visible="0" opacity="0.31">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -583,4 +573,57 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup name="Objetos">
+  <object id="6" gid="2729" x="323" y="1279" width="32" height="32">
+   <properties>
+    <property name="cartel" value="gimguti1"/>
+    <property name="mostrar" value="true"/>
+   </properties>
+  </object>
+  <object id="7" gid="2725" x="480" y="863" width="32" height="32">
+   <properties>
+    <property name="item" value="Corte"/>
+    <property name="mostrar" value="true"/>
+    <property name="used" value="false"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Personajes">
+  <object id="10" gid="7818" x="320" y="831" width="32" height="32">
+   <properties>
+    <property name="combate" value="false"/>
+    <property name="dialogo" value="edu_gimguti"/>
+    <property name="dir" value="izquierda"/>
+    <property name="dis" value="6"/>
+    <property name="pack" value="seymor"/>
+   </properties>
+  </object>
+  <object id="11" gid="7818" x="864" y="799" width="32" height="32">
+   <properties>
+    <property name="combate" value="false"/>
+    <property name="dialogo" value="repartidor_gimguti"/>
+    <property name="dir" value="cara"/>
+    <property name="dis" value="4"/>
+    <property name="pack" value="dp_man_10"/>
+   </properties>
+  </object>
+  <object id="13" gid="7818" x="513" y="960" width="32" height="32">
+   <properties>
+    <property name="combate" value="false"/>
+    <property name="dialogo" value="guti_gimguti"/>
+    <property name="dir" value="izquierda"/>
+    <property name="dis" value="4"/>
+    <property name="pack" value="hilario"/>
+   </properties>
+  </object>
+  <object id="15" gid="7818" x="671" y="1280" width="32" height="32">
+   <properties>
+    <property name="combate" value="false"/>
+    <property name="dialogo" value="ceresuela_gimguti"/>
+    <property name="dir" value="izquierda"/>
+    <property name="dis" value="6"/>
+    <property name="pack" value="mal"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

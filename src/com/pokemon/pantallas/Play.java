@@ -126,6 +126,7 @@ public class Play extends Pantalla {
 				NPC npc = new NPC(personajePack, new Animation(1 / 10f, playerAtlas.findRegions(dirVista)), dirVista,
 						disVista, this, dialogoCode, combate);
 				npc.setPosition(t.getX(), t.getY());
+				npc.setScale(2, 1);
 				npcs.add(npc);
 			}
 		}
