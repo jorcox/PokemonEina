@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="80" tilewidth="32" tileheight="32" nextobjectid="60">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="80" tilewidth="32" tileheight="32" nextobjectid="64">
  <tileset firstgid="1" name="Outside" tilewidth="32" tileheight="32" tilecount="4016" columns="8">
   <image source="../Tilesets/Outside.png" trans="ffffff" width="256" height="16064"/>
  </tileset>
@@ -527,14 +527,47 @@
     <property name="mostrar" value="true"/>
    </properties>
   </object>
+<<<<<<< HEAD
+  <object id="60" gid="949" x="1045" y="2048" width="32" height="32">
+   <properties>
+=======
   <object id="59" gid="949" x="1122" y="1728" width="32" height="32">
    <properties>
     <property name="ID" value="TP1"/>
+>>>>>>> refs/remotes/origin/master
     <property name="item" value="Poción"/>
     <property name="mostrar" value="true"/>
     <property name="used" value="false"/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="Personajes"/>
+ <objectgroup name="Personajes">
+  <object id="59" gid="4024" x="257" y="2206" width="32" height="32">
+   <properties>
+    <property name="combate" value="false"/>
+    <property name="dialogo" value="mentor_tranvia"/>
+    <property name="dir" value="derecha"/>
+    <property name="dis" value="5"/>
+    <property name="pack" value="crop"/>
+   </properties>
+  </object>
+  <object id="62" gid="4024" x="1088" y="1825" width="32" height="32">
+   <properties>
+    <property name="combate" value="false"/>
+    <property name="dialogo" value="estudiante_betan_tranvia"/>
+    <property name="dir" value="izquierda"/>
+    <property name="dis" value="5"/>
+    <property name="pack" value="sarya"/>
+   </properties>
+  </object>
+  <object id="63" gid="4024" x="832" y="1376" width="32" height="32">
+   <properties>
+    <property name="combate" value="true"/>
+    <property name="dialogo" value="entrenador_tranvia"/>
+    <property name="dir" value="derecha"/>
+    <property name="dis" value="7"/>
+    <property name="pack" value="locke"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>
