@@ -166,7 +166,7 @@ public class Play extends Pantalla {
 				npcs.add(npc);
 			}
 		}
-		if (!objetos.isEmpty() && objetos.get(0).getObj() == null) {
+		if (!objetos.isEmpty()) {
 			/* Recarga de objetos */
 			MapObjects objs = map.getLayers().get("Objetos").getObjects();
 			for (MapObject o : objs) {	
@@ -210,7 +210,7 @@ public class Play extends Pantalla {
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+ 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		tweenManager.update(delta);
 
