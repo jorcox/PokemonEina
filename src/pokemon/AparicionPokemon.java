@@ -134,7 +134,7 @@ public class AparicionPokemon {
 			habs = setHabilidades(459, 204, 320, 457);
 			aparicion[3].setHabilidades(habs);
 			aparicion[3].setTipo(Tipo.PSIQUICO);
-			
+
 			aparicion[4] = bd.getPokemonTipo(114);
 			habs = setHabilidades(323, 206, 34, 205);
 			aparicion[4].setHabilidades(habs);
@@ -314,7 +314,7 @@ public class AparicionPokemon {
 			habs = setHabilidades(306, 459, 287, -1);
 			aparicion[4].setHabilidades(habs);
 			aparicion[4].setTipo(Tipo.PSIQUICO);
-			
+
 			aparicion[5] = bd.getPokemonTipo(63);
 			habs = setHabilidades(459, -1, -1, -1);
 			aparicion[5].setHabilidades(habs);
@@ -411,7 +411,7 @@ public class AparicionPokemon {
 			habs = setHabilidades(308, 179, 317, 105);
 			aparicion[4].setHabilidades(habs);
 			aparicion[4].setTipo(Tipo.TIERRA);
-			
+
 			aparicion[5] = bd.getPokemonTipo(56);
 			habs = setHabilidades(308, 115, 317, 105);
 			aparicion[5].setHabilidades(habs);
@@ -471,7 +471,7 @@ public class AparicionPokemon {
 			habs = setHabilidades(206, 208, -1, -1);
 			aparicion[4].setHabilidades(habs);
 			aparicion[4].setTipo(Tipo.PLANTA);
-			
+
 			aparicion[5] = bd.getPokemonTipo(48);
 			habs = setHabilidades(300, 459, -1, -1);
 			aparicion[5].setHabilidades(habs);
@@ -520,7 +520,6 @@ public class AparicionPokemon {
 			habs = setHabilidades(106, 523, 109, 311);
 			aparicion[4].setHabilidades(habs);
 			aparicion[4].setTipo(Tipo.LUCHA);
-			
 
 			int n = 4;
 			for (int i = 0; i < aparicion.length; i++) {
@@ -538,6 +537,208 @@ public class AparicionPokemon {
 			for (int i = 0; i < aparicion.length; i++) {
 				aparicion[i].setPs(aparicion[i].getPsMax());
 			}
+		}
+		return aparicion;
+	}
+
+	public Pokemon[] setPokemonSalvajeAgua(String mapa) {
+		double r;
+		Habilidad[] habs;
+		mapa = mapa.replace(".tmx", "");
+
+		if (mapa.equals("Tranvia_n")) {
+			aparicion = new Pokemon[2];
+			aparicion[0] = bd.getPokemonTipo(129);
+			habs = setHabilidades(300, -1, -1, -1);
+			aparicion[0].setHabilidades(habs);
+			aparicion[0].setTipo(Tipo.AGUA);
+
+			aparicion[1] = bd.getPokemonTipo(72);
+			habs = setHabilidades(543, 287, 434, -1);
+			aparicion[1].setHabilidades(habs);
+			aparicion[1].setTipo(Tipo.AGUA);
+
+			int n = 18;
+			for (int i = 0; i < aparicion.length; i++) {
+				for (int j = 0; j < n; j++) {
+					if (j < n - 4) {
+						aparicion[i].subirNivel(0, 0);
+					} else {
+						r = new Random().nextDouble();
+						if (r > 0.35) {
+							aparicion[i].subirNivel(0, 0);
+						}
+					}
+				}
+			}
+			for (int i = 0; i < aparicion.length; i++) {
+				aparicion[i].setPs(aparicion[i].getPsMax());
+			}
+
+		} else if (mapa.equals("Terraza")) {
+
+		} else if (mapa.equals("Sotano")) {
+			aparicion = new Pokemon[2];
+			aparicion[0] = bd.getPokemonTipo(129);
+			habs = setHabilidades(300, -1, -1, -1);
+			aparicion[0].setHabilidades(habs);
+			aparicion[0].setTipo(Tipo.AGUA);
+
+			aparicion[1] = bd.getPokemonTipo(116);
+			habs = setHabilidades(551, 543, -1, -1);
+			aparicion[1].setHabilidades(habs);
+			aparicion[1].setTipo(Tipo.AGUA);
+
+			int n = 20;
+			for (int i = 0; i < aparicion.length; i++) {
+				for (int j = 0; j < n; j++) {
+					if (j < n - 4) {
+						aparicion[i].subirNivel(0, 0);
+					} else {
+						r = new Random().nextDouble();
+						if (r > 0.35) {
+							aparicion[i].subirNivel(0, 0);
+						}
+					}
+				}
+			}
+			for (int i = 0; i < aparicion.length; i++) {
+				aparicion[i].setPs(aparicion[i].getPsMax());
+			}
+
+		} else if (mapa.equals("Redes")) {
+
+		} else if (mapa.equals("Pasillo")) {
+		} else if (mapa.equals("Liga")) {
+
+		} else if (mapa.equals("Lab1")) {
+
+		} else if (mapa.equals("Hendrix")) {
+			aparicion = new Pokemon[2];
+			aparicion[0] = bd.getPokemonTipo(129);
+			habs = setHabilidades(300, -1, -1, -1);
+			aparicion[0].setHabilidades(habs);
+			aparicion[0].setTipo(Tipo.AGUA);
+
+			aparicion[1] = bd.getPokemonTipo(118);
+			habs = setHabilidades(551, 291, -1, -1);
+			aparicion[1].setHabilidades(habs);
+			aparicion[1].setTipo(Tipo.AGUA);
+
+			int n = 4;
+			for (int i = 0; i < aparicion.length; i++) {
+				for (int j = 0; j < n; j++) {
+					if (j < n - 4) {
+						aparicion[i].subirNivel(0, 0);
+					} else {
+						r = new Random().nextDouble();
+						if (r > 0.35) {
+							aparicion[i].subirNivel(0, 0);
+						}
+					}
+				}
+			}
+			for (int i = 0; i < aparicion.length; i++) {
+				aparicion[i].setPs(aparicion[i].getPsMax());
+			}
+
+		} else if (mapa.equals("Hardware")) {
+
+		} else if (mapa.equals("Hall")) {
+
+		} else if (mapa.equals("Giga")) {
+
+		} else if (mapa.equals("Geoslab")) {
+			aparicion = new Pokemon[2];
+			aparicion[0] = bd.getPokemonTipo(129);
+			habs = setHabilidades(300, -1, -1, -1);
+			aparicion[0].setHabilidades(habs);
+			aparicion[0].setTipo(Tipo.AGUA);
+
+			aparicion[1] = bd.getPokemonTipo(98);
+			habs = setHabilidades(551, 549, -1, -1);
+			aparicion[1].setHabilidades(habs);
+			aparicion[1].setTipo(Tipo.AGUA);
+			int n = 4;
+			for (int i = 0; i < aparicion.length; i++) {
+				for (int j = 0; j < n; j++) {
+					if (j < n - 4) {
+						aparicion[i].subirNivel(0, 0);
+					} else {
+						r = new Random().nextDouble();
+						if (r > 0.35) {
+							aparicion[i].subirNivel(0, 0);
+						}
+					}
+				}
+			}
+			for (int i = 0; i < aparicion.length; i++) {
+				aparicion[i].setPs(aparicion[i].getPsMax());
+			}
+
+		} else if (mapa.equals("Estudios")) {
+
+		} else if (mapa.equals("Cueva")) {
+			aparicion = new Pokemon[2];
+			aparicion[0] = bd.getPokemonTipo(129);
+			habs = setHabilidades(300, -1, -1, -1);
+			aparicion[0].setHabilidades(habs);
+			aparicion[0].setTipo(Tipo.AGUA);
+
+			aparicion[1] = bd.getPokemonTipo(90);
+			habs = setHabilidades(551, 543, -1, -1);
+			aparicion[1].setHabilidades(habs);
+			aparicion[1].setTipo(Tipo.AGUA);
+
+			int n = 4;
+			for (int i = 0; i < aparicion.length; i++) {
+				for (int j = 0; j < n; j++) {
+					if (j < n - 4) {
+						aparicion[i].subirNivel(0, 0);
+					} else {
+						r = new Random().nextDouble();
+						if (r > 0.35) {
+							aparicion[i].subirNivel(0, 0);
+						}
+					}
+				}
+			}
+			for (int i = 0; i < aparicion.length; i++) {
+				aparicion[i].setPs(aparicion[i].getPsMax());
+			}
+
+		} else if (mapa.equals("Cafeteria")) {
+
+		} else if (mapa.equals("Bosque")) {
+			aparicion = new Pokemon[2];
+			aparicion[0] = bd.getPokemonTipo(129);
+			habs = setHabilidades(300, -1, -1, -1);
+			aparicion[0].setHabilidades(habs);
+			aparicion[0].setTipo(Tipo.ELECTRICO);
+
+			aparicion[1] = bd.getPokemonTipo(60);
+			habs = setHabilidades(300, 7, -1, -1);
+			aparicion[1].setHabilidades(habs);
+			aparicion[1].setTipo(Tipo.BICHO);
+
+			int n = 4;
+			for (int i = 0; i < aparicion.length; i++) {
+				for (int j = 0; j < n; j++) {
+					if (j < n - 4) {
+						aparicion[i].subirNivel(0, 0);
+					} else {
+						r = new Random().nextDouble();
+						if (r > 0.35) {
+							aparicion[i].subirNivel(0, 0);
+						}
+					}
+				}
+			}
+			for (int i = 0; i < aparicion.length; i++) {
+				aparicion[i].setPs(aparicion[i].getPsMax());
+			}
+
+		} else if (mapa.equals("Aulas")) {
 		}
 		return aparicion;
 	}

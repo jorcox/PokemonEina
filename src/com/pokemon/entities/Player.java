@@ -479,6 +479,20 @@ public class Player extends Sprite implements Serializable {
 						.setScreen(new CombateP(play.getCtx(), this, play.getCtx().jugador, 1, play, p));
 			}
 		}
+		if (collisionLayer
+				.getCell((int) ((getX() + getWidth()) / collisionLayer.getTileWidth()),
+						(int) ((getY() + getHeight()) / collisionLayer.getTileHeight()))
+				.getTile().getProperties().containsKey("water")) {
+			double combatOdds = new Random().nextDouble();
+			if (combatOdds < 0.08) {
+				AparicionPokemon ap = new AparicionPokemon();
+				Pokemon[] pkmns = ap.setPokemonSalvajeAgua(play.getMapa());
+				Pokemon p = pkmns[new Random().nextInt(pkmns.length)];
+				ap.shutdown();
+				((Game) Gdx.app.getApplicationListener())
+						.setScreen(new CombateP(play.getCtx(), this, play.getCtx().jugador, 1, play, p));
+			}
+		}
 	}
 
 	public boolean getSpacePressed() {
