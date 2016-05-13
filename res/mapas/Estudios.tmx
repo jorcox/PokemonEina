@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="9">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="10">
  <tileset firstgid="1" name="Outside" tilewidth="32" tileheight="32" tilecount="4016" columns="8">
   <image source="../Tilesets/Outside.png" trans="00aa00" width="256" height="16064"/>
  </tileset>
@@ -698,6 +698,12 @@
    <properties>
     <property name="cartel" value="estudios3"/>
     <property name="mostrar" value="true"/>
+   </properties>
+  </object>
+  <object id="9" gid="10944" x="672" y="2751" width="32" height="32">
+   <properties>
+    <property name="mostrar" value="false"/>
+    <property name="salud" value=""/>
    </properties>
   </object>
  </objectgroup>

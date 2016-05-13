@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="40" tilewidth="32" tileheight="32" nextobjectid="103">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="40" tilewidth="32" tileheight="32" nextobjectid="108">
  <tileset firstgid="1" name="Entorno" tilewidth="32" tileheight="32" tilecount="5" columns="5">
   <image source="../Tilesets/Entorno.png" width="160" height="32"/>
   <tile id="0">
@@ -28,6 +28,9 @@
  </tileset>
  <tileset firstgid="17816" name="Interior Modern 64x64" tilewidth="64" tileheight="64" tilecount="828" columns="4">
   <image source="../Tilesets/Interior Modern.png" width="256" height="13311"/>
+ </tileset>
+ <tileset firstgid="18644" name="Entorno1" tilewidth="32" tileheight="32" tilecount="10" columns="10">
+  <image source="../Tilesets/Entorno1.png" width="320" height="32"/>
  </tileset>
  <objectgroup name="Trans"/>
  <layer name="Suelo" width="100" height="40">
@@ -187,6 +190,24 @@
    <properties>
     <property name="mostrar" value="true"/>
     <property name="rompible" value="true"/>
+   </properties>
+  </object>
+  <object id="103" gid="18651" x="992" y="191" width="32" height="32">
+   <properties>
+    <property name="mostrar" value="false"/>
+    <property name="salud" value=""/>
+   </properties>
+  </object>
+  <object id="106" gid="18651" x="1024" y="190" width="32" height="32">
+   <properties>
+    <property name="mostrar" value="false"/>
+    <property name="saludo" value=""/>
+   </properties>
+  </object>
+  <object id="107" gid="18651" x="1055" y="193" width="32" height="32">
+   <properties>
+    <property name="mostrar" value="false"/>
+    <property name="salud" value=""/>
    </properties>
   </object>
  </objectgroup>

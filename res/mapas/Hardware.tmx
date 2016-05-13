@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="27">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="28">
  <tileset firstgid="1" name="Outside" tilewidth="32" tileheight="32" tilecount="4016" columns="8">
   <image source="../Tilesets/Outside.png" trans="00aa00" width="256" height="16064"/>
  </tileset>
@@ -631,6 +631,12 @@
    <properties>
     <property name="item" value="Poción"/>
     <property name="used" value="false"/>
+   </properties>
+  </object>
+  <object id="27" gid="9357" x="319" y="640" width="32" height="32">
+   <properties>
+    <property name="mostrar" value="false"/>
+    <property name="salud" value=""/>
    </properties>
   </object>
  </objectgroup>
