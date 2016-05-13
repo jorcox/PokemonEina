@@ -26,6 +26,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 import com.pokemon.entities.NPC;
 import com.pokemon.entities.Player;
 import com.pokemon.mochila.Antidoto;
@@ -56,8 +57,13 @@ public class Play extends Pantalla {
 	// private Player player = new Player(new Sprite(new
 	// Texture("assets/maps/tilesInterior.png")));
 	private Player player;
+	
 	private Stage stage;
+	
 	private ArrayList<NPC> npcs = new ArrayList<>();
+	
+	private ArrayList<ObjetoMapa> objetos = new ArrayList<>();
+	
 	private boolean dialogando;
 
 	/* Para pausar el listener de teclas */
@@ -104,7 +110,7 @@ public class Play extends Pantalla {
 
 		TmxMapLoader loader = new TmxMapLoader();
 
-		map = loader.load("res/mapas/" + getCtx().map);
+		map = loader.load("res/mapas/" + mapa);
 
 		renderer = new TextureMapObjectRenderer(map);
 
@@ -128,9 +134,14 @@ public class Play extends Pantalla {
 				npc.setPosition(t.getX(), t.getY());
 				npc.setScale(2, 1);
 				npcs.add(npc);
+			}			
+			for (MapObject obj : map.getLayers().get("Objetos").getObjects()){
+				objetos.add(new ObjetoMapa(obj));
 			}
 		}
-
+		/*
+		 * Caso de recien cargado
+		 */
 		if (!npcs.isEmpty() && npcs.get(0).getCara() == null) {
 			/* Recarga de NPCs */
 			MapLayer npcLayer = map.getLayers().get("Personajes");
@@ -153,6 +164,21 @@ public class Play extends Pantalla {
 					}
 				}
 				npcs.add(npc);
+			}
+		}
+		if (!objetos.isEmpty() && objetos.get(0).getObj() == null) {
+			/* Recarga de objetos */
+			MapObjects objs = map.getLayers().get("Objetos").getObjects();
+			for (MapObject o : objs) {	
+				ObjetoMapa obj = new ObjetoMapa(o);
+				for (ObjetoMapa objAlmacenado : objetos) {
+					if (objAlmacenado.getProperties().get("ID").equals(obj.getProperties().get("ID"))) {
+						objetos.remove(objetos.indexOf(objAlmacenado));
+						obj.setProperties(objAlmacenado.getProperties());
+						break;
+					}
+				}
+				objetos.add(obj);
 			}
 		}
 
@@ -197,15 +223,14 @@ public class Play extends Pantalla {
 		/* Begin */
 		renderer.getBatch().begin();
 
-		ArrayList<?> render = ordenar(player, npcs, map.getLayers().get("Objetos").getObjects());
+		ArrayList<?> render = ordenar(player, npcs, objetos);
 		for (Object object : render) {
 			if (object instanceof Player) {
 				((Player) object).draw(renderer.getBatch());
 			} else if (object instanceof NPC) {
 				((NPC) object).draw(renderer.getBatch());
 			} else {
-				MapObject obj = (MapObject) object;
-				renderer.renderObject((MapObject) object);
+				renderer.renderObject((ObjetoMapa) object);
 			}
 		}
 
@@ -239,11 +264,11 @@ public class Play extends Pantalla {
 		font = generator.generateFont(parameter);
 	}
 
-	private ArrayList<Object> ordenar(Player player, ArrayList<NPC> npcs, MapObjects objects) {
+	private ArrayList<Object> ordenar(Player player, ArrayList<NPC> npcs, ArrayList<ObjetoMapa> objetos) {
 		ArrayList<Object> componentes = new ArrayList<>();
 		componentes.add(player);
 		componentes.addAll(npcs);
-		for (MapObject object : objects) {
+		for (ObjetoMapa object : objetos) {
 			componentes.add(object);
 		}
 		Collections.sort(componentes, new CustomComparator());
@@ -261,14 +286,14 @@ public class Play extends Pantalla {
 			} else if (com1 instanceof NPC) {
 				Y1 = ((NPC) com1).getY();
 			} else {
-				Y1 = ((TextureMapObject) com1).getY();
+				Y1 = ((TextureMapObject)((ObjetoMapa) com1).getObj()).getY();
 			}
 			if (com2 instanceof Player) {
 				Y2 = ((Player) com2).getY();
 			} else if (com2 instanceof NPC) {
 				Y2 = ((NPC) com2).getY();
 			} else {
-				Y2 = ((TextureMapObject) com2).getY();
+				Y2 = ((TextureMapObject)((ObjetoMapa) com2).getObj()).getY();
 			}
 			return (int) ((Y2 - Y1));
 		}
@@ -424,13 +449,12 @@ public class Play extends Pantalla {
 					}
 				} else {
 					/* Busca interactuar con algo */
-					for (MapObject o : map.getLayers().get("Objetos").getObjects()) {
-						TextureMapObject t = (TextureMapObject) o;
-						Gdx.app.log("cartel", "distancia " + distance(t));
+					for (ObjetoMapa o : objetos) {
+						Gdx.app.log("cartel", "distancia " + distance(o.getObj()));
 
 						/* Dispara evento si estan muy cerca jugador y objeto */
-						if (distance(t) < 50) {
-							interact(t);
+						if (distance(o.getObj()) < 50) {
+							interact(o);
 							break;
 						}
 					}
@@ -447,34 +471,34 @@ public class Play extends Pantalla {
 	 * Gestiona las interacciones entre el jugador y el objeto obj, que puede
 	 * ser un cartel, pokeball, etc.
 	 * 
-	 * @param obj
+	 * @param o
 	 *            el objeto declarado en la capa de objetos.
 	 */
-	private void interact(TextureMapObject obj) {
-		if (obj.getProperties().containsKey("cartel")) {
+	private void interact(ObjetoMapa o) {
+		if (o.getProperties().containsKey("cartel")) {
 			optionsVisible = true;
 			setDialogando(true);
 
 			/* Leer cartel */
-			String value = (String) obj.getProperties().get("cartel");
+			String value = (String) o.getProperties().get("cartel");
 			getCtx().dialogo.procesarDialogo("cartel_" + value);
 			getCtx().dialogo.setLineas(getCtx().dialogo.siguienteLinea(), getCtx().dialogo.siguienteLinea());
-		} else if (obj.getProperties().containsKey("item") && obj.getProperties().containsKey("used")
-				&& obj.getProperties().get("used").equals("false")) {
-			obj.setScaleX(0);
-			obj.setScaleY(0);
+		} else if (o.getProperties().containsKey("item") && o.getProperties().containsKey("used")
+				&& o.getProperties().get("used").equals("false")) {
+			((TextureMapObject) o.getObj()).setScaleX(0);
+			((TextureMapObject) o.getObj()).setScaleY(0);
 			optionsVisible = true;
 			setDialogando(true);
 
 			/* Leer objeto recogido */
-			String value = (String) obj.getProperties().get("item");
+			String value = (String) o.getProperties().get("item");
 			getCtx().dialogo.procesarDialogo("item_" + value);
 			getCtx().dialogo.setLineas(getCtx().dialogo.siguienteLinea(), getCtx().dialogo.siguienteLinea());
 
 			/* Introduce en mochila */
-			if (value.equals("Poci�n")) {
+			if (value.equals("Poción")) {
 				getCtx().mochila.add(new Pocion());
-			} else if (value.equals("Ant�doto")) {
+			} else if (value.equals("Antídoto")) {
 				getCtx().mochila.add(new Antidoto());
 			} else if (value.equals("Corte")) {
 				getCtx().mochila.add(new MO("Corte"));
@@ -485,7 +509,10 @@ public class Play extends Pantalla {
 			}
 
 			/* Asi no se puede volver a coger ese item */
-			obj.getProperties().put("used", "true");
+			o.getProperties().put("used", "true");
+			o.getObj().getProperties().put("used", "true");
+			o.getProperties().put("mostrar", "false");
+			o.getObj().getProperties().put("mostrar", "false");
 		}
 	}
 
@@ -518,7 +545,8 @@ public class Play extends Pantalla {
 	 *            el objeto de texturas.
 	 * @return la distancia euclidea.
 	 */
-	public int distance(TextureMapObject t) {
+	public int distance(MapObject o) {
+		TextureMapObject t = (TextureMapObject) o;
 		double aux = t.getX();
 		double dx = Math.pow(player.getX() - aux, 2);
 		double dy = Math.pow(player.getY() - t.getY(), 2);
@@ -670,6 +698,14 @@ public class Play extends Pantalla {
 
 	public void setMapa(String mapa) {
 		this.mapa = mapa;
+	}
+
+	public ArrayList<ObjetoMapa> getObjetos() {
+		return objetos;
+	}
+
+	public void setObjetos(ArrayList<ObjetoMapa> objetos) {
+		this.objetos = objetos;
 	}
 
 }
