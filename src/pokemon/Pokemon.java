@@ -234,4 +234,8 @@ public class Pokemon {
 		velocidad=velocidad+30;
 		psMax=psMax+30;
 	}
+	
+	public void sanar(){
+		ps=psMax;
+	}
 }

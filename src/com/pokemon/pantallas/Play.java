@@ -366,8 +366,8 @@ public class Play extends Pantalla {
 	@Override
 	public boolean keyDown(int keycode) {
 		if (listener) {
-			player.checkCombat();
 			if (movimiento && keycode == getCtx().getTeclaUp()) {
+				player.checkCombat();
 				player.velocity.y = player.speed;
 				player.velocity.x = 0;
 				player.animationTime = 0;
@@ -377,6 +377,7 @@ public class Play extends Pantalla {
 				}
 				player.WPressed = true;
 			} else if (movimiento && keycode == getCtx().getTeclaLeft()) {
+				player.checkCombat();
 				player.velocity.x = -player.speed;
 				player.velocity.y = 0;
 				player.animationTime = 0;
@@ -386,8 +387,8 @@ public class Play extends Pantalla {
 				}
 				player.APressed = true;
 			} else if (movimiento && keycode == getCtx().getTeclaDown()) {
+				player.checkCombat();
 				player.velocity.y = -player.speed;
-
 				player.velocity.x = 0;
 				player.animationTime = 0;
 				player.setLastPressed(3);
@@ -396,6 +397,7 @@ public class Play extends Pantalla {
 				}
 				player.SPressed = true;
 			} else if (movimiento && keycode == getCtx().getTeclaRight()) {
+				player.checkCombat();
 				player.velocity.x = player.speed;
 				player.velocity.y = 0;
 				player.animationTime = 0;
@@ -513,6 +515,14 @@ public class Play extends Pantalla {
 			o.getObj().getProperties().put("used", "true");
 			o.getProperties().put("mostrar", "false");
 			o.getObj().getProperties().put("mostrar", "false");
+		}else if(o.getProperties().containsKey("salud")){
+			optionsVisible = true;
+			setDialogando(true);
+			getCtx().dialogo.procesarDialogo("centro_salud");
+			getCtx().dialogo.setLineas(getCtx().dialogo.siguienteLinea(), getCtx().dialogo.siguienteLinea());
+			for(Pokemon poke :getCtx().jugador.getEquipo()){
+				poke.sanar();
+			}
 		}
 	}
 
