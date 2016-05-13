@@ -166,7 +166,7 @@ public class Play extends Pantalla {
 				npcs.add(npc);
 			}
 		}
-		if (!objetos.isEmpty() && objetos.get(0).getObj() == null) {
+		if (!objetos.isEmpty()) {
 			/* Recarga de objetos */
 			MapObjects objs = map.getLayers().get("Objetos").getObjects();
 			for (MapObject o : objs) {	
