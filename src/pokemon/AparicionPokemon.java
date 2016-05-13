@@ -38,15 +38,15 @@ public class AparicionPokemon {
 
 		if (mapa.equals("Tranvia_n")) {
 			aparicion = new Pokemon[5];
-			aparicion[0] = bd.getPokemonTipo(16);
+			aparicion[0] = bd.getPokemonTipo(19);
 			habs = setHabilidades(307, 300, 27, -1);
 			aparicion[0].setHabilidades(habs);
-			aparicion[0].setTipo(Tipo.VOLADOR);
+			aparicion[0].setTipo(Tipo.NORMAL);
 
-			aparicion[1] = bd.getPokemonTipo(19);
+			aparicion[1] = bd.getPokemonTipo(16);
 			habs = setHabilidades(307, 300, 165, -1);
 			aparicion[1].setHabilidades(habs);
-			aparicion[1].setTipo(Tipo.NORMAL);
+			aparicion[1].setTipo(Tipo.VOLADOR);
 
 			aparicion[2] = bd.getPokemonTipo(29);
 			habs = setHabilidades(64, 437, 308, 110);
@@ -745,16 +745,16 @@ public class AparicionPokemon {
 
 	public Habilidad[] setHabilidades(int hab0, int hab1, int hab2, int hab3) {
 		Habilidad[] habilidades = new Habilidad[4];
-		if (hab0 <= 0) {
+		if (hab0 >= 0) {
 			habilidades[0] = bd.getHabilidad(hab0);
 		}
-		if (hab1 <= 0) {
+		if (hab1 >= 0) {
 			habilidades[1] = bd.getHabilidad(hab1);
 		}
-		if (hab2 <= 0) {
+		if (hab2 >= 0) {
 			habilidades[2] = bd.getHabilidad(hab2);
 		}
-		if (hab3 <= 0) {
+		if (hab3 >= 0) {
 			habilidades[3] = bd.getHabilidad(hab3);
 		}
 		return habilidades;

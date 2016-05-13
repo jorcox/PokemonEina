@@ -30,9 +30,8 @@ public class CombateEntrenador extends Enfrentamiento {
 
 	TextureRegion[] spritesEntrenador;
 
-	public CombateEntrenador(ArchivoGuardado ctx, Player player, Jugador jugador, String idEntrenador,
-			Pantalla pantalla) {
-		super(ctx, player, jugador, pantalla);
+	public CombateEntrenador(ArchivoGuardado ctx, Player player, String idEntrenador, Pantalla pantalla) {
+		super(ctx, player, pantalla);
 		this.fase = 0;
 		this.idEntrenador = idEntrenador;
 		pkmn = jugador.getPokemon(iPokemon);
@@ -295,6 +294,7 @@ public class CombateEntrenador extends Enfrentamiento {
 					}
 				} else if (fase == 3) {
 					elegirOpcion(true);
+					seleccionEnemigo = combate.decidir(pkmnpokemonEnemigo);
 				} else if (fase == 4) {
 					/*
 					 * Primer ataque
