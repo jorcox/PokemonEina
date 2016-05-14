@@ -130,7 +130,7 @@ public class CombateP extends Enfrentamiento {
 			} else {
 				pokemon.setAlpha(1);
 				if (acierto != -1 && acierto != 1)
-					ataqueRecibido(false);
+					ataqueRecibido(false); 
 				animacionVida(false);
 				dibujarVida(false);
 			}
