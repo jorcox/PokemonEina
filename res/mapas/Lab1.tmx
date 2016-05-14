@@ -593,18 +593,21 @@
  <objectgroup name="Objetos">
   <object id="1" gid="963" x="991" y="160" width="32" height="32">
    <properties>
+    <property name="ID" value="C1"/>
     <property name="cartel" value="lab11"/>
     <property name="mostrar" value="true"/>
    </properties>
   </object>
   <object id="4" gid="963" x="480" y="542" width="32" height="32">
    <properties>
+    <property name="ID" value="C2"/>
     <property name="cartel" value="lab12"/>
     <property name="mostrar" value="true"/>
    </properties>
   </object>
   <object id="5" gid="959" x="348" y="576" width="32" height="32">
    <properties>
+    <property name="ID" value="P2"/>
     <property name="mostrar" value="true"/>
    </properties>
   </object>
