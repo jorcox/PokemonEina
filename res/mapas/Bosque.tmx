@@ -693,36 +693,42 @@
  <objectgroup name="Objetos">
   <object id="5" gid="9226" x="2210" y="2464" width="32" height="32">
    <properties>
+    <property name="ID" value="BC2"/>
     <property name="cartel" value="bosque2"/>
     <property name="mostrar" value="true"/>
    </properties>
   </object>
   <object id="6" gid="9225" x="606" y="2976" width="32" height="32">
    <properties>
+    <property name="ID" value="BC1"/>
     <property name="cartel" value="bosque1"/>
     <property name="mostrar" value="true"/>
    </properties>
   </object>
   <object id="7" gid="9225" x="1376" y="1343" width="32" height="32">
    <properties>
+    <property name="ID" value="BC3"/>
     <property name="cartel" value="bosque3"/>
     <property name="mostrar" value="true"/>
    </properties>
   </object>
   <object id="8" gid="9225" x="1183" y="510" width="32" height="32">
    <properties>
+    <property name="ID" value="BC4"/>
     <property name="cartel" value="bosque4"/>
     <property name="mostrar" value="true"/>
    </properties>
   </object>
   <object id="10" gid="9220" x="1601" y="1536" width="32" height="32">
    <properties>
+    <property name="ID" value="BA1"/>
     <property name="corte" value="bosque1"/>
     <property name="mostrar" value="true"/>
    </properties>
   </object>
   <object id="13" gid="9221" x="1249" y="3070.67" width="32" height="32">
    <properties>
+    <property name="ID" value="BP2"/>
     <property name="item" value="Poción"/>
     <property name="mostrar" value="true"/>
     <property name="used" value="false"/>
@@ -730,6 +736,7 @@
   </object>
   <object id="15" gid="9221" x="256" y="1888" width="32" height="32">
    <properties>
+    <property name="ID" value="BP3"/>
     <property name="item" value="Antídoto"/>
     <property name="mostrar" value="true"/>
     <property name="used" value="false"/>
@@ -737,6 +744,7 @@
   </object>
   <object id="17" gid="9221" x="2242" y="2560" width="32" height="32">
    <properties>
+    <property name="ID" value="BP1"/>
     <property name="item" value="Poción"/>
     <property name="mostrar" value="true"/>
     <property name="used" value="true"/>
@@ -744,6 +752,7 @@
   </object>
   <object id="19" gid="9221" x="1918" y="1442" width="32" height="32">
    <properties>
+    <property name="ID" value="BP4"/>
     <property name="item" value="Poción"/>
     <property name="mostrar" value="true"/>
     <property name="used" value="false"/>
@@ -751,6 +760,7 @@
   </object>
   <object id="20" gid="9221" x="1278" y="769" width="32" height="32">
    <properties>
+    <property name="ID" value="BP5"/>
     <property name="item" value="Poción"/>
     <property name="mostrar" value="true"/>
     <property name="used" value="false"/>
@@ -758,6 +768,7 @@
   </object>
   <object id="23" gid="9225" x="415" y="514" width="32" height="32">
    <properties>
+    <property name="ID" value="BC5"/>
     <property name="cartel" value="bosque5"/>
     <property name="mostrar" value="true"/>
    </properties>
