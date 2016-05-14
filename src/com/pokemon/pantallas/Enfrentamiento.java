@@ -592,7 +592,9 @@ public class Enfrentamiento extends Pantalla {
 			break;
 		case 4: // huir
 			if (!trainer) {
+				Jugador aux=Jugador.nuevoJugador(jugador);
 				((Game) Gdx.app.getApplicationListener()).setScreen(pantalla);
+				pantalla.getCtx().jugador=aux;
 			}
 
 			break;
