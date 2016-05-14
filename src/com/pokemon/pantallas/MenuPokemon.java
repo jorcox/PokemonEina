@@ -20,11 +20,12 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.pokemon.dialogo.Dialogo;
 import com.pokemon.utilidades.ArchivoGuardado;
 
+import entrenadores.Jugador;
 import pokemon.Pokemon;
 
 public class MenuPokemon extends Pantalla {
 
-	private Screen screen;
+	private Pantalla screen;
 	private List<Pokemon> listaPokemon;
 	private Dialogo dialogo;
 	private boolean combate;
@@ -42,7 +43,7 @@ public class MenuPokemon extends Pantalla {
 
 	private int selection = 0;
 
-	public MenuPokemon(ArchivoGuardado ctx, List<Pokemon> listaPokemon, Screen screen, boolean combate) {
+	public MenuPokemon(ArchivoGuardado ctx, List<Pokemon> listaPokemon, Pantalla screen, boolean combate) {
 		this.setCtx(ctx);
 		this.screen = screen;
 		this.listaPokemon = listaPokemon;
@@ -130,7 +131,7 @@ public class MenuPokemon extends Pantalla {
 		batch.draw(barrasVida[0], 158, 453, (int) (132 * (pokemon.getPs() / (double) pokemon.getPsMax())), 9);
 		font.draw(batch, pokemon.getNombre().toUpperCase(), 160, 500);
 		font.draw(batch, pokemon.getPs() + "/" + pokemon.getPsMax(), 190, 440);
-		font.draw(batch, "Nvº " + pokemon.getNivel(), 60, 440);
+		font.draw(batch, "Nvï¿½ " + pokemon.getNivel(), 60, 440);
 		batch.draw(spPokemon.get(0), 60, 460, 60, 60);
 	}
 
@@ -177,7 +178,7 @@ public class MenuPokemon extends Pantalla {
 			batch.draw(tHpVivo, xHp, yHp);
 			font.draw(batch, pokemon.getNombre().toUpperCase(), xName, yName);
 			font.draw(batch, pokemon.getPs() + "/" + pokemon.getPsMax(), xPs, yPs);
-			font.draw(batch, "Nvº " + pokemon.getNivel(), xNv, yNv);
+			font.draw(batch, "Nvï¿½ " + pokemon.getNivel(), xNv, yNv);
 			batch.draw(spPokemon.get(i), xPok, yPok, 60, 60);
 		} else {
 			if (selection != i) {
@@ -189,7 +190,7 @@ public class MenuPokemon extends Pantalla {
 			batch.draw(tHpMuerto, xHp, yHp);
 			font.draw(batch, pokemon.getNombre().toUpperCase(), xName, yName);
 			font.draw(batch, pokemon.getPs() + "/" + pokemon.getPsMax(), xPs, yPs);
-			font.draw(batch, "Nvº " + pokemon.getNivel(), xNv, yNv);
+			font.draw(batch, "Nvï¿½ " + pokemon.getNivel(), xNv, yNv);
 			batch.draw(spPokemon.get(i), xPok, yPok, 60, 60);
 		}
 		batch.draw(barrasVida[0], xVida, yVida, (int) (100 * (pokemon.getPs() / (double) pokemon.getPsMax())), 9);
@@ -230,7 +231,9 @@ public class MenuPokemon extends Pantalla {
 			if (!cambiar || pokemonCambiar) {
 				if (keycode == getCtx().getTeclaB()) {
 					/* Vuelve al menu */
+					Jugador aux = Jugador.nuevoJugador(getCtx().jugador);
 					((Game) Gdx.app.getApplicationListener()).setScreen(screen);
+					screen.getCtx().jugador = aux;
 				} else if (keycode == getCtx().getTeclaA()) {
 					action(selection);
 				} else if (keycode == getCtx().getTeclaDown()) {
@@ -355,7 +358,7 @@ public class MenuPokemon extends Pantalla {
 		} else {
 			cambiar = true;
 
-			String[] frases = { "¿Quieres cambiar este pokemon de posición en la mochila?", "" };
+			String[] frases = { "ï¿½Quieres cambiar este pokemon de posiciï¿½n en la mochila?", "" };
 			dialogo.setFrases(frases);
 			String l1 = dialogo.siguienteLinea();
 			String l2 = dialogo.siguienteLinea();
@@ -371,7 +374,7 @@ public class MenuPokemon extends Pantalla {
 	}
 
 	private void dialogoCambiar() {
-		if (cambiar) { 
+		if (cambiar) {
 			cajaDialogo.draw(batch);
 			cajaDialogo.setSize(720, 120);
 			if (!pokemonCambiar) {

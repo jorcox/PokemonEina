@@ -19,6 +19,7 @@ import com.pokemon.mochila.Mochila;
 import com.pokemon.utilidades.ArchivoGuardado;
 import com.pokemon.utilidades.Guardador;
 
+import entrenadores.Jugador;
 import pokemon.Pokemon;
 
 public class MenuPlay extends Pantalla {
@@ -191,7 +192,10 @@ public class MenuPlay extends Pantalla {
 			Gdx.app.exit();
 		} else if (keycode == getCtx().getTeclaB()) {
 			if(play.getCtx().getMapas().containsKey(map)){				
-				((Game) Gdx.app.getApplicationListener()).setScreen(play.getCtx().getMapas().get(map));
+				Jugador aux = Jugador.nuevoJugador(getCtx().jugador);
+				Pantalla pant=play.getCtx().getMapas().get(map);
+				((Game) Gdx.app.getApplicationListener()).setScreen(pant);
+				pant.getCtx().jugador=aux;
 			} else {
 				((Game) Gdx.app.getApplicationListener()).setScreen(new Play(getCtx(), x, y,
 						lastPressed, map));

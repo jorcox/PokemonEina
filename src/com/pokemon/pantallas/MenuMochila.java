@@ -18,6 +18,8 @@ import com.pokemon.mochila.Ball;
 import com.pokemon.mochila.Mochila;
 import com.pokemon.utilidades.ArchivoGuardado;
 
+import entrenadores.Jugador;
+
 public class MenuMochila extends Pantalla {
 
 	private static final int MAX_ITEMS = 6; /*
@@ -181,7 +183,9 @@ public class MenuMochila extends Pantalla {
 		if (keycode == getCtx().getTeclaB()) {
 			/* Vuelve al menu */
 			screen.setCtx(this.getCtx());
+			Jugador aux = Jugador.nuevoJugador(getCtx().jugador);
 			((Game) Gdx.app.getApplicationListener()).setScreen(screen);
+			screen.getCtx().jugador = aux;
 		} else if (keycode == getCtx().getTeclaA()) {
 			if (!usar) {
 				usar = true;
