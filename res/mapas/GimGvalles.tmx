@@ -578,7 +578,7 @@
  <objectgroup name="Personajes">
   <object id="5" gid="10954" x="224" y="2688" width="32" height="32">
    <properties>
-    <property name="combate" value="false"/>
+    <property name="combate" value="true"/>
     <property name="dialogo" value="dpellicer_gimgvalles"/>
     <property name="dir" value="derecha"/>
     <property name="dis" value="3"/>
@@ -587,7 +587,7 @@
   </object>
   <object id="6" gid="10954" x="289" y="2208" width="32" height="32">
    <properties>
-    <property name="combate" value="false"/>
+    <property name="combate" value="true"/>
     <property name="dialogo" value="unai_gimgvalles"/>
     <property name="dir" value="izquierda"/>
     <property name="dis" value="3"/>
@@ -596,7 +596,7 @@
   </object>
   <object id="7" gid="10954" x="318" y="1760" width="32" height="32">
    <properties>
-    <property name="combate" value="false"/>
+    <property name="combate" value="true"/>
     <property name="dialogo" value="gvalles_gimgvalles"/>
     <property name="dir" value="izquierda"/>
     <property name="dis" value="8"/>
