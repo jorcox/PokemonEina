@@ -191,7 +191,7 @@ public class MenuMochila extends Pantalla {
 
 				} else {
 
-					String l1 = dialogo.siguienteLinea();
+					String l1 = dialogo.siguienteLinea(); 
 					String l2 = dialogo.siguienteLinea();
 
 					if (si_no) {
