@@ -29,7 +29,7 @@
  <tileset firstgid="19224" name="CustomTiles" tilewidth="32" tileheight="32" tilecount="10" columns="10">
   <image source="../Tilesets/CustomTiles.png" trans="00aa00" width="320" height="32"/>
  </tileset>
- <objectgroup name="Trans" visible="0">
+ <objectgroup name="Trans">
   <object id="29" gid="19219" x="352" y="511" width="32" height="32">
    <properties>
     <property name="mapa" value="Hall"/>

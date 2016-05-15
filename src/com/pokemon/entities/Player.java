@@ -362,7 +362,7 @@ public class Player extends Sprite implements Serializable {
 					: velocity.x > 0 ? derecha.getKeyFrame(animationTime)
 							: velocity.y > 0 ? espalda.getKeyFrame(animationTime) : cara.getKeyFrame(animationTime));
 		} else {
-			switch (lastPressed) {
+			switch (play.getCtx().lastPressed) {
 			case 1: // A
 				setRegion(izquierda.getKeyFrame(0));
 				break;
