@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="13">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="15">
  <tileset firstgid="1" name="Outside" tilewidth="32" tileheight="32" tilecount="4016" columns="8">
   <image source="../Tilesets/Outside.png" trans="00aa00" width="256" height="16064"/>
  </tileset>
@@ -29,6 +29,9 @@
     <property name="water" value="true"/>
    </properties>
   </tile>
+ </tileset>
+ <tileset firstgid="10947" name="CustomTiles" tilewidth="32" tileheight="32" tilecount="10" columns="10">
+  <image source="../Tilesets/CustomTiles.png" trans="00aa00" width="320" height="32"/>
  </tileset>
  <objectgroup name="Trans" visible="0">
   <object id="4" gid="10942" x="1344" y="417" width="32" height="32">
@@ -611,16 +614,37 @@
  <objectgroup name="Objetos">
   <object id="1" gid="955" x="576" y="411" width="32" height="32">
    <properties>
+    <property name="ID" value="SC1"/>
     <property name="cartel" value="sotano1"/>
     <property name="mostrar" value="true"/>
    </properties>
   </object>
   <object id="3" gid="955" x="287" y="447" width="32" height="32">
    <properties>
+    <property name="ID" value="SC2"/>
     <property name="cartel" value="sotano2"/>
     <property name="mostrar" value="true"/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="Personajes"/>
+ <objectgroup name="Personajes">
+  <object id="13" gid="10954" x="1119" y="415" width="32" height="32">
+   <properties>
+    <property name="combate" value="false"/>
+    <property name="dialogo" value="calvo_sotano"/>
+    <property name="dir" value="cara"/>
+    <property name="dis" value="4"/>
+    <property name="pack" value="c"/>
+   </properties>
+  </object>
+  <object id="14" gid="10954" x="1279" y="960" width="32" height="32">
+   <properties>
+    <property name="combate" value="true"/>
+    <property name="dialogo" value="silarri_sotano"/>
+    <property name="dir" value="cara"/>
+    <property name="dis" value="6"/>
+    <property name="pack" value="hilario"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>
