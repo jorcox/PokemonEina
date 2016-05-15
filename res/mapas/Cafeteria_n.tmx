@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="43" tilewidth="32" tileheight="32" nextobjectid="8">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="43" tilewidth="32" tileheight="32" nextobjectid="9">
  <tileset firstgid="1" name="exterior" tilewidth="32" tileheight="32" tilecount="8272" columns="8">
   <image source="../Tilesets/exterior.png" trans="ffffff" width="256" height="33096"/>
  </tileset>
@@ -14,6 +14,17 @@
   <tile id="0">
    <properties>
     <property name="blocked" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="13606" name="CustomTiles" tilewidth="32" tileheight="32" tilecount="10" columns="10">
+  <image source="../Tilesets/CustomTiles.png" width="320" height="32"/>
+  <tile id="7">
+   <properties>
+    <property name="dialogo" value="azafata_cafeteria_n"/>
+    <property name="dir" value="espalda"/>
+    <property name="dis" value="5"/>
+    <property name="pack" value="azafata"/>
    </properties>
   </tile>
  </tileset>
@@ -35,5 +46,8 @@
  <objectgroup name="Objects">
   <object id="6" gid="11001" x="2402.18" y="97.8182" width="32" height="32"/>
   <object id="7" gid="11001" x="2405.21" y="1249.33" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup name="Personajes">
+  <object id="8" gid="13613" x="927" y="828" width="32" height="32"/>
  </objectgroup>
 </map>

@@ -17,7 +17,7 @@
  <tileset firstgid="6035" name="CustomTiles" tilewidth="32" tileheight="32" tilecount="10" columns="10">
   <image source="../Tilesets/CustomTiles.png" trans="00aa00" width="320" height="32"/>
  </tileset>
- <objectgroup name="Trans" visible="0">
+ <objectgroup name="Trans">
   <properties>
    <property name="mapa" value="Cueva"/>
    <property name="x" value="2500"/>
@@ -46,28 +46,28 @@
   </object>
   <object id="14" gid="6" x="350" y="448" width="32" height="32">
    <properties>
-    <property name="mapa" value="sotano"/>
+    <property name="mapa" value="Sotano"/>
     <property name="x" value="1250"/>
     <property name="y" value="2750"/>
    </properties>
   </object>
   <object id="18" gid="6" x="320" y="447" width="32" height="32">
    <properties>
-    <property name="mapa" value="sotano"/>
+    <property name="mapa" value="Sotano"/>
     <property name="x" value="1250"/>
     <property name="y" value="2750"/>
    </properties>
   </object>
   <object id="19" gid="6" x="321" y="480" width="32" height="32">
    <properties>
-    <property name="mapa" value="sotano"/>
+    <property name="mapa" value="Sotano"/>
     <property name="x" value="1250"/>
     <property name="y" value="2750"/>
    </properties>
   </object>
   <object id="20" gid="6" x="351" y="479" width="32" height="32">
    <properties>
-    <property name="mapa" value="sotano"/>
+    <property name="mapa" value="Sotano"/>
     <property name="x" value="1250"/>
     <property name="y" value="2750"/>
    </properties>
