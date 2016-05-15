@@ -130,7 +130,7 @@ public class CombateP extends Enfrentamiento {
 			} else {
 				pokemon.setAlpha(1);
 				if (acierto != -1 && acierto != 1)
-					ataqueRecibido(false); 
+					ataqueRecibido(false);
 				animacionVida(false);
 				dibujarVida(false);
 			}
@@ -360,9 +360,13 @@ public class CombateP extends Enfrentamiento {
 
 						dialogo.setLineas(l1, l2);
 					} else {
-						Jugador aux = Jugador.nuevoJugador(jugador);
-						((Game) Gdx.app.getApplicationListener()).setScreen(pantalla);
-						pantalla.getCtx().jugador = aux;
+						if (dialogo.getId().equals("combate_ganado")) {
+							Jugador aux = Jugador.nuevoJugador(jugador);
+							((Game) Gdx.app.getApplicationListener()).setScreen(pantalla);
+							pantalla.getCtx().jugador = aux;
+						}else{
+							combatePerdido();
+						}
 					}
 				} else if (fase == 13) {
 					/*
