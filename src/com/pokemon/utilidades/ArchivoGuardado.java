@@ -100,7 +100,6 @@ public class ArchivoGuardado implements Serializable {
 		
 		// Objetos de prueba metidos a pelo
 		mochila.add(new Pocion());
-		mochila.add(new Antidoto());
 		mochila.add(new Pokeball());
 		mochila.add(new Superball());
 		mochila.add(new Pokeball());

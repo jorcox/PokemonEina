@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import pokemon.Pokemon;
+
 /**
  * 
  * @author Javier Beltran, Jorge Cancer, Alejandro Dieste
@@ -33,6 +35,7 @@ public class Jugador extends Entrenador implements Serializable {
 		this.setNombre(nombre);
 		this.setHombre(esHombre);
 		setMedallas(new ArrayList<Medalla>());
+		setEquipo(new ArrayList<Pokemon>());
 	}
 
 	public List<Medalla> getMedallas() {
