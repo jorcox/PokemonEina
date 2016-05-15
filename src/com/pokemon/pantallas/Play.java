@@ -395,7 +395,7 @@ public class Play extends Pantalla {
 				getCtx().lastPressed = 2;
 				if (getCtx().lastPressed == 0) {
 					getCtx().lastPressed = 2;
-				}
+				} 
 				player.WPressed = true;
 			} else if (movimiento && keycode == getCtx().getTeclaLeft()) {
 				player.checkCombat();
