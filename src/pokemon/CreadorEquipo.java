@@ -12,11 +12,13 @@ public class CreadorEquipo {
 	
 	private BaseDatos bd;
 	private ResourceBundle bundle;
+	private ResourceBundle nombres;
 	
 	public CreadorEquipo() {
 		try {
 			bd = new BaseDatos("pokemon_base");
 			bundle = ResourceBundle.getBundle("equipos");
+			nombres = ResourceBundle.getBundle("nombres");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -31,6 +33,10 @@ public class CreadorEquipo {
 		}
 		
 		return lista;
+	}
+	
+	public String nombrar(String id) {
+		return nombres.getString(id);
 	}
 	
 	private int contarPokemon(String id) {
@@ -60,6 +66,7 @@ public class CreadorEquipo {
 			for (int i=0; i<nivel; i++) {
 				p.subirNivel(0, 0);
 			}
+			p.setPs(p.getPsMax());
 		}
 		return p;
 	}
