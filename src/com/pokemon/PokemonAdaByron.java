@@ -7,6 +7,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.pokemon.pantallas.Pantalla;
 import com.pokemon.pantallas.Play;
+import com.pokemon.pantallas.PokemonIniciales;
 import com.pokemon.utilidades.ArchivoGuardado;
 import com.pokemon.utilidades.Importador;
 
@@ -38,7 +39,7 @@ public class PokemonAdaByron extends Game {
 			//setScreen(new Play(ctx, 600, 800, 3, "Hall.tmx"));
 			//setScreen(new Play(ctx, 500, 2000, 3, "GimGuti.tmx"));
 			//setScreen(new Play(ctx, 500, 500, 3, "Geoslab.tmx"));
-			setScreen(new Play(ctx, 2800, 2050, 3, "Cueva.tmx"));
+			setScreen(new PokemonIniciales(ctx));
 		} catch (Exception e) {
 			Gdx.app.log("Context", "Save file could not be retrieved");
 			ctx = new ArchivoGuardado();

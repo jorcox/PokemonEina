@@ -524,9 +524,7 @@ public class Play extends Pantalla {
 			/* Introduce en mochila */
 			if (value.equals("Poción")) {
 				getCtx().mochila.add(new Pocion());
-			} else if (value.equals("Antídoto")) {
-				getCtx().mochila.add(new Antidoto());
-			} else if (value.equals("Corte")) {
+			}  else if (value.equals("Corte")) {
 				getCtx().mochila.add(new MO("Corte"));
 			} else if (value.equals("Fuerza")) {
 				getCtx().mochila.add(new MO("Fuerza"));
