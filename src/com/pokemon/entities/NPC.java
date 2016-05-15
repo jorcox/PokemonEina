@@ -47,16 +47,23 @@ public class NPC extends Sprite implements Serializable {
 	private Player player;
 
 	private boolean activo;
-	
+
 	private boolean dialogado = false;
-	
+
 	private String dialogoCode;
-	
+
 	private boolean combate;
+
+	private boolean volver;
 	
-	private float x, y;	
-	
-	public NPC(TextureAtlas playerAtlas, Animation face, String dir, int disVista, Play play, String dialogoCode, boolean combate) {
+	private boolean volviendo = false;
+
+	private float x, y;
+
+	private float xOriginal, yOriginal;
+
+	public NPC(TextureAtlas playerAtlas, Animation face, String dir, int disVista, Play play, String dialogoCode,
+			boolean combate) {
 		super(face.getKeyFrame(0));
 		cara = new Animation(1 / 10f, playerAtlas.findRegions("cara"));
 		derecha = new Animation(1 / 10f, playerAtlas.findRegions("derecha"));
@@ -117,6 +124,24 @@ public class NPC extends Sprite implements Serializable {
 			velocity.y = 0;
 			player.colisionNPC = true;
 		}
+
+		/*
+		 * Vuelta a la posicion original
+		 */
+		if (volviendo) {
+			boolean collisionVuelta = false;
+
+			collisionVuelta |= ((xOriginal + anchura / 3) > getX()) && ((xOriginal - anchura / 3) < getX())
+					&& ((yOriginal + altura / 3) > getY()) && ((yOriginal - altura / 3) < getY());
+
+			if (collisionVuelta) {
+				velocity.x = 0;
+				velocity.y = 0;
+				//direccionVision = sentidoContrario(direccionVision);
+				volviendo = false;
+			}
+		}
+
 		/*
 		 * Actualizar animacion
 		 */
@@ -138,7 +163,20 @@ public class NPC extends Sprite implements Serializable {
 				setRegion(derecha.getKeyFrame(1));
 			}
 		}
+	}
+
+	private String sentidoContrario(String direccionVision) {
+		if (direccionVision.equals("cara")) {
+			return "espalda";
+		} else if (direccionVision.equals("espalda")) {
+			return "cara";
+		} else if (direccionVision.equals("izquierda")) {
+			return "derecha";
+		} else if (direccionVision.equals("derecha")) {
+			return "izquierda";
 		}
+		return "cara";
+	}
 
 	/**
 	 * Calcula la distancia entre el jugador y el objeto de texturas t.
@@ -296,7 +334,7 @@ public class NPC extends Sprite implements Serializable {
 	}
 
 	public void setDialogado(boolean b) {
-		dialogado = b;		
+		dialogado = b;
 	}
 
 	public String getDialogoCode() {
@@ -306,7 +344,7 @@ public class NPC extends Sprite implements Serializable {
 	public void setDialogoCode(String dialogoCode) {
 		this.dialogoCode = dialogoCode;
 	}
-	
+
 	public Animation getCara() {
 		return cara;
 	}
@@ -314,22 +352,67 @@ public class NPC extends Sprite implements Serializable {
 	public void setCara(Animation cara) {
 		this.cara = cara;
 	}
-	
-	public void setX (float x) {		
+
+	public void setX(float x) {
 		super.setX(x);
 		this.x = x;
 	}
 
-	public void setY (float y) {		
+	public void setY(float y) {
 		super.setY(y);
 		this.y = y;
 	}
-	
-	public float getX () {	
+
+	public float getX() {
 		return x;
 	}
 
-	public float getY () {	
+	public float getY() {
 		return y;
 	}
+
+	public boolean isVolver() {
+		return volver;
+	}
+
+	public void setVolver(boolean volver) {
+		this.volver = volver;
+	}
+
+	public void setPosicionOriginal(float x, float y) {
+		xOriginal = x;
+		yOriginal = y;
+	}
+
+	public void volver() {
+		//setX(xOriginal);
+		//setY(yOriginal);
+		if (direccionVision.equals("cara")) {
+			velocity.y = speed;
+		} else if (direccionVision.equals("espalda")) {
+			velocity.y = -speed;
+		} else if (direccionVision.equals("izquierda")) {
+			velocity.x = speed;
+		} else if (direccionVision.equals("derecha")) {
+			velocity.x = -speed;
+		}
+		volviendo = true;
+	}
+
+	public float getxOriginal() {
+		return xOriginal;
+	}
+
+	public void setxOriginal(float xOriginal) {
+		this.xOriginal = xOriginal;
+	}
+
+	public float getyOriginal() {
+		return yOriginal;
+	}
+
+	public void setyOriginal(float yOriginal) {
+		this.yOriginal = yOriginal;
+	}
+
 }
