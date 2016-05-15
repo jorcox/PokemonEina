@@ -67,17 +67,17 @@
   <object id="140" gid="13" x="2255" y="415" width="32" height="32">
    <properties>
     <property name="encara" value="3"/>
-    <property name="mapa" value="cueva"/>
-    <property name="x" value="2880"/>
-    <property name="y" value="2035"/>
+    <property name="mapa" value="bosque"/>
+    <property name="x" value="352"/>
+    <property name="y" value="2650"/>
    </properties>
   </object>
   <object id="141" gid="13" x="2255" y="448" width="32" height="32">
    <properties>
     <property name="encara" value="3"/>
-    <property name="mapa" value="cueva"/>
-    <property name="x" value="2880"/>
-    <property name="y" value="2035"/>
+    <property name="mapa" value="bosque"/>
+    <property name="x" value="352"/>
+    <property name="y" value="2650"/>
    </properties>
   </object>
  </objectgroup>
@@ -229,7 +229,7 @@
    </properties>
   </object>
  </objectgroup>
- <layer name="Entorno" width="72" height="40" visible="0" opacity="0.34">
+ <layer name="Entorno" width="72" height="40" opacity="0.34">
   <data encoding="csv">
 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,6,
 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,6,
