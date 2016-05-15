@@ -139,7 +139,7 @@ public class AparicionPokemon {
 			habs = setHabilidades(323, 206, 34, 205);
 			aparicion[4].setHabilidades(habs);
 			aparicion[4].setTipo(Tipo.PLANTA);
-			int n = 20;
+			int n = 30;
 			for (int i = 0; i < aparicion.length; i++) {
 				for (int j = 0; j < n; j++) {
 					if (j < n - 4) {
@@ -182,7 +182,7 @@ public class AparicionPokemon {
 			habs = setHabilidades(27, 140, 271, 141);
 			aparicion[4].setHabilidades(habs);
 			aparicion[4].setTipo(Tipo.FUEGO);
-			int n = 4;
+			int n = 25;
 			for (int i = 0; i < aparicion.length; i++) {
 				for (int j = 0; j < n; j++) {
 					if (j < n - 4) {
@@ -225,7 +225,7 @@ public class AparicionPokemon {
 			habs = setHabilidades(300, 296, 307, 27);
 			aparicion[4].setHabilidades(habs);
 			aparicion[4].setTipo(Tipo.NORMAL);
-			int n = 4;
+			int n = 15;
 			for (int i = 0; i < aparicion.length; i++) {
 				for (int j = 0; j < n; j++) {
 					if (j < n - 4) {
@@ -366,7 +366,7 @@ public class AparicionPokemon {
 			habs = setHabilidades(3, 98, 95, 329);
 			aparicion[4].setHabilidades(habs);
 			aparicion[4].setTipo(Tipo.BICHO);
-			int n = 4;
+			int n = 27;
 			for (int i = 0; i < aparicion.length; i++) {
 				for (int j = 0; j < n; j++) {
 					if (j < n - 4) {
@@ -426,7 +426,7 @@ public class AparicionPokemon {
 			habs = setHabilidades(300, 319, 313, 504);
 			aparicion[7].setHabilidades(habs);
 			aparicion[7].setTipo(Tipo.ROCA);
-			int n = 4;
+			int n = 10;
 			for (int i = 0; i < aparicion.length; i++) {
 				for (int j = 0; j < n; j++) {
 					if (j < n - 4) {
@@ -477,7 +477,7 @@ public class AparicionPokemon {
 			aparicion[5].setHabilidades(habs);
 			aparicion[5].setTipo(Tipo.BICHO);
 
-			int n = 4;
+			int n = 7;
 			for (int i = 0; i < aparicion.length; i++) {
 				for (int j = 0; j < n; j++) {
 					if (j < n - 4) {
@@ -521,7 +521,7 @@ public class AparicionPokemon {
 			aparicion[4].setHabilidades(habs);
 			aparicion[4].setTipo(Tipo.LUCHA);
 
-			int n = 4;
+			int n = 20;
 			for (int i = 0; i < aparicion.length; i++) {
 				for (int j = 0; j < n; j++) {
 					if (j < n - 4) {
@@ -558,7 +558,7 @@ public class AparicionPokemon {
 			aparicion[1].setHabilidades(habs);
 			aparicion[1].setTipo(Tipo.AGUA);
 
-			int n = 18;
+			int n = 40;
 			for (int i = 0; i < aparicion.length; i++) {
 				for (int j = 0; j < n; j++) {
 					if (j < n - 4) {
@@ -589,7 +589,7 @@ public class AparicionPokemon {
 			aparicion[1].setHabilidades(habs);
 			aparicion[1].setTipo(Tipo.AGUA);
 
-			int n = 20;
+			int n = 40;
 			for (int i = 0; i < aparicion.length; i++) {
 				for (int j = 0; j < n; j++) {
 					if (j < n - 4) {
@@ -609,6 +609,7 @@ public class AparicionPokemon {
 		} else if (mapa.equals("Redes")) {
 
 		} else if (mapa.equals("Pasillo")) {
+			
 		} else if (mapa.equals("Liga")) {
 
 		} else if (mapa.equals("Lab1")) {
@@ -625,7 +626,7 @@ public class AparicionPokemon {
 			aparicion[1].setHabilidades(habs);
 			aparicion[1].setTipo(Tipo.AGUA);
 
-			int n = 4;
+			int n = 40;
 			for (int i = 0; i < aparicion.length; i++) {
 				for (int j = 0; j < n; j++) {
 					if (j < n - 4) {
@@ -659,7 +660,7 @@ public class AparicionPokemon {
 			habs = setHabilidades(551, 549, -1, -1);
 			aparicion[1].setHabilidades(habs);
 			aparicion[1].setTipo(Tipo.AGUA);
-			int n = 4;
+			int n = 40;
 			for (int i = 0; i < aparicion.length; i++) {
 				for (int j = 0; j < n; j++) {
 					if (j < n - 4) {
@@ -690,7 +691,7 @@ public class AparicionPokemon {
 			aparicion[1].setHabilidades(habs);
 			aparicion[1].setTipo(Tipo.AGUA);
 
-			int n = 4;
+			int n = 40;
 			for (int i = 0; i < aparicion.length; i++) {
 				for (int j = 0; j < n; j++) {
 					if (j < n - 4) {
@@ -721,7 +722,7 @@ public class AparicionPokemon {
 			aparicion[1].setHabilidades(habs);
 			aparicion[1].setTipo(Tipo.BICHO);
 
-			int n = 4;
+			int n = 40;
 			for (int i = 0; i < aparicion.length; i++) {
 				for (int j = 0; j < n; j++) {
 					if (j < n - 4) {
