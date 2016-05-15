@@ -2,6 +2,7 @@ package com.pokemon.pantallas;
 
 import java.util.ArrayList;
 
+import pokemon.CreadorEquipo;
 import pokemon.Pokemon;
 import aurelienribon.tweenengine.Tween;
 import core.Combate;
@@ -676,17 +677,7 @@ public class CombateEntrenador extends Enfrentamiento {
 
 	public void setEntrenador() {
 		entrenadorE = new Jugador(idEntrenador, true);
-		ArrayList<Pokemon> lPoke = new ArrayList<Pokemon>();
-		try {
-			db = new BaseDatos("pokemon_base");
-			pkmnpokemonEnemigo = db.getPokemon(3);
-			lPoke.add(pkmnpokemonEnemigo);
-			lPoke.add(db.getPokemon(2));
-			db.shutdown();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+		ArrayList<Pokemon> lPoke = new CreadorEquipo().crear(idEntrenador);
 		entrenadorE.setEquipo(lPoke);
 		pkmnpokemonEnemigo = entrenadorE.getEquipo().get(iPokemonEnemigo);
 	}
