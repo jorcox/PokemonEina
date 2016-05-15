@@ -123,16 +123,20 @@ public class Play extends Pantalla {
 			MapLayer npcLayer = map.getLayers().get("Personajes");
 			for (MapObject o : npcLayer.getObjects()) {
 				TextureMapObject t = (TextureMapObject) o;
+				/* Carga de atributos */
 				String dirVista = (String) t.getProperties().get("dir");
 				boolean combate = Boolean.parseBoolean((String) t.getProperties().get("combate"));
 				int disVista = Integer.parseInt((String) t.getProperties().get("dis"));
 				String dialogoCode = (String) t.getProperties().get("dialogo");
+				boolean activo = Boolean.parseBoolean((String) t.getProperties().get("activo"));
 				TextureAtlas personajePack = new TextureAtlas(
 						"res/imgs/entrenadoresWorld/" + (String) t.getProperties().get("pack") + ".pack");
+				/* Creación del los NPCs */
 				NPC npc = new NPC(personajePack, new Animation(1 / 10f, playerAtlas.findRegions(dirVista)), dirVista,
 						disVista, this, dialogoCode, combate);
 				npc.setPosition(t.getX(), t.getY());
-				npc.setScale(2, 1);
+				//npc.setScale(2, 1);
+				npc.setActivo(activo);
 				npcs.add(npc);
 			}			
 			for (MapObject obj : map.getLayers().get("Objetos").getObjects()){
@@ -372,6 +376,7 @@ public class Play extends Pantalla {
 				player.velocity.x = 0;
 				player.animationTime = 0;
 				player.setLastPressed(2);
+				getCtx().lastPressed = 2;
 				if (getCtx().lastPressed == 0) {
 					getCtx().lastPressed = 2;
 				}
@@ -380,8 +385,9 @@ public class Play extends Pantalla {
 				player.checkCombat();
 				player.velocity.x = -player.speed;
 				player.velocity.y = 0;
-				player.animationTime = 0;
+				player.animationTime = 0;				
 				player.setLastPressed(1);
+				getCtx().lastPressed = 1;
 				if (getCtx().lastPressed == 0) {
 					getCtx().lastPressed = 1;
 				}
@@ -392,6 +398,7 @@ public class Play extends Pantalla {
 				player.velocity.x = 0;
 				player.animationTime = 0;
 				player.setLastPressed(3);
+				getCtx().lastPressed = 3;
 				if (getCtx().lastPressed == 0) {
 					getCtx().lastPressed = 3;
 				}
@@ -402,6 +409,7 @@ public class Play extends Pantalla {
 				player.velocity.y = 0;
 				player.animationTime = 0;
 				player.setLastPressed(4);
+				getCtx().lastPressed = 4;
 				if (getCtx().lastPressed == 0) {
 					getCtx().lastPressed = 4;
 				}
@@ -566,7 +574,7 @@ public class Play extends Pantalla {
 	@Override
 	public boolean keyUp(int keycode) {
 		if (listener) {
-			if (keycode == getCtx().getTeclaUp()) {
+			if (movimiento && keycode == getCtx().getTeclaUp()) {
 				if (player.SPressed) {
 					player.velocity.x = 0;
 					player.velocity.y = -player.speed;
@@ -580,9 +588,9 @@ public class Play extends Pantalla {
 					player.velocity.y = 0;
 				}
 				player.animationTime = 0;
-				getCtx().lastPressed = 2;
+				//getCtx().lastPressed = 2;
 				player.WPressed = false;
-			} else if (keycode == getCtx().getTeclaLeft()) {
+			} else if (movimiento && keycode == getCtx().getTeclaLeft()) {
 				if (player.DPressed) {
 					player.velocity.y = 0;
 					player.velocity.x = player.speed;
@@ -596,9 +604,9 @@ public class Play extends Pantalla {
 					player.velocity.x = 0;
 				}
 				player.animationTime = 0;
-				getCtx().lastPressed = 1;
+				//getCtx().lastPressed = 1;
 				player.APressed = false;
-			} else if (keycode == getCtx().getTeclaDown()) {
+			} else if (movimiento && keycode == getCtx().getTeclaDown()) {
 				if (player.WPressed) {
 					player.velocity.x = 0;
 					player.velocity.y = player.speed;
@@ -612,9 +620,9 @@ public class Play extends Pantalla {
 					player.velocity.y = 0;
 				}
 				player.animationTime = 0;
-				getCtx().lastPressed = 3;
+				//getCtx().lastPressed = 3;
 				player.SPressed = false;
-			} else if (keycode == getCtx().getTeclaRight()) {
+			} else if (movimiento && keycode == getCtx().getTeclaRight()) {
 				if (player.APressed) {
 					player.velocity.y = 0;
 					player.velocity.x = -player.speed;
@@ -628,7 +636,7 @@ public class Play extends Pantalla {
 					player.velocity.x = 0;
 				}
 				player.animationTime = 0;
-				getCtx().lastPressed = 4;
+				//getCtx().lastPressed = 4;
 				player.DPressed = false;
 			} else if (keycode == getCtx().getTeclaB()) {
 				player.SpacePressed = false;
