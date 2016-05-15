@@ -31,7 +31,7 @@ public class Player extends Sprite implements Serializable {
 
 	public Vector2 velocity = new Vector2();
 
-	public float speed = 60 * 2;
+	public float speed = 300 * 2;
 
 	private float gravity = 60 * 1.8f;
 
@@ -394,19 +394,28 @@ public class Player extends Sprite implements Serializable {
 		/* Esperando la llegada de entrenador a personaje */
 		if (esperando) {
 			if (colisionNPC) {
-				// TODO Combate o Conversacion
+				/*
+				 * Una vez el NPC ha llegado al personaje empieza la conversacion 
+				 */
 				if (!npcInteractuando.isDialogado()) {
 					play.interactNPC(npcInteractuando);
 					npcInteractuando.setDialogado(true);
 				} else {
 					/*
 					 * Cuando deja de dialogar se procede a devolver la libertad
-					 * al jugador
+					 * al jugador o iniciar el compate
 					 */
 					if (!play.isDialogando()) {
 						if (npcInteractuando.hayCombate()) {
+							if(npcInteractuando.isVolver()){
+								npcInteractuando.volver();
+							}
 							iniciarCombate();
 						}
+						if(npcInteractuando.isVolver()){
+							npcInteractuando.volver();
+						}
+						resetMovimiento();
 						play.resumeMovimiento();
 						esperando = false;
 						colisionNPC = false;
@@ -414,6 +423,15 @@ public class Player extends Sprite implements Serializable {
 				}
 			}
 		}
+	}
+
+	private void resetMovimiento() {
+		velocity.x = 0;
+		velocity.y = 0;
+		WPressed = false;
+		APressed = false;
+		SPressed = false;
+		DPressed = false;	
 	}
 
 	private void iniciarCombate() {
@@ -429,25 +447,25 @@ public class Player extends Sprite implements Serializable {
 		float npcY = npc.getY();
 		float minX = 0, maxX = 0, minY = 0, maxY = 0;
 		if (dir.equals("cara")) {
-			minX = npcX - 1;
-			maxX = npcX + 1;
+			minX = npcX - 3;
+			maxX = npcX + 3;
 			minY = npcY - (32 * dis);
 			maxY = npcY;
 		} else if (dir.equals("espalda")) {
-			minX = npcX - 1;
-			maxX = npcX + 1;
+			minX = npcX - 3;
+			maxX = npcX + 3;
 			minY = npcY;
 			maxY = npcY + (32 * dis);
 		} else if (dir.equals("izquierda")) {
 			minX = npcX - (32 * dis);
 			maxX = npcX;
-			minY = npcY - 1;
-			maxY = npcY + 1;
+			minY = npcY - 3;
+			maxY = npcY + 3;
 		} else if (dir.equals("derecha")) {
 			minX = npcX;
 			maxX = npcX + (32 * dis);
-			minY = npcY - 1;
-			maxY = npcY + 1;
+			minY = npcY - 3;
+			maxY = npcY + 3;
 		}
 		return (maxX > getX()) && (minX < getX()) && (maxY > getY()) && (minY < getY());
 	}

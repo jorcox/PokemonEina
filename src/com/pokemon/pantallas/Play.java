@@ -106,7 +106,7 @@ public class Play extends Pantalla {
 
 	@Override
 	public void show() {
-		tweenManager = new TweenManager();
+ 		tweenManager = new TweenManager();
 
 		TmxMapLoader loader = new TmxMapLoader();
 
@@ -129,14 +129,21 @@ public class Play extends Pantalla {
 				int disVista = Integer.parseInt((String) t.getProperties().get("dis"));
 				String dialogoCode = (String) t.getProperties().get("dialogo");
 				boolean activo = Boolean.parseBoolean((String) t.getProperties().get("activo"));
+				boolean volver = Boolean.parseBoolean((String) t.getProperties().get("activo"));
 				TextureAtlas personajePack = new TextureAtlas(
 						"res/imgs/entrenadoresWorld/" + (String) t.getProperties().get("pack") + ".pack");
 				/* Creación del los NPCs */
 				NPC npc = new NPC(personajePack, new Animation(1 / 10f, playerAtlas.findRegions(dirVista)), dirVista,
 						disVista, this, dialogoCode, combate);
 				npc.setPosition(t.getX(), t.getY());
-				//npc.setScale(2, 1);
+				//t.getTextureRegion().getTexture().getHeight();
+				//t.getTextureRegion().getTexture().get
+				npc.setPosicionOriginal(t.getX(), t.getY());
+				if(!t.getProperties().containsKey("ancho")){
+					npc.setScale((float) 1.5, 1);
+				}				
 				npc.setActivo(activo);
+				npc.setVolver(volver);
 				npcs.add(npc);
 			}			
 			for (MapObject obj : map.getLayers().get("Objetos").getObjects()){
@@ -159,11 +166,16 @@ public class Play extends Pantalla {
 						"res/imgs/entrenadoresWorld/" + (String) t.getProperties().get("pack") + ".pack");
 				NPC npc = new NPC(personajePack, new Animation(1 / 10f, playerAtlas.findRegions(dirVista)), dirVista,
 						disVista, this, dialogoCode, combate);
+				if(!t.getProperties().containsKey("ancho")){
+					npc.setScale((float) 1.5, 1);
+				}	
 				for (NPC npcAlmacenado : npcs) {
 					if (npc.getDialogoCode().equals(npcAlmacenado.getDialogoCode())) {
 						npcs.remove(npcs.indexOf(npcAlmacenado));
 						npc.setPosition(npcAlmacenado.getX(), npcAlmacenado.getY());
 						npc.setActivo(npcAlmacenado.isActivo());
+						npc.setPosicionOriginal(npcAlmacenado.getxOriginal(), npcAlmacenado.getyOriginal());
+						npc.setVolver(npcAlmacenado.isActivo());
 						break;
 					}
 				}
