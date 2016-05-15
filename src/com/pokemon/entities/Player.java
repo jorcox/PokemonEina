@@ -1,8 +1,5 @@
 package com.pokemon.entities;
 
-import pokemon.AparicionPokemon;
-import pokemon.Pokemon;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
@@ -19,21 +16,16 @@ import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.pokemon.dialogo.Dialogo;
-import com.pokemon.mochila.Antidoto;
-import com.pokemon.mochila.MO;
-import com.pokemon.mochila.Mochila;
-import com.pokemon.mochila.Pocion;
-import com.pokemon.mochila.Pokeball;
-import com.pokemon.mochila.Superball;
 import com.pokemon.pantallas.CombateEntrenador;
 import com.pokemon.pantallas.CombateP;
-import com.pokemon.pantallas.MenuPlay;
 import com.pokemon.pantallas.ObjetoMapa;
 import com.pokemon.pantallas.Pantalla;
 import com.pokemon.pantallas.Play;
 import com.pokemon.utilidades.ArchivoGuardado;
 
 import entrenadores.Jugador;
+import pokemon.AparicionPokemon;
+import pokemon.Pokemon;
 
 public class Player extends Sprite implements Serializable {
 
@@ -258,6 +250,10 @@ public class Player extends Sprite implements Serializable {
 				/* Transicion solo si estan muy cerca jugador y casilla */
 				if (play.distance(o) < 50) {
 					String mapa = (String) t.getProperties().get("mapa");
+					if (t.getProperties().containsKey("encara")) {
+						int encara = Integer.parseInt((String) t.getProperties().get("encara"));
+						play.getCtx().lastPressed = encara;
+					}
 					if (!play.getCtx().getMapas().containsKey(mapa + ".tmx")) {
 						play.getCtx().getMapas().put(play.getMapa(), play);
 						Pantalla p = new Play(play.getCtx(), Integer.parseInt((String) t.getProperties().get("x")),
@@ -358,11 +354,13 @@ public class Player extends Sprite implements Serializable {
 		animationTime += delta;
 		if ((WPressed || APressed || SPressed || DPressed) && (!collisionX && !collisionY)
 				&& (!(velocity.x == 0) || !(velocity.y == 0))) {
-			setRegion(velocity.x < 0 ? izquierda.getKeyFrame(animationTime)
-					: velocity.x > 0 ? derecha.getKeyFrame(animationTime)
-							: velocity.y > 0 ? espalda.getKeyFrame(animationTime) : cara.getKeyFrame(animationTime));
+			setRegion(
+					velocity.x < 0 ? izquierda.getKeyFrame(animationTime)
+							: velocity.x > 0 ? derecha.getKeyFrame(animationTime)
+									: velocity.y > 0 ? espalda.getKeyFrame(animationTime)
+											: cara.getKeyFrame(animationTime));
 		} else {
-			switch (lastPressed) {
+			switch (play.getCtx().lastPressed) {
 			case 1: // A
 				setRegion(izquierda.getKeyFrame(0));
 				break;
