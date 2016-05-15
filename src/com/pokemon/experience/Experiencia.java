@@ -24,7 +24,7 @@ public class Experiencia {
 		if (trainer) {
 			factor = 1.5;
 		}
-		double baseExperience = baseExperience(level)/100;
+		double baseExperience = baseExperience(level);
 		return (int) (factor * baseExperience * level);
 	}
 
@@ -45,11 +45,11 @@ public class Experiencia {
 	 * @return
 	 */
 	public static int baseExperience(int level) {
-		/*int acc = 0;
+		int acc = 0;
 		for (int i = 1; i <= level; i++) {
 			acc += experienceToLevel(i);
-		}*/
-		return experienceToLevel(level);
+		}
+		return acc;
 	}
 
 }
