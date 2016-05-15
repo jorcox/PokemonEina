@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="9">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="13">
  <tileset firstgid="1" name="Outside" tilewidth="32" tileheight="32" tilecount="4016" columns="8">
   <image source="../Tilesets/Outside.png" trans="00aa00" width="256" height="16064"/>
  </tileset>
@@ -19,6 +19,9 @@
     <property name="blocked" value="true"/>
    </properties>
   </tile>
+ </tileset>
+ <tileset firstgid="10947" name="CustomTiles" tilewidth="32" tileheight="32" tilecount="10" columns="10">
+  <image source="../Tilesets/CustomTiles.png" trans="00aa00" width="320" height="32"/>
  </tileset>
  <objectgroup name="Trans" visible="0">
   <object id="5" gid="10942" x="128" y="3104" width="32" height="32">
@@ -573,16 +576,55 @@
  <objectgroup name="Objetos">
   <object id="2" gid="953" x="864" y="2556" width="32" height="32">
    <properties>
+    <property name="ID" value="GMC2"/>
     <property name="cartel" value="gimmena2"/>
     <property name="mostrar" value="true"/>
    </properties>
   </object>
   <object id="4" gid="953" x="255" y="2976" width="32" height="32">
    <properties>
+    <property name="ID" value="GMC1"/>
     <property name="cartel" value="gimmena1"/>
     <property name="mostrar" value="true"/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="Personajes"/>
+ <objectgroup name="Personajes">
+  <object id="9" gid="10954" x="383" y="2624" width="32" height="32">
+   <properties>
+    <property name="combate" value="true"/>
+    <property name="dialogo" value="trillo_gimmena"/>
+    <property name="dir" value="cara"/>
+    <property name="dis" value="8"/>
+    <property name="pack" value="ja2"/>
+   </properties>
+  </object>
+  <object id="10" gid="10954" x="640" y="2752" width="32" height="32">
+   <properties>
+    <property name="combate" value="true"/>
+    <property name="dialogo" value="valero_gimmena"/>
+    <property name="dir" value="cara"/>
+    <property name="dis" value="6"/>
+    <property name="pack" value="com"/>
+   </properties>
+  </object>
+  <object id="11" gid="10954" x="960" y="2560" width="32" height="32">
+   <properties>
+    <property name="combate" value="true"/>
+    <property name="dialogo" value="velilla_gimmena"/>
+    <property name="dir" value="izquierda"/>
+    <property name="dis" value="3"/>
+    <property name="pack" value="abuelo"/>
+   </properties>
+  </object>
+  <object id="12" gid="10954" x="865" y="2207" width="32" height="32">
+   <properties>
+    <property name="combate" value="true"/>
+    <property name="dialogo" value="mena_gimmena"/>
+    <property name="dir" value="cara"/>
+    <property name="dis" value="6"/>
+    <property name="pack" value="monti"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>
