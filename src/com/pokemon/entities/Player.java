@@ -410,7 +410,7 @@ public class Player extends Sprite implements Serializable {
 							if(npcInteractuando.isVolver()){
 								npcInteractuando.volver();
 							}
-							iniciarCombate();
+							iniciarCombate(npcInteractuando.getDialogoCode());
 						}
 						if(npcInteractuando.isVolver()){
 							npcInteractuando.volver();
@@ -434,10 +434,10 @@ public class Player extends Sprite implements Serializable {
 		DPressed = false;	
 	}
 
-	private void iniciarCombate() {
+	private void iniciarCombate(String id) {
 		play.getCtx().getMapas().put(play.getMapa(), play);
 		((Game) Gdx.app.getApplicationListener())
-				.setScreen(new CombateEntrenador(play.getCtx(), this, "reverte", play));
+				.setScreen(new CombateEntrenador(play.getCtx(), this, id, play));
 	}
 
 	private boolean visible(NPC npc) {
