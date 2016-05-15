@@ -149,13 +149,13 @@ public class CombateEntrenador extends Enfrentamiento {
 			dibujarExp();
 			if ((orden && fase == 6) || (!orden && fase == 8)) {
 				pokemonEnemigo.setAlpha(1);
-				if (acierto != -1)
+				if (acierto != -1 && acierto != 1)
 					ataqueRecibido(true);
 				animacionVida(true);
 				dibujarVida(true);
 			} else {
 				pokemon.setAlpha(1);
-				if (acierto != -1)
+				if (acierto != -1 && acierto != 1)
 					ataqueRecibido(false);
 				animacionVida(false);
 				dibujarVida(false);
@@ -420,7 +420,9 @@ public class CombateEntrenador extends Enfrentamiento {
 
 						dialogo.setLineas(l1, l2);
 					} else {
+						Jugador aux = Jugador.nuevoJugador(jugador);
 						((Game) Gdx.app.getApplicationListener()).setScreen(pantalla);
+						pantalla.getCtx().jugador = aux;
 					}
 				} else if (fase == 13) {
 					fase = 3;

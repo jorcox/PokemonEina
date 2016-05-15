@@ -123,14 +123,14 @@ public class CombateP extends Enfrentamiento {
 			dibujarVidas();
 			if ((orden && fase == 6) || (!orden && fase == 8)) {
 				pokemonEnemigo.setAlpha(1);
-				if (acierto != -1)
+				if (acierto != -1 && acierto != 1)
 					ataqueRecibido(true);
 				animacionVida(true);
 				dibujarVida(true);
 			} else {
 				pokemon.setAlpha(1);
-				if (acierto != -1)
-					ataqueRecibido(false);
+				if (acierto != -1 && acierto != 1)
+					ataqueRecibido(false); 
 				animacionVida(false);
 				dibujarVida(false);
 			}
@@ -360,7 +360,9 @@ public class CombateP extends Enfrentamiento {
 
 						dialogo.setLineas(l1, l2);
 					} else {
+						Jugador aux = Jugador.nuevoJugador(jugador);
 						((Game) Gdx.app.getApplicationListener()).setScreen(pantalla);
+						pantalla.getCtx().jugador = aux;
 					}
 				} else if (fase == 13) {
 					/*
@@ -497,9 +499,9 @@ public class CombateP extends Enfrentamiento {
 					if (l1 == null) {
 						if (atrapado) {
 							jugador.getEquipo().add(pkmnpokemonEnemigo);
-							Jugador aux=Jugador.nuevoJugador(jugador);
+							Jugador aux = Jugador.nuevoJugador(jugador);
 							((Game) Gdx.app.getApplicationListener()).setScreen(pantalla);
-							pantalla.getCtx().jugador=aux;
+							pantalla.getCtx().jugador = aux;
 						} else {
 							animacionBall = 60;
 							xBall = 120;

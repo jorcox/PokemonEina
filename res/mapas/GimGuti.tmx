@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="16">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="17">
  <tileset firstgid="1" name="Caves" tilewidth="32" tileheight="32" tilecount="1592" columns="8">
   <image source="../Tilesets/Caves.png" trans="00aa00" width="256" height="6368"/>
  </tileset>
@@ -576,12 +576,14 @@
  <objectgroup name="Objetos">
   <object id="6" gid="2729" x="323" y="1279" width="32" height="32">
    <properties>
+    <property name="ID" value="GGC1"/>
     <property name="cartel" value="gimguti1"/>
     <property name="mostrar" value="true"/>
    </properties>
   </object>
   <object id="7" gid="2725" x="480" y="863" width="32" height="32">
    <properties>
+    <property name="ID" value="MO1"/>
     <property name="item" value="Corte"/>
     <property name="mostrar" value="true"/>
     <property name="used" value="false"/>
@@ -616,7 +618,7 @@
     <property name="pack" value="hilario"/>
    </properties>
   </object>
-  <object id="15" gid="7818" x="671" y="1280" width="32" height="32">
+  <object id="16" gid="7818" x="673" y="1280" width="32" height="32">
    <properties>
     <property name="combate" value="false"/>
     <property name="dialogo" value="ceresuela_gimguti"/>

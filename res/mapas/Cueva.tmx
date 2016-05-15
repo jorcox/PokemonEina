@@ -509,43 +509,51 @@
   </properties>
   <object id="1" gid="12352" x="2718.67" y="1116" width="32" height="32">
    <properties>
+    <property name="ID" value="CC1"/>
     <property name="cartel" value="cueva1"/>
     <property name="mostrar" value="true"/>
    </properties>
   </object>
   <object id="2" gid="12352" x="1277.33" y="1122.67" width="32" height="32">
    <properties>
+    <property name="ID" value="CC2"/>
     <property name="cartel" value="cueva2"/>
     <property name="mostrar" value="true"/>
    </properties>
   </object>
   <object id="5" gid="9221" x="2236" y="1341.33" width="32" height="32">
    <properties>
+    <property name="ID" value="CP4"/>
     <property name="mostrar" value="true"/>
    </properties>
   </object>
   <object id="6" gid="9221" x="2174.67" y="1628" width="32" height="32">
    <properties>
+    <property name="ID" value="CP1"/>
     <property name="mostrar" value="true"/>
    </properties>
   </object>
   <object id="7" gid="9221" x="1668" y="2241.33" width="32" height="32">
    <properties>
+    <property name="ID" value="CP2"/>
     <property name="mostrar" value="true"/>
    </properties>
   </object>
   <object id="8" gid="9221" x="1498.67" y="2180" width="32" height="32">
    <properties>
+    <property name="ID" value="CP3"/>
     <property name="mostrar" value="true"/>
    </properties>
   </object>
   <object id="10" gid="9221" x="1693.33" y="1566.67" width="32" height="32">
    <properties>
+    <property name="ID" value="CP5"/>
     <property name="mostrar" value="true"/>
    </properties>
   </object>
   <object id="12" gid="9221" x="672.333" y="929" width="32" height="32">
    <properties>
+    <property name="ID" value="CP7"/>
     <property name="item" value="Poción"/>
     <property name="mostrar" value="true"/>
     <property name="used" value="false"/>
@@ -553,6 +561,7 @@
   </object>
   <object id="14" gid="9221" x="1374.67" y="798.667" width="32" height="32">
    <properties>
+    <property name="ID" value="CP6"/>
     <property name="mostrar" value="true"/>
    </properties>
   </object>

@@ -376,6 +376,7 @@ public class Play extends Pantalla {
 				player.velocity.x = 0;
 				player.animationTime = 0;
 				player.setLastPressed(2);
+				getCtx().lastPressed = 2;
 				if (getCtx().lastPressed == 0) {
 					getCtx().lastPressed = 2;
 				}
@@ -384,8 +385,9 @@ public class Play extends Pantalla {
 				player.checkCombat();
 				player.velocity.x = -player.speed;
 				player.velocity.y = 0;
-				player.animationTime = 0;
+				player.animationTime = 0;				
 				player.setLastPressed(1);
+				getCtx().lastPressed = 1;
 				if (getCtx().lastPressed == 0) {
 					getCtx().lastPressed = 1;
 				}
@@ -396,6 +398,7 @@ public class Play extends Pantalla {
 				player.velocity.x = 0;
 				player.animationTime = 0;
 				player.setLastPressed(3);
+				getCtx().lastPressed = 3;
 				if (getCtx().lastPressed == 0) {
 					getCtx().lastPressed = 3;
 				}
@@ -406,6 +409,7 @@ public class Play extends Pantalla {
 				player.velocity.y = 0;
 				player.animationTime = 0;
 				player.setLastPressed(4);
+				getCtx().lastPressed = 4;
 				if (getCtx().lastPressed == 0) {
 					getCtx().lastPressed = 4;
 				}
@@ -584,7 +588,7 @@ public class Play extends Pantalla {
 					player.velocity.y = 0;
 				}
 				player.animationTime = 0;
-				getCtx().lastPressed = 2;
+				//getCtx().lastPressed = 2;
 				player.WPressed = false;
 			} else if (movimiento && keycode == getCtx().getTeclaLeft()) {
 				if (player.DPressed) {
@@ -600,7 +604,7 @@ public class Play extends Pantalla {
 					player.velocity.x = 0;
 				}
 				player.animationTime = 0;
-				getCtx().lastPressed = 1;
+				//getCtx().lastPressed = 1;
 				player.APressed = false;
 			} else if (movimiento && keycode == getCtx().getTeclaDown()) {
 				if (player.WPressed) {
@@ -616,7 +620,7 @@ public class Play extends Pantalla {
 					player.velocity.y = 0;
 				}
 				player.animationTime = 0;
-				getCtx().lastPressed = 3;
+				//getCtx().lastPressed = 3;
 				player.SPressed = false;
 			} else if (movimiento && keycode == getCtx().getTeclaRight()) {
 				if (player.APressed) {
@@ -632,7 +636,7 @@ public class Play extends Pantalla {
 					player.velocity.x = 0;
 				}
 				player.animationTime = 0;
-				getCtx().lastPressed = 4;
+				//getCtx().lastPressed = 4;
 				player.DPressed = false;
 			} else if (keycode == getCtx().getTeclaB()) {
 				player.SpacePressed = false;
@@ -654,7 +658,7 @@ public class Play extends Pantalla {
 			arrayP.add(db.getPokemon(2));
 			arrayP.add(db.getPokemon(3));
 			arrayP.add(db.getPokemon(0));
-			//arrayP.add(db.getPokemon(5));
+			arrayP.add(db.getPokemon(5));
 			getCtx().jugador.setEquipo(arrayP);
 			db.shutdown();
 		} catch (Exception e) {

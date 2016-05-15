@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="40" tilewidth="32" tileheight="32" nextobjectid="123">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="40" tilewidth="32" tileheight="32" nextobjectid="134">
  <tileset firstgid="1" name="Entorno" tilewidth="32" tileheight="32" tilecount="5" columns="5">
   <image source="../Tilesets/Entorno.png" width="160" height="32"/>
   <tile id="0">
@@ -50,16 +50,18 @@
  <objectgroup name="Trans" offsetx="-1" offsety="0">
   <object id="121" gid="13" x="223" y="193" width="32" height="32">
    <properties>
+    <property name="encara" value="3"/>
     <property name="mapa" value="bosque"/>
     <property name="x" value="352"/>
-    <property name="y" value="1500"/>
+    <property name="y" value="2650"/>
    </properties>
   </object>
   <object id="122" gid="13" x="257" y="193" width="32" height="32">
    <properties>
+    <property name="encara" value="3"/>
     <property name="mapa" value="bosque"/>
     <property name="x" value="352"/>
-    <property name="y" value="1500"/>
+    <property name="y" value="2650"/>
    </properties>
   </object>
  </objectgroup>
@@ -296,32 +298,32 @@
     <property name="pack" value="guardia"/>
    </properties>
   </object>
-  <object id="113" gid="13" x="-1" y="576" width="32" height="32">
+  <object id="113" gid="13" x="128" y="704" width="32" height="32">
    <properties>
     <property name="activo" value="false"/>
     <property name="combate" value="false"/>
     <property name="dialogo" value="estudiante_betan_tranvia"/>
-    <property name="dir" value="derecha"/>
+    <property name="dir" value="espalda"/>
     <property name="dis" value="5"/>
     <property name="pack" value="guardia"/>
    </properties>
   </object>
-  <object id="114" gid="13" x="0" y="607" width="32" height="32">
+  <object id="114" gid="13" x="96" y="704" width="32" height="32">
    <properties>
     <property name="activo" value="false"/>
     <property name="combate" value="false"/>
     <property name="dialogo" value="estudiante_betan_tranvia"/>
-    <property name="dir" value="derecha"/>
+    <property name="dir" value="espalda"/>
     <property name="dis" value="5"/>
     <property name="pack" value="guardiarojo"/>
    </properties>
   </object>
-  <object id="115" gid="13" x="-1" y="640" width="32" height="32">
+  <object id="115" gid="13" x="64" y="704" width="32" height="32">
    <properties>
     <property name="activo" value="false"/>
     <property name="combate" value="false"/>
     <property name="dialogo" value="estudiante_betan_tranvia"/>
-    <property name="dir" value="derecha"/>
+    <property name="dir" value="espalda"/>
     <property name="dis" value="5"/>
     <property name="pack" value="guardia"/>
    </properties>
@@ -334,6 +336,106 @@
     <property name="dir" value="espalda"/>
     <property name="dis" value="5"/>
     <property name="pack" value="marcos"/>
+   </properties>
+  </object>
+  <object id="123" gid="13" x="320.5" y="704.5" width="32" height="32">
+   <properties>
+    <property name="activo" value="false"/>
+    <property name="combate" value="false"/>
+    <property name="dialogo" value="estudiante_betan_tranvia"/>
+    <property name="dir" value="espalda"/>
+    <property name="dis" value="5"/>
+    <property name="pack" value="guardia"/>
+   </properties>
+  </object>
+  <object id="124" gid="13" x="160.5" y="704.5" width="32" height="32">
+   <properties>
+    <property name="activo" value="false"/>
+    <property name="combate" value="false"/>
+    <property name="dialogo" value="estudiante_betan_tranvia"/>
+    <property name="dir" value="espalda"/>
+    <property name="dis" value="5"/>
+    <property name="pack" value="guardiarojo"/>
+   </properties>
+  </object>
+  <object id="125" gid="13" x="192.5" y="704.5" width="32" height="32">
+   <properties>
+    <property name="activo" value="false"/>
+    <property name="combate" value="false"/>
+    <property name="dialogo" value="estudiante_betan_tranvia"/>
+    <property name="dir" value="espalda"/>
+    <property name="dis" value="5"/>
+    <property name="pack" value="guardia"/>
+   </properties>
+  </object>
+  <object id="127" gid="13" x="224.75" y="704.75" width="32" height="32">
+   <properties>
+    <property name="activo" value="false"/>
+    <property name="combate" value="false"/>
+    <property name="dialogo" value="estudiante_betan_tranvia"/>
+    <property name="dir" value="espalda"/>
+    <property name="dis" value="5"/>
+    <property name="pack" value="guardiarojo"/>
+   </properties>
+  </object>
+  <object id="128" gid="13" x="256.75" y="704.75" width="32" height="32">
+   <properties>
+    <property name="activo" value="false"/>
+    <property name="combate" value="false"/>
+    <property name="dialogo" value="estudiante_betan_tranvia"/>
+    <property name="dir" value="espalda"/>
+    <property name="dis" value="5"/>
+    <property name="pack" value="guardia"/>
+   </properties>
+  </object>
+  <object id="129" gid="13" x="352.25" y="704.25" width="32" height="32">
+   <properties>
+    <property name="activo" value="false"/>
+    <property name="combate" value="false"/>
+    <property name="dialogo" value="estudiante_betan_tranvia"/>
+    <property name="dir" value="espalda"/>
+    <property name="dis" value="5"/>
+    <property name="pack" value="guardiarojo"/>
+   </properties>
+  </object>
+  <object id="130" gid="13" x="-2" y="609.5" width="32" height="32">
+   <properties>
+    <property name="activo" value="false"/>
+    <property name="combate" value="false"/>
+    <property name="dialogo" value="estudiante_betan_tranvia"/>
+    <property name="dir" value="derecha"/>
+    <property name="dis" value="5"/>
+    <property name="pack" value="guardiarojo"/>
+   </properties>
+  </object>
+  <object id="131" gid="13" x="-2" y="577.5" width="32" height="32">
+   <properties>
+    <property name="activo" value="false"/>
+    <property name="combate" value="false"/>
+    <property name="dialogo" value="estudiante_betan_tranvia"/>
+    <property name="dir" value="derecha"/>
+    <property name="dis" value="5"/>
+    <property name="pack" value="guardia"/>
+   </properties>
+  </object>
+  <object id="132" gid="13" x="-2" y="640.5" width="32" height="32">
+   <properties>
+    <property name="activo" value="false"/>
+    <property name="combate" value="false"/>
+    <property name="dialogo" value="estudiante_betan_tranvia"/>
+    <property name="dir" value="derecha"/>
+    <property name="dis" value="5"/>
+    <property name="pack" value="guardia"/>
+   </properties>
+  </object>
+  <object id="133" gid="13" x="288" y="704" width="32" height="32">
+   <properties>
+    <property name="activo" value="false"/>
+    <property name="combate" value="false"/>
+    <property name="dialogo" value="estudiante_betan_tranvia"/>
+    <property name="dir" value="espalda"/>
+    <property name="dis" value="5"/>
+    <property name="pack" value="guardiarojo"/>
    </properties>
   </object>
  </objectgroup>
