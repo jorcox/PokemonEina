@@ -1,8 +1,11 @@
 package com.pokemon.pantallas;
 
 import habilidad.Habilidad;
+import mapas.Posicion;
+import mapas.PosicionIniciales;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import pokemon.Pokemon;
@@ -65,7 +68,7 @@ public class Enfrentamiento extends Pantalla {
 	protected int seleccion = 1;
 	protected boolean seleccionAprender = true;
 	protected int seleccionAtaque = 1;
-	protected int seleccionEnemigo=0;
+	protected int seleccionEnemigo = 0;
 	protected Dialogo dialogo;
 	protected Jugador jugador;
 	protected Player player;
@@ -83,7 +86,7 @@ public class Enfrentamiento extends Pantalla {
 
 	public Enfrentamiento(ArchivoGuardado ctx, Player player, Pantalla pantalla) {
 		this.setCtx(ctx);
-		jugador=getCtx().jugador;
+		jugador = getCtx().jugador;
 		dialogo = new Dialogo("es", "ES");
 		this.jugador = jugador;
 		this.player = player;
@@ -453,10 +456,10 @@ public class Enfrentamiento extends Pantalla {
 
 			if (!dialogo.isWriting()) {
 				actualPsS = pkmnpokemonEnemigo.getPs();
-				pkmnAux=new Pokemon(pkmnpokemonEnemigo);
+				pkmnAux = new Pokemon(pkmnpokemonEnemigo);
 				acierto = combate.ejecutar(pkmn, pkmnAux, pkmn.getHabilidad(seleccionAtaque));
 				if (acierto == 0) {
-					pkmnpokemonEnemigo=pkmnAux;
+					pkmnpokemonEnemigo = pkmnAux;
 					fase++;
 				} else {
 					fase = 10;
@@ -481,15 +484,15 @@ public class Enfrentamiento extends Pantalla {
 				}
 			}
 		} else {
-			
 
 			if (!dialogo.isWriting()) {
-				pkmnAux=new Pokemon(pkmn);
-				acierto = combate.ejecutar(pkmnpokemonEnemigo, pkmnAux, pkmnpokemonEnemigo.getHabilidad(seleccionEnemigo));
+				pkmnAux = new Pokemon(pkmn);
+				acierto = combate.ejecutar(pkmnpokemonEnemigo, pkmnAux,
+						pkmnpokemonEnemigo.getHabilidad(seleccionEnemigo));
 				actualPs = pkmn.getPs();
 				if (acierto == 0) {
 					fase++;
-					pkmn=pkmnAux;
+					pkmn = pkmnAux;
 				} else {
 					fase = 11;
 					if (acierto == -1) {
@@ -592,9 +595,9 @@ public class Enfrentamiento extends Pantalla {
 			break;
 		case 4: // huir
 			if (!trainer) {
-				Jugador aux=Jugador.nuevoJugador(jugador);
+				Jugador aux = Jugador.nuevoJugador(jugador);
 				((Game) Gdx.app.getApplicationListener()).setScreen(pantalla);
-				pantalla.getCtx().jugador=aux;
+				pantalla.getCtx().jugador = aux;
 			}
 
 			break;
@@ -683,6 +686,19 @@ public class Enfrentamiento extends Pantalla {
 			return habilidad;
 		}
 		return habilidad;
+	}
+
+	public void combatePerdido() {
+		HashMap<String, Posicion> map = new PosicionIniciales().getHashMap();
+		Posicion pos=map.get(getCtx().map);
+		Jugador aux = Jugador.nuevoJugador(jugador);
+		((Game) Gdx.app.getApplicationListener()).setScreen(pantalla);
+		pantalla.getCtx().jugador = aux;
+		pantalla.getCtx().x=pos.getX();
+		pantalla.getCtx().y=pos.getY();
+		for(Pokemon poke :getCtx().jugador.getEquipo()){
+			poke.sanar();
+		}
 	}
 
 }
