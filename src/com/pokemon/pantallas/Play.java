@@ -125,11 +125,15 @@ public class Play extends Pantalla {
 				TextureMapObject t = (TextureMapObject) o;
 				/* Carga de atributos */
 				String dirVista = (String) t.getProperties().get("dir");
-				boolean combate = Boolean.parseBoolean((String) t.getProperties().get("combate"));
 				int disVista = Integer.parseInt((String) t.getProperties().get("dis"));
-				String dialogoCode = (String) t.getProperties().get("dialogo");
-				boolean activo = Boolean.parseBoolean((String) t.getProperties().get("activo"));
-				boolean volver = Boolean.parseBoolean((String) t.getProperties().get("activo"));
+				String dialogoCode = (String) t.getProperties().get("dialogo");				
+				boolean combate = Boolean.parseBoolean((String) t.getProperties().get("combate"));
+				boolean activo = true;
+				if(t.getProperties().containsKey("activo")){
+					activo = Boolean.parseBoolean((String) t.getProperties().get("activo"));
+				}
+				boolean volver = t.getProperties().containsKey("volver");
+				
 				TextureAtlas personajePack = new TextureAtlas(
 						"res/imgs/entrenadoresWorld/" + (String) t.getProperties().get("pack") + ".pack");
 				/* Creación del los NPCs */

@@ -31,7 +31,7 @@ public class Player extends Sprite implements Serializable {
 
 	public Vector2 velocity = new Vector2();
 
-	public float speed = 300 * 2;
+	public float speed = 60 * 2;
 
 	private float gravity = 60 * 1.8f;
 
