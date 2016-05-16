@@ -57,6 +57,8 @@ public class NPC extends Sprite implements Serializable {
 	private boolean volver;
 	
 	private boolean volviendo = false;
+	
+	private boolean marcos = false;
 
 	private float x, y;
 
@@ -413,6 +415,14 @@ public class NPC extends Sprite implements Serializable {
 
 	public void setyOriginal(float yOriginal) {
 		this.yOriginal = yOriginal;
+	}
+
+	public boolean isMarcos() {
+		return marcos;
+	}
+	
+	public void setMarcos(boolean marcos) {
+		this.marcos = marcos;
 	}
 
 }

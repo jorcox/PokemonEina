@@ -133,6 +133,10 @@ public class Play extends Pantalla {
 					activo = Boolean.parseBoolean((String) t.getProperties().get("activo"));
 				}
 				boolean volver = t.getProperties().containsKey("volver");
+				boolean marcos = false;
+				if(t.getProperties().containsKey("marcos")){
+					marcos = Boolean.parseBoolean((String) t.getProperties().get("marcos"));
+				}
 				
 				TextureAtlas personajePack = new TextureAtlas(
 						"res/imgs/entrenadoresWorld/" + (String) t.getProperties().get("pack") + ".pack");
@@ -148,6 +152,7 @@ public class Play extends Pantalla {
 				}				
 				npc.setActivo(activo);
 				npc.setVolver(volver);
+				npc.setMarcos(marcos);
 				npcs.add(npc);
 			}			
 			for (MapObject obj : map.getLayers().get("Objetos").getObjects()){
@@ -180,6 +185,8 @@ public class Play extends Pantalla {
 						npc.setActivo(npcAlmacenado.isActivo());
 						npc.setPosicionOriginal(npcAlmacenado.getxOriginal(), npcAlmacenado.getyOriginal());
 						npc.setVolver(npcAlmacenado.isActivo());
+						npc.setMarcos(npcAlmacenado.isMarcos());
+						npc.setDireccionVision(npcAlmacenado.getDireccionVision());
 						break;
 					}
 				}

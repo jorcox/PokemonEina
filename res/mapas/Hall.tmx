@@ -345,7 +345,7 @@
     <property name="pack" value="guardia"/>
    </properties>
   </object>
-  <object id="116" gid="13" x="535" y="583" width="32" height="32">
+  <object id="116" gid="13" x="536" y="580" width="32" height="32">
    <properties>
     <property name="activo" value="false"/>
     <property name="ancho" value="true"/>
@@ -353,7 +353,9 @@
     <property name="dialogo" value="marcos_hall"/>
     <property name="dir" value="espalda"/>
     <property name="dis" value="5"/>
+    <property name="marcos" value="true"/>
     <property name="pack" value="marcos"/>
+    <property name="volver" value="true"/>
    </properties>
   </object>
   <object id="123" gid="13" x="320.5" y="704.5" width="32" height="32">
