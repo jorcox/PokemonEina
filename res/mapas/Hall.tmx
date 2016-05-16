@@ -67,7 +67,7 @@
   <object id="140" gid="13" x="2255" y="415" width="32" height="32">
    <properties>
     <property name="encara" value="3"/>
-    <property name="mapa" value="cueva"/>
+    <property name="mapa" value="Cueva"/>
     <property name="x" value="2880"/>
     <property name="y" value="2035"/>
    </properties>
@@ -75,7 +75,7 @@
   <object id="141" gid="13" x="2255" y="448" width="32" height="32">
    <properties>
     <property name="encara" value="3"/>
-    <property name="mapa" value="cueva"/>
+    <property name="mapa" value="Cueva"/>
     <property name="x" value="2880"/>
     <property name="y" value="2035"/>
    </properties>

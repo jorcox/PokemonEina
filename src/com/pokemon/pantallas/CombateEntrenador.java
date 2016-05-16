@@ -2,6 +2,7 @@ package com.pokemon.pantallas;
 
 import java.util.ArrayList;
 
+import pokemon.CreadorEquipo;
 import pokemon.Pokemon;
 import aurelienribon.tweenengine.Tween;
 import core.Combate;
@@ -26,6 +27,7 @@ import entrenadores.Jugador;
 public class CombateEntrenador extends Enfrentamiento {
 
 	private String idEntrenador;
+	private String nombre;
 	private Jugador entrenadorE;
 
 	TextureRegion[] spritesEntrenador;
@@ -261,10 +263,10 @@ public class CombateEntrenador extends Enfrentamiento {
 						}
 						if (dialogo.getId().equals("combate_entrenador") || dialogo.getId().equals("adelante")) {
 							if (l1.contains("${ENTRENADOR}")) {
-								l1 = l1.replace("${ENTRENADOR}", "ENTRENADOR " + idEntrenador.toUpperCase());
+								l1 = l1.replace("${ENTRENADOR}",  nombre.toUpperCase());
 							}
 							if (l2.contains("${ENTRENADOR}")) {
-								l2 = l2.replace("${ENTRENADOR}", "ENTRENADOR " + idEntrenador.toUpperCase());
+								l2 = l2.replace("${ENTRENADOR}", nombre.toUpperCase());
 							}
 							if (l1.contains("${POKEMONE}")) {
 								l1 = l1.replace("${POKEMONE}", pkmnpokemonEnemigo.getNombre());
@@ -676,19 +678,11 @@ public class CombateEntrenador extends Enfrentamiento {
 
 	public void setEntrenador() {
 		entrenadorE = new Jugador(idEntrenador, true);
-		ArrayList<Pokemon> lPoke = new ArrayList<Pokemon>();
-		try {
-			db = new BaseDatos("pokemon_base");
-			pkmnpokemonEnemigo = db.getPokemon(3);
-			lPoke.add(pkmnpokemonEnemigo);
-			lPoke.add(db.getPokemon(2));
-			db.shutdown();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+		CreadorEquipo creador = new CreadorEquipo();
+		ArrayList<Pokemon> lPoke = creador.crear(idEntrenador);
 		entrenadorE.setEquipo(lPoke);
 		pkmnpokemonEnemigo = entrenadorE.getEquipo().get(iPokemonEnemigo);
+		nombre = creador.nombrar(idEntrenador);
 	}
 
 	public void dibujarPokeballs() {
@@ -740,7 +734,7 @@ public class CombateEntrenador extends Enfrentamiento {
 		pkmnpokemonEnemigo = entrenadorE.getPokemon(iPokemonEnemigo);
 		pokemonEnemigo = new Sprite(
 				new Texture("res/imgs/pokemon/" + pkmnpokemonEnemigo.getNombre().toLowerCase() + ".png"));
-		String[] frase = { "�ENTRENADOR " + idEntrenador.toUpperCase() + " utiliza a "
+		String[] frase = { "� " + nombre.toUpperCase() + " utiliza a "
 				+ entrenadorE.getPokemon(iPokemonEnemigo).getNombre() + "!" };
 		fase = 13;
 		orden = combate.getVelocidad(iPokemon);
