@@ -66,6 +66,7 @@ public class CombateEntrenador extends Enfrentamiento {
 		if (fase == 0) {
 
 			entrenador.draw(batch);
+			entrenador.setSize(160, 160);
 			protagonista.draw(batch);
 
 		}
