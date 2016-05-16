@@ -28,7 +28,7 @@ import entrenadores.Jugador;
 
 public class Evolucion extends Pantalla {
 
-	private Screen screen;
+	private Pantalla screen;
 	private Jugador jugador;
 	private Dialogo dialogo;
 	private Pokemon pkmn, pkmnEvolucion;
@@ -40,7 +40,7 @@ public class Evolucion extends Pantalla {
 	BitmapFont font;
 	SpriteBatch batch;
 
-	public Evolucion(ArchivoGuardado ctx, Screen screen, Jugador jugador, int i) {
+	public Evolucion(ArchivoGuardado ctx, Pantalla screen, Jugador jugador, int i) {
 		this.setCtx(ctx);
 		this.screen=screen;
 		dialogo = new Dialogo("es", "ES");
@@ -135,8 +135,10 @@ public class Evolucion extends Pantalla {
 				}
 				if(l1==null){
 					pkmn.evolucionar(pkmnEvolucion.getNombre());
+					Jugador aux = Jugador.nuevoJugador(jugador);
 					((Game) Gdx.app.getApplicationListener())
 					.setScreen(screen);
+					screen.getCtx().jugador=aux;
 				}
 
 				dialogo.setLineas(l1, l2);
