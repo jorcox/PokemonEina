@@ -332,6 +332,7 @@ public class MenuPokemon extends Pantalla {
 						e.veces = 0;
 						e.cambio = false;
 					}
+					e.actualPsS=e.pkmnpokemonEnemigo.getPs();
 					e.setIPokemon(i);
 					((Game) Gdx.app.getApplicationListener()).setScreen(e);
 				}

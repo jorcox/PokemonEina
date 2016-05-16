@@ -777,7 +777,7 @@
  <objectgroup name="Personajes">
   <object id="44" gid="19231" x="224" y="2465" width="32" height="32">
    <properties>
-    <property name="combate" value="false"/>
+    <property name="combate" value="true"/>
     <property name="dialogo" value="teleco_bosque"/>
     <property name="dir" value="izquierda"/>
     <property name="dis" value="4"/>
@@ -795,7 +795,7 @@
   </object>
   <object id="46" gid="19231" x="1278" y="1280" width="32" height="32">
    <properties>
-    <property name="combate" value="false"/>
+    <property name="combate" value="true"/>
     <property name="dialogo" value="entrenadora_bosque"/>
     <property name="dir" value="derecha"/>
     <property name="dis" value="4"/>
@@ -804,7 +804,7 @@
   </object>
   <object id="47" gid="19231" x="1377" y="961" width="32" height="32">
    <properties>
-    <property name="combate" value="false"/>
+    <property name="combate" value="true"/>
     <property name="dialogo" value="entrenador_tfg_bosque"/>
     <property name="dir" value="izquierda"/>
     <property name="dis" value="4"/>
@@ -813,7 +813,7 @@
   </object>
   <object id="48" gid="19231" x="1279" y="672" width="32" height="32">
    <properties>
-    <property name="combate" value="false"/>
+    <property name="combate" value="true"/>
     <property name="dialogo" value="adrian_bosque"/>
     <property name="dir" value="derecha"/>
     <property name="dis" value="4"/>
