@@ -65,6 +65,10 @@ public class Player extends Sprite implements Serializable {
 	private NPC npcInteractuando;
 
 	public boolean terminado = false;
+	
+	public NPC npcMarcos;
+	
+	public boolean marcos = false;
 
 	ArrayList<NPC> npcs;
 
@@ -297,10 +301,25 @@ public class Player extends Sprite implements Serializable {
 					&& texture.getProperties().get("rompible").equals("true")) {
 				object.getProperties().put("mostrar", "false");
 				texture.getProperties().put("mostrar", "false");
+				/* Caso Marcos */
+				if(object.getProperties().get("ID").equals("FT")){
+					for (NPC npc : npcs) {
+						if(npc.isMarcos()){
+							npcMarcos = npc;
+							interaccionMarcos(npc);
+							marcos = true;
+						}
+					}
+				}
 			}
 			/* Actualiza el flag global de colision */
 			collisionObj |= currentCollision;
 		}
+		
+		if(marcos){
+			interaccionMarcos(npcMarcos);
+		}
+		
 
 		/*
 		 * Colision de NPC
@@ -377,15 +396,62 @@ public class Player extends Sprite implements Serializable {
 		}
 	}
 
+	private void interaccionMarcos(NPC npc) {
+		if(!marcos) {
+			play.pauseMovimiento();
+			npcInteractuando = npc;
+			npc.setActivo(false);
+			velocity.x = 0;
+			velocity.y = 0;
+			play.pauseMovimiento();	
+			marcos = false;
+		}
+		
+		if (!npcInteractuando.isDialogado()) {
+			play.interactNPC(npcInteractuando);
+			npcInteractuando.setDialogado(true);
+		} else {
+			/*
+			 * Cuando deja de dialogar se procede a devolver la libertad
+			 * al jugador o iniciar el compate
+			 */
+			if (!play.isDialogando()) {
+				if (npcInteractuando.hayCombate()) {
+					if(npcInteractuando.isVolver()){
+						npcInteractuando.setX(478);
+						npcInteractuando.setY(700);
+						npcInteractuando.setDireccionVision("derecha");
+						npcInteractuando.volver();
+					}
+					iniciarCombate("marcos");
+				}
+				if(npcInteractuando.isVolver()){
+					npcInteractuando.setxOriginal(478);
+					npcInteractuando.setyOriginal(700);
+					npcInteractuando.setDireccionVision("derecha");
+					npcInteractuando.volver();
+				}
+				resetMovimiento();
+				play.resumeMovimiento();
+				esperando = false;
+				colisionNPC = false;
+			}
+		}
+		
+		
+
+		
+	}
+
 	private void interaccionEntrenadores() {
 		/* Interacción entrenadores */
 		for (NPC npc : npcs) {
 			if (visible(npc) && npc.isActivo()) {
+				play.pauseMovimiento();
 				npcInteractuando = npc;
 				npc.setActivo(false);
 				velocity.x = 0;
-				velocity.y = 0;
-				play.pauseMovimiento();
+				velocity.y = 0;				
 				npc.moverAPersonaje(this);
 				esperando = true;
 			}

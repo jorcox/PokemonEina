@@ -5,7 +5,7 @@ import pokemon.Pokemon;
 public class Antidoto extends Objeto {
 
 	public Antidoto() {
-		super("Antídoto");
+		super("AntÃ­doto");
 	}
 
 	@Override
