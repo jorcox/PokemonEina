@@ -182,7 +182,15 @@ public class PokemonIniciales extends Pantalla {
 				String l2 = dialogo.siguienteLinea();
 				if (elegir) {
 					if (fin) {
-						elegirPokemon(seleccion);
+						int indice = 1;
+						if (seleccion == 0) {
+							indice = 1;
+						} else if (seleccion == 1) {
+							indice = 4;
+						} else if (seleccion == 2) {
+							indice = 7;
+						}
+						elegirPokemon(indice);
 
 					} else if (si_no) {
 						String nombre = "";
@@ -259,7 +267,7 @@ public class PokemonIniciales extends Pantalla {
 	private void elegirPokemon(int i) {
 		try {
 			BaseDatos bd = new BaseDatos("pokemon_base");
-			Pokemon poke = bd.getPokemonTipo(seleccion+1);
+			Pokemon poke = bd.getPokemonTipo(seleccion);
 			Habilidad[] habs = new Habilidad[4];
 			if (seleccion == 0) {
 				poke.setTipo(Tipo.PLANTA);
@@ -274,7 +282,7 @@ public class PokemonIniciales extends Pantalla {
 			}
 			bd.shutdown();
 			poke.setHabilidades(habs);
-			for(int j=0;j<5;j++){
+			for (int j = 0; j < 5; j++) {
 				poke.subirNivel(0, 0);
 			}
 			poke.sanar();
