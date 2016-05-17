@@ -1,5 +1,6 @@
 package entrenadores;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pokemon.Pokemon;
@@ -17,7 +18,7 @@ public abstract class Entrenador {
 
 	private String nombre;
 	private boolean esHombre;
-	private List<Pokemon> equipo;
+	private List<Pokemon> equipo = new ArrayList<>();
 
 	public String getNombre() {
 		return nombre;

@@ -204,7 +204,6 @@ public class MenuMochila extends Pantalla {
 								String[] frase = { "¡Ya tienes 6 Pokemon, no puedes llevar más!", "" };
 								dialogo.setFrases(frase);
 								dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
-
 							}
 						}
 						if (l1 != null && ok) {
