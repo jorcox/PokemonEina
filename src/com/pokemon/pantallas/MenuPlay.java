@@ -101,9 +101,7 @@ public class MenuPlay extends Pantalla {
 			regButton4 = new Sprite(selButton);
 			save = new Sprite(sSel);
 			break;
-
 		}
-
 	}
 
 	private void resetSelection() {
@@ -193,9 +191,9 @@ public class MenuPlay extends Pantalla {
 		} else if (keycode == getCtx().getTeclaB()) {
 			if(play.getCtx().getMapas().containsKey(map)){				
 				Jugador aux = Jugador.nuevoJugador(getCtx().jugador);
-				Pantalla pant=play.getCtx().getMapas().get(map);
+				Pantalla pant = play.getCtx().getMapas().get(map);
 				((Game) Gdx.app.getApplicationListener()).setScreen(pant);
-				pant.getCtx().jugador=aux;
+				pant.getCtx().jugador = aux;
 			} else {
 				((Game) Gdx.app.getApplicationListener()).setScreen(new Play(getCtx(), x, y,
 						lastPressed, map));
@@ -239,6 +237,7 @@ public class MenuPlay extends Pantalla {
 		getCtx().lastPressed = lastPressed;
 		getCtx().map = map;
 		getCtx().getMapas().put(play.getMapa(), play);
+		getCtx().existe = true;
 		
 		boolean saved = Guardador.guardar(getCtx());
 		writing = true;

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.pokemon.pantallas.Pantalla;
+import com.pokemon.pantallas.PantallaInicio;
 import com.pokemon.pantallas.Play;
 import com.pokemon.pantallas.PokemonIniciales;
 import com.pokemon.utilidades.ArchivoGuardado;
@@ -27,16 +28,14 @@ public class PokemonAdaByron extends Game {
 		ArchivoGuardado ctx;
 		try {
 			ctx = Importador.importar();
-			HashMap<String, Pantalla> hM = ctx.getMapas();
-			if(hM.containsKey(ctx.map)){
-				setScreen(hM.get(ctx.map));
-			}
-			//setScreen(new Play(ctx));
+			setScreen(new PantallaInicio(ctx));
+			//setScreen(new PokemonIniciales(ctx));
 		} catch(FileNotFoundException e) {
 			ctx = new ArchivoGuardado();
+			ctx.existe = false;
 			//setScreen(new Play(ctx, 500, 200, 3, "Hendrix.tmx"));
 			//setScreen(new Play(ctx, 200, 300, 3, "Tranvia_n.tmx"));
-			setScreen(new Play(ctx, 600, 800, 3, "Hall.tmx"));
+			setScreen(new PantallaInicio(ctx));
 			//setScreen(new Play(ctx, 500, 2000, 3, "GimGuti.tmx"));
 			//setScreen(new Play(ctx, 500, 500, 3, "Geoslab.tmx"));
 			//setScreen(new Play(ctx,400, 2000, 3, "GimGuti.tmx"));

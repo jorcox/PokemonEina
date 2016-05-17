@@ -176,7 +176,7 @@ public class Bienvenida extends Pantalla {
 				} else {
 					m.stop();
 					((Game) Gdx.app.getApplicationListener())
-							.setScreen(new Play(getCtx(), 60,60,3,"Tranvia_n.tmx"));
+							.setScreen(new PokemonIniciales(getCtx()));
 				}
 				break;
 			case (Keys.UP):
