@@ -267,7 +267,7 @@ public class PokemonIniciales extends Pantalla {
 	private void elegirPokemon(int i) {
 		try {
 			BaseDatos bd = new BaseDatos("pokemon_base");
-			Pokemon poke = bd.getPokemonTipo(seleccion);
+			Pokemon poke = bd.getPokemonTipo(i);
 			Habilidad[] habs = new Habilidad[4];
 			if (seleccion == 0) {
 				poke.setTipo(Tipo.PLANTA);
