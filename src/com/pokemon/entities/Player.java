@@ -296,14 +296,12 @@ public class Player extends Sprite implements Serializable {
 			}
 			/* Fuerza/Romper */
 
-			if (currentCollision && texture.getProperties().containsKey("cortable")
-					&& texture.getProperties().get("cortable").equals("true")
+			if (currentCollision && texture.getProperties().containsKey("corte")
 					&& play.getCtx().mochila.tieneCorte()) {
 				object.getProperties().put("mostrar", "false");
 				texture.getProperties().put("mostrar", "false");
 			}
 			
-			// TODO Comprobar Fuerza/Romper del personaje
 			if (currentCollision && texture.getProperties().containsKey("rompible")
 					&& texture.getProperties().get("rompible").equals("true")
 					&& play.getCtx().mochila.tieneFuerza()) {
