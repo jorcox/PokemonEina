@@ -31,7 +31,8 @@ public class MenuMochila extends Pantalla {
 	private Pantalla screen;
 	private int first; /* Indice del primer elemento de la lista en mostrarse */
 	private int pointer; /*
-							 * Indice del seleccionado de los MAX_ITEMS que caben
+							 * Indice del seleccionado de los MAX_ITEMS que
+							 * caben
 							 */
 	private int seccion;
 	private boolean usar = false, si_no = true;
@@ -191,7 +192,7 @@ public class MenuMochila extends Pantalla {
 
 				} else {
 
-					String l1 = dialogo.siguienteLinea(); 
+					String l1 = dialogo.siguienteLinea();
 					String l2 = dialogo.siguienteLinea();
 
 					if (si_no) {
@@ -200,21 +201,19 @@ public class MenuMochila extends Pantalla {
 							CombateP p = (CombateP) screen;
 							if (p.jugador.getEquipo().size() == 6) {
 								ok = false;
-								String[] frase = {
-										"¡Ya tienes 6 Pokemon, no puedes llevar más!", "" };
+								String[] frase = { "¡Ya tienes 6 Pokemon, no puedes llevar más!", "" };
 								dialogo.setFrases(frase);
 								dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
-							
+
 							}
 						}
 						if (l1 != null && ok) {
 							l1 = l1.replace("${OBJETO}", getCtx().mochila.get(seccion, pointer).getNombre());
 							dialogo.setLineas(l1, l2);
-							Pokemon pokemon=null;
-							if(screen instanceof Enfrentamiento){
+							Pokemon pokemon = null;
+							if (screen instanceof Enfrentamiento) {
 								pokemon = e.jugador.getPokemon(e.iPokemon);
-							}
-							else{
+							} else {
 								pokemon = getCtx().jugador.getPokemon(0);
 							}
 							getCtx().mochila.get(seccion, pointer).use(pokemon);
@@ -232,6 +231,7 @@ public class MenuMochila extends Pantalla {
 							} else if (screen instanceof Enfrentamiento) {
 								Enfrentamiento e = (Enfrentamiento) screen;
 								e.fase = 6;
+								e.actualPsS = e.pkmnpokemonEnemigo.getPs();
 								e.veces = 0;
 								e.cambio = false;
 								((Game) Gdx.app.getApplicationListener()).setScreen(e);
