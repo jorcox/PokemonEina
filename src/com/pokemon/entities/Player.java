@@ -296,9 +296,17 @@ public class Player extends Sprite implements Serializable {
 			}
 			/* Fuerza/Romper */
 
+			if (currentCollision && texture.getProperties().containsKey("cortable")
+					&& texture.getProperties().get("cortable").equals("true")
+					&& play.getCtx().mochila.tieneCorte()) {
+				object.getProperties().put("mostrar", "false");
+				texture.getProperties().put("mostrar", "false");
+			}
+			
 			// TODO Comprobar Fuerza/Romper del personaje
 			if (currentCollision && texture.getProperties().containsKey("rompible")
-					&& texture.getProperties().get("rompible").equals("true")) {
+					&& texture.getProperties().get("rompible").equals("true")
+					&& play.getCtx().mochila.tieneFuerza()) {
 				object.getProperties().put("mostrar", "false");
 				texture.getProperties().put("mostrar", "false");
 				/* Caso Marcos */

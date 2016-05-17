@@ -103,7 +103,7 @@ public class ArchivoGuardado implements Serializable {
 		mochila.add(new Pokeball());
 		mochila.add(new Superball());
 		mochila.add(new Pokeball());
-		mochila.add(new MO("Surf"));
+		mochila.add(new MO("Fuerza"));
 	}
 	
 	private void setDefaultKeys() {
