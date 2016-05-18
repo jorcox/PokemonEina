@@ -99,6 +99,7 @@ public class Player extends Sprite implements Serializable {
 		this.dialogo = dialogo;
 		this.play = play;
 		this.npcs = npcs;
+		this.jugador = new Jugador("Sara", true);
 
 		p = 0;
 	}
