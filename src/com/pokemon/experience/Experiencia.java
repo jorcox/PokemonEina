@@ -25,7 +25,7 @@ public class Experiencia {
 			factor = 1.5;
 		}
 		double baseExperience = baseExperience(level);
-		return (int) (factor * baseExperience * level);
+		return (int) (factor * baseExperience );
 	}
 
 	/**

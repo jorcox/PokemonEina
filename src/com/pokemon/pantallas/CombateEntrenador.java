@@ -110,11 +110,11 @@ public class CombateEntrenador extends Enfrentamiento {
 		 */
 		if (fase == 3) {
 			pokemon.draw(batch);
-			dibujarMenuCombate();
 			dibujarCajasVida();
 			dibujarVidas();
 			dibujarPokeballs();
 			dibujarExp();
+			dibujarMenuCombate();
 		}
 		/*
 		 * Decisi�n de ataque
