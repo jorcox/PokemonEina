@@ -37,7 +37,7 @@ public class PokemonAdaByron extends Game {
 			//setScreen(new Play(ctx, 200, 300, 3, "Tranvia_n.tmx"));
 			setScreen(new PantallaInicio(ctx));
 			//setScreen(new Play(ctx, 500, 2000, 3, "GimGuti.tmx"));
-			//setScreen(new Play(ctx, 500, 500, 3, "Geoslab.tmx"));
+			//setScreen(new Play(ctx, 400, 2900, 3, "Terraza.tmx"));
 			//setScreen(new Play(ctx,400, 2000, 3, "GimGuti.tmx"));
 		} catch (Exception e) {
 			Gdx.app.log("Context", "Save file could not be retrieved");
