@@ -10,6 +10,6 @@ package entrenadores;
  */
 public enum Medalla {
 
-	UNIX, ARM, SELINUX, OPENGL, PACMAN
+	UNIX, ARM, SELINUX, OPENGL, PACMAN, LIGA
 	
 }

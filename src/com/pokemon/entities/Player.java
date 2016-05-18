@@ -259,19 +259,27 @@ public class Player extends Sprite implements Serializable {
 						int encara = Integer.parseInt((String) t.getProperties().get("encara"));
 						play.getCtx().lastPressed = encara;
 					}
-					if (!play.getCtx().getMapas().containsKey(mapa + ".tmx")) {
-						play.getCtx().getMapas().put(play.getMapa(), play);
-						Pantalla p = new Play(play.getCtx(), Integer.parseInt((String) t.getProperties().get("x")),
-								Integer.parseInt((String) t.getProperties().get("y")), getLastPressed(), mapa + ".tmx");
-						play.getCtx().getMapas().put(mapa + ".tmx", p);
-						((Game) Gdx.app.getApplicationListener()).setScreen(p);
-					} else {
-						play.getCtx().getMapas().put(play.getMapa(), play);
-						play.getCtx().x = Integer.parseInt((String) t.getProperties().get("x"));
-						play.getCtx().y = Integer.parseInt((String) t.getProperties().get("y"));
-						play.getCtx().lastPressed = getLastPressed();
-						((Game) Gdx.app.getApplicationListener())
-								.setScreen(play.getCtx().getMapas().get(mapa + ".tmx"));
+					
+					boolean ok = true;
+					if (t.getProperties().containsKey("medalla")) {
+						ok = (jugador.getMedallas().contains(Medalla.valueOf((String)t.getProperties().get("medalla"))));
+					}
+					
+					if (ok) {
+						if (!play.getCtx().getMapas().containsKey(mapa + ".tmx")) {
+							play.getCtx().getMapas().put(play.getMapa(), play);
+							Pantalla p = new Play(play.getCtx(), Integer.parseInt((String) t.getProperties().get("x")),
+									Integer.parseInt((String) t.getProperties().get("y")), getLastPressed(), mapa + ".tmx");
+							play.getCtx().getMapas().put(mapa + ".tmx", p);
+							((Game) Gdx.app.getApplicationListener()).setScreen(p);
+						} else {
+							play.getCtx().getMapas().put(play.getMapa(), play);
+							play.getCtx().x = Integer.parseInt((String) t.getProperties().get("x"));
+							play.getCtx().y = Integer.parseInt((String) t.getProperties().get("y"));
+							play.getCtx().lastPressed = getLastPressed();
+							((Game) Gdx.app.getApplicationListener())
+									.setScreen(play.getCtx().getMapas().get(mapa + ".tmx"));
+						}
 					}
 					break;
 				}
