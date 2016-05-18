@@ -22,6 +22,6 @@ public class TextureMapObjectRenderer extends OrthogonalTiledMapRenderer {
 			}
 			TextureMapObject texture = (TextureMapObject) object.getObj();
 			batch.draw(texture.getTextureRegion(), texture.getX(), texture.getY());
-		}
+		} 
 	}
 }
