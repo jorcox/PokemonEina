@@ -46,6 +46,10 @@ public class Jugador extends Entrenador implements Serializable {
 		this.medallas = medallas;
 	}
 	
+	public void addMedalla(Medalla medalla) {
+		medallas.add(medalla);
+	}
+	
 	public static Jugador nuevoJugador(Jugador jugador){
 		Jugador aux=new Jugador(jugador.getNombre(),jugador.isHombre());
 		aux.setMedallas(jugador.getMedallas());

@@ -24,6 +24,7 @@ import com.pokemon.pantallas.Play;
 import com.pokemon.utilidades.ArchivoGuardado;
 
 import entrenadores.Jugador;
+import entrenadores.Medalla;
 import pokemon.AparicionPokemon;
 import pokemon.Pokemon;
 
@@ -429,7 +430,7 @@ public class Player extends Sprite implements Serializable {
 						npcInteractuando.setDireccionVision("derecha");
 						npcInteractuando.volver();
 					}
-					iniciarCombate("marcos");
+					iniciarCombate("marcos", null);
 				}
 				if(npcInteractuando.isVolver()){
 					npcInteractuando.setxOriginal(478);
@@ -482,7 +483,13 @@ public class Player extends Sprite implements Serializable {
 							if(npcInteractuando.isVolver()){
 								npcInteractuando.volver();
 							}
-							iniciarCombate(npcInteractuando.getDialogoCode());
+							String medalla = npcInteractuando.getMedalla();
+							if (medalla != null) {
+								iniciarCombate(npcInteractuando.getDialogoCode(),Medalla.valueOf(medalla));
+							} else {
+								iniciarCombate(npcInteractuando.getDialogoCode(),null);
+							}
+							
 						}
 						if(npcInteractuando.isVolver()){
 							npcInteractuando.volver();
@@ -506,10 +513,11 @@ public class Player extends Sprite implements Serializable {
 		DPressed = false;	
 	}
 
-	private void iniciarCombate(String id) {
+	private void iniciarCombate(String id, Medalla medalla) {
+		
 		play.getCtx().getMapas().put(play.getMapa(), play);
 		((Game) Gdx.app.getApplicationListener())
-				.setScreen(new CombateEntrenador(play.getCtx(), this, id, play));
+				.setScreen(new CombateEntrenador(play.getCtx(), this, id, play, medalla));
 	}
 
 	private boolean visible(NPC npc) {

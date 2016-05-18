@@ -10,6 +10,6 @@ package entrenadores;
  */
 public enum Medalla {
 
-	MEDALLA_GUTI, MEDALLA_TARDOS;	// Por poner algo
+	UNIX, ARM, SELINUX, OPENGL, PACMAN
 	
 }
