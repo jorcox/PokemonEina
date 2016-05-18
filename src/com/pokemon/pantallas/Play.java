@@ -561,6 +561,12 @@ public class Play extends Pantalla {
 			for(Pokemon poke :getCtx().jugador.getEquipo()){
 				poke.sanar();
 			}
+		} else if(o.getProperties().containsKey("medalla")) {
+			if (player.jugador.getMedallas().contains(Medalla.valueOf((String)o.getProperties().get("medalla")))) {
+				/* Asi no se puede volver a coger ese item */
+				o.getProperties().put("mostrar", "false");
+				o.getObj().getProperties().put("mostrar", "false");
+			}
 		}
 	}
 
