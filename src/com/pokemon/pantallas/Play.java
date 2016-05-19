@@ -3,10 +3,12 @@ package com.pokemon.pantallas;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.ResourceBundle;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -49,7 +51,7 @@ public class Play extends Pantalla {
 	private transient BitmapFont font;
 	private transient FreeTypeFontGenerator generator;
 	private transient TweenManager tweenManager;
-
+	private Music music;
 	private transient TextureAtlas playerAtlas;
 
 	private transient Sprite box;
@@ -58,13 +60,13 @@ public class Play extends Pantalla {
 	// private Player player = new Player(new Sprite(new
 	// Texture("assets/maps/tilesInterior.png")));
 	private Player player;
-	
+
 	private Stage stage;
-	
+
 	private ArrayList<NPC> npcs = new ArrayList<>();
-	
+
 	private ArrayList<ObjetoMapa> objetos = new ArrayList<>();
-	
+
 	private boolean dialogando;
 
 	/* Para pausar el listener de teclas */
@@ -78,22 +80,23 @@ public class Play extends Pantalla {
 
 	public Play(ArchivoGuardado ctx) {
 		this.setCtx(ctx);
-
+		
 		Gdx.input.setInputProcessor(this);
 
 		setDialogando(false);
 
 		cargarFuente();
 
-		//setJugador();
+		// setJugador();
 	}
 
 	public Play(ArchivoGuardado ctx, float x, float y, int lastPressed, String mapa) {
+		this.setCtx(ctx);
 		ctx.x = x;
 		ctx.y = y;
 		ctx.lastPressed = lastPressed;
 		ctx.map = mapa;
-		this.setCtx(ctx);
+		
 
 		this.mapa = mapa;
 
@@ -107,7 +110,12 @@ public class Play extends Pantalla {
 
 	@Override
 	public void show() {
- 		tweenManager = new TweenManager();
+		getCtx().setMusic(mapa);
+		music=getCtx().music;
+		music.play();
+		music.setLooping(true);
+		music.setVolume(0.01f);
+		tweenManager = new TweenManager();
 
 		TmxMapLoader loader = new TmxMapLoader();
 
@@ -127,40 +135,40 @@ public class Play extends Pantalla {
 				/* Carga de atributos */
 				String dirVista = (String) t.getProperties().get("dir");
 				int disVista = Integer.parseInt((String) t.getProperties().get("dis"));
-				String dialogoCode = (String) t.getProperties().get("dialogo");				
+				String dialogoCode = (String) t.getProperties().get("dialogo");
 				boolean combate = Boolean.parseBoolean((String) t.getProperties().get("combate"));
 				String medalla = null;
 				if (t.getProperties().containsKey("medalla")) {
 					medalla = (String) t.getProperties().get("medalla");
 				}
 				boolean activo = true;
-				if(t.getProperties().containsKey("activo")){
+				if (t.getProperties().containsKey("activo")) {
 					activo = Boolean.parseBoolean((String) t.getProperties().get("activo"));
 				}
 				boolean volver = t.getProperties().containsKey("volver");
 				boolean marcos = false;
-				if(t.getProperties().containsKey("marcos")){
+				if (t.getProperties().containsKey("marcos")) {
 					marcos = Boolean.parseBoolean((String) t.getProperties().get("marcos"));
 				}
-				
+
 				TextureAtlas personajePack = new TextureAtlas(
 						"res/imgs/entrenadoresWorld/" + (String) t.getProperties().get("pack") + ".pack");
 				/* Creación del los NPCs */
 				NPC npc = new NPC(personajePack, new Animation(1 / 10f, playerAtlas.findRegions(dirVista)), dirVista,
 						disVista, this, dialogoCode, combate, medalla);
 				npc.setPosition(t.getX(), t.getY());
-				//t.getTextureRegion().getTexture().getHeight();
-				//t.getTextureRegion().getTexture().get
+				// t.getTextureRegion().getTexture().getHeight();
+				// t.getTextureRegion().getTexture().get
 				npc.setPosicionOriginal(t.getX(), t.getY());
-				if(!t.getProperties().containsKey("ancho")){
+				if (!t.getProperties().containsKey("ancho")) {
 					npc.setScale((float) 1.5, 1);
-				}				
+				}
 				npc.setActivo(activo);
 				npc.setVolver(volver);
 				npc.setMarcos(marcos);
 				npcs.add(npc);
-			}			
-			for (MapObject obj : map.getLayers().get("Objetos").getObjects()){
+			}
+			for (MapObject obj : map.getLayers().get("Objetos").getObjects()) {
 				objetos.add(new ObjetoMapa(obj));
 			}
 		}
@@ -184,9 +192,9 @@ public class Play extends Pantalla {
 						"res/imgs/entrenadoresWorld/" + (String) t.getProperties().get("pack") + ".pack");
 				NPC npc = new NPC(personajePack, new Animation(1 / 10f, playerAtlas.findRegions(dirVista)), dirVista,
 						disVista, this, dialogoCode, combate, medalla);
-				if(!t.getProperties().containsKey("ancho")){
+				if (!t.getProperties().containsKey("ancho")) {
 					npc.setScale((float) 1.5, 1);
-				}	
+				}
 				for (NPC npcAlmacenado : npcs) {
 					if (npc.getDialogoCode().equals(npcAlmacenado.getDialogoCode())) {
 						npcs.remove(npcs.indexOf(npcAlmacenado));
@@ -205,7 +213,7 @@ public class Play extends Pantalla {
 		if (!objetos.isEmpty()) {
 			/* Recarga de objetos */
 			MapObjects objs = map.getLayers().get("Objetos").getObjects();
-			for (MapObject o : objs) {	
+			for (MapObject o : objs) {
 				ObjetoMapa obj = new ObjetoMapa(o);
 				for (ObjetoMapa objAlmacenado : objetos) {
 					if (objAlmacenado.getProperties().get("ID").equals(obj.getProperties().get("ID"))) {
@@ -246,7 +254,7 @@ public class Play extends Pantalla {
 
 	@Override
 	public void render(float delta) {
- 		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		tweenManager.update(delta);
 
@@ -322,14 +330,14 @@ public class Play extends Pantalla {
 			} else if (com1 instanceof NPC) {
 				Y1 = ((NPC) com1).getY();
 			} else {
-				Y1 = ((TextureMapObject)((ObjetoMapa) com1).getObj()).getY();
+				Y1 = ((TextureMapObject) ((ObjetoMapa) com1).getObj()).getY();
 			}
 			if (com2 instanceof Player) {
 				Y2 = ((Player) com2).getY();
 			} else if (com2 instanceof NPC) {
 				Y2 = ((NPC) com2).getY();
 			} else {
-				Y2 = ((TextureMapObject)((ObjetoMapa) com2).getObj()).getY();
+				Y2 = ((TextureMapObject) ((ObjetoMapa) com2).getObj()).getY();
 			}
 			return (int) ((Y2 - Y1));
 		}
@@ -411,13 +419,13 @@ public class Play extends Pantalla {
 				getCtx().lastPressed = 2;
 				if (getCtx().lastPressed == 0) {
 					getCtx().lastPressed = 2;
-				} 
+				}
 				player.WPressed = true;
 			} else if (movimiento && keycode == getCtx().getTeclaLeft()) {
 				player.checkCombat();
 				player.velocity.x = -player.speed;
 				player.velocity.y = 0;
-				player.animationTime = 0;				
+				player.animationTime = 0;
 				player.setLastPressed(1);
 				getCtx().lastPressed = 1;
 				if (getCtx().lastPressed == 0) {
@@ -501,10 +509,7 @@ public class Play extends Pantalla {
 						}
 					}
 				}
-			} else if (keycode == Keys.V) {
-				((Game) Gdx.app.getApplicationListener())
-						.setScreen(new CombateEntrenador(getCtx(), player, "reverte", this, Medalla.OPENGL));
-			}
+			} 
 		}
 		return false;
 	}
@@ -540,7 +545,7 @@ public class Play extends Pantalla {
 			/* Introduce en mochila */
 			if (value.equals("Poción")) {
 				getCtx().mochila.add(new Pocion());
-			}  else if (value.equals("Corte")) {
+			} else if (value.equals("Corte")) {
 				getCtx().mochila.add(new MO("Corte"));
 			} else if (value.equals("Fuerza")) {
 				getCtx().mochila.add(new MO("Fuerza"));
@@ -553,16 +558,16 @@ public class Play extends Pantalla {
 			o.getObj().getProperties().put("used", "true");
 			o.getProperties().put("mostrar", "false");
 			o.getObj().getProperties().put("mostrar", "false");
-		}else if(o.getProperties().containsKey("salud")){
+		} else if (o.getProperties().containsKey("salud")) {
 			optionsVisible = true;
 			setDialogando(true);
 			getCtx().dialogo.procesarDialogo("centro_salud");
 			getCtx().dialogo.setLineas(getCtx().dialogo.siguienteLinea(), getCtx().dialogo.siguienteLinea());
-			for(Pokemon poke :getCtx().jugador.getEquipo()){
+			for (Pokemon poke : getCtx().jugador.getEquipo()) {
 				poke.sanar();
 			}
-		} else if(o.getProperties().containsKey("medalla")) {
-			if (player.jugador.getMedallas().contains(Medalla.valueOf((String)o.getProperties().get("medalla")))) {
+		} else if (o.getProperties().containsKey("medalla")) {
+			if (player.jugador.getMedallas().contains(Medalla.valueOf((String) o.getProperties().get("medalla")))) {
 				/* Asi no se puede volver a coger ese item */
 				o.getProperties().put("mostrar", "false");
 				o.getObj().getProperties().put("mostrar", "false");
@@ -624,7 +629,7 @@ public class Play extends Pantalla {
 					player.velocity.y = 0;
 				}
 				player.animationTime = 0;
-				//getCtx().lastPressed = 2;
+				// getCtx().lastPressed = 2;
 				player.WPressed = false;
 			} else if (movimiento && keycode == getCtx().getTeclaLeft()) {
 				if (player.DPressed) {
@@ -640,7 +645,7 @@ public class Play extends Pantalla {
 					player.velocity.x = 0;
 				}
 				player.animationTime = 0;
-				//getCtx().lastPressed = 1;
+				// getCtx().lastPressed = 1;
 				player.APressed = false;
 			} else if (movimiento && keycode == getCtx().getTeclaDown()) {
 				if (player.WPressed) {
@@ -656,7 +661,7 @@ public class Play extends Pantalla {
 					player.velocity.y = 0;
 				}
 				player.animationTime = 0;
-				//getCtx().lastPressed = 3;
+				// getCtx().lastPressed = 3;
 				player.SPressed = false;
 			} else if (movimiento && keycode == getCtx().getTeclaRight()) {
 				if (player.APressed) {
@@ -672,7 +677,7 @@ public class Play extends Pantalla {
 					player.velocity.x = 0;
 				}
 				player.animationTime = 0;
-				//getCtx().lastPressed = 4;
+				// getCtx().lastPressed = 4;
 				player.DPressed = false;
 			} else if (keycode == getCtx().getTeclaB()) {
 				player.SpacePressed = false;
