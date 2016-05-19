@@ -1,10 +1,10 @@
 package core;
 
-import java.util.Random;
 import java.util.Scanner;
 
+import com.pokemon.ia.MovementChooser;
+
 import entrenadores.Entrenador;
-import habilidad.Categoria;
 import habilidad.Habilidad;
 import logica.CalculosCombate;
 import logica.MatrizEfectividad;
@@ -107,7 +107,7 @@ public class Combate {
 	 *            el pokemon cuyo ataque se va a decidir.
 	 * @return el indice de la habilidad que elige utilizar.
 	 */
-	public int decidir(Pokemon enemigo) {
+	/*public int decidir(Pokemon enemigo) {
 		Random random = new Random();
 		int l = enemigo.getHabilidades().length;
 		int ataque=random.nextInt(l)+1;
@@ -115,8 +115,11 @@ public class Combate {
 			ataque=random.nextInt(l)+1;
 		}
 		return ataque;
+	}*/
+	public int decidir(Pokemon enemigo) {
+		return new MovementChooser(pokemon, enemigo).choose() + 1;
 	}
-
+	
 	/**
 	 * 
 	 * Realiza la accion de un pokemon haciendo una habilidad en combate. Su

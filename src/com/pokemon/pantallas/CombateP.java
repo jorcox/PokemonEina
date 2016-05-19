@@ -1,6 +1,5 @@
 package com.pokemon.pantallas;
 
-import habilidad.Habilidad;
 import pokemon.Pokemon;
 import aurelienribon.tweenengine.Tween;
 import core.Combate;
