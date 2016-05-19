@@ -477,6 +477,7 @@ public class Enfrentamiento extends Pantalla {
 						String[] frase = { "¡El ataque es mega efectivo pavo!", "" };
 						dialogo.setFrases(frase);
 					}
+					dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
 				}
 			}
 		} else {
@@ -504,6 +505,7 @@ public class Enfrentamiento extends Pantalla {
 						String[] frase = { "¡El ataque es mega efectivo pavo!", "" };
 						dialogo.setFrases(frase);
 					}
+					dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
 				}
 			}
 		}
@@ -686,13 +688,13 @@ public class Enfrentamiento extends Pantalla {
 
 	public void combatePerdido() {
 		HashMap<String, Posicion> map = new PosicionIniciales().getHashMap();
-		Posicion pos=map.get(getCtx().map);
+		Posicion pos = map.get(getCtx().map);
 		Jugador aux = Jugador.nuevoJugador(jugador);
 		((Game) Gdx.app.getApplicationListener()).setScreen(pantalla);
 		pantalla.getCtx().jugador = aux;
-		pantalla.getCtx().x=pos.getX();
-		pantalla.getCtx().y=pos.getY();
-		for(Pokemon poke :getCtx().jugador.getEquipo()){
+		pantalla.getCtx().x = pos.getX();
+		pantalla.getCtx().y = pos.getY();
+		for (Pokemon poke : getCtx().jugador.getEquipo()) {
 			poke.sanar();
 		}
 	}
