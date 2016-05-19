@@ -446,7 +446,7 @@ public class Play extends Pantalla {
 					getCtx().lastPressed = 4;
 				}
 				player.DPressed = true;
-			} else if (keycode == getCtx().getTeclaB()) {
+			} else if (movimiento && keycode == getCtx().getTeclaB()) {
 				// player.SpacePressed = true;
 				getCtx().getMapas().put(getMapa(), this);
 				((Game) Gdx.app.getApplicationListener()).setScreen(new MenuPlay(getCtx(), player.getX(), player.getY(),
