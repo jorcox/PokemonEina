@@ -1,6 +1,5 @@
 package com.pokemon.pantallas;
 
-import habilidad.Habilidad;
 import pokemon.Pokemon;
 import aurelienribon.tweenengine.Tween;
 import core.Combate;
@@ -8,7 +7,6 @@ import core.Combate;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;

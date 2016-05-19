@@ -4,17 +4,13 @@ import habilidad.Habilidad;
 import mapas.Posicion;
 import mapas.PosicionIniciales;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
 import pokemon.Pokemon;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenManager;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
