@@ -36,7 +36,6 @@ public class Menu extends Pantalla {
 
 	public Menu(ArchivoGuardado ctx) {
 		this.setCtx(ctx);
-		ArchivoGuardado.musica = null;
 	}
 
 	@Override

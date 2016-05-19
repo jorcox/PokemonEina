@@ -10,6 +10,7 @@ import core.Combate;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -27,6 +28,7 @@ import entrenadores.Medalla;
 
 public class CombateEntrenador extends Enfrentamiento {
 
+	private Music music;
 	private String idEntrenador;
 	private String nombre;
 	private Jugador entrenadorE;
@@ -36,6 +38,11 @@ public class CombateEntrenador extends Enfrentamiento {
 
 	public CombateEntrenador(ArchivoGuardado ctx, Player player, String idEntrenador, Pantalla pantalla, Medalla medalla) {
 		super(ctx, player, pantalla);
+		getCtx().setMusic("batalla_entrenador");
+		music=getCtx().music;
+		music.play();
+		music.setLooping(true);
+		music.setVolume(0.01f);
 		this.fase = 0;
 		this.idEntrenador = idEntrenador;
 		pkmn = jugador.getPokemon(iPokemon);

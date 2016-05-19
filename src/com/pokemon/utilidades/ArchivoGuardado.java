@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ResourceBundle;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.Vector2;
@@ -35,7 +37,7 @@ public class ArchivoGuardado implements Serializable {
 	/*
 	 * Indica la musica que estaba sonando
 	 */
-	public static Music musica;
+	public Music music;
 
 	/*
 	 * El nombre de la pieza de musica que estaba sonando
@@ -95,7 +97,7 @@ public class ArchivoGuardado implements Serializable {
 		teclas = new ArrayList<>(6);
 		setDefaultKeys();
 		dialogo = new Dialogo("es", "ES");
-		
+		music =Gdx.audio.newMusic(Gdx.files.internal("res/musica/PokemonHGSS.mp3"));
 		jugador = new Jugador("Sara", false);
 		
 		// Objetos de prueba metidos a pelo
@@ -188,6 +190,12 @@ public class ArchivoGuardado implements Serializable {
 		}
 		/* Asigna la tecla a la accion indicada */
 		teclas.set(pos, value);
+	}
+	
+	public void setMusic(String map){
+		music.stop();
+		ResourceBundle rb = ResourceBundle.getBundle("musica");
+		music = Gdx.audio.newMusic(Gdx.files.internal("res/musica/" + rb.getString(map) + ".mp3"));
 	}
 	
 	/* En teclas se almacenan en este orden */
