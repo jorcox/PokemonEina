@@ -272,12 +272,14 @@ public class Player extends Sprite implements Serializable {
 							Pantalla p = new Play(play.getCtx(), Integer.parseInt((String) t.getProperties().get("x")),
 									Integer.parseInt((String) t.getProperties().get("y")), getLastPressed(), mapa + ".tmx");
 							play.getCtx().getMapas().put(mapa + ".tmx", p);
+							//play.getCtx().setMusic(mapa+".tmx");
 							((Game) Gdx.app.getApplicationListener()).setScreen(p);
 						} else {
 							play.getCtx().getMapas().put(play.getMapa(), play);
 							play.getCtx().x = Integer.parseInt((String) t.getProperties().get("x"));
 							play.getCtx().y = Integer.parseInt((String) t.getProperties().get("y"));
 							play.getCtx().lastPressed = getLastPressed();
+							//play.getCtx().setMusic(mapa+".tmx");
 							((Game) Gdx.app.getApplicationListener())
 									.setScreen(play.getCtx().getMapas().get(mapa + ".tmx"));
 						}

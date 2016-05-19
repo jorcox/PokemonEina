@@ -11,6 +11,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -28,6 +29,7 @@ import entrenadores.Jugador;
 
 public class Evolucion extends Pantalla {
 
+	Music music = Gdx.audio.newMusic(Gdx.files.internal("res/musica/evolucion.mp3"));
 	private Pantalla screen;
 	private Jugador jugador;
 	private Dialogo dialogo;
@@ -43,6 +45,11 @@ public class Evolucion extends Pantalla {
 	public Evolucion(ArchivoGuardado ctx, Pantalla screen, Jugador jugador, int i) {
 		this.setCtx(ctx);
 		this.screen=screen;
+		getCtx().setMusic("evolucion");
+		music=getCtx().music;
+		music.play();
+		music.setLooping(true);
+		music.setVolume(0.01f);
 		dialogo = new Dialogo("es", "ES");
 		dialogo.procesarDialogo("evolucion");
 

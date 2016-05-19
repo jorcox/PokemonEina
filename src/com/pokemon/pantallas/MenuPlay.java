@@ -49,7 +49,6 @@ public class MenuPlay extends Pantalla {
 
 	public MenuPlay(ArchivoGuardado ctx, float x, float y, int lastPressed, String map,
 			List<Pokemon> listaPokemon, Play play) {
-		ArchivoGuardado.musica = null;
 		this.x = x;
 		this.y = y;
 		this.lastPressed = lastPressed;

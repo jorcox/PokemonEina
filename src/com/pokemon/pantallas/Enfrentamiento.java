@@ -516,7 +516,7 @@ public class Enfrentamiento extends Pantalla {
 	}
 
 	public String[] frasesExperiencia(boolean trainer) {
-		String[] frase = { "¡" + pkmn.getNombre() + " gan� " + gainExperience(trainer, pkmnpokemonEnemigo.getNivel())
+		String[] frase = { "¡" + pkmn.getNombre() + " ganó " + gainExperience(trainer, pkmnpokemonEnemigo.getNivel())
 				+ " puntos de EXP.!", "" };
 		return frase;
 	}
