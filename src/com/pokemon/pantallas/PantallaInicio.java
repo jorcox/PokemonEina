@@ -23,7 +23,7 @@ public class PantallaInicio extends Pantalla {
 
 	PokemonAdaByron game;
 
-	Music music = Gdx.audio.newMusic(Gdx.files.internal("res/musica/PokemonHGSS.mp3"));
+	private Music music;
 
 	Texture portada;
 
@@ -46,6 +46,7 @@ public class PantallaInicio extends Pantalla {
 	
 	public PantallaInicio(ArchivoGuardado ctx) {
 		this.setCtx(ctx);
+		music=getCtx().music;
 		
 		/*
 		 * Configuracion musica

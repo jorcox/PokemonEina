@@ -8,6 +8,7 @@ import core.Combate;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -22,6 +23,7 @@ import entrenadores.Jugador;
 
 public class CombateP extends Enfrentamiento {
 
+	private Music music;
 	private boolean show = true;
 	private boolean atrapado = false;
 	private int xBall = 120, yBall = 120, animacionBall = 60;
@@ -29,6 +31,11 @@ public class CombateP extends Enfrentamiento {
 
 	public CombateP(ArchivoGuardado ctx, Player player, int fase, Pantalla pantalla, Pokemon pkmnpokemonEnemigo) {
 		super(ctx, player, pantalla);
+		getCtx().setMusic("batalla_salvaje");
+		music = getCtx().music;
+		music.play();
+		music.setLooping(true);
+		music.setVolume(0.01f);
 		actualPsS = pkmnpokemonEnemigo.getPs();
 		combate = new Combate(jugador, pkmnpokemonEnemigo);
 		orden = combate.getVelocidad(iPokemon);
@@ -364,7 +371,7 @@ public class CombateP extends Enfrentamiento {
 							Jugador aux = Jugador.nuevoJugador(jugador);
 							((Game) Gdx.app.getApplicationListener()).setScreen(pantalla);
 							pantalla.getCtx().jugador = aux;
-						}else{
+						} else {
 							combatePerdido();
 						}
 					}
