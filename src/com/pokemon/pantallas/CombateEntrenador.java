@@ -23,16 +23,18 @@ import com.pokemon.utilidades.ArchivoGuardado;
 import db.BaseDatos;
 import entrenadores.Entrenador;
 import entrenadores.Jugador;
+import entrenadores.Medalla;
 
 public class CombateEntrenador extends Enfrentamiento {
 
 	private String idEntrenador;
 	private String nombre;
 	private Jugador entrenadorE;
+	private Medalla medalla;
 
 	TextureRegion[] spritesEntrenador;
 
-	public CombateEntrenador(ArchivoGuardado ctx, Player player, String idEntrenador, Pantalla pantalla) {
+	public CombateEntrenador(ArchivoGuardado ctx, Player player, String idEntrenador, Pantalla pantalla, Medalla medalla) {
 		super(ctx, player, pantalla);
 		this.fase = 0;
 		this.idEntrenador = idEntrenador;
@@ -108,11 +110,11 @@ public class CombateEntrenador extends Enfrentamiento {
 		 */
 		if (fase == 3) {
 			pokemon.draw(batch);
-			dibujarMenuCombate();
 			dibujarCajasVida();
 			dibujarVidas();
 			dibujarPokeballs();
 			dibujarExp();
+			dibujarMenuCombate();
 		}
 		/*
 		 * Decisi�n de ataque
@@ -425,6 +427,9 @@ public class CombateEntrenador extends Enfrentamiento {
 					} else {
 						if (dialogo.getId().equals("combate_ganado")) {
 							Jugador aux = Jugador.nuevoJugador(jugador);
+							if (medalla != null) {
+								aux.addMedalla(medalla);
+							}
 							((Game) Gdx.app.getApplicationListener()).setScreen(pantalla);
 							pantalla.getCtx().jugador = aux;
 						}else{

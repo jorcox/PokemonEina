@@ -83,10 +83,10 @@ public class CombateP extends Enfrentamiento {
 		 */
 		if (fase == 3) {
 			pokemon.draw(batch);
-			dibujarMenuCombate();
 			dibujarCajasVida();
 			dibujarVidas();
 			dibujarExp();
+			dibujarMenuCombate();
 		}
 		/*
 		 * Decisi�n de ataque

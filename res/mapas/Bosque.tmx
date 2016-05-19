@@ -22,9 +22,19 @@
     <property name="blocked" value=""/>
    </properties>
   </tile>
+  <tile id="2">
+   <properties>
+    <property name="combat" value="true"/>
+   </properties>
+  </tile>
  </tileset>
  <tileset firstgid="19214" name="Entorno1" tilewidth="32" tileheight="32" tilecount="10" columns="10">
   <image source="../Tilesets/Entorno1.png" trans="00aa00" width="320" height="32"/>
+  <tile id="2">
+   <properties>
+    <property name="combat" value="true"/>
+   </properties>
+  </tile>
  </tileset>
  <tileset firstgid="19224" name="CustomTiles" tilewidth="32" tileheight="32" tilecount="10" columns="10">
   <image source="../Tilesets/CustomTiles.png" trans="00aa00" width="320" height="32"/>

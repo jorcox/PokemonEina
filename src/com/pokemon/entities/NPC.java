@@ -63,9 +63,11 @@ public class NPC extends Sprite implements Serializable {
 	private float x, y;
 
 	private float xOriginal, yOriginal;
+	
+	private String medalla;
 
 	public NPC(TextureAtlas playerAtlas, Animation face, String dir, int disVista, Play play, String dialogoCode,
-			boolean combate) {
+			boolean combate, String medalla) {
 		super(face.getKeyFrame(0));
 		cara = new Animation(1 / 10f, playerAtlas.findRegions("cara"));
 		derecha = new Animation(1 / 10f, playerAtlas.findRegions("derecha"));
@@ -85,6 +87,7 @@ public class NPC extends Sprite implements Serializable {
 		this.direccionVision = dir;
 		this.dialogoCode = dialogoCode;
 		this.combate = combate;
+		this.medalla = medalla;
 		activo = true;
 		mochila = new Mochila();
 	}
@@ -423,6 +426,10 @@ public class NPC extends Sprite implements Serializable {
 	
 	public void setMarcos(boolean marcos) {
 		this.marcos = marcos;
+	}
+	
+	public String getMedalla() {
+		return medalla;
 	}
 
 }

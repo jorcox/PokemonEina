@@ -37,6 +37,7 @@ import com.pokemon.utilidades.ArchivoGuardado;
 
 import aurelienribon.tweenengine.TweenManager;
 import db.BaseDatos;
+import entrenadores.Medalla;
 import pokemon.Pokemon;
 
 public class Play extends Pantalla {
@@ -128,6 +129,10 @@ public class Play extends Pantalla {
 				int disVista = Integer.parseInt((String) t.getProperties().get("dis"));
 				String dialogoCode = (String) t.getProperties().get("dialogo");				
 				boolean combate = Boolean.parseBoolean((String) t.getProperties().get("combate"));
+				String medalla = null;
+				if (t.getProperties().containsKey("medalla")) {
+					medalla = (String) t.getProperties().get("medalla");
+				}
 				boolean activo = true;
 				if(t.getProperties().containsKey("activo")){
 					activo = Boolean.parseBoolean((String) t.getProperties().get("activo"));
@@ -142,7 +147,7 @@ public class Play extends Pantalla {
 						"res/imgs/entrenadoresWorld/" + (String) t.getProperties().get("pack") + ".pack");
 				/* Creación del los NPCs */
 				NPC npc = new NPC(personajePack, new Animation(1 / 10f, playerAtlas.findRegions(dirVista)), dirVista,
-						disVista, this, dialogoCode, combate);
+						disVista, this, dialogoCode, combate, medalla);
 				npc.setPosition(t.getX(), t.getY());
 				//t.getTextureRegion().getTexture().getHeight();
 				//t.getTextureRegion().getTexture().get
@@ -171,10 +176,14 @@ public class Play extends Pantalla {
 				boolean combate = Boolean.parseBoolean((String) t.getProperties().get("combate"));
 				int disVista = Integer.parseInt((String) t.getProperties().get("dis"));
 				String dialogoCode = (String) t.getProperties().get("dialogo");
+				String medalla = null;
+				if (t.getProperties().containsKey("medalla")) {
+					medalla = (String) t.getProperties().get("medalla");
+				}
 				TextureAtlas personajePack = new TextureAtlas(
 						"res/imgs/entrenadoresWorld/" + (String) t.getProperties().get("pack") + ".pack");
 				NPC npc = new NPC(personajePack, new Animation(1 / 10f, playerAtlas.findRegions(dirVista)), dirVista,
-						disVista, this, dialogoCode, combate);
+						disVista, this, dialogoCode, combate, medalla);
 				if(!t.getProperties().containsKey("ancho")){
 					npc.setScale((float) 1.5, 1);
 				}	
@@ -494,7 +503,7 @@ public class Play extends Pantalla {
 				}
 			} else if (keycode == Keys.V) {
 				((Game) Gdx.app.getApplicationListener())
-						.setScreen(new CombateEntrenador(getCtx(), player, "reverte", this));
+						.setScreen(new CombateEntrenador(getCtx(), player, "reverte", this, Medalla.OPENGL));
 			}
 		}
 		return false;
@@ -551,6 +560,12 @@ public class Play extends Pantalla {
 			getCtx().dialogo.setLineas(getCtx().dialogo.siguienteLinea(), getCtx().dialogo.siguienteLinea());
 			for(Pokemon poke :getCtx().jugador.getEquipo()){
 				poke.sanar();
+			}
+		} else if(o.getProperties().containsKey("medalla")) {
+			if (player.jugador.getMedallas().contains(Medalla.valueOf((String)o.getProperties().get("medalla")))) {
+				/* Asi no se puede volver a coger ese item */
+				o.getProperties().put("mostrar", "false");
+				o.getObj().getProperties().put("mostrar", "false");
 			}
 		}
 	}

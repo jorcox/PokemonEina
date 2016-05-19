@@ -62,7 +62,7 @@ public class AparicionPokemon {
 			habs = setHabilidades(208, 434, -1, -1);
 			aparicion[4].setHabilidades(habs);
 			aparicion[4].setTipo(Tipo.PLANTA);
-			int n = 4;
+			int n = 3;
 			for (int i = 0; i < aparicion.length; i++) {
 				for (int j = 0; j < n; j++) {
 					if (j < n - 4) {
@@ -477,7 +477,7 @@ public class AparicionPokemon {
 			aparicion[5].setHabilidades(habs);
 			aparicion[5].setTipo(Tipo.BICHO);
 
-			int n = 7;
+			int n = 6;
 			for (int i = 0; i < aparicion.length; i++) {
 				for (int j = 0; j < n; j++) {
 					if (j < n - 4) {

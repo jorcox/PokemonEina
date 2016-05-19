@@ -511,6 +511,7 @@
     <property name="dialogo" value="guti_gimguti"/>
     <property name="dir" value="derecha"/>
     <property name="dis" value="6"/>
+    <property name="medalla" value="UNIX"/>
     <property name="pack" value="elm"/>
    </properties>
   </object>
