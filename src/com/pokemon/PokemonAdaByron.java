@@ -35,8 +35,8 @@ public class PokemonAdaByron extends Game {
 			ctx.existe = false;
 			//setScreen(new Play(ctx, 500, 200, 3, "Hendrix.tmx"));
 			//setScreen(new Play(ctx, 200, 300, 3, "Tranvia_n.tmx"));
-			//setScreen(new PantallaInicio(ctx));
-			setScreen(new Play(ctx, 550, 200, 3, "Bosque.tmx"));
+			setScreen(new PantallaInicio(ctx));
+			//setScreen(new Play(ctx, 550, 200, 3, "Bosque.tmx"));
 			//setScreen(new Play(ctx, 500, 500, 3, "Estudios.tmx"));
 			//setScreen(new Play(ctx,400, 2000, 3, "GimGuti.tmx"));
 		} catch (Exception e) {
