@@ -21,8 +21,6 @@ import com.pokemon.entities.Player;
 import com.pokemon.tween.SpriteAccessor;
 import com.pokemon.utilidades.ArchivoGuardado;
 
-import db.BaseDatos;
-import entrenadores.Entrenador;
 import entrenadores.Jugador;
 import entrenadores.Medalla;
 

@@ -4,17 +4,13 @@ import habilidad.Habilidad;
 import mapas.Posicion;
 import mapas.PosicionIniciales;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
 import pokemon.Pokemon;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenManager;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -481,6 +477,7 @@ public class Enfrentamiento extends Pantalla {
 						String[] frase = { "¡El ataque es mega efectivo pavo!", "" };
 						dialogo.setFrases(frase);
 					}
+					dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
 				}
 			}
 		} else {
@@ -508,6 +505,7 @@ public class Enfrentamiento extends Pantalla {
 						String[] frase = { "¡El ataque es mega efectivo pavo!", "" };
 						dialogo.setFrases(frase);
 					}
+					dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
 				}
 			}
 		}
@@ -690,13 +688,13 @@ public class Enfrentamiento extends Pantalla {
 
 	public void combatePerdido() {
 		HashMap<String, Posicion> map = new PosicionIniciales().getHashMap();
-		Posicion pos=map.get(getCtx().map);
+		Posicion pos = map.get(getCtx().map);
 		Jugador aux = Jugador.nuevoJugador(jugador);
 		((Game) Gdx.app.getApplicationListener()).setScreen(pantalla);
 		pantalla.getCtx().jugador = aux;
-		pantalla.getCtx().x=pos.getX();
-		pantalla.getCtx().y=pos.getY();
-		for(Pokemon poke :getCtx().jugador.getEquipo()){
+		pantalla.getCtx().x = pos.getX();
+		pantalla.getCtx().y = pos.getY();
+		for (Pokemon poke : getCtx().jugador.getEquipo()) {
 			poke.sanar();
 		}
 	}
