@@ -237,7 +237,7 @@ public class CombateEntrenador extends Enfrentamiento {
 		super.show();
 		entrenador = new Sprite(new Texture("res/imgs/entrenadores/" + idEntrenador + ".png"));
 		pokemonEnemigo = new Sprite(
-				new Texture("res/imgs/pokemon/" + entrenadorE.getEquipo().get(iPokemonEnemigo).getNombre() + ".png"));
+				new Texture("res/imgs/pokemon/" + entrenadorE.getEquipo().get(iPokemonEnemigo).getNombre().toLowerCase() + ".png"));
 		protagonista = new Sprite(new Texture("res/imgs/entrenadores/prota.png"));
 		protagonista.setSize(150, 240);
 		if (fase < 1) {
