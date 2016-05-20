@@ -568,7 +568,7 @@ public class CombateP extends Enfrentamiento {
 						seleccionAprender = false;
 					}
 				}
-			} else if (keycode == Keys.ESCAPE) {
+			} else if (keycode == getCtx().getTeclaB()) {
 				if (fase == 4) {
 					fase = 3;
 				}
