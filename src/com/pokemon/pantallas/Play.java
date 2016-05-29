@@ -511,6 +511,8 @@ public class Play extends Pantalla {
 				}
 			} 
 		}
+		System.out.println(player.getX());
+		System.out.println(player.getY());
 		return false;
 	}
 
