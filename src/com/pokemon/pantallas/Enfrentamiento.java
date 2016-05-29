@@ -699,4 +699,33 @@ public class Enfrentamiento extends Pantalla {
 		}
 	}
 
+	public int evolucion() {
+		try {
+			db = new BaseDatos("pokemon_base");
+			int j=0;
+			boolean ok = true;
+			for (int i = 0; i < jugador.getEquipo().size() && ok; i++) {
+				Pokemon poke = db.getPokemonTipo(db.getIdPoke(jugador.getEquipo().get(i).getNombre()));
+				if (jugador.getEquipo().get(i).getNivel() >= poke.getEvolucion() && poke.getEvolucion() > 0) {
+					db.shutdown();
+					j=i;
+					ok = false;
+					
+				}
+			}
+			if (ok) {
+				db.shutdown();
+				return -1;
+			}
+			else{
+				return j;
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return -1;
+	}
+
 }

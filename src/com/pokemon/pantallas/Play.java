@@ -511,8 +511,6 @@ public class Play extends Pantalla {
 				}
 			} 
 		}
-		System.out.println(player.getX());
-		System.out.println(player.getY());
 		return false;
 	}
 
@@ -696,11 +694,11 @@ public class Play extends Pantalla {
 		ArrayList<Pokemon> arrayP = new ArrayList<Pokemon>();
 		try {
 			BaseDatos db = new BaseDatos("pokemon_base");
-			arrayP.add(db.getPokemon(6));
+			arrayP.add(db.getPokemon(0));
 			arrayP.add(db.getPokemon(1));
 			arrayP.add(db.getPokemon(2));
 			arrayP.add(db.getPokemon(3));
-			arrayP.add(db.getPokemon(0));
+			arrayP.add(db.getPokemon(6));
 			arrayP.add(db.getPokemon(5));
 			getCtx().jugador.setEquipo(arrayP);
 			db.shutdown();

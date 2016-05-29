@@ -367,9 +367,15 @@ public class CombateP extends Enfrentamiento {
 						dialogo.setLineas(l1, l2);
 					} else {
 						if (dialogo.getId().equals("combate_ganado")) {
-							Jugador aux = Jugador.nuevoJugador(jugador);
-							((Game) Gdx.app.getApplicationListener()).setScreen(pantalla);
-							pantalla.getCtx().jugador = aux;
+							int j = evolucion();
+							if (j == -1) {
+								Jugador aux = Jugador.nuevoJugador(jugador);
+								((Game) Gdx.app.getApplicationListener()).setScreen(pantalla);
+								pantalla.getCtx().jugador = aux;
+							} else {
+								((Game) Gdx.app.getApplicationListener())
+										.setScreen(new Evolucion(getCtx(), pantalla, jugador, j));
+							}
 						} else {
 							combatePerdido();
 						}
