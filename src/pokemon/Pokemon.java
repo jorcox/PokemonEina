@@ -23,6 +23,7 @@ public class Pokemon {
 	private int ps;
 	private int experiencia;
 	private int estado;
+	private int evolucion;
 	private int id;
 	private int entrenador;
 	
@@ -237,5 +238,13 @@ public class Pokemon {
 	
 	public void sanar(){
 		ps=psMax;
+	}
+
+	public int getEvolucion() {
+		return evolucion;
+	}
+
+	public void setEvolucion(int evolucion) {
+		this.evolucion = evolucion;
 	}
 }

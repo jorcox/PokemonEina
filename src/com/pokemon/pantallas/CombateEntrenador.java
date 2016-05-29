@@ -34,10 +34,11 @@ public class CombateEntrenador extends Enfrentamiento {
 
 	TextureRegion[] spritesEntrenador;
 
-	public CombateEntrenador(ArchivoGuardado ctx, Player player, String idEntrenador, Pantalla pantalla, Medalla medalla) {
+	public CombateEntrenador(ArchivoGuardado ctx, Player player, String idEntrenador, Pantalla pantalla,
+			Medalla medalla) {
 		super(ctx, player, pantalla);
 		getCtx().setMusic("batalla_entrenador");
-		music=getCtx().music;
+		music = getCtx().music;
 		music.play();
 		music.setLooping(true);
 		music.setVolume(0.01f);
@@ -236,8 +237,8 @@ public class CombateEntrenador extends Enfrentamiento {
 	public void show() {
 		super.show();
 		entrenador = new Sprite(new Texture("res/imgs/entrenadores/" + idEntrenador + ".png"));
-		pokemonEnemigo = new Sprite(
-				new Texture("res/imgs/pokemon/" + entrenadorE.getEquipo().get(iPokemonEnemigo).getNombre().toLowerCase() + ".png"));
+		pokemonEnemigo = new Sprite(new Texture(
+				"res/imgs/pokemon/" + entrenadorE.getEquipo().get(iPokemonEnemigo).getNombre().toLowerCase() + ".png"));
 		protagonista = new Sprite(new Texture("res/imgs/entrenadores/prota.png"));
 		protagonista.setSize(150, 240);
 		if (fase < 1) {
@@ -271,7 +272,7 @@ public class CombateEntrenador extends Enfrentamiento {
 						}
 						if (dialogo.getId().equals("combate_entrenador") || dialogo.getId().equals("adelante")) {
 							if (l1.contains("${ENTRENADOR}")) {
-								l1 = l1.replace("${ENTRENADOR}",  nombre.toUpperCase());
+								l1 = l1.replace("${ENTRENADOR}", nombre.toUpperCase());
 							}
 							if (l2.contains("${ENTRENADOR}")) {
 								l2 = l2.replace("${ENTRENADOR}", nombre.toUpperCase());
@@ -435,9 +436,15 @@ public class CombateEntrenador extends Enfrentamiento {
 							if (medalla != null) {
 								aux.addMedalla(medalla);
 							}
-							((Game) Gdx.app.getApplicationListener()).setScreen(pantalla);
-							pantalla.getCtx().jugador = aux;
-						}else{
+							int j = evolucion();
+							if (j == -1) {
+								((Game) Gdx.app.getApplicationListener()).setScreen(pantalla);
+								pantalla.getCtx().jugador = aux;
+							} else {
+								((Game) Gdx.app.getApplicationListener())
+										.setScreen(new Evolucion(getCtx(), pantalla, jugador, j));
+							}
+						} else {
 							combatePerdido();
 						}
 					}
@@ -502,7 +509,10 @@ public class CombateEntrenador extends Enfrentamiento {
 							l1 = l1.replace("${MOVIMIENTO}", hab.getNombre());
 							dialogo.setLineas(l1, l2);
 						} else {
-							if (!jugador.vivo()) {
+							if (!entrenadorE.vivo()) {
+								fase = 12;
+								dialogo.procesarDialogo("combate_ganado");
+							} else if (!jugador.vivo()) {
 								fase = 12;
 								dialogo.procesarDialogo("combate_perdido");
 							} else if (!pkmnpokemonEnemigo.vivo()) {
