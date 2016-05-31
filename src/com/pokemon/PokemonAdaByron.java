@@ -33,8 +33,8 @@ public class PokemonAdaByron extends Game {
 		} catch(FileNotFoundException e) {
 			ctx = new ArchivoGuardado();
 			ctx.existe = false;
-			//setScreen(new Play(ctx, 500, 200, 3, "Hendrix.tmx"));
-			setScreen(new Play(ctx, 1000, 1300, 3, "Tranvia_n.tmx"));
+			setScreen(new Play(ctx, 970, 3000, 3, "Hall.tmx"));
+			//setScreen(new Play(ctx, 1000, 1300, 3, "Tranvia_n.tmx"));
 			//setScreen(new PantallaInicio(ctx));
 			//setScreen(new Play(ctx, 550, 200, 3, "Bosque.tmx"));
 			//setScreen(new Play(ctx, 500, 500, 3, "Estudios.tmx"));
