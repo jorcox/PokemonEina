@@ -190,12 +190,16 @@ public class MenuPlay extends Pantalla {
 		} else if (keycode == getCtx().getTeclaB()) {
 			if(play.getCtx().getMapas().containsKey(map)){				
 				Jugador aux = Jugador.nuevoJugador(getCtx().jugador);
-				Pantalla pant = play.getCtx().getMapas().get(map);
-				((Game) Gdx.app.getApplicationListener()).setScreen(pant);
-				pant.getCtx().jugador = aux;
+				//Pantalla pant = play.getCtx().getMapas().get(map);
+				((Game) Gdx.app.getApplicationListener()).setScreen(play);
+				play.getCtx().x=x;
+				play.getCtx().y=y;
+				play.getCtx().jugador = aux;
 			} else {
+				Jugador aux = Jugador.nuevoJugador(getCtx().jugador);
 				((Game) Gdx.app.getApplicationListener()).setScreen(new Play(getCtx(), x, y,
 						lastPressed, map));
+				getCtx().jugador = aux;
 			}
 		}
 		return true;
