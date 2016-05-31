@@ -409,6 +409,8 @@ public class Play extends Pantalla {
 
 	@Override
 	public boolean keyDown(int keycode) {
+		System.out.println(player.getX());
+		System.out.println(player.getY());
 		if (listener) {
 			if (movimiento && keycode == getCtx().getTeclaUp()) {
 				player.checkCombat();
