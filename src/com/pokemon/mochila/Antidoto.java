@@ -12,7 +12,6 @@ public class Antidoto extends Objeto {
 	public void use(Pokemon pokemon) {
 		pokemon.setEstado(0);
 	}
-	
-	
-	
 }
+
+

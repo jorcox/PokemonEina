@@ -7,6 +7,7 @@ public class PosicionIniciales {
 	private HashMap<String, Posicion> map;
 
 	public PosicionIniciales() {
+		map = new HashMap<>();
 		map.put("Tranvia_n.tmx", new Posicion(200, 300));
 		map.put("Terraza.tmx", new Posicion(400, 2900));
 		map.put("Sotano.tmx", new Posicion(1250, 2750));

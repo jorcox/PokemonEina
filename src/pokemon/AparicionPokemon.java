@@ -49,12 +49,12 @@ public class AparicionPokemon {
 			aparicion[1].setTipo(Tipo.VOLADOR);
 
 			aparicion[2] = bd.getPokemonTipo(29);
-			habs = setHabilidades(64, 437, 308, 110);
+			habs = setHabilidades(300, 437, 308, 110);
 			aparicion[2].setHabilidades(habs);
 			aparicion[2].setTipo(Tipo.VENENO);
 
 			aparicion[3] = bd.getPokemonTipo(32);
-			habs = setHabilidades(64, 437, 166, 110);
+			habs = setHabilidades(300, 437, 166, 110);
 			aparicion[3].setHabilidades(habs);
 			aparicion[3].setTipo(Tipo.VENENO);
 
