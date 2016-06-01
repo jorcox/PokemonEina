@@ -767,5 +767,4 @@ public class Play extends Pantalla {
 	public void setObjetos(ArrayList<ObjetoMapa> objetos) {
 		this.objetos = objetos;
 	}
-
 }
