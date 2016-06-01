@@ -179,7 +179,7 @@ public class MenuPokemon extends Pantalla {
 			batch.draw(tHpVivo, xHp, yHp);
 			font.draw(batch, pokemon.getNombre().toUpperCase(), xName, yName);
 			font.draw(batch, pokemon.getPs() + "/" + pokemon.getPsMax(), xPs, yPs);
-			font.draw(batch, "Nvº " + pokemon.getNivel(), xNv, yNv);
+			font.draw(batch, "Nv� " + pokemon.getNivel(), xNv, yNv);
 			batch.draw(spPokemon.get(i), xPok, yPok, 60, 60);
 		} else {
 			if (selection != i) {
@@ -374,7 +374,7 @@ public class MenuPokemon extends Pantalla {
 			} else {
 				pokemonSoltar = true;
 				iAccion = selection;
-				String[] frases = { "¿Estás seguro de soltar este pokemon?", "" };
+				String[] frases = { "�Estás seguro de soltar este pokemon?", "" };
 				dialogo.setFrases(frases);
 				String l1 = dialogo.siguienteLinea();
 				String l2 = dialogo.siguienteLinea();
@@ -385,7 +385,7 @@ public class MenuPokemon extends Pantalla {
 		} else {
 			opcion = true;
 
-			String[] frases = { "¿Qué deseas hacer con este pokemon?", "" };
+			String[] frases = { "�Qué deseas hacer con este pokemon?", "" };
 			dialogo.setFrases(frases);
 			String l1 = dialogo.siguienteLinea();
 			String l2 = dialogo.siguienteLinea();

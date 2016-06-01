@@ -496,10 +496,10 @@ public class CombateP extends Enfrentamiento {
 				} else if (fase == 20) {
 					atrapado = Ball.atrapar(pkmnpokemonEnemigo);
 					if (atrapado) {
-						String[] frases = { "...", "...", "...", "...", "Â¡Genial!", "Â¡Has capturado a ${POKEMON}!" };
+						String[] frases = { "...", "...", "...", "...", "¡Genial!", "¡Has capturado a ${POKEMON}!" };
 						dialogo.setFrases(frases);
 					} else {
-						String[] frases = { "...", "...", "...", "...", "Â¡LÃ¡stima!", "Â¡${POKEMON} se ha escapado!" };
+						String[] frases = { "...", "...", "...", "...", "¡Lástima!", "¡${POKEMON} se ha escapado!" };
 						dialogo.setFrases(frases);
 
 					}

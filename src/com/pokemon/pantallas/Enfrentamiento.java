@@ -462,19 +462,19 @@ public class Enfrentamiento extends Pantalla {
 					if (acierto == -1) {
 						// Ataque fallido
 						String[] frase = {
-								"Â¡ " + jugador.getEquipo().get(iPokemon).getNombre() + " fallÃ³! Vaya mierdas...", "" };
+								"¡ " + jugador.getEquipo().get(iPokemon).getNombre() + " fallÃ³! Vaya mierdas...", "" };
 						dialogo.setFrases(frase); 
 					} else if (acierto == 1) {
 						// Ataque no afecta
-						String[] frase = { "Â¡ El ataque no afecta al enemigo! Espabila", "" };
+						String[] frase = { "¡ El ataque no afecta al enemigo! Espabila", "" };
 						dialogo.setFrases(frase);
 					} else if (acierto == 2) {
 						// Ataque no muy efectivo
-						String[] frase = { "Â¡ El ataque no es muy efectivo!", "" };
+						String[] frase = { "¡ El ataque no es muy efectivo!", "" };
 						dialogo.setFrases(frase);
 					} else if (acierto == 3) {
 						// Ataque muy efectivo
-						String[] frase = { "Â¡ El ataque es mega efectivo pavo!", "" };
+						String[] frase = { "¡ El ataque es mega efectivo pavo!", "" };
 						dialogo.setFrases(frase);
 					}
 					dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
@@ -493,16 +493,16 @@ public class Enfrentamiento extends Pantalla {
 				} else {
 					fase = 11;
 					if (acierto == -1) {
-						String[] frase = { "Â¡" + pkmnpokemonEnemigo.getNombre() + " fallÃ³! Vaya mierdas...", "" };
+						String[] frase = { "¡" + pkmnpokemonEnemigo.getNombre() + " fallÃ³! Vaya mierdas...", "" };
 						dialogo.setFrases(frase);
 					} else if (acierto == 1) {
-						String[] frase = { "Â¡El ataque no afecta al enemigo! Espabila", "" };
+						String[] frase = { "¡El ataque no afecta al enemigo! Espabila", "" };
 						dialogo.setFrases(frase);
 					} else if (acierto == 2) {
-						String[] frase = { "Â¡El ataque no es muy efectivo!", "" };
+						String[] frase = { "¡El ataque no es muy efectivo!", "" };
 						dialogo.setFrases(frase);
 					} else if (acierto == 3) {
-						String[] frase = { "Â¡El ataque es mega efectivo pavo!", "" };
+						String[] frase = { "¡El ataque es mega efectivo pavo!", "" };
 						dialogo.setFrases(frase);
 					}
 					dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
@@ -513,12 +513,12 @@ public class Enfrentamiento extends Pantalla {
 	}
 
 	public String[] frasesAtaque(Pokemon pokemon, int id) {
-		String[] frase = { "Â¡ " + pokemon.getNombre() + " uso " + pokemon.getHabilidad(id).getNombre() + "!", "" };
+		String[] frase = { "¡ " + pokemon.getNombre() + " uso " + pokemon.getHabilidad(id).getNombre() + "!", "" };
 		return frase;
 	}
 
 	public String[] frasesExperiencia(boolean trainer) {
-		String[] frase = { "Â¡ " + pkmn.getNombre() + " ganÃ³ " + gainExperience(trainer, pkmnpokemonEnemigo.getNivel())
+		String[] frase = { "¡ " + pkmn.getNombre() + " ganÃ³ " + gainExperience(trainer, pkmnpokemonEnemigo.getNivel())
 				+ " puntos de EXP.!", "" };
 		return frase;
 	}

@@ -201,7 +201,7 @@ public class MenuMochila extends Pantalla {
 							CombateP p = (CombateP) screen;
 							if (p.jugador.getEquipo().size() == 6) {
 								ok = false;
-								String[] frase = { "¡Ya tienes 6 Pokemon, no puedes llevar más!", "" };
+								String[] frase = { "�Ya tienes 6 Pokemon, no puedes llevar más!", "" };
 								dialogo.setFrases(frase);
 								dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
 							}
