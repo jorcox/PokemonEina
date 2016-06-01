@@ -202,7 +202,7 @@ public class PokemonIniciales extends Pantalla {
 							nombre = "Squirtle";
 
 						}
-						String[] frase = { "Â¡ENHORABUENA! Has elegido a ", nombre + "!!!!" };
+						String[] frase = { "¡ENHORABUENA! Has elegido a ", nombre + "!!!!" };
 						dialogo.setFrases(frase);
 						dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
 						fin = true;
@@ -222,13 +222,13 @@ public class PokemonIniciales extends Pantalla {
 					} else if (fase == 2) {
 						elegir = true;
 						if (seleccion == 0) {
-							String[] frase = { "Â¿Estas seguro de coger al peor pokemon del mundo?", "" };
+							String[] frase = { "¿Estas seguro de coger al peor pokemon del mundo?", "" };
 							dialogo.setFrases(frase);
 						} else if (seleccion == 1) {
-							String[] frase = { "Â¿Estas seguro de coger al mierdas este?", "" };
+							String[] frase = { "¿Estas seguro de coger al mierdas este?", "" };
 							dialogo.setFrases(frase);
 						} else if (seleccion == 2) {
-							String[] frase = { "Â¿Estas seguro de coger al pokemon con mas swag del mundo?", "" };
+							String[] frase = { "¿Estas seguro de coger al pokemon con mas swag del mundo?", "" };
 							dialogo.setFrases(frase);
 						}
 

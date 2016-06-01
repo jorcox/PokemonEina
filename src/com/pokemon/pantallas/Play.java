@@ -87,7 +87,6 @@ public class Play extends Pantalla {
 
 		cargarFuente();
 
-		// setJugador();
 	}
 
 	public Play(ArchivoGuardado ctx, float x, float y, int lastPressed, String mapa) {
@@ -105,7 +104,6 @@ public class Play extends Pantalla {
 
 		cargarFuente();
 
-		//setJugador();
 	}
 
 	@Override
