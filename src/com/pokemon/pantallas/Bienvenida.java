@@ -174,7 +174,6 @@ public class Bienvenida extends Pantalla {
 					 * ""); optionsVisible = true; }
 					 */
 				} else {
-					m.stop();
 					((Game) Gdx.app.getApplicationListener())
 							.setScreen(new PokemonIniciales(getCtx()));
 				}

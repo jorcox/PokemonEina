@@ -13,3 +13,5 @@ public class Antidoto extends Objeto {
 		pokemon.setEstado(0);
 	}
 }
+
+

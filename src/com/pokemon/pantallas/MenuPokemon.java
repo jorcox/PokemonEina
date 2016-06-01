@@ -132,7 +132,7 @@ public class MenuPokemon extends Pantalla {
 		batch.draw(barrasVida[0], 158, 453, (int) (132 * (pokemon.getPs() / (double) pokemon.getPsMax())), 9);
 		font.draw(batch, pokemon.getNombre().toUpperCase(), 160, 500);
 		font.draw(batch, pokemon.getPs() + "/" + pokemon.getPsMax(), 190, 440);
-		font.draw(batch, "Nv� " + pokemon.getNivel(), 60, 440);
+		font.draw(batch, "Nv " + pokemon.getNivel(), 60, 440); 
 		batch.draw(spPokemon.get(0), 60, 460, 60, 60);
 	}
 
@@ -179,7 +179,7 @@ public class MenuPokemon extends Pantalla {
 			batch.draw(tHpVivo, xHp, yHp);
 			font.draw(batch, pokemon.getNombre().toUpperCase(), xName, yName);
 			font.draw(batch, pokemon.getPs() + "/" + pokemon.getPsMax(), xPs, yPs);
-			font.draw(batch, "Nv� " + pokemon.getNivel(), xNv, yNv);
+			font.draw(batch, "Nvº " + pokemon.getNivel(), xNv, yNv);
 			batch.draw(spPokemon.get(i), xPok, yPok, 60, 60);
 		} else {
 			if (selection != i) {
@@ -191,7 +191,7 @@ public class MenuPokemon extends Pantalla {
 			batch.draw(tHpMuerto, xHp, yHp);
 			font.draw(batch, pokemon.getNombre().toUpperCase(), xName, yName);
 			font.draw(batch, pokemon.getPs() + "/" + pokemon.getPsMax(), xPs, yPs);
-			font.draw(batch, "Nv� " + pokemon.getNivel(), xNv, yNv);
+			font.draw(batch, "Nv " + pokemon.getNivel(), xNv, yNv);
 			batch.draw(spPokemon.get(i), xPok, yPok, 60, 60);
 		}
 		batch.draw(barrasVida[0], xVida, yVida, (int) (100 * (pokemon.getPs() / (double) pokemon.getPsMax())), 9);
@@ -332,7 +332,7 @@ public class MenuPokemon extends Pantalla {
 						e.veces = 0;
 						e.cambio = false;
 					}
-					e.actualPsS=e.pkmnpokemonEnemigo.getPs();
+					e.actualPsS = e.pkmnpokemonEnemigo.getPs();
 					e.setIPokemon(i);
 					((Game) Gdx.app.getApplicationListener()).setScreen(e);
 				}
@@ -445,8 +445,10 @@ public class MenuPokemon extends Pantalla {
 	}
 
 	public void soltarPokemon() {
-		listaPokemon.remove(selection);
-		spPokemon.remove(selection);
+		if (listaPokemon.size() > 1) {
+			listaPokemon.remove(selection);
+			spPokemon.remove(selection);
+		}
 	}
 
 }

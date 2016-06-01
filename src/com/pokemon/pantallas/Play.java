@@ -87,7 +87,6 @@ public class Play extends Pantalla {
 
 		cargarFuente();
 
-		// setJugador();
 	}
 
 	public Play(ArchivoGuardado ctx, float x, float y, int lastPressed, String mapa) {
@@ -105,7 +104,6 @@ public class Play extends Pantalla {
 
 		cargarFuente();
 
-		setJugador();
 	}
 
 	@Override
@@ -231,7 +229,6 @@ public class Play extends Pantalla {
 				map.getLayers().get("Objetos"), map.getLayers().get("Trans"), npcs, getCtx().dialogo, this);
 		player.setPosition(getCtx().x, getCtx().y);
 		player.setLastPressed(getCtx().lastPressed);
-		equipoPokemon();
 
 		for (NPC npc : npcs) {
 			npc.setPlayer(player);
@@ -409,6 +406,8 @@ public class Play extends Pantalla {
 
 	@Override
 	public boolean keyDown(int keycode) {
+		System.out.println(player.getX());
+		System.out.println(player.getY());
 		if (listener) {
 			if (movimiento && keycode == getCtx().getTeclaUp()) {
 				player.checkCombat();
@@ -694,11 +693,11 @@ public class Play extends Pantalla {
 		ArrayList<Pokemon> arrayP = new ArrayList<Pokemon>();
 		try {
 			BaseDatos db = new BaseDatos("pokemon_base");
-			arrayP.add(db.getPokemon(6));
+			arrayP.add(db.getPokemon(0));
 			arrayP.add(db.getPokemon(1));
 			arrayP.add(db.getPokemon(2));
 			arrayP.add(db.getPokemon(3));
-			arrayP.add(db.getPokemon(0));
+			arrayP.add(db.getPokemon(6));
 			arrayP.add(db.getPokemon(5));
 			getCtx().jugador.setEquipo(arrayP);
 			db.shutdown();
@@ -766,5 +765,4 @@ public class Play extends Pantalla {
 	public void setObjetos(ArrayList<ObjetoMapa> objetos) {
 		this.objetos = objetos;
 	}
-
 }

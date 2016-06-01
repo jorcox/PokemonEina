@@ -273,15 +273,19 @@ public class Player extends Sprite implements Serializable {
 									Integer.parseInt((String) t.getProperties().get("y")), getLastPressed(), mapa + ".tmx");
 							play.getCtx().getMapas().put(mapa + ".tmx", p);
 							//play.getCtx().setMusic(mapa+".tmx");
+							Jugador aux = Jugador.nuevoJugador(play.getCtx().jugador);
 							((Game) Gdx.app.getApplicationListener()).setScreen(p);
+							play.getCtx().jugador = aux;
 						} else {
 							play.getCtx().getMapas().put(play.getMapa(), play);
 							play.getCtx().x = Integer.parseInt((String) t.getProperties().get("x"));
 							play.getCtx().y = Integer.parseInt((String) t.getProperties().get("y"));
 							play.getCtx().lastPressed = getLastPressed();
 							//play.getCtx().setMusic(mapa+".tmx");
+							Jugador aux = Jugador.nuevoJugador(play.getCtx().jugador);
 							((Game) Gdx.app.getApplicationListener())
 									.setScreen(play.getCtx().getMapas().get(mapa + ".tmx"));
+							play.getCtx().jugador = aux;
 						}
 					}
 					break;
@@ -655,5 +659,4 @@ public class Player extends Sprite implements Serializable {
 	public void setAnimationTime(float animationTime) {
 		this.animationTime = animationTime;
 	}
-
 }

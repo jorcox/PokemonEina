@@ -108,7 +108,7 @@ public class CombateP extends Enfrentamiento {
 			vida = 100;
 			vidaS = 100;
 		}
-		if (fase == 5 || fase == 7) {
+		if (fase == 5 || fase == 7) { 
 			/*
 			 * Dialogo Ataque
 			 */
@@ -367,9 +367,15 @@ public class CombateP extends Enfrentamiento {
 						dialogo.setLineas(l1, l2);
 					} else {
 						if (dialogo.getId().equals("combate_ganado")) {
-							Jugador aux = Jugador.nuevoJugador(jugador);
-							((Game) Gdx.app.getApplicationListener()).setScreen(pantalla);
-							pantalla.getCtx().jugador = aux;
+							int j = evolucion();
+							if (j == -1) {
+								Jugador aux = Jugador.nuevoJugador(jugador);
+								((Game) Gdx.app.getApplicationListener()).setScreen(pantalla);
+								pantalla.getCtx().jugador = aux;
+							} else {
+								((Game) Gdx.app.getApplicationListener())
+										.setScreen(new Evolucion(getCtx(), pantalla, jugador, j));
+							}
 						} else {
 							combatePerdido();
 						}
@@ -490,10 +496,10 @@ public class CombateP extends Enfrentamiento {
 				} else if (fase == 20) {
 					atrapado = Ball.atrapar(pkmnpokemonEnemigo);
 					if (atrapado) {
-						String[] frases = { "...", "...", "...", "...", "�Genial!", "�Has capturado a ${POKEMON}!" };
+						String[] frases = { "...", "...", "...", "...", "¡Genial!", "¡Has capturado a ${POKEMON}!" };
 						dialogo.setFrases(frases);
 					} else {
-						String[] frases = { "...", "...", "...", "...", "�L�stima!", "�${POKEMON} se ha escapado!" };
+						String[] frases = { "...", "...", "...", "...", "¡Lástima!", "¡${POKEMON} se ha escapado!" };
 						dialogo.setFrases(frases);
 
 					}
@@ -568,7 +574,7 @@ public class CombateP extends Enfrentamiento {
 						seleccionAprender = false;
 					}
 				}
-			} else if (keycode == Keys.ESCAPE) {
+			} else if (keycode == getCtx().getTeclaB()) {
 				if (fase == 4) {
 					fase = 3;
 				}
