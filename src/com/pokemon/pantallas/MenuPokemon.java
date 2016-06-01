@@ -179,7 +179,7 @@ public class MenuPokemon extends Pantalla {
 			batch.draw(tHpVivo, xHp, yHp);
 			font.draw(batch, pokemon.getNombre().toUpperCase(), xName, yName);
 			font.draw(batch, pokemon.getPs() + "/" + pokemon.getPsMax(), xPs, yPs);
-			font.draw(batch, "Nv� " + pokemon.getNivel(), xNv, yNv);
+			font.draw(batch, "Nvº " + pokemon.getNivel(), xNv, yNv);
 			batch.draw(spPokemon.get(i), xPok, yPok, 60, 60);
 		} else {
 			if (selection != i) {
