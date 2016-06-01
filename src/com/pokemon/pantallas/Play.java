@@ -112,7 +112,7 @@ public class Play extends Pantalla {
 		music=getCtx().music;
 		music.play();
 		music.setLooping(true);
-		music.setVolume(0.01f);
+		music.setVolume(0.5f);
 		tweenManager = new TweenManager();
 
 		TmxMapLoader loader = new TmxMapLoader();
