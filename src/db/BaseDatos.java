@@ -231,6 +231,7 @@ public class BaseDatos {
 			poke.setVelocidad(rs.getInt("velocidad"));
 			poke.setEvasion(100);
 			poke.setPrecision(100);
+			poke.setEvolucion(rs.getInt("evolucion"));
 			poke.setId(id);
 			rs.close();
 		} catch (SQLException e) {
@@ -422,4 +423,5 @@ public class BaseDatos {
 			return null;
 		}
 	}
+>>>>>>> refs/remotes/origin/master
 } // class Testdb

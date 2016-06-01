@@ -44,20 +44,19 @@ public class Evolucion extends Pantalla {
 
 	public Evolucion(ArchivoGuardado ctx, Pantalla screen, Jugador jugador, int i) {
 		this.setCtx(ctx);
-		this.screen=screen;
+		this.screen = screen;
+		this.jugador = jugador;
 		getCtx().setMusic("evolucion");
-		music=getCtx().music;
+		music = getCtx().music;
 		music.play();
 		music.setLooping(true);
 		music.setVolume(0.01f);
 		dialogo = new Dialogo("es", "ES");
 		dialogo.procesarDialogo("evolucion");
 
-		setJugador();
 		pkmn = this.jugador.getPokemon(i);
 		Gdx.input.setInputProcessor(this);
-		generator = new FreeTypeFontGenerator(
-				Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("res/fuentes/PokemonFont.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 35;
 		font = generator.generateFont(parameter); // font size 35 pixels
@@ -67,8 +66,7 @@ public class Evolucion extends Pantalla {
 	public void show() {
 		Gdx.input.setInputProcessor(this);
 		batch = new SpriteBatch();
-		evolucionBg = new Sprite(new Texture(
-				"res/imgs/evolucion/evolutionbg.png"));
+		evolucionBg = new Sprite(new Texture("res/imgs/evolucion/evolutionbg.png"));
 		message = new Sprite(new Texture("res/imgs/batallas/battleMessage.png"));
 		setPokemon();
 		font.setColor(Color.BLACK);
@@ -100,52 +98,47 @@ public class Evolucion extends Pantalla {
 	}
 
 	public void setPokemon() {
-		pokemon = new Sprite(new Texture("res/imgs/pokemon/" + pkmn.getNombre()
-				+ ".png"));
+		pokemon = new Sprite(new Texture("res/imgs/pokemon/" + pkmn.getNombre() + ".png"));
 		pokemon.setSize(120, 120);
 		pokemon.setPosition(280, 250);
-		try { 
+		try {
 			bd = new BaseDatos("pokemon_base");
-			pkmnEvolucion = bd
-					.getPokemonTipo(bd.getIdPoke(pkmn.getNombre()) + 1);
+			pkmnEvolucion = bd.getPokemonTipo(bd.getIdPoke(pkmn.getNombre()) + 1);
 			bd.shutdown();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		evolucion = new Sprite(new Texture("res/imgs/pokemon/"
-				+ pkmnEvolucion.getNombre() + ".png"));
+		evolucion = new Sprite(new Texture("res/imgs/pokemon/" + pkmnEvolucion.getNombre() + ".png"));
 		evolucion.setSize(120, 120);
 		evolucion.setPosition(280, 250);
 	}
 
-	
 	@Override
 	public boolean keyDown(int keycode) {
 		if (!dialogo.isWriting()) {
 			if (keycode == getCtx().getTeclaA()) {
-				if(fase==0)fase = 1;
+				if (fase == 0)
+					fase = 1;
 				String l1 = dialogo.siguienteLinea();
 				String l2 = dialogo.siguienteLinea();
 				if (l1 != null) {
 					if (l1.contains("ENHORABUENA")) {
-						fase=2;
+						fase = 2;
 					} else {
 						l1 = l1.replace("${POKEMON}", pkmn.getNombre());
-						l1 = l1.replace("${EVOLUCION}",
-								pkmnEvolucion.getNombre());
+						l1 = l1.replace("${EVOLUCION}", pkmnEvolucion.getNombre());
 					}
 				}
 				if (l2 != null) {
 					l2 = l2.replace("${EVOLUCION}", pkmnEvolucion.getNombre());
 					l2 = l2.replace("${POKEMON}", pkmn.getNombre());
 				}
-				if(l1==null){
+				if (l1 == null) {
 					pkmn.evolucionar(pkmnEvolucion.getNombre());
 					Jugador aux = Jugador.nuevoJugador(jugador);
-					((Game) Gdx.app.getApplicationListener())
-					.setScreen(screen);
-					screen.getCtx().jugador=aux;
+					((Game) Gdx.app.getApplicationListener()).setScreen(screen);
+					screen.getCtx().jugador = aux;
 				}
 
 				dialogo.setLineas(l1, l2);
@@ -226,25 +219,4 @@ public class Evolucion extends Pantalla {
 		return false;
 	}
 
-	public void setJugador() {
-		jugador = new Jugador("Sara", false);
-		equipoPokemon();
-	}
-
-	public void equipoPokemon() {
-		ArrayList<Pokemon> arrayP = new ArrayList<Pokemon>();
-		try {
-			BaseDatos db = new BaseDatos("pokemon_base");
-			arrayP.add(db.getPokemon(6));
-			arrayP.add(db.getPokemon(1));
-			arrayP.add(db.getPokemon(2));
-			arrayP.add(db.getPokemon(3));
-			arrayP.add(db.getPokemon(0));
-			arrayP.add(db.getPokemon(5));
-			jugador.setEquipo(arrayP);
-			db.shutdown();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }
