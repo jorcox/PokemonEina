@@ -75,7 +75,7 @@ public class BaseDatos {
 		// It can contain directory names relative to the
 		// current working directory
 		conn = DriverManager.getConnection(
-				"jdbc:hsqldb:res:" + db_file_name_prefix, // filenames
+				"jdbc:hsqldb:" + db_file_name_prefix, // filenames
 				"pokemon", // username
 				""); // password
 	}
