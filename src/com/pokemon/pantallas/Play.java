@@ -105,7 +105,7 @@ public class Play extends Pantalla {
 
 		cargarFuente();
 
-		setJugador();
+		//setJugador();
 	}
 
 	@Override
