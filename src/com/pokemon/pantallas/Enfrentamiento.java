@@ -462,19 +462,19 @@ public class Enfrentamiento extends Pantalla {
 					if (acierto == -1) {
 						// Ataque fallido
 						String[] frase = {
-								"¡" + jugador.getEquipo().get(iPokemon).getNombre() + " falló! Vaya mierdas...", "" };
-						dialogo.setFrases(frase);
+								"¡ " + jugador.getEquipo().get(iPokemon).getNombre() + " falló! Vaya mierdas...", "" };
+						dialogo.setFrases(frase); 
 					} else if (acierto == 1) {
 						// Ataque no afecta
-						String[] frase = { "¡El ataque no afecta al enemigo! Espabila", "" };
+						String[] frase = { "¡ El ataque no afecta al enemigo! Espabila", "" };
 						dialogo.setFrases(frase);
 					} else if (acierto == 2) {
 						// Ataque no muy efectivo
-						String[] frase = { "¡El ataque no es muy efectivo!", "" };
+						String[] frase = { "¡ El ataque no es muy efectivo!", "" };
 						dialogo.setFrases(frase);
 					} else if (acierto == 3) {
 						// Ataque muy efectivo
-						String[] frase = { "¡El ataque es mega efectivo pavo!", "" };
+						String[] frase = { "¡ El ataque es mega efectivo pavo!", "" };
 						dialogo.setFrases(frase);
 					}
 					dialogo.setLineas(dialogo.siguienteLinea(), dialogo.siguienteLinea());
@@ -513,12 +513,12 @@ public class Enfrentamiento extends Pantalla {
 	}
 
 	public String[] frasesAtaque(Pokemon pokemon, int id) {
-		String[] frase = { "¡" + pokemon.getNombre() + " uso " + pokemon.getHabilidad(id).getNombre() + "!", "" };
+		String[] frase = { "¡ " + pokemon.getNombre() + " uso " + pokemon.getHabilidad(id).getNombre() + "!", "" };
 		return frase;
 	}
 
 	public String[] frasesExperiencia(boolean trainer) {
-		String[] frase = { "¡" + pkmn.getNombre() + " ganó " + gainExperience(trainer, pkmnpokemonEnemigo.getNivel())
+		String[] frase = { "¡ " + pkmn.getNombre() + " ganó " + gainExperience(trainer, pkmnpokemonEnemigo.getNivel())
 				+ " puntos de EXP.!", "" };
 		return frase;
 	}

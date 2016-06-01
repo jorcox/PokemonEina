@@ -755,12 +755,12 @@ public class CombateEntrenador extends Enfrentamiento {
 		pkmnpokemonEnemigo = entrenadorE.getPokemon(iPokemonEnemigo);
 		pokemonEnemigo = new Sprite(
 				new Texture("res/imgs/pokemon/" + pkmnpokemonEnemigo.getNombre().toLowerCase() + ".png"));
-		String[] frase = { "ï¿½ " + nombre.toUpperCase() + " utiliza a "
+		String[] frase = { "¡ " + nombre.toUpperCase() + " utiliza a "
 				+ entrenadorE.getPokemon(iPokemonEnemigo).getNombre() + "!" };
 		fase = 13;
 		orden = combate.getVelocidad(iPokemon);
 		dialogo.setFrases(frase);
-		l1 = dialogo.siguienteLinea();
+		l1 = dialogo.siguienteLinea(); 
 		l2 = dialogo.siguienteLinea();
 		dialogo.setLineas(l1, l2);
 	}
