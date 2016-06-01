@@ -727,5 +727,4 @@ public class Enfrentamiento extends Pantalla {
 		}
 		return -1;
 	}
-
 }
