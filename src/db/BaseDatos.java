@@ -423,4 +423,5 @@ public class BaseDatos {
 			return null;
 		}
 	}
+>>>>>>> refs/remotes/origin/master
 } // class Testdb
